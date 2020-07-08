@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/appRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#dadada"
+    tools:context=".MapLocation">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/location_et"
+                android:layout_width="match_parent"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:hint="@string/location"
+                android:textSize="16sp"
+                android:padding="5dp"
+                android:textColor="#000"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"/>
+
+            <LinearLayout
+                android:id="@+id/lan_lat"
+                android:layout_below="@+id/location_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp">
+
+                <EditText
+                    android:id="@+id/lat_et"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:inputType="text"
+                    android:layout_weight="1"
+                    android:hint="@string/latitude"
+                    android:textSize="16sp"
+                    android:textColor="#000"
+                    android:padding="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="#ffffff"/>
+
+                <EditText
+                    android:id="@+id/lng_et"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:hint="@string/longitude"
+                    android:textSize="16sp"
+                    android:textColor="#000"
+                    android:inputType="text"
+                    android:padding="10dp"
+                    android:layout_marginStart="5dp"
+                    android:background="#ffffff"/>
+
+                <EditText
+                    android:id="@+id/editTextPinCode"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:hint="@string/longitude"
+                    android:textSize="16sp"
+                    android:textColor="#000"
+                    android:inputType="text"
+                    android:padding="10dp"
+                    android:visibility="gone"
+                    android:layout_marginStart="5dp"
+                    android:background="#ffffff"/>
+
+            </LinearLayout>
+
+            <com.google.android.gms.maps.MapView
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_below="@id/lan_lat"
+                android:id="@+id/google_map_view"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"/>
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:ems="15"
+        android:id="@+id/save_map"
+        android:textColor="#ffffff"
+        android:text="@string/save_location"
+        android:background="@color/style_color_primary"
+        android:layout_margin="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

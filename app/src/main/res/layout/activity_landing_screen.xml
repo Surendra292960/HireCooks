@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.Home.LandingScreen">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/user_profile_photo"
+        app:srcCompat="@drawable/ic_launcher" />
+
+
+    <LinearLayout
+        android:id="@+id/user_profile_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="@color/style_color_primary">
+
+        <Button
+            android:id="@+id/buttonSignInUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
+            android:textColor="@color/white"
+            android:text="@string/sign_in" />
+
+        <Button
+            android:id="@+id/buttonSignUpUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
+            android:textColor="@color/white"
+            android:text="@string/sign_up" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cook_profile_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="@color/style_color_primary">
+
+        <Button
+            android:id="@+id/buttonSignInCook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
+            android:textColor="@color/white"
+            android:text="@string/sign_in" />
+
+        <Button
+            android:id="@+id/buttonSignUpCook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="?android:attr/buttonBarButtonStyle"
+            android:textColor="@color/white"
+            android:text="@string/sign_up" />
+    </LinearLayout>
+
+</RelativeLayout>

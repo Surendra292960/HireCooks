@@ -1,0 +1,166 @@
+<resources>
+    <string name="app_name" translatable="false">HireCook</string>
+    <string name="FACEBOOK_APP_ID" translatable="false">741054493063557</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN" translatable="false">[ACCOUNT_KIT_CLIENT_TOKEN]</string>
+    <string name="hello_world" translatable="false">Hello world!</string>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="user_profile_photo" translatable="false">http://baobaoloveyou.com/flowingdrawer_icon.png</string>
+    <string name="username" translatable="false">UserName</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="password" translatable="false">Password</string>
+    <string name="con_password" translatable="false">Confirm Password</string>
+    <string name="sign_up" translatable="false">Sign Up</string>
+    <string name="sign_in" translatable="false">Sign In</string>
+    <string name="please_wait" translatable="false">Please wait . . . </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+
+    <string name="simplified_coding" translatable="false">Simplified Coding</string>
+    <string name="male" translatable="false">Male</string>
+    <string name="female" translatable="false">Female</string>
+    <string name="enter_title" translatable="false">Enter title</string>
+    <string name="enter_message" translatable="false">Enter Message</string>
+
+    <string name="write_something_here" translatable="false">Write Something Here</string>
+    <string name="message_txt" translatable="false">Lorem ipsum dolor sit camet lorem ipsum dolor sit camet lorem ipsum</string>
+    <string name="date_time" translatable="false">30/04/1993 10:25am</string>
+    <string name="greetings" translatable="false">Greetings !</string>
+    <string name="ok_got_it" translatable="false">Ok Got it</string>
+    <string name="connection_txt">Look like you are Offline</string>
+    <string name="continue_txt">Continue</string>
+    <string name="phone">Phone</string>
+    <string name="image">Image</string>
+    <string name="address">Address</string>
+    <string name="cook">Cook</string>
+    <string name="user">User</string>
+    <string name="uploadImages">Upload Image</string>
+    <string name="image_uploaded">Image Uploaded</string>
+    <string name="user_name">User Name</string>
+    <string name="user_phone">Phone</string>
+    <string name="sign_up_date">SignUp Date</string>
+    <string name="user_type">User Type</string>
+    <string name="gender">Gender</string>
+    <string name="verify">Verify Email: </string>
+    <string name="status">Status</string>
+    <string name="refresh">  Refresh</string>
+    <string name="userId">User Id</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="generate_otp">Generate OTP</string>
+    <string name="enter_otp">Enter OTP</string>
+    <string name="verify_sign_in">Verify and Sign In</string>
+    <string name="sign_out">sign out</string>
+    <string name="verify_phone">Verify Phone</string>
+    <string name="error">Please check your internet connection and try after some time</string>
+    <string name="failed_due_to">Failed due to</string>
+    <string name="phone_not_exist">Phone Number not exist</string>
+    <string name="invalidate">Invalid email or password</string>
+    <string name="update">Update</string>
+
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">GOT IT</string>
+
+    <string name="slide_1_title">Welcome to HireCooks!</string>
+    <string name="slide_1_desc">Javatpoint is passionate to offer better technical content to the world.</string>
+    <string name="slide_2_title">Android</string>
+    <string name="slide_2_desc">Android is a mobile operating system developed by Google.</string>
+    <string name="message">Message</string>
+    <string name="remove">Remove</string>
+    <string name="go_back">Go back</string>
+    <string name="hire">HIRE NOW</string>
+    <string name="add_to_wish">ADD TO WISHLIST</string>
+    <string name="send">Send</string>
+    <string name="cancel">Cancel</string>
+    <string name="pincode">Pincode</string>
+    <string name="slelect_image">Select Image</string>
+    <string name="save_location">Save Location</string>
+
+
+    <string-array name="uploadImages">
+        <item>Pick from gallery</item>
+        <item>Click from camera</item>
+        <item>Remove image</item>
+    </string-array>
+
+    <string-array name="itemIds">
+        <item>gallery_image</item>
+        <item>camera_image</item>
+        <item>remove_image</item>
+    </string-array>
+    <string name="title_activity_map_location">Map</string>
+    <string name="location">Pick Your Location</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="popular_products">OUR POPULAR PRODUCTS</string>
+    <string name="default_notification_channel_id">Channel Id</string>
+    <string name="search">Search</string>
+    <string name="dialog_text">What Do you want ?</string>
+    <string name="ok">Ok</string>
+    <string name="no_internet">No Internet Connection</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="resend_code">Resend</string>
+    <string name="offline">OFFLINE</string>
+    <string name="task">Your Task</string>
+    <string name="search_items">Search a iteams...</string>
+    <string name="our_popular_product">OUR POPULAR PRODUCTS</string>
+    <string name="already_have_account">already have account ? </string>
+    <string name="don_t_have_account">don`t have account ?</string>
+    <string name="cart">Cart</string>
+    <string name="checkout">CheckOut</string>
+    <string name="offer_banner">Offers</string>
+    <string name="similar_product">Similar Products</string>
+    <string name="details">Description</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="buy_now">Buy Now</string>
+    <string name="our_new_product">Our New Products</string>
+    <string name="new_offers">NEW OFFERS</string>
+    <string name="delivery_address">Delivery Address</string>
+    <string name="delivery_time">Delivery Time</string>
+    <string name="order_summery">Order Summery</string>
+    <string name="sub_total">Sub Total</string>
+    <string name="delivery_charge">Delivery Charge</string>
+    <string name="grand_total">Grand Total</string>
+    <string name="hirecook_mony">HireCook Money</string>
+    <string name="submit">Submit</string>
+    <string name="promo">Promo</string>
+    <string name="promo_code">Promo Code</string>
+    <string name="pay_online">Pay Online</string>
+    <string name="cash_on_delivery">Cash On Delivery</string>
+    <string name="payable_rs_00">Payable Rs 00</string>
+    <string name="your_order_will_deliver_in_3_hrs" translatable="false">Your Order will deliver in 3 hrs</string>
+    <string name="apply" translatable="false">Apply</string>
+    <string name="shop_now" translatable="false">Start Shopping</string>
+    <string name="firmid" translatable="false">FirmId</string>
+    <string name="usertype" translatable="false">userType</string>
+    <string name="website" translatable="false">Website</string>
+    <string name="surendra_site" translatable="false">Surendra Site</string>
+    <string name="standard_delivery_within_2_4_hrs" translatable="false">  &#x20; &#x2009; &#x200A; Standard Delivery within 2–4 Hrs</string>
+    <string name="forgot_pass">Forgot Password</string>
+
+
+    <string-array name="colorList">
+        <item>Black</item>
+        <item>White</item>
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Yellow</item>
+        <item>Green</item>
+        <item>Brown</item>
+        <item>Pink</item>
+        <item>Orange</item>
+        <item>Purple</item>
+    </string-array>
+
+    <string-array name="order_status">
+        <item>Prepairing</item>
+        <item>Pending</item>
+        <item>Delivered</item>
+        <item>on the way</item>
+        <item>Cancelled</item>
+    </string-array>
+
+</resources>

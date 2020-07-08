@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:behavior_hideable="true"
+    android:background="@color/paint_color"
+    app:behavior_peekHeight="56dp"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+   <ScrollView
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:fillViewport="true">
+
+       <LinearLayout
+           android:background="@color/paint_color"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="vertical">
+
+           <LinearLayout
+               android:background="@color/paint_color"
+               android:visibility="visible"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="vertical">
+
+               <RadioGroup
+                   android:layout_width="match_parent"
+                   android:layout_height="30dp"
+                   android:layout_gravity="center"
+                   android:layout_marginBottom="20dp"
+                   android:layout_marginTop="10dp"
+                   android:gravity="center"
+                   android:orientation="horizontal">
+
+                   <RadioButton
+                       android:id="@+id/booking_personal"
+                       android:layout_width="@dimen/margin_100"
+                       android:layout_height="match_parent"
+                       android:gravity="center"
+                       android:text="Personal"
+                       android:checked="true" />
+
+                   <RadioButton
+                       android:id="@+id/booking_company"
+                       android:layout_width="@dimen/margin_100"
+                       android:layout_height="match_parent"
+                       android:gravity="center"
+                       android:text="Business"/>
+               </RadioGroup>
+               <!--personal layout-->
+               <LinearLayout
+                   android:id="@+id/personal_layout"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:background="@color/paint_color"
+                   android:orientation="vertical">
+
+                   <RadioGroup
+                       android:layout_width="match_parent"
+                       android:layout_height="30dp"
+                       android:layout_gravity="center"
+                       android:layout_marginBottom="20dp"
+                       android:layout_marginTop="10dp"
+                       android:gravity="center"
+                       android:orientation="horizontal">
+
+                       <RadioButton
+                           android:id="@+id/booking_mr"
+                           android:layout_width="70dp"
+                           android:layout_height="match_parent"
+                           android:gravity="center"
+                           android:text="Mr"
+                           android:checked="true"/>
+
+                       <RadioButton
+                           android:id="@+id/booking_mrs"
+                           android:layout_width="70dp"
+                           android:layout_height="match_parent"
+                           android:gravity="center"
+                           android:text="Mrs"/>
+
+                       <RadioButton
+                           android:id="@+id/booking_ms"
+                           android:layout_width="70dp"
+                           android:layout_height="match_parent"
+                           android:gravity="center"
+                           android:text="Ms"/>
+
+                   </RadioGroup>
+
+                   <EditText
+                       android:id="@+id/booking_user_name"
+                       android:layout_width="match_parent"
+                       android:layout_height="45dp"
+                       android:layout_margin="10dp"
+                       android:drawablePadding="10dp"
+                       android:hint="Full Name"
+                       android:background="@null"
+                       android:paddingLeft="15dp"
+                       android:singleLine="true"/>
+
+                   <EditText
+                       android:id="@+id/booking_user_phone_number"
+                       android:layout_width="match_parent"
+                       android:layout_height="45dp"
+                       android:layout_margin="10dp"
+                       android:background="@null"
+                       android:drawablePadding="10dp"
+                       android:hint="Phone Number"
+                       android:inputType="number"
+                       android:paddingLeft="15dp"
+                       android:singleLine="true"/>
+
+                   <EditText
+                       android:id="@+id/booking_user_email"
+                       android:layout_width="match_parent"
+                       android:layout_height="45dp"
+                       android:layout_margin="10dp"
+                       android:drawablePadding="10dp"
+                       android:background="@null"
+                       android:hint="Email"
+                       android:inputType="textEmailAddress"
+                       android:paddingLeft="15dp"
+                       android:singleLine="true"/>
+
+               </LinearLayout>
+               <!--Business layout-->
+               <LinearLayout
+                   android:id="@+id/business_layout"
+                   android:visibility="gone"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:background="@color/paint_color"
+                   android:orientation="vertical">
+
+                   <RadioGroup
+                       android:layout_width="match_parent"
+                       android:layout_height="30dp"
+                       android:layout_gravity="center"
+                       android:layout_marginBottom="20dp"
+                       android:layout_marginTop="10dp"
+                       android:gravity="center"
+                       android:orientation="horizontal">
+
+                       <RadioButton
+                           android:id="@+id/booking_company_mr"
+                           android:layout_width="70dp"
+                           android:layout_height="match_parent"
+                           android:gravity="center"
+                           android:text="Mr"
+                           android:checked="true"/>
+
+                       <RadioButton
+                           android:id="@+id/booking_company_mrs"
+                           android:layout_width="70dp"
+                           android:layout_height="match_parent"
+                           android:gravity="center"
+                           android:text="Mrs"/>
+
+                       <RadioButton
+                           android:id="@+id/booking_company_ms"
+                           android:layout_width="70dp"
+                           android:layout_height="match_parent"
+                           android:gravity="center"
+                           android:text="Ms"/>
+
+                   </RadioGroup>
+
+                   <EditText
+                       android:id="@+id/booking_company_gst_num"
+                       android:layout_width="match_parent"
+                       android:layout_height="45dp"
+                       android:layout_margin="10dp"
+                       android:drawablePadding="10dp"
+                       android:hint="GST Number"
+                       android:paddingLeft="15dp"
+                       android:singleLine="true"
+                       android:background="@null"/>
+
+                   <EditText
+                       android:id="@+id/booking_company_gst_name"
+                       android:layout_width="match_parent"
+                       android:layout_height="45dp"
+                       android:layout_margin="10dp"
+                       android:drawablePadding="10dp"
+                       android:hint="Company Name"
+                       android:inputType="text"
+                       android:paddingLeft="15dp"
+                       android:singleLine="true"
+                       android:background="@null"/>
+
+                   <EditText
+                       android:id="@+id/booking_company_user_name"
+                       android:layout_width="match_parent"
+                       android:layout_height="45dp"
+                       android:layout_margin="10dp"
+                       android:drawablePadding="10dp"
+                       android:hint="Full Name"
+                       android:paddingLeft="15dp"
+                       android:singleLine="true"
+                       android:background="@null"/>
+
+                   <EditText
+                       android:id="@+id/booking_company_phone_number"
+                       android:layout_width="match_parent"
+                       android:layout_height="45dp"
+                       android:layout_margin="10dp"
+                       android:drawablePadding="10dp"
+                       android:hint="Phone Number"
+                       android:inputType="number"
+                       android:paddingLeft="15dp"
+                       android:singleLine="true"
+                       android:background="@null"/>
+
+                   <EditText
+                       android:id="@+id/booking_company_email"
+                       android:layout_width="match_parent"
+                       android:layout_height="45dp"
+                       android:layout_margin="10dp"
+                       android:drawablePadding="10dp"
+                       android:hint="Email(Bussiness email)"
+                       android:inputType="textEmailAddress"
+                       android:paddingLeft="15dp"
+                       android:singleLine="true"
+                       android:background="@null"/>
+
+               </LinearLayout>
+
+           </LinearLayout>
+
+           <LinearLayout
+               android:background="@color/paint_color"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:layout_gravity="center_vertical"
+               android:weightSum="3">
+
+               <TextView
+                   android:layout_width="0dp"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="2"
+                   android:text="Order Details"
+                   android:textColor="#444"
+                   android:textSize="18dp"
+                   android:textStyle="bold" />
+
+               <TextView
+                   android:id="@+id/price"
+                   android:layout_width="0dp"
+                   android:gravity="right"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1"
+                   android:textStyle="bold"
+                   android:textSize="15dp"
+                   android:text="₹435.00"/>
+           </LinearLayout>
+
+       </LinearLayout>
+
+   </ScrollView>
+
+    <Button
+        android:id="@+id/proceed_payment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="#000"
+        android:foreground="?attr/selectableItemBackground"
+        android:text="PROCEED PAYMENT"
+        android:textColor="#fff" />
+
+</LinearLayout>

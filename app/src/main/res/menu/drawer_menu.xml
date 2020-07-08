@@ -1,0 +1,57 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/menu_group_1">
+        <item
+            android:id="@+id/menu_offers"
+            android:icon="@drawable/ic_local_offer_black_24dp"
+            android:title="Offers" />
+
+        <item
+            android:id="@+id/menu_newproducts"
+            android:icon="@drawable/ic_fiber_new_black_24dp"
+            android:title="New Products" />
+
+        <item
+            android:id="@+id/menu_popularproducts"
+            android:icon="@drawable/ic_grid"
+            android:title="Popular Products" />
+
+        <item
+            android:id="@+id/menu_help"
+            android:icon="@drawable/ic_help"
+            android:title="Help" />
+
+        <item
+            android:id="@+id/menu_about"
+            android:icon="@drawable/ic_profile"
+            android:title="About Us" />
+
+        <item
+            android:id="@+id/menu_message"
+            android:icon="@drawable/ic_message_black_24dp"
+            android:title="Messages" />
+
+    </group>
+    <group android:id="@+id/menu_group_2">
+
+        <item
+            android:id="@+id/menu_recieved_orders"
+            android:icon="@drawable/ic_format_list_bulleted_black_24dp"
+            android:title="Recived Order"/>
+
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/ic_logout"
+            android:title="Logout" />
+
+        <item
+            android:id="@+id/menu_terms_and_condition"
+            android:icon="@drawable/ic_message_black_24dp"
+            android:title="Terms and Condition" />
+
+        <item
+            android:id="@+id/menu_share"
+            android:icon="@drawable/ic_share_black_24dp"
+            android:title="Terms and Condition" />
+
+    </group>
+</menu>

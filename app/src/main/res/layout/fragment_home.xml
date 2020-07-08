@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/home_fragment"
+    android:background="@color/white">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                xmlns:custom="http://schemas.android.com/apk/res-auto"
+                android:background="#ffffff"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_marginTop="50dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.test.sample.hirecooks.Libraries.Slider.SliderLayout
+                        android:id="@+id/slider"
+                        android:layout_width="match_parent"
+                        custom:pager_animation_span="1100"
+                        android:layout_height="200dp" />
+
+                    <LinearLayout
+                        android:layout_margin="15dp"
+                        android:id="@+id/searchResults"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/margin_40"
+                        android:background="@drawable/cartbutton_selector"
+                        android:orientation="horizontal"
+                        android:elevation="2dp"
+                        android:layout_gravity="center"
+                        android:visibility="visible">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textAllCaps="true"
+                            android:drawableLeft="@drawable/ic_airport_shuttle_black_24dp"
+                            android:layout_marginLeft="20dp"
+                            android:textColor="@color/dark_gray"
+                            android:textStyle="bold"
+                            android:text="@string/standard_delivery_within_2_4_hrs"/>
+
+                        <!--                   <ImageView
+                                               android:layout_width="match_parent"
+                                               android:layout_height="30dp"
+                                               android:layout_gravity="center"
+                                               app:srcCompat="@drawable/ic_search"
+                                               android:layout_weight="3"/>-->
+
+                        <!--                   <AutoCompleteTextView
+                                               android:focusable="false"
+                                                android:focusableInTouchMode="false"
+                                               android:layout_weight="1"
+                                               android:id="@+id/autoComplete"
+                                               android:layout_width="match_parent"
+                                               android:layout_height="wrap_content"
+                                               android:hint="@string/search_items"
+                                               android:textColorHint="@color/gray_btn_bg_color"
+                                               android:textCursorDrawable="@drawable/color_cursor"
+                                               android:layout_gravity="center"
+                                               android:background="@color/white"
+                                               android:textColor="@color/gray_btn_bg_color"
+                                               android:popupBackground="@color/white" />-->
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:visibility="visible"
+                        android:id="@+id/venders_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:scrollbars="none"
+                        android:background="@color/white"
+                        android:scrollbarAlwaysDrawHorizontalTrack="true"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/light_gray_rect"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:padding="7dp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textAllCaps="true"
+                        android:text="@string/new_offers"
+                        android:textColor="@color/white"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/offer_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:scrollbars="none"
+                    android:background="@color/white"
+                    android:scrollbarAlwaysDrawHorizontalTrack="true"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/light_gray_rect"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:padding="7dp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textAllCaps="true"
+                        android:text="@string/popular_products"
+                        android:textColor="@color/white"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/my_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:scrollbars="none"
+                    android:background="@color/white"
+                    android:scrollbarAlwaysDrawHorizontalTrack="true"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/my_recycler_view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:scrollbars="none"
+                    android:background="@color/white"
+                    android:scrollbarAlwaysDrawHorizontalTrack="true"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/light_gray_rect"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:padding="7dp"
+                        android:gravity="center"
+                        android:textAllCaps="true"
+                        android:layout_gravity="center"
+                        android:text="@string/our_new_product"
+                        android:textColor="@color/white"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/my_recycler_view3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:background="@color/white"
+                    android:layout_margin="5dp"
+                    android:scrollbarAlwaysDrawHorizontalTrack="true"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="70dp"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

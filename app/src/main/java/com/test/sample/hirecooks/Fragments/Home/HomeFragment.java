@@ -1,0 +1,447 @@
+package com.test.sample.hirecooks.Fragments.Home;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.os.Build;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.test.sample.hirecooks.Activity.Home.MainActivity;
+import com.test.sample.hirecooks.Adapter.Category.CategoryAdapter;
+import com.test.sample.hirecooks.Adapter.Category.CircularImageCategoryAdapter;
+import com.test.sample.hirecooks.Adapter.Category.NewProductCategoryAdapter;
+import com.test.sample.hirecooks.Adapter.Home.FeedProperties;
+import com.test.sample.hirecooks.Adapter.Offer.OfferAdapter;
+import com.test.sample.hirecooks.Adapter.Venders.VendersAdapter;
+import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
+import com.test.sample.hirecooks.BaseActivity;
+import com.test.sample.hirecooks.Libraries.Slider.SliderLayout;
+import com.test.sample.hirecooks.Models.Category.Categories;
+import com.test.sample.hirecooks.Models.Category.Category;
+import com.test.sample.hirecooks.Models.MapLocationResponse.Example;
+import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
+import com.test.sample.hirecooks.Models.NewProductsCategory.NewProductCategories;
+import com.test.sample.hirecooks.Models.NewProductsCategory.NewProductCategory;
+import com.test.sample.hirecooks.Models.Offer.Offer;
+import com.test.sample.hirecooks.Models.OfferCategory.OffersCategories;
+import com.test.sample.hirecooks.Models.OfferCategory.OffersCategory;
+import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
+import com.test.sample.hirecooks.Models.UsersResponse.UsersResponse;
+import com.test.sample.hirecooks.Models.users.User;
+import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.Utils.Constants;
+import com.test.sample.hirecooks.Utils.SharedPrefManager;
+import com.test.sample.hirecooks.WebApis.MapApi;
+import com.test.sample.hirecooks.WebApis.ProductApi;
+import com.test.sample.hirecooks.WebApis.UserApi;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class HomeFragment extends Fragment{
+    private Context context;
+    private SliderLayout mDemoSlider;
+    private ScrollView scrollView;
+    private RecyclerView offer_recycler_view,recyclerView,recyclerView2,my_recycler_view3,venders_recycler_view;
+    private ArrayList<FeedProperties> os_versions;
+    private AutoCompleteTextView autoComplete;
+    private CategoryAdapter mAdapter;
+    private LinearLayout searchResults;
+    ArrayAdapter<String> stringAdapter;
+    private UserApi mService;
+    private List<Category> categories;
+    MainActivity mainActivity;
+    private float mToolbarBarHeight;
+    CoordinatorLayout.LayoutParams layoutParams;
+    private List<Map> maps;
+    private User user = SharedPrefManager.getInstance(getContext()).getUser();
+    private List<UserResponse> vendersList;
+    private BaseActivity baseActivity;
+    public HomeFragment() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @SuppressLint("NewApi")
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        context = container.getContext();
+        initViews(view);
+        getMapDetails();
+        getCategory();
+        getOfferCategory();
+        getNewProductCategory();
+        getOffer();
+        return view;
+    }
+
+    @SuppressLint("WrongConstant")
+    private void getOffer() {
+        List<Offer> offers = new ArrayList<>();
+        offers.add(new Offer(0,"Grocery", "https://cmkt-image-prd.freetls.fastly.net/0.1.0/ps/4021761/910/607/m2/fpnw/wm1/zpope64kaakcxgygqinp9cz1axdtaj45we4zeeuv9uv24vuadgujqxshj5pkqrwe-.jpg?1518944844&s=03a65531af02f4353d74c0816dae35a8","https://cmkt-image-prd.freetls.fastly.net/0.1.0/ps/4021761/910/607/m2/fpnw/wm1/zpope64kaakcxgygqinp9cz1axdtaj45we4zeeuv9uv24vuadgujqxshj5pkqrwe-.jpg?1518944844&s=03a65531af02f4353d74c0816dae35a8","#ff6347"));
+        offers.add(new Offer(1,"Food", "https://i.pinimg.com/originals/1f/28/13/1f28133d604d126080bda739a02847cc.jpg","https://cmkt-image-prd.freetls.fastly.net/0.1.0/ps/4021761/910/607/m2/fpnw/wm1/zpope64kaakcxgygqinp9cz1axdtaj45we4zeeuv9uv24vuadgujqxshj5pkqrwe-.jpg?1518944844&s=03a65531af02f4353d74c0816dae35a8","#FF9933"));
+        offers.add(new Offer(2,"Icecream", "https://5.imimg.com/data5/KH/TW/MY-9134447/big-cone-ice-cream-500x500.jpg","https://cmkt-image-prd.freetls.fastly.net/0.1.0/ps/4021761/910/607/m2/fpnw/wm1/zpope64kaakcxgygqinp9cz1axdtaj45we4zeeuv9uv24vuadgujqxshj5pkqrwe-.jpg?1518944844&s=03a65531af02f4353d74c0816dae35a8","#ff6347"));
+        offers.add(new Offer(3,"Carts", "https://img.freepik.com/free-photo/closeup-smartphone-fruits-vegetables_23-2148216120.jpg?size=626&ext=jpg","https://cmkt-image-prd.freetls.fastly.net/0.1.0/ps/4021761/910/607/m2/fpnw/wm1/zpope64kaakcxgygqinp9cz1axdtaj45we4zeeuv9uv24vuadgujqxshj5pkqrwe-.jpg?1518944844&s=03a65531af02f4353d74c0816dae35a8","#FF9933"));
+        offers.add(new Offer(4,"Vegitable", "https://www.vegetables.co.nz/assets/Uploads/vegetables.jpg","https://cmkt-image-prd.freetls.fastly.net/0.1.0/ps/4021761/910/607/m2/fpnw/wm1/zpope64kaakcxgygqinp9cz1axdtaj45we4zeeuv9uv24vuadgujqxshj5pkqrwe-.jpg?1518944844&s=03a65531af02f4353d74c0816dae35a8","#ff6347"));
+        offers.add(new Offer(5,"Fast Food", "https://i2.wp.com/www.eatthis.com/wp-content/uploads/2018/05/mcdonalds-burger-fries-soda.jpg?fit=1024%2C750&ssl=1","https://cmkt-image-prd.freetls.fastly.net/0.1.0/ps/4021761/910/607/m2/fpnw/wm1/zpope64kaakcxgygqinp9cz1axdtaj45we4zeeuv9uv24vuadgujqxshj5pkqrwe-.jpg?1518944844&s=03a65531af02f4353d74c0816dae35a8","#ff6347"));
+        offers.add(new Offer(6,"Milk", "https://cdn1.sph.harvard.edu/wp-content/uploads/sites/30/2012/09/calcium_and_milk-300x194.jpg","https://cmkt-image-prd.freetls.fastly.net/0.1.0/ps/4021761/910/607/m2/fpnw/wm1/zpope64kaakcxgygqinp9cz1axdtaj45we4zeeuv9uv24vuadgujqxshj5pkqrwe-.jpg?1518944844&s=03a65531af02f4353d74c0816dae35a8","#ff6347"));
+        offers.add(new Offer(7,"Fruits", "https://i.ytimg.com/vi/4gi05GOe4Ew/maxresdefault.jpg","https://cmkt-image-prd.freetls.fastly.net/0.1.0/ps/4021761/910/607/m2/fpnw/wm1/zpope64kaakcxgygqinp9cz1axdtaj45we4zeeuv9uv24vuadgujqxshj5pkqrwe-.jpg?1518944844&s=03a65531af02f4353d74c0816dae35a8","#ff6347"));
+
+        getCategoryOffer(offers);
+    }
+
+    @SuppressLint("WrongConstant")
+    private void getCategoryOffer(List<Offer> offers){
+        CircularImageCategoryAdapter adapter = new CircularImageCategoryAdapter(getActivity(),offers);
+        recyclerView2.setAdapter(adapter);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+        } else {
+            linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+        }
+        recyclerView2.setLayoutManager(linearLayoutManager);
+        recyclerView2.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    public static HomeFragment newInstance() {
+        Bundle args = new Bundle();
+        HomeFragment fragment = new HomeFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    private void getMapDetails() {
+        MapApi mService = ApiClient.getClient().create(MapApi.class);
+        Call<com.test.sample.hirecooks.Models.MapLocationResponse.Result> call = mService.getMapDetails(user.getId());
+        call.enqueue(new Callback<com.test.sample.hirecooks.Models.MapLocationResponse.Result>() {
+            @Override
+            public void onResponse(Call<com.test.sample.hirecooks.Models.MapLocationResponse.Result> call, Response<com.test.sample.hirecooks.Models.MapLocationResponse.Result> response) {
+                if (response.code() == 200 && response.body() != null && response.body().getMaps() != null) {
+                    try{
+                        getNearByUsers(response.body().getMaps());
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                } else {
+                    baseActivity.ShowToast(getResources().getString(R.string.failed_due_to)+response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<com.test.sample.hirecooks.Models.MapLocationResponse.Result> call, Throwable t) {
+            }
+        });
+    }
+
+    public void getNearByUsers(final Map map) {
+        MapApi mapApi = ApiClient.getClient().create(MapApi.class);
+        Call<Example> call = mapApi.getNearByUsers(map.getLatitude(),map.getLongitude());
+        call.enqueue(new Callback<Example>() {
+            @Override
+            public void onResponse(@NonNull Call<Example> call, @NonNull Response<Example> response) {
+                maps = new ArrayList<>();
+                if(response.code() == 200 && response.body() != null) {
+                    try{
+                        maps = response.body().getMaps();
+                        Constants.NEARBY_USER_LOCATION = response.body().getMaps();
+                        getVenders();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    baseActivity.ShowToast(getResources().getString(R.string.failed_due_to)+response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Example> call, @NonNull Throwable t) {
+            }
+        });
+    }
+
+    private void getVenders() {
+        UserApi service = ApiClient.getClient().create(UserApi.class);
+        Call<UsersResponse> call = service.getUsers();
+        call.enqueue(new Callback<UsersResponse>() {
+            @SuppressLint({"ShowToast", "WrongConstant"})
+            @Override
+            public void onResponse(@NonNull Call<UsersResponse> call, @NonNull Response<UsersResponse> response) {
+                int statusCode = response.code();
+                if (statusCode == 200) {
+                    vendersList = new ArrayList<>();
+                    List<UserResponse> list = new ArrayList<>();
+                    List<UserResponse> filteredList = new ArrayList<>();
+                    if (response.body() != null) {
+                        list = response.body().getUsersResponses();
+                        for (UserResponse usersResponse : list) {
+                            if(usersResponse.getId()==user.getId()&&usersResponse.getEmail().equalsIgnoreCase(user.getEmail())){
+                                Constants.USER_PROFILE = usersResponse.getImage();
+                            }
+                            for (Map map : Constants.NEARBY_USER_LOCATION) {
+                                if (map.getFirm_id().equalsIgnoreCase(usersResponse.getFirmId())) {
+                                    if (!usersResponse.getUserType().equalsIgnoreCase("User")&&!usersResponse.getFirmId().equalsIgnoreCase("Not_Available")) {
+                                        vendersList.add(usersResponse);
+                                        Set<UserResponse> newList = new LinkedHashSet<>(vendersList);
+                                        filteredList = new ArrayList<>(newList);
+                                        Constants.NEARBY_VENDERS = filteredList;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if(filteredList!=null&&filteredList.size()!=0){
+                        VendersAdapter adapter = new VendersAdapter(getActivity(),filteredList);
+                        venders_recycler_view.setAdapter(adapter);
+                        venders_recycler_view.setVisibility(View.VISIBLE);
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                            linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+                        }else{
+                            linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+                        }
+                        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(20, 20, 20, 20);
+                        linearLayoutManager.canScrollHorizontally();
+
+                        venders_recycler_view.setLayoutManager(linearLayoutManager);
+                        venders_recycler_view.setItemAnimator(new DefaultItemAnimator());
+                    }else{
+                        venders_recycler_view.setVisibility(View.GONE);
+                    }
+                }else{
+                    baseActivity.ShowToast(getResources().getString(R.string.failed_due_to)+statusCode);
+                }
+            }
+
+            @SuppressLint("ShowToast")
+            @Override
+            public void onFailure(@NonNull Call<UsersResponse> call, @NonNull Throwable t) {
+            }
+        });
+    }
+
+    private void getOfferCategory() {
+       ProductApi mService = ApiClient.getClient().create(ProductApi.class);
+        Call<OffersCategories> call = mService.getOffersCategory();
+        call.enqueue(new Callback<OffersCategories>() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public void onResponse(Call<OffersCategories> call, Response<OffersCategories> response) {
+                int statusCode = response.code();
+                if(statusCode==200){
+                  List<OffersCategory> categories = response.body().getOffersCategory();
+                    OfferAdapter adapter = new OfferAdapter(getActivity(),categories);
+                    offer_recycler_view.setAdapter(adapter);
+
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+                    }else{
+                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+                    }
+                    RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(20, 20, 20, 20);
+                    linearLayoutManager.canScrollHorizontally();
+
+                    offer_recycler_view.setLayoutManager(linearLayoutManager);
+                    offer_recycler_view.setItemAnimator(new DefaultItemAnimator());
+
+                }
+                else{
+                    baseActivity.ShowToast(getResources().getString(R.string.failed_due_to)+statusCode);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OffersCategories> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getNewProductCategory() {
+       ProductApi mService = ApiClient.getClient().create(ProductApi.class);
+        Call<NewProductCategories> call = mService.getNewProductCategory();
+        call.enqueue(new Callback<NewProductCategories>() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public void onResponse(Call<NewProductCategories> call, Response<NewProductCategories> response) {
+                int statusCode = response.code();
+                if(statusCode==200){
+                  List<NewProductCategory> categories = response.body().getNewProductCategory();
+                    my_recycler_view3.setHasFixedSize(true);
+                    my_recycler_view3.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    NewProductCategoryAdapter adapter = new NewProductCategoryAdapter(getActivity(),categories);
+                    my_recycler_view3.setAdapter(adapter);
+
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+                    }else {
+                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+                    }
+                    my_recycler_view3.setLayoutManager(linearLayoutManager);
+                    my_recycler_view3.setItemAnimator(new DefaultItemAnimator());
+
+                }
+                else{
+                    baseActivity.ShowToast(getResources().getString(R.string.failed_due_to)+statusCode);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NewProductCategories> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getCategory() {
+        mService = ApiClient.getClient().create(UserApi.class);
+        Call<Categories> call = mService.getCategory();
+        call.enqueue(new Callback<Categories>() {
+            @SuppressLint("WrongConstant")
+            @Override
+            public void onResponse(Call<Categories> call, Response<Categories> response) {
+                int statusCode = response.code();
+                if(statusCode==200){
+                    categories = response.body().getCategory();
+                    recyclerView.setHasFixedSize(true);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    mAdapter = new CategoryAdapter(getActivity(),categories);
+                    recyclerView.setAdapter(mAdapter);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+                    } else {
+                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+                    }
+                    recyclerView.setLayoutManager(linearLayoutManager);
+                    recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+                }
+                else{
+                    baseActivity.ShowToast(getResources().getString(R.string.failed_due_to)+response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Categories> call, Throwable t) {
+
+            }
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @SuppressLint({"WrongConstant", "ClickableViewAccessibility"})
+    private void initViews(View view) {
+        Fresco.initialize(getActivity());
+        scrollView = view.findViewById(R.id.scrollView);
+        baseActivity = new BaseActivity();
+       // searchResults = view.findViewById(R.id.searchResults);
+        mDemoSlider = view.findViewById(R.id.slider);
+        offer_recycler_view = view.findViewById(R.id.offer_recycler_view);
+        recyclerView = view.findViewById(R.id.my_recycler_view);
+        recyclerView2 = view.findViewById(R.id.my_recycler_view2);
+        my_recycler_view3 = view.findViewById(R.id.my_recycler_view3);
+        venders_recycler_view = view.findViewById(R.id.venders_recycler_view);
+
+        String[] colors = getResources().getStringArray(R.array.colorList);
+        stringAdapter = new ArrayAdapter<>(getActivity(), R.layout.row, colors);
+       /* autoComplete = view.findViewById(R.id.autoComplete);
+        autoComplete.setAdapter(stringAdapter);
+        autoComplete.setTextColor(Color.BLACK);*/
+
+        HashMap<String, Integer> file_maps = new HashMap<String, Integer>();
+        file_maps.put("Ws",R.drawable.slid1);
+        file_maps.put("Ws Design",R.drawable.slid2);
+        file_maps.put("Ws Android",R.drawable.slid3);
+        file_maps.put("Ws Web", R.drawable.slid4);
+
+        for(String name : file_maps.keySet()){
+            TextSliderView textSliderView = new TextSliderView(getActivity());
+            textSliderView
+                    .description(name)
+                    .image(file_maps.get(name))
+                    .setScaleType(BaseSliderView.ScaleType.Fit)
+                    //.setOnSliderClickListener((BaseSliderView.OnSliderClickListener) getActivity());
+            .setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+                @Override
+                public void onSliderClick(BaseSliderView slider) {
+                    Toast.makeText(getActivity(),"clicked: "+file_maps.get(name),Toast.LENGTH_LONG).show();
+                }
+            });
+
+            textSliderView.bundle(new Bundle());
+            mDemoSlider.addSlider(textSliderView);
+        }
+
+        mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+        mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        mDemoSlider.setCustomAnimation(new DescriptionAnimation());
+        mDemoSlider.setDuration(4000);
+       // mDemoSlider.addOnPageChangeListener((ViewPagerEx.OnPageChangeListener) this);
+
+     /*   searchResults.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), SearchResultActivity.class));
+            }
+        });*/
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mainActivity = (MainActivity)context;
+    }
+
+    @Override
+    public void onResume() {
+        getCategory();
+        super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        mDemoSlider.stopAutoCycle();
+        super.onStop();
+    }
+}

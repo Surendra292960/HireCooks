@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1033969955865",
+    "firebase_url": "https://hirecooks-c6211.firebaseio.com",
+    "project_id": "hirecooks-c6211",
+    "storage_bucket": "hirecooks-c6211.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1033969955865:android:11e4fee8704725a27ae688",
+        "android_client_info": {
+          "package_name": "com.test.sample.hirecooks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1033969955865-1209sd8ii5md074761rq3r8f1n5l29hb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.test.sample.hirecooks",
+            "certificate_hash": "5d7a214c23e2ba3d34ac6ed3eb1ce043eed1cd62"
+          }
+        },
+        {
+          "client_id": "1033969955865-tehj1c3g6l04f03h8s9jvp8d1itp25m9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXRojWAIIe5z6ndj5xiCRxcJgatA3PjJ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1033969955865-tehj1c3g6l04f03h8s9jvp8d1itp25m9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

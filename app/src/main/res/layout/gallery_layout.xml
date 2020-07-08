@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <Switch
+        android:id="@+id/hide_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="Hide"
+        android:textSize="12sp"
+        android:layout_margin="3dp"
+        android:textOff="No"
+        android:textOn="Yes"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/hotel_images"
+        android:scaleType="centerCrop"/>
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/hotel_image_caption"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="45dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/edit_text_design"
+            android:drawablePadding="10dp"
+            android:inputType="number"
+            android:text="Caption"
+            android:paddingStart="15dp"
+            android:layout_gravity="center"
+            android:textSize="@dimen/text_size_small"
+            android:elevation="1dp"
+            android:textColor="@color/green_light"
+            android:singleLine="true"
+            android:hint="Rate"
+            tools:ignore="Autofill,RtlSymmetry" />
+
+        <EditText
+            android:id="@+id/hotel_image_order"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="45dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/edit_text_design"
+            android:drawablePadding="10dp"
+            android:inputType="number"
+            android:text="Caption"
+            android:paddingStart="15dp"
+            android:layout_gravity="center"
+            android:textSize="@dimen/text_size_small"
+            android:elevation="1dp"
+            android:textColor="@color/green_light"
+            android:singleLine="true"
+            android:hint="Rate"
+            tools:ignore="Autofill,RtlSymmetry" />
+
+    </LinearLayout>
+
+</LinearLayout>

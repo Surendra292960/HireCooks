@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.Users.UserSignUpActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:id="@+id/user_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_20"
+            android:orientation="vertical">
+
+            <com.google.android.gms.maps.MapView
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:id="@+id/google_map_view"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"/>
+
+            <View
+                android:id="@+id/otp_view"
+                android:layout_width="match_parent"
+                android:layout_height="70dp" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="-50dp"
+                android:background="@drawable/ic_launcher"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/gray_btn_bg_pressed_color"
+                android:textAlignment="center"
+                android:layout_margin="10dp"
+                android:text="@string/sign_up"
+                android:textAllCaps="true"/>
+
+            <EditText
+                android:id="@+id/editTextUsername"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/edit_text_design"
+                android:hint="@string/username"
+                android:paddingStart="30dp"
+                android:textSize="@dimen/size_14"
+                android:inputType="text"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:elevation="2dp"
+                android:autofillHints="@string/username" />
+
+            <EditText
+                android:id="@+id/editTextEmail"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_design"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:paddingLeft="30dp"
+                android:textSize="@dimen/size_14"
+                android:textAlignment="viewStart"
+                android:elevation="2dp"/>
+
+
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_design"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:paddingLeft="30dp"
+                android:textSize="@dimen/size_14"
+                android:textAlignment="viewStart"
+                android:elevation="2dp"/>
+
+            <EditText
+                android:id="@+id/editTextConPassword"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_design"
+                android:hint="@string/con_password"
+                android:inputType="textPassword"
+                android:paddingLeft="30dp"
+                android:textSize="@dimen/size_14"
+                android:textAlignment="viewStart"
+                android:elevation="2dp"/>
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/edit_text_design"
+                android:gravity="center_vertical"
+                android:elevation="2dp">
+
+                <com.hbb20.CountryCodePicker
+                    android:id="@+id/ccp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:ccp_defaultNameCode="IN" />
+
+                <EditText
+                    android:id="@+id/editTextPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/size_14"
+                    android:hint="@string/phone"
+                    android:background="@null"
+                    android:inputType="phone"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <RadioGroup
+                android:id="@+id/radioGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButtonMale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/male" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/female" />
+
+            </RadioGroup>
+
+            <LinearLayout
+                android:visibility="gone"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_design"
+                android:gravity="center_vertical"
+                android:elevation="2dp">
+
+                <TextView
+                    android:id="@+id/location_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingStart="@dimen/margin_20"
+                    android:drawableLeft="@drawable/ic_my_location_black_24dp" />
+
+                <EditText
+                    android:id="@+id/editTextAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="@string/address"
+                    android:inputType="text"
+                    android:paddingLeft="30dp"
+                    android:background="@null"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/size_14"
+                    android:elevation="2dp"/>
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/editTextPinCode"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_design"
+                android:hint="@string/pincode"
+                android:inputType="number"
+                android:paddingLeft="30dp"
+                android:textSize="@dimen/size_14"
+                android:visibility="gone"
+                android:textAlignment="viewStart"
+                android:elevation="2dp"/>
+
+            <EditText
+                android:id="@+id/editTextFirmId"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_design"
+                android:hint="@string/firmid"
+                android:inputType="text"
+                android:paddingLeft="30dp"
+                android:textSize="@dimen/size_14"
+                android:textAlignment="viewStart"
+                android:elevation="2dp"
+                android:visibility="gone"/>
+
+            <EditText
+                android:id="@+id/editTextUserType"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_design"
+                android:hint="@string/usertype"
+                android:inputType="text"
+                android:paddingLeft="30dp"
+                android:textSize="@dimen/size_14"
+                android:textAlignment="viewStart"
+                android:elevation="2dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/buttonSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/sign_up"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:elevation="5dp"
+                android:textAllCaps="true"
+                android:background="@drawable/rounded"/>
+
+                <TextView
+                    android:id="@+id/txtSignIn"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/already_have_account"
+                    android:inputType="number"
+                    android:paddingLeft="30dp"
+                    android:textSize="@dimen/size_14"
+                    android:gravity="center"
+                    android:layout_marginBottom="@dimen/margin_50"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
