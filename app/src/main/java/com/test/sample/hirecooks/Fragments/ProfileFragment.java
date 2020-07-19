@@ -1,13 +1,15 @@
 package com.test.sample.hirecooks.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -15,13 +17,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.textfield.TextInputEditText;
 import com.ipaulpro.afilechooser.utils.FileUtils;
 import com.squareup.picasso.Picasso;
+import com.test.sample.hirecooks.Activity.Home.MainActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.users.Result;
 import com.test.sample.hirecooks.Models.users.User;
@@ -47,10 +49,8 @@ import static android.app.Activity.RESULT_OK;
 import static com.test.sample.hirecooks.Utils.Constants.USER_PROFILE;
 
 public class ProfileFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener, UploadCallBack {
-    private AppCompatButton buttonUpdate;
-    private TextInputEditText editTextUsername, editTextEmail,editTextPhone,
-            editTextFirmId,editTextUserType;
-    private TextView edit_profile_image;
+    private TextView buttonUpdate;
+    private EditText editTextUsername, editTextEmail,editTextPhone, editTextFirmId,editTextUserType;
     private RadioGroup radioGender;
     private View appRoot;
     private CircleImageView profile_image;
@@ -59,6 +59,8 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
     private static final int PICK_FILE_REQUEST = 1222;
     private Uri selectedFileUri;
     private UserApi mService;
+    private MainActivity mainActivity;
+    private FrameLayout profile_image_layout;
 
     public static ProfileFragment newInstance() {
         Bundle args = new Bundle();
@@ -74,23 +76,21 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
         progressBarUtil = new ProgressBarUtil(getActivity());
         buttonUpdate = view.findViewById(R.id.buttonUpdate);
         appRoot = view.findViewById(R.id.appRoot);
+        profile_image_layout = view.findViewById(R.id.profile_image_layout);
         editTextUsername = view.findViewById(R.id.editTextUsername);
         editTextEmail = view.findViewById(R.id.editTextEmail);
         editTextPhone = view.findViewById(R.id.editTextPhone);
         editTextUserType = view.findViewById(R.id.editTextUserType);
         editTextFirmId = view.findViewById(R.id.editTextFirmId);
         profile_image = view.findViewById(R.id.profile_image);
-        edit_profile_image = view.findViewById(R.id.edit_profile_image);
         radioGender = view.findViewById(R.id.radioGender);
-
         user = SharedPrefManager.getInstance(getActivity()).getUser();
-
         editTextUsername.setText(user.getName());
         editTextEmail.setText(user.getEmail());
         editTextPhone.setText(user.getPhone());
         editTextUserType.setText(user.getUserType());
         editTextFirmId.setText(user.getFirmId());
-        if (!TextUtils.isEmpty(user.getImage())) {
+        if (USER_PROFILE!=null) {
             Picasso.with(getActivity()).load(APIUrl.PROFILE_URL+USER_PROFILE).into(profile_image);
         }
 
@@ -105,16 +105,50 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
             public void onClick(View v) {
                 updateUser();
             }
-        }); 
-        
-        edit_profile_image.setOnClickListener(new View.OnClickListener() {
+        });
+
+        profile_image_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(user!=null)
                     chooseImage();
             }
         });
+
+        NestedScrollView nested_content = (NestedScrollView) view.findViewById(R.id.nested_scroll_view);
+        nested_content.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY < oldScrollY) { // up
+                   // animateNavigation(false);
+                   // animateToolBar(false);
+                }
+                if (scrollY > oldScrollY) { // down
+                   // animateNavigation(true);
+                  //  animateToolBar(true);
+                }
+            }
+        });
+
         return view;
+    }
+
+    boolean isNavigationHide = false;
+
+    private void animateNavigation(final boolean hide) {
+        if (isNavigationHide && hide || !isNavigationHide && !hide) return;
+        isNavigationHide = hide;
+        int moveY = hide ? (2 * mainActivity.mNavigationView.getHeight()) : 0;
+        mainActivity.mNavigationView.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+    }
+
+    boolean isToolBarHide = false;
+
+    private void animateToolBar(final boolean hide) {
+        if (isToolBarHide && hide || !isToolBarHide && !hide) return;
+        isToolBarHide = hide;
+        int moveY = hide ? -(2 * mainActivity.toolbar_layout.getHeight()) : 0;
+        mainActivity.toolbar_layout.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
     }
 
     private void chooseImage() {
@@ -221,5 +255,11 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mainActivity = (MainActivity)context;
     }
 }

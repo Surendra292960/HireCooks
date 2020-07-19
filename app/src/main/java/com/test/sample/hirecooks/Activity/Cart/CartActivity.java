@@ -1,5 +1,6 @@
 package com.test.sample.hirecooks.Activity.Cart;
-
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -29,7 +31,7 @@ import com.kinda.alert.KAlertDialog;
 import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Activity.CheckOut.CheckoutActivity;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
-import com.test.sample.hirecooks.BaseActivity;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Models.Cart.Cart;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
@@ -43,15 +45,14 @@ public class CartActivity extends BaseActivity {
     private TextView item_count,checkout_amount,checkout;
     private FrameLayout empty_cart_img;
     private AppCompatButton shop_now;
-    private View appRoot;
-    List<Cart> cartList;
-    RelativeLayout bottom_anchor_layout;
-    int Quantity = 0, sellRate = 0,displayRate = 0, SubTotal = 0,weight = 0;
-    LocalStorage localStorage;
-    Gson gson;
-    CartAdapter adapter;
+    private View appRoot,bottom_anchor;
+    private List<Cart> cartList;
+    private RelativeLayout bottom_anchor_layout;
+    private int Quantity = 0, sellRate = 0,displayRate = 0, SubTotal = 0,weight = 0;
+    private LocalStorage localStorage;
+    private Gson gson;
+    private CartAdapter adapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +76,21 @@ public class CartActivity extends BaseActivity {
 
         View view = findViewById(R.id.footerView);
         item_count =  view.findViewById(R.id.item_count);
+        bottom_anchor =  view.findViewById(R.id.bottom_anchor);
         checkout_amount = view.findViewById(R.id.checkout_amount);
         checkout = view.findViewById(R.id.checkout);
+
+        NestedScrollView nested_content = findViewById(R.id.nested_scroll_view);
+        nested_content.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if (scrollY < oldScrollY) { // up
+                // animateSearchBar(false);
+                animateBottomAnchor(false);
+            }
+            if (scrollY > oldScrollY) { // down
+                // animateSearchBar(true);
+                animateBottomAnchor(true);
+            }
+        });
 
         mSwipeRefreshLayout = findViewById(R.id.swipeToRefresh);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -102,10 +116,21 @@ public class CartActivity extends BaseActivity {
         });
     }
 
+
+    boolean isBottomAnchorNavigationHide = false;
+
+    private void animateBottomAnchor(final boolean hide) {
+        if (isBottomAnchorNavigationHide && hide || !isBottomAnchorNavigationHide && !hide) return;
+        isBottomAnchorNavigationHide = hide;
+        int moveY = hide ? (2 * bottom_anchor.getHeight()) : 0;
+        bottom_anchor.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+    }
+
     private void getCart() {
         cartList = new ArrayList<>();
         cartList = getCartList();
         if(!cartList.isEmpty()){
+            animateBottomAnchor(false);
             bottom_anchor_layout.setVisibility(View.VISIBLE);
             checkout_amount.setText("₹  "+getTotalPrice());
             empty_cart_img.setVisibility(View.GONE);
@@ -219,6 +244,7 @@ public class CartActivity extends BaseActivity {
         }
 
 
+        @SuppressLint("SetTextI18n")
         @Override
         public void onBindViewHolder(CartAdapter.CartViewHolder holder, int position) {
             if(cartList!=null){
@@ -296,6 +322,10 @@ public class CartActivity extends BaseActivity {
                 holder.itemDelete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        View currentFocus = ((Activity)mCtx).getCurrentFocus();
+                        if (currentFocus != null) {
+                            currentFocus.clearFocus();
+                        }
                         cartList.remove(position);
                         notifyItemRemoved(position);
                         notifyItemRangeChanged(position, cartList.size());

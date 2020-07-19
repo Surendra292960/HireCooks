@@ -1,3 +1,4 @@
+/*
 package com.test.sample.hirecooks.Adapter.SearchAdapter;
 import android.content.Context;
 import android.text.SpannableString;
@@ -9,17 +10,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Activity.AddorRemoveCallbacks;
-import com.test.sample.hirecooks.Activity.SubCategory.SubCategoryActivity.SubCategoryActivity;
-import com.test.sample.hirecooks.BaseActivity;
+import com.test.sample.hirecooks.Activity.Home.MainActivity;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Models.Cart.Cart;
 import com.test.sample.hirecooks.Models.SearchSubCategory.Search;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,14 +32,16 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
     Context context;
     String Tag;
     LocalStorage localStorage;
+    MainActivity mainActivity;
     Gson gson;
     List<Cart> cartList = new ArrayList<>();
     String weight;
     private int discount = 0, discountPercentage = 0, displayrate = 0,sellRate = 0,displayRate = 0, SubTotal = 0,Quantity = 0;
 
-    public SearchAdapter(Context context, List<Search> productList) {
+    public SearchAdapter(Context context, List<Search> productList, MainActivity mainActivity) {
         this.productList = productList;
         this.context = context;
+        this.mainActivity = mainActivity;
     }
 
     @NonNull
@@ -63,12 +69,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
             if(product!=null){
                 holder.add_item_layout.setVisibility(View.VISIBLE);
                 holder.available_stock.setVisibility(View.VISIBLE);
-                holder.not_available.setVisibility(View.GONE);
 
             }else{
                 holder.available_stock.setVisibility(View.GONE);
-                holder.not_available.setVisibility(View.VISIBLE);
-                holder.add_item_layout.setVisibility(View.GONE);
                 holder.add_item_layout.setVisibility(View.GONE);
             }
             holder.name.setText(product.getName());
@@ -129,7 +132,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
                         if (Quantity == 0) {
                             Quantity = 1;
                             SubTotal = (sellRate * Quantity);
-                            if (context instanceof SubCategoryActivity) {
+                            if (context instanceof MainActivity) {
                                 Cart cart = new Cart(product.getId(), product.getName(),  product.getLink(), product.getDiscription(), sellRate, displayRate, SubTotal, 1, weight, product.getFirmId());
                                 cartList = ((BaseActivity) context).getCartList();
                                 cartList.add(cart);
@@ -137,7 +140,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
                                 localStorage.setCart(cartStr);
                                 ((AddorRemoveCallbacks) context).onAddProduct();
                                 notifyItemChanged(position);
-                               // getCart();
+                                //getCart();
                             }
                         } else {
                             Toast.makeText(context, "Please Add Quantity", Toast.LENGTH_SHORT).show();
@@ -187,7 +190,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView discount, name, sellrate, quantity, displayRate,available_stock,not_available;
+        TextView discount, name, sellrate, quantity, displayRate,available_stock;
         ImageView add_item, remove_item;
         LinearLayout add_item_layout;
 
@@ -203,7 +206,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
             remove_item = itemView.findViewById(R.id.remove_item);
             add_item_layout = itemView.findViewById(R.id.add_item_layout);
             available_stock = itemView.findViewById(R.id.available_stock);
-            not_available = itemView.findViewById(R.id.not_available);
         }
     }
-}
+}*/

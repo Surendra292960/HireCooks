@@ -25,12 +25,16 @@ public class Token implements Serializable {
     private Integer userId;
     @SerializedName("firm_id")
     @Expose
-    private String firm_id;
+    private String firmId;
 
     public Token(Integer tokenId, String token, String deviceId) {
         this.tokenId = tokenId;
         this.token = token;
         this.deviceId = deviceId;
+    }
+
+    public Token() {
+
     }
 
     public Integer getTokenId() {
@@ -82,10 +86,10 @@ public class Token implements Serializable {
     }
 
     public String getFirm_id() {
-        return firm_id;
+        return firmId;
     }
 
     public void setFirm_id(String firm_id) {
-        this.firm_id = firm_id;
+        this.firmId = firm_id;
     }
 }

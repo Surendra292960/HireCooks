@@ -19,9 +19,24 @@ public class SubCategory implements Serializable {
     @SerializedName("link")
     @Expose
     private String link;
+    @SerializedName("link2")
+    @Expose
+    private String link2;
+    @SerializedName("link3")
+    @Expose
+    private String link3;
+    @SerializedName("link4")
+    @Expose
+    private String link4;
+    @SerializedName("shield_link")
+    @Expose
+    private String shieldLink;
     @SerializedName("discription")
     @Expose
     private String discription;
+    @SerializedName("detail_discription")
+    @Expose
+    private String detailDiscription;
     @SerializedName("sellRate")
     @Expose
     private Integer sellRate;
@@ -30,10 +45,13 @@ public class SubCategory implements Serializable {
     private Integer displayRate;
     @SerializedName("firm_id")
     @Expose
-    private String firm_id;
+    private String firmId;
     @SerializedName("stock")
     @Expose
     private Integer stock;
+    @SerializedName("accepting_order")
+    @Expose
+    private Integer acceptingOrder;
     @SerializedName("available_stock")
     @Expose
     private Integer availableStock;
@@ -70,12 +88,52 @@ public class SubCategory implements Serializable {
         this.link = link;
     }
 
+    public String getLink2() {
+        return link2;
+    }
+
+    public void setLink2(String link2) {
+        this.link2 = link2;
+    }
+
+    public String getLink3() {
+        return link3;
+    }
+
+    public void setLink3(String link3) {
+        this.link3 = link3;
+    }
+
+    public String getLink4() {
+        return link4;
+    }
+
+    public void setLink4(String link4) {
+        this.link4 = link4;
+    }
+
+    public String getShieldLink() {
+        return shieldLink;
+    }
+
+    public void setShieldLink(String shieldLink) {
+        this.shieldLink = shieldLink;
+    }
+
     public String getDiscription() {
         return discription;
     }
 
     public void setDiscription(String discription) {
         this.discription = discription;
+    }
+
+    public String getDetailDiscription() {
+        return detailDiscription;
+    }
+
+    public void setDetailDiscription(String detailDiscription) {
+        this.detailDiscription = detailDiscription;
     }
 
     public Integer getSellRate() {
@@ -95,11 +153,11 @@ public class SubCategory implements Serializable {
     }
 
     public String getFirm_id() {
-        return firm_id;
+        return firmId;
     }
 
-    public void setFirm_id(String firm_id) {
-        this.firm_id = firm_id;
+    public void setFirm_id(String firmId) {
+        this.firmId = firmId;
     }
 
     public Integer getStock() {
@@ -110,6 +168,14 @@ public class SubCategory implements Serializable {
         this.stock = stock;
     }
 
+    public Integer getAcceptingOrder() {
+        return acceptingOrder;
+    }
+
+    public void setAcceptingOrder(Integer acceptingOrder) {
+        this.acceptingOrder = acceptingOrder;
+    }
+
     public Integer getAvailableStock() {
         return availableStock;
     }
@@ -117,7 +183,6 @@ public class SubCategory implements Serializable {
     public void setAvailableStock(Integer availableStock) {
         this.availableStock = availableStock;
     }
-
 
     public static Comparator<SubCategory> priceComparator = new Comparator<SubCategory>() {
         @Override

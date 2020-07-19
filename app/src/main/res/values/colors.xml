@@ -12,6 +12,7 @@
 
     //TextColor
     <color name="gen_black">#000000</color>
+    <color name="normal_black">#3D3B3B</color>
     <color name="gen_white">#FFFFFF</color>
     <color name="green_light">#43A047</color>
     <color name="grey_light">#E0E0E0</color>

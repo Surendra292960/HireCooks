@@ -1,4 +1,5 @@
 package com.test.sample.hirecooks.Activity.Home;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -7,19 +8,30 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.test.sample.hirecooks.Activity.Users.UserSignInActivity;
-import com.test.sample.hirecooks.Activity.Users.UserSignUpActivity;
-import com.test.sample.hirecooks.R;
-import com.test.sample.hirecooks.Utils.SharedPrefManager;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.test.sample.hirecooks.Activity.Users.UserSignInActivity;
+import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
+import com.test.sample.hirecooks.Utils.BaseActivity;
+import com.test.sample.hirecooks.Models.users.Result;
+import com.test.sample.hirecooks.Models.users.User;
+import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.Utils.Constants;
+import com.test.sample.hirecooks.Utils.ProgressBarUtil;
+import com.test.sample.hirecooks.Utils.SharedPrefManager;
+import com.test.sample.hirecooks.WebApis.UserApi;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LandingScreen extends AppCompatActivity {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+public class LandingScreen extends BaseActivity {
+    private User user;
+    private ProgressBarUtil progressBarUtil;
     private static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
 
     @Override
@@ -36,8 +48,49 @@ public class LandingScreen extends AppCompatActivity {
         }
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
             startActivity(new Intent(this, MainActivity.class));
+            //ResultSignIn(user.getEmail(),user.getPassword());
             finish();
         }
+    }
+
+
+    private void ResultSignIn(String email, String password) {
+        progressBarUtil.showProgress();
+        UserApi mService = ApiClient.getClient().create(UserApi.class);
+        Call<Result> call = mService.userLogin(email, password);
+        call.enqueue(new Callback<Result>() {
+            @Override
+            public void onResponse(Call<Result> call, Response<Result> response) {
+                int statusCode = response.code();
+                if(statusCode==200&&response.body().getError()==false){
+                    progressBarUtil.hideProgress();
+                    assert response.body() != null;
+                    if (!response.body().getError()) {
+                        Constants.CurrentUser = response.body();
+                        if(Constants.CurrentUser.getUser().getUserType().equalsIgnoreCase("User")||
+                                Constants.CurrentUser.getUser().getUserType().equalsIgnoreCase("Manager")||
+                                Constants.CurrentUser.getUser().getUserType().equalsIgnoreCase("SuperAdmin")){
+                            SharedPrefManager.getInstance(getApplicationContext()).userLogin(Constants.CurrentUser.getUser());
+                            finish();
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        }else{
+                            ShowToast("You Cant Access");
+                        }
+                    } else {
+                        ShowToast(response.body().getMessage());
+                    }
+                }else{
+                    ShowToast(response.body().getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result> call, Throwable t) {
+                progressBarUtil.hideProgress();
+                System.out.println("Suree :"+ t.getMessage());
+                ShowToast("Please Check Intenet Connection");
+            }
+        });
     }
 
 /*    private void CheckPermissions() {
@@ -65,8 +118,9 @@ public class LandingScreen extends AppCompatActivity {
     }*/
 
     private void initializeViews() {
+        progressBarUtil = new ProgressBarUtil(this);
+        user = SharedPrefManager.getInstance(this).getUser();
         Button buttonSignInUser, buttonSignUpUser;
-
         buttonSignInUser = findViewById(R.id.buttonSignInUser);
         buttonSignUpUser = findViewById(R.id.buttonSignUpUser);
 
@@ -80,7 +134,7 @@ public class LandingScreen extends AppCompatActivity {
         buttonSignUpUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LandingScreen.this, UserSignUpActivity.class));
+                startActivity(new Intent(LandingScreen.this, PhoneVerification.class));
                 finish();
             }
         });

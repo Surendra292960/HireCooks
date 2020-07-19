@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -31,7 +32,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.hbb20.CountryCodePicker;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.BaseActivity;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Models.TokenResponse.TokenResult;
 import com.test.sample.hirecooks.Models.users.Result;
 import com.test.sample.hirecooks.Models.users.User;
@@ -73,6 +74,7 @@ public class UserSignUpActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         initializeViews();
     }
 
@@ -104,6 +106,7 @@ public class UserSignUpActivity extends BaseActivity {
         radioGender = findViewById(R.id.radioGender);
         buttonSignUp = findViewById(R.id.buttonSignUp);
 
+        editTextPhone.setText(Constants.CurrentUserPhoneNumber);
         buttonSignUp.setOnClickListener(new OnClickRateLimitedDecoratedListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

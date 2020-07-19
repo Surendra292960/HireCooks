@@ -1,34 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:id="@+id/offers_layout"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/margin_20">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/margin_80"
+        android:layout_height="@dimen/margin_20"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:text="Offer"
         android:scrollbarAlwaysDrawHorizontalTrack="true"
         android:gravity="center"
+        android:layout_gravity="center_horizontal"
         android:textAllCaps="false"
         android:background="@drawable/rounded"
         android:textColor="@android:color/white"
         android:textSize="12sp"/>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/circular_image"
-        android:paddingTop="5dp"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:padding="5dp"
-        app:civ_border_color="@color/gray_btn_bg_color"
-        app:civ_border_width="1dp"
-        android:src="@drawable/no_image"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10"
+        android:elevation="2dp"
+        android:orientation="vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/circular_image"
+            android:paddingTop="5dp"
+            android:layout_width="@dimen/margin_100"
+            android:layout_height="@dimen/margin_100"
+            android:padding="5dp"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/circular_image_name"

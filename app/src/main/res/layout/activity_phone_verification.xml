@@ -1,6 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/tools"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -21,14 +20,7 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:titleTextColor="#fff" />
 
-
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:scrollbars="none">
-
-            <LinearLayout
+             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -57,90 +49,108 @@
                     android:text="@string/verify_phone"
                     android:textAllCaps="true"/>
 
-                <androidx.core.widget.NestedScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fillViewport="true"
-                    android:scrollbars="none">
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:orientation="vertical"
+                     tools:ignore="MissingConstraints">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        tools:ignore="MissingConstraints">
+                     <LinearLayout
+                         android:visibility="visible"
+                         android:id="@+id/verify_phone_layout"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:orientation="vertical">
 
-                       <!-- <LinearLayout
-                            android:padding="10dp"
-                            android:layout_margin="@dimen/size_16"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical">
+                         <LinearLayout
+                             android:padding="10dp"
+                             android:layout_margin="@dimen/size_16"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:gravity="center_vertical">
 
-                            <com.hbb20.CountryCodePicker
-                                android:id="@+id/ccp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                app:ccp_defaultNameCode="IN" />
+                             <com.hbb20.CountryCodePicker
+                                 android:id="@+id/ccp"
+                                 android:layout_width="wrap_content"
+                                 android:layout_height="wrap_content"
+                                 app:ccp_defaultNameCode="IN"
+                                 app:ccp_textSize="@dimen/size_16"/>
 
-                            <EditText
-                                android:id="@+id/editTextPhone"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/phone"
-                                android:inputType="phone"
-                                android:singleLine="true" />
-                        </LinearLayout>-->
-                       <!--         <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/verify_phone"
-                            android:layout_width="200dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:textSize="@dimen/size_14"
-                            style="?android:attr/buttonBarButtonStyle"
-                            android:textColor="@color/white"
-                            android:text="@string/verify_phone"
-                            android:background="@drawable/rounded"/>-->
+                             <EditText
+                                 android:id="@+id/editTextPhone"
+                                 android:layout_width="match_parent"
+                                 android:layout_height="wrap_content"
+                                 android:hint="@string/enter_mobile_number"
+                                 android:inputType="phone"
+                                 android:singleLine="true"
+                                 android:background="@null"
+                                 android:textSize="@dimen/size_16"/>
 
-                        <TextView
-                            android:id="@+id/editTextPhone"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/phone"
-                            android:inputType="phone"
-                            android:textSize="@dimen/size_18"
-                            android:gravity="center"
-                            android:singleLine="true" />
+                         </LinearLayout>
 
-                        <com.test.sample.hirecooks.Libraries.PinView.PinView
-                            android:layout_margin="@dimen/size_16"
-                            android:layout_gravity="center"
-                            android:id="@+id/pinView"
-                            style="@style/PinWidget.PinView"
-                            android:layout_width="350dp"
-                            android:layout_height="wrap_content"
-                            android:inputType="number"
-                            android:padding="10dp"
-                            android:textSize="18sp"
-                            app:itemCount="6"
-                            app:itemHeight="48dp"
-                            app:itemRadius="10dp"
-                            app:lineColor="@android:color/darker_gray"
-                            app:viewType="rectangle" />
+                         <androidx.appcompat.widget.AppCompatButton
+                             android:id="@+id/verify_phone"
+                             android:layout_width="200dp"
+                             android:layout_height="wrap_content"
+                             android:layout_gravity="center"
+                             android:textSize="@dimen/size_14"
+                             style="?android:attr/buttonBarButtonStyle"
+                             android:textColor="@color/white"
+                             android:text="@string/verify_phone"
+                             android:background="@drawable/rounded"/>
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:visibility="gone"
-                            android:id="@+id/buttonSignIn"
-                            android:layout_width="200dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:textSize="@dimen/size_14"
-                            style="?android:attr/buttonBarButtonStyle"
-                            android:textColor="@color/white"
-                            android:text="@string/sign_in"
-                            android:background="@drawable/rounded"/>
-                    </LinearLayout>
-                </androidx.core.widget.NestedScrollView>
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+                     </LinearLayout>
+
+                     <LinearLayout
+                         android:visibility="gone"
+                         android:id="@+id/enter_otp_layout"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:orientation="vertical">
+
+                         <com.test.sample.hirecooks.Libraries.PinView.PinView
+                             android:layout_margin="@dimen/size_16"
+                             android:layout_gravity="center"
+                             android:id="@+id/pinView"
+                             style="@style/PinWidget.PinView"
+                             android:layout_width="350dp"
+                             android:layout_height="wrap_content"
+                             android:inputType="number"
+                             android:padding="10dp"
+                             android:textSize="18sp"
+                             app:itemCount="6"
+                             app:itemHeight="48dp"
+                             app:itemRadius="10dp"
+                             app:lineColor="@android:color/darker_gray"
+                             app:viewType="rectangle" />
+
+                         <androidx.appcompat.widget.AppCompatButton
+                             android:visibility="visible"
+                             android:id="@+id/buttonSignIn"
+                             android:layout_width="200dp"
+                             android:layout_height="wrap_content"
+                             android:layout_gravity="center"
+                             android:textSize="@dimen/size_14"
+                             style="?android:attr/buttonBarButtonStyle"
+                             android:textColor="@color/white"
+                             android:text="@string/submit"
+                             android:background="@drawable/rounded"/>
+
+                         <TextView
+                             android:id="@+id/buttonResendOtp"
+                             android:layout_marginTop="@dimen/margin_40"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:layout_gravity="center"
+                             android:textSize="@dimen/size_14"
+                             android:textColor="@color/dark_gray"
+                             android:text="@string/resend_otp"/>
+                     </LinearLayout>
+
+                 </LinearLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
+
 </RelativeLayout>

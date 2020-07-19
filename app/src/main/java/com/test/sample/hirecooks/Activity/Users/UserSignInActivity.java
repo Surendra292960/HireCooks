@@ -10,13 +10,15 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.BaseActivity;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Models.users.Result;
+import com.test.sample.hirecooks.Activity.Home.PhoneVerification;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
@@ -41,6 +43,8 @@ public class UserSignInActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         progressBarUtil = new ProgressBarUtil(this);
         appRoot = findViewById(R.id.appRoot);
         txtSignUp = findViewById(R.id.txtSignUp);
@@ -49,13 +53,15 @@ public class UserSignInActivity extends BaseActivity implements View.OnClickList
         editTextPassword = findViewById(R.id.editTextPassword);
         buttonSignIn = findViewById(R.id.buttonSignIn);
         buttonSignIn.setOnClickListener(this);
+
         txtSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(UserSignInActivity.this,UserSignUpActivity.class));
+                startActivity(new Intent(UserSignInActivity.this, PhoneVerification.class));
                 finish();
             }
-        });  txtForgotPasswrd.setOnClickListener(new View.OnClickListener() {
+        });
+        txtForgotPasswrd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(UserSignInActivity.this,ForgotPasswordActivity.class));

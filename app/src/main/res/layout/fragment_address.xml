@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:weightSum="10"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <ScrollView android:id="@+id/scrollbar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -44,7 +45,7 @@
                 android:layout_height="@dimen/view_width_small"
                 android:background="@color/grey_light"/>
 
-            <EditText
+            <TextView
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
@@ -53,8 +54,8 @@
                 android:id="@+id/editTextAddress"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:background="@drawable/edit_text_design"
                 android:textSize="14sp"
+                android:layout_gravity="center_horizontal"
                 android:drawableRight="@drawable/ic_mode_edit_black_18dp"/>
 
             <View android:layout_width="match_parent"
@@ -72,7 +73,7 @@
                 android:layout_height="@dimen/view_width_small"
                 android:background="@color/grey_light"/>
 
-            <EditText
+            <TextView
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
@@ -81,7 +82,6 @@
                 android:id="@+id/editTextDeliveryTime"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:background="@drawable/edit_text_design"
                 android:textSize="14sp"
                 android:drawableRight="@drawable/ic_mode_edit_black_18dp" />
 

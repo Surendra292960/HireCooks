@@ -12,11 +12,11 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,7 +34,7 @@ import com.test.sample.hirecooks.Adapter.Home.FeedProperties;
 import com.test.sample.hirecooks.Adapter.Offer.OfferAdapter;
 import com.test.sample.hirecooks.Adapter.Venders.VendersAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.BaseActivity;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Libraries.Slider.SliderLayout;
 import com.test.sample.hirecooks.Models.Category.Categories;
 import com.test.sample.hirecooks.Models.Category.Category;
@@ -50,6 +50,7 @@ import com.test.sample.hirecooks.Models.UsersResponse.UsersResponse;
 import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.Constants;
+import com.test.sample.hirecooks.Utils.NetworkUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.MapApi;
 import com.test.sample.hirecooks.WebApis.ProductApi;
@@ -84,6 +85,7 @@ public class HomeFragment extends Fragment{
     private User user = SharedPrefManager.getInstance(getContext()).getUser();
     private List<UserResponse> vendersList;
     private BaseActivity baseActivity;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -99,11 +101,17 @@ public class HomeFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         context = container.getContext();
         initViews(view);
-        getMapDetails();
-        getCategory();
-        getOfferCategory();
-        getNewProductCategory();
-        getOffer();
+        if(NetworkUtil.checkInternetConnection(getActivity())) {
+            getMapDetails();
+            getCategory();
+            getOfferCategory();
+            getNewProductCategory();
+            getOffer();
+        }
+        else {
+            baseActivity.showAlert(getResources().getString(R.string.no_internet));
+        }
+
         return view;
     }
 
@@ -225,7 +233,6 @@ public class HomeFragment extends Fragment{
                             }
                         }
                     }
-
                     if(filteredList!=null&&filteredList.size()!=0){
                         VendersAdapter adapter = new VendersAdapter(getActivity(),filteredList);
                         venders_recycler_view.setAdapter(adapter);
@@ -375,7 +382,6 @@ public class HomeFragment extends Fragment{
         Fresco.initialize(getActivity());
         scrollView = view.findViewById(R.id.scrollView);
         baseActivity = new BaseActivity();
-       // searchResults = view.findViewById(R.id.searchResults);
         mDemoSlider = view.findViewById(R.id.slider);
         offer_recycler_view = view.findViewById(R.id.offer_recycler_view);
         recyclerView = view.findViewById(R.id.my_recycler_view);
@@ -385,27 +391,24 @@ public class HomeFragment extends Fragment{
 
         String[] colors = getResources().getStringArray(R.array.colorList);
         stringAdapter = new ArrayAdapter<>(getActivity(), R.layout.row, colors);
-       /* autoComplete = view.findViewById(R.id.autoComplete);
-        autoComplete.setAdapter(stringAdapter);
-        autoComplete.setTextColor(Color.BLACK);*/
 
         HashMap<String, Integer> file_maps = new HashMap<String, Integer>();
-        file_maps.put("Ws",R.drawable.slid1);
-        file_maps.put("Ws Design",R.drawable.slid2);
-        file_maps.put("Ws Android",R.drawable.slid3);
-        file_maps.put("Ws Web", R.drawable.slid4);
+        file_maps.put("Groceroies",R.drawable.slide1);
+        file_maps.put("Masala",R.drawable.slide2);
+        file_maps.put("Vegitables",R.drawable.slide3);
+        file_maps.put("Householdes", R.drawable.slide4);
 
         for(String name : file_maps.keySet()){
             TextSliderView textSliderView = new TextSliderView(getActivity());
             textSliderView
-                    .description(name)
+                    //.description(name)
                     .image(file_maps.get(name))
                     .setScaleType(BaseSliderView.ScaleType.Fit)
                     //.setOnSliderClickListener((BaseSliderView.OnSliderClickListener) getActivity());
             .setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                 @Override
                 public void onSliderClick(BaseSliderView slider) {
-                    Toast.makeText(getActivity(),"clicked: "+file_maps.get(name),Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity(),"clicked: "+textSliderView,Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -417,15 +420,43 @@ public class HomeFragment extends Fragment{
         mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         mDemoSlider.setCustomAnimation(new DescriptionAnimation());
         mDemoSlider.setDuration(4000);
-       // mDemoSlider.addOnPageChangeListener((ViewPagerEx.OnPageChangeListener) this);
 
-     /*   searchResults.setOnClickListener(new View.OnClickListener() {
+
+        NestedScrollView nested_content = (NestedScrollView) view.findViewById(R.id.nested_scroll_view);
+        nested_content.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), SearchResultActivity.class));
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY < oldScrollY) { // up
+                    animateNavigation(false);
+                    animateToolBar(false);
+                }
+                if (scrollY > oldScrollY) { // down
+                    animateNavigation(true);
+                    animateToolBar(true);
+                }
             }
-        });*/
+        });
     }
+
+
+    boolean isNavigationHide = false;
+
+    private void animateNavigation(final boolean hide) {
+        if (isNavigationHide && hide || !isNavigationHide && !hide) return;
+        isNavigationHide = hide;
+        int moveY = hide ? (2 * mainActivity.mNavigationView.getHeight()) : 0;
+        mainActivity.mNavigationView.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+    }
+
+    boolean isToolBarHide = false;
+
+    private void animateToolBar(final boolean hide) {
+        if (isToolBarHide && hide || !isToolBarHide && !hide) return;
+        isToolBarHide = hide;
+        int moveY = hide ? -(2 * mainActivity.toolbar_layout.getHeight()) : 0;
+        mainActivity.toolbar_layout.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+    }
+
 
     @Override
     public void onAttach(@NonNull Context context) {

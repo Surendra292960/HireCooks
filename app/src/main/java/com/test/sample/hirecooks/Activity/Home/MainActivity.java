@@ -4,8 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,8 +25,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -39,21 +35,22 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.test.sample.flowingdrawer_core.ElasticDrawer;
 import com.test.sample.flowingdrawer_core.FlowingDrawer;
 import com.test.sample.hirecooks.Activity.Cart.CartActivity;
+import com.test.sample.hirecooks.Activity.Search.SearchResultActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.BaseActivity;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Fragments.Home.HomeFragment;
 import com.test.sample.hirecooks.Fragments.OrdersFragment;
 import com.test.sample.hirecooks.Fragments.ProfileFragment;
 import com.test.sample.hirecooks.Fragments.SearchFragment;
 import com.test.sample.hirecooks.Libraries.BedgeNotification.NotificationCountSetClass;
-import com.test.sample.hirecooks.MenuListFragment;
+import com.test.sample.hirecooks.Fragments.Home.MenuListFragment;
 import com.test.sample.hirecooks.Models.TokenResponse.Token;
 import com.test.sample.hirecooks.Models.TokenResponse.TokenResult;
 import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Services.TrackerService;
 import com.test.sample.hirecooks.Utils.Constants;
-import com.test.sample.hirecooks.Utils.ProgressBarUtil;
+import com.test.sample.hirecooks.Utils.NetworkUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.UserApi;
 
@@ -66,17 +63,15 @@ import retrofit2.Response;
 
 public class MainActivity extends BaseActivity {
     private FlowingDrawer mDrawer;
-    private View appRoot;
-    private Toolbar toolbar;
-    private float mToolbarBarHeight;
+    public View appRoot,toolbar_layout;
+    public Toolbar toolbar;
     private ViewPager mViewPager;
     private List<Fragment> fragmentList;
-    private BottomNavigationView mNavigationView;
+    public BottomNavigationView mNavigationView;
     public static int notificationCountCart = 0;
     private User user;
     private UserApi mService;
     private String deviceId;
-    private ProgressBarUtil progressBarUtil;
     private Token token;
     private static final int PERMISSIONS_REQUEST = 1;
     private boolean doubleBackToExitPressedOnce = false;
@@ -92,7 +87,6 @@ public class MainActivity extends BaseActivity {
         initData();
         initViews();
         setupToolbar();
-        setupFeed();
         setupMenu();
         getTokenFromServer(user.getId());
     }
@@ -101,17 +95,17 @@ public class MainActivity extends BaseActivity {
     @SuppressLint({"WrongConstant", "ClickableViewAccessibility"})
     private void initViews() {
         Fresco.initialize(this);
-        progressBarUtil = new ProgressBarUtil(this);
         mDrawer = findViewById(R.id.drawerlayout);
         mDrawer.setTouchMode(ElasticDrawer.TOUCH_MODE_BEZEL);
         appRoot = findViewById(R.id.appRoot);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(Color.WHITE);
-        //toolbar.setTitle("Welcome To HireCook");
-        setSupportActionBar(toolbar);
-        mNavigationView = (BottomNavigationView) findViewById(R.id.bye_burger);
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        mNavigationView = findViewById(R.id.bye_burger);
+        mViewPager = findViewById(R.id.viewpager);
 
+        View toolbar_view = findViewById(R.id.toolbar_interface);
+        toolbar=toolbar_view.findViewById(R.id.toolbar);
+        toolbar_layout =  toolbar_view.findViewById(R.id.toolbar_layout);
+        toolbar.setTitle("");
+        toolbar.setSubtitle("");
 
         mViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override public Fragment getItem(int position) {
@@ -128,19 +122,19 @@ public class MainActivity extends BaseActivity {
                     @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.navigation_home:
-                                toolbar.setTitle("Home");
+                                toolbar.setTitle("");
                                 mViewPager.setCurrentItem(0);
                                 return true;
                             case R.id.navigation_orders:
-                                toolbar.setTitle("Orders");
+                                toolbar.setTitle("My Orders");
                                 mViewPager.setCurrentItem(1);
                                 return true;
                             case R.id.navigation_profile:
                                 toolbar.setTitle("Profile");
                                 mViewPager.setCurrentItem(2);
                                 return true;
-                            case R.id.navigation_search:
-                                toolbar.setTitle("Search");
+                            case R.id.navigation_notification:
+                                toolbar.setTitle("Notifications");
                                 mViewPager.setCurrentItem(3);
                                 return true;
                         }
@@ -162,9 +156,6 @@ public class MainActivity extends BaseActivity {
         if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             enableGPS();
         }
-
-        // Check location permission is granted - if it is, start
-        // the service, otherwise request the permission
         int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         if (permission == PackageManager.PERMISSION_GRANTED) {
             startTrackerService();
@@ -200,7 +191,7 @@ public class MainActivity extends BaseActivity {
                         sendTokenToServer(phone,newToken,0,deviceId,userId);
                     }
                 }else{
-                    ShowToast("Token Not Generated");
+                   // ShowToast("Token Not Generated");
                 }
             }
         });
@@ -216,10 +207,10 @@ public class MainActivity extends BaseActivity {
                 if(statusCode==200&&response.body().getError()==false) {
                     Constants.CurrentToken = response.body();
                     SharedPrefManager.getInstance(MainActivity.this).token(Constants.CurrentToken.getToken());
-                    ShowToast("Token Updated Successfuly");
+                  //  ShowToast("Token Updated Successfuly");
                 }
                 else{
-                    ShowToast("Failedd due to :"+response.code());
+                   // ShowToast("Failedd due to :"+response.code());
                 }
             }
 
@@ -247,7 +238,7 @@ public class MainActivity extends BaseActivity {
                     }
                 }
                 else{
-                    ShowToast("Failed due to :"+response.body().getMessage());
+                  //  ShowToast("Failed due to :"+response.body().getMessage());
                     getToken(user.getPhone(),user.getId(),user.getFirmId());
                 }
             }
@@ -265,13 +256,6 @@ public class MainActivity extends BaseActivity {
         call1.enqueue(new Callback<TokenResult>() {
             @Override
             public void onResponse(Call<TokenResult> call, Response<TokenResult> response) {
-                int statusCode = response.code();
-                if(statusCode==200&&response.body().getError()==false) {
-                    ShowToast("Token Saved Successfuly");
-                }
-                else{
-                   ShowToast("Failed due to :"+response.code());
-                }
             }
 
             @Override
@@ -292,10 +276,6 @@ public class MainActivity extends BaseActivity {
     protected void setupToolbar() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final TypedArray mTypedArray = getTheme().obtainStyledAttributes(new int[] { android.R.attr.actionBarSize });
-        mToolbarBarHeight = mTypedArray.getDimension(0, 0);
-        mTypedArray.recycle();
-       // (findViewById(R.id.scrollView)).getViewTreeObserver().addOnScrollChangedListener(this);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -303,15 +283,6 @@ public class MainActivity extends BaseActivity {
                 mDrawer.toggleMenu();
             }
         });
-    }
-
-    private void setupFeed() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this) {
-            @Override
-            protected int getExtraLayoutSpace(RecyclerView.State state) {
-                return 300;
-            }
-        };
     }
 
     private void setupMenu() {
@@ -354,12 +325,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        // Get the notifications MenuItem and
-        // its LayerDrawable (layer-list)
         MenuItem item = menu.findItem(R.id.action_cart);
         NotificationCountSetClass.setAddToCart(MainActivity.this, item,notificationCountCart);
-        // force the ActionBar to relayout its MenuItems.
-        // onCreateOptionsMenu(Menu) will be called again.
         invalidateOptionsMenu();
         return super.onPrepareOptionsMenu(menu);
     }
@@ -372,6 +339,10 @@ public class MainActivity extends BaseActivity {
         }else if ( id == R.id.action_cart ) {
             finish();
             startActivity(new Intent(MainActivity.this, CartActivity.class));
+            return true;
+        }else if ( id == R.id.action_searchresult ) {
+            finish();
+            startActivity(new Intent(MainActivity.this, SearchResultActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -389,6 +360,10 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         boolean b = false;
         notificationCountCart = cartCount();
-        Connection(this);
+        if(NetworkUtil.checkInternetConnection(MainActivity.this)) {
+
+        } else {
+            showAlert(getResources().getString(R.string.no_internet));
+        }
     }
 }

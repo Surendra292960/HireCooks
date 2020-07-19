@@ -43,7 +43,7 @@ public class NewProductCategoryAdapter extends RecyclerView.Adapter<NewProductCa
         NewProductCategory newProductCategory = categories.get(position);
         if(newProductCategory!=null){
             holder.new_product_category_name.setText(newProductCategory.getCategoryName());
-            Picasso.with(mCtx).load(newProductCategory.getLink()).placeholder(R.drawable.no_image).into(holder.new_product_category_image);
+            Picasso.with(mCtx).load(newProductCategory.getLink()).into(holder.new_product_category_image);
 
             holder.cardview.setOnClickListener(new View.OnClickListener() {
                 @Override

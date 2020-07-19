@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,14 +23,15 @@ import com.google.android.libraries.places.api.Places;
 import com.google.gson.Gson;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.BaseActivity;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.MapLocation;
 import com.test.sample.hirecooks.Models.Cart.Cart;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Result;
 import com.test.sample.hirecooks.Models.Order.Order;
 import com.test.sample.hirecooks.Models.Order.Results;
-import com.test.sample.hirecooks.Models.TokenResponse.TokenResult;
+import com.test.sample.hirecooks.Models.TokenResponse.Token;
+import com.test.sample.hirecooks.Models.TokenResponse.Tokens;
 import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
@@ -58,20 +58,19 @@ import static com.facebook.accountkit.internal.AccountKitController.getApplicati
 
 public class AddressFragment extends Fragment {
     Context context;
-    EditText editTextAddress,editTextDeliveryTime;
-    TextView editTextHirecookMoney,editTextPromo,editTextSubTotal,editTextDeliveryCharge,editTextGrandTotal,editTextPayableAmount,editTextCashOnDelivery,editTextPayOnline;
+    TextView editTextAddress,editTextDeliveryTime,editTextHirecookMoney,editTextPromo,editTextSubTotal,editTextDeliveryCharge,editTextGrandTotal,editTextPayableAmount,editTextCashOnDelivery,editTextPayOnline;
     private ProgressBarUtil progressBarUtil;
     GoogleMap mMap;
     List<Cart> cartList = new ArrayList<>();
     LocalStorage localStorage;
     Gson gson;
-    Double mTotal, mDeliveryCharges, mTotalAmount;
-    String id,orderNo;
+    Double mTotal, mTotalAmount,includedDeliveryCharges,excludedDeliveryCharges;
+    String orderNo;
     private User user;
     private Map maps;
     private RadioGroup radioPromo;
     private OrderApi mService;
-    private int discount = 0, discountPercentage = 0, displayrate = 0;
+    private int id, discount = 0, discountPercentage = 0, displayrate = 0;
     private int RESULT_OK;
     final int UPI_PAYMENT = 0;
     private String status = "";
@@ -104,19 +103,20 @@ public class AddressFragment extends Fragment {
         user = SharedPrefManager.getInstance(getActivity()).getUser();
 
         Random rnd = new Random();
-        orderNo = String.valueOf(100000 + rnd.nextInt(900000));
+        orderNo = String.valueOf(100000000 + rnd.nextInt(900000000));
 
         localStorage = new LocalStorage(getContext());
         gson = new Gson();
-        cartList = ((BaseActivity) getActivity()).getCartList();
 
+        cartList = ((BaseActivity) getActivity()).getCartList();
+        excludedDeliveryCharges = 0.0;
         mTotal = ((BaseActivity) getActivity()).getTotalPrice();
-        mDeliveryCharges = 0.0;
-        mTotalAmount = mTotal + mDeliveryCharges;
+        mTotalAmount = mTotal + excludedDeliveryCharges;
         editTextSubTotal.setText("\u20B9 "+mTotal + "");
         editTextPromo.setText("- \u20B9 "+00 + "");
         editTextHirecookMoney.setText("- \u20B9 "+00 + "");
-        editTextDeliveryCharge.setText("+ \u20B9 "+mDeliveryCharges + "");
+
+        editTextDeliveryCharge.setText("+ \u20B9 "+excludedDeliveryCharges + "");
         editTextGrandTotal.setText("\u20B9 "+mTotalAmount + "");
         editTextPayableAmount.setText("Payable Amount "+"\u20B9 "+mTotalAmount + "");
 
@@ -132,8 +132,8 @@ public class AddressFragment extends Fragment {
             public void onClick(View v) {
                 if(maps!=null){
                     if(cartList!=null&&cartList.size()!=0){
+                        Order order = new Order();
                         for(Cart cart:cartList){
-                            Order order = new Order();
                             order.setOrderId(orderNo);
                             order.setProductName(cart.getName());
                             order.setProductSellRate(cart.getSellRate());
@@ -175,7 +175,7 @@ public class AddressFragment extends Fragment {
                                         &&order.getOrderLatitude()!=null&&order.getOrderLongitude()!=null&&order.getOrderAddress()!=null&&order.getOrderPincode()!=0
                                         &&order.getName()!=null&&order.getEmail()!=null&&order.getPhone()!=null&&order.getFirmLat()!=null&&order.getFirmLng()!=null
                                         &&order.getFirmAddress()!=null){
-                                    placeOrder(order);
+                                        placeOrder(order);
                                 }else{
                                     Toast.makeText(getActivity(),"These Item can`t be placed please remove item and try again",Toast.LENGTH_LONG).show();
                                 }
@@ -195,8 +195,8 @@ public class AddressFragment extends Fragment {
             public void onClick(View v) {
                 if(maps!=null){
                     if(cartList!=null&&cartList.size()!=0){
+                        Order order = new Order();
                         for(Cart cart:cartList){
-                            Order order = new Order();
                             order.setOrderId(orderNo);
                             order.setProductName(cart.getName());
                             order.setProductSellRate(cart.getSellRate());
@@ -240,9 +240,9 @@ public class AddressFragment extends Fragment {
                                         &&order.getFirmAddress()!=null){
 
                                     if(mTotalAmount!=0){
-                                        payUsingUpi("HireCook","kamal.bunkar07@okaxis","Test Payment", String.valueOf(mTotalAmount));
+                                        payUsingUpi("HireCook","ramveer261@oksbi","Test Payment", String.valueOf(mTotalAmount));
                                         if(status.equals("success")){
-                                            placeOrder(order);
+                                         placeOrder(order);
                                         }
                                     }
                                 }else{
@@ -280,9 +280,11 @@ public class AddressFragment extends Fragment {
                 if (response.code() == 200 &&response.body().getError()==false) {
                     Toast.makeText(getActivity(),response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     localStorage.deleteCart();
-                    getTokenFromServer(order.getFirmId(),order.getUserId());
-                    getActivity().finish();
-                    startActivity(new Intent(getActivity(), MainActivity.class));
+                    List<Order> orderList = new ArrayList<>();
+                    for(Order order1:response.body().getOrder()){
+                        orderList.add(order1);
+                    }
+                    getTokenFromServer(orderList);
                 } else {
                     Toast.makeText(getActivity(),response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -295,18 +297,28 @@ public class AddressFragment extends Fragment {
         });
     }
 
-    private void getTokenFromServer(String firm_id, int userId) {
+    private void getTokenFromServer(List<Order> orderList) {
         UserApi mService =  ApiClient.getClient().create(UserApi.class);
-        Call<TokenResult> call1 = mService.getTokenByFirmId(firm_id,userId);
-        call1.enqueue(new Callback<TokenResult>() {
+        Call<Tokens> call1 = mService.getTokens();
+        call1.enqueue(new Callback<Tokens>() {
             @Override
-            public void onResponse(Call<TokenResult> call, Response<TokenResult> response) {
+            public void onResponse(Call<Tokens> call, Response<Tokens> response) {
                 int statusCode = response.code();
-                if(statusCode==200&&response.body().getError()==false) {
+                if(statusCode==200) {
                     progressBarUtil.hideProgress();
-                    TokenResult tokenResult = response.body();
-                    sendNotification(firm_id,tokenResult.getToken().getToken());
-                    Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    List<Token> filteredToken = new ArrayList<>();
+                    Token tokens = new Token();
+                    for(Order order:orderList){
+                        for(Token token: response.body().getTokens()){
+                            if(token.getFirm_id().equalsIgnoreCase(order.getFirmId())){
+                                tokens.setFirm_id(order.getFirmId());
+                                tokens.setToken(token.getToken());
+                                sendNotification(tokens);
+                            }
+                        }
+                    }
+                    filteredToken.add(tokens);
+                    System.out.println("Order Tokens: "+filteredToken);
                     System.out.println("Suree Token  "+SharedPrefToken.getInstance(getApplicationContext()).getTokens().getToken());
                 }
                 else{
@@ -315,7 +327,7 @@ public class AddressFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<TokenResult> call, Throwable t) {
+            public void onFailure(Call<Tokens> call, Throwable t) {
                 progressBarUtil.hideProgress();
                 Toast.makeText(getApplicationContext(), R.string.error+t.getMessage(), Toast.LENGTH_LONG).show();
                 System.out.println("Suree: "+t.getMessage());
@@ -323,19 +335,22 @@ public class AddressFragment extends Fragment {
         });
     }
 
-    private void sendNotification(String firmId, String token) {
+    private void sendNotification(Token filteredToken) {
         NotificationApi mService = ApiClient.getClient().create(NotificationApi.class);
-        Call<String> call = mService.sendNotification(token,firmId);
+        Call<String> call = mService.sendNotification(filteredToken.getToken(),filteredToken.getFirm_id());
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.code() == 200 ) {
                     localStorage.deleteCart();
+                    getActivity().finish();
+                    startActivity(new Intent(getActivity(), MainActivity.class));
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
+                System.out.println(t.toString());
                 Toast.makeText(getActivity(),R.string.error, Toast.LENGTH_SHORT).show();
             }
         });
@@ -343,7 +358,6 @@ public class AddressFragment extends Fragment {
 
     private void getDateAndTime() {
         Calendar c = Calendar.getInstance();
-
         int seconds = c.get(Calendar.SECOND);
         int minutes = c.get(Calendar.MINUTE);
         int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -538,7 +552,7 @@ public class AddressFragment extends Fragment {
         }
         return false;
     }
-    
+
     @Override
     public void onStart() {
         getMapDetails();

@@ -12,13 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.test.sample.hirecooks.Adapter.RecievedOrdersAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.BaseActivity;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Models.Order.Order;
 import com.test.sample.hirecooks.Models.Order.Results;
 import com.test.sample.hirecooks.Models.users.User;
@@ -26,7 +27,6 @@ import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.OrderApi;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,14 +38,13 @@ public class RecievedOrderActivity extends BaseActivity {
     private RecyclerView recyclerView;
     private OrderApi mService;
     private User user;
-    private List<Order> ordersList;
-    private List<Order> orders;
     private RecievedOrdersAdapter ordersAdapter;
     private View appRoot;
     private TextView order_status_text;
     private LinearLayout no_orders;
     BottomNavigationView bottomNavigationView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private static String status = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,107 +65,22 @@ public class RecievedOrderActivity extends BaseActivity {
         user = SharedPrefManager.getInstance(this).getUser();
         appRoot = findViewById(R.id.appRoot);
         initViews();
-        getOrders();
+        getCurrentOrders("Pending");
 
         bottomNavigationView=findViewById(R.id.bottom_nav);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId()==R.id.order_new) {
-                    if(ordersList!=null){
-                        orders = new ArrayList<>();
-                        for(Order order: ordersList){
-                            if(order.getOrderStatus().equalsIgnoreCase("Pending")){
-                                orders.add(order);
-                                if(orders!=null&&orders.size()!=0){
-                                    recyclerView.setVisibility(View.VISIBLE);
-                                    no_orders.setVisibility(View.GONE);
-                                    ordersAdapter = new RecievedOrdersAdapter(RecievedOrderActivity.this,orders);
-                                    recyclerView.setAdapter(ordersAdapter);
-                                }else{
-                                    recyclerView.setVisibility(View.GONE);
-                                    no_orders.setVisibility(View.VISIBLE);
-                                    order_status_text.setText("No New Orders Available");
-                                }
-                            }
-                        }
-                    }
+                    getCurrentOrders("Pending");
                 }else if (item.getItemId()==R.id.order_cancel) {
-                    if(ordersList!=null){
-                        orders = new ArrayList<>();
-                        for(Order order: ordersList){
-                            if(order.getOrderStatus().equalsIgnoreCase("Cancelled")){
-                                orders.add(order);
-                                if(orders!=null&&orders.size()!=0){
-                                    recyclerView.setVisibility(View.VISIBLE);
-                                    no_orders.setVisibility(View.GONE);
-                                    ordersAdapter = new RecievedOrdersAdapter(RecievedOrderActivity.this,orders);
-                                    recyclerView.setAdapter(ordersAdapter);
-                                }else{
-                                    recyclerView.setVisibility(View.GONE);
-                                    no_orders.setVisibility(View.VISIBLE);
-                                    order_status_text.setText("No Cancelled Orders Available");
-                                }
-                            }
-                        }
-                    }
+                    getCurrentOrders("Cancelled");
                 }else if (item.getItemId()==R.id.order_processing) {
-                    if(ordersList!=null){
-                        orders = new ArrayList<>();
-                        for(Order order: ordersList){
-                            if(order.getOrderStatus().equalsIgnoreCase("Prepairing")){
-                                orders.add(order);
-                                if(orders!=null&&orders.size()!=0){
-                                    recyclerView.setVisibility(View.VISIBLE);
-                                    no_orders.setVisibility(View.GONE);
-                                    ordersAdapter = new RecievedOrdersAdapter(RecievedOrderActivity.this,orders);
-                                    recyclerView.setAdapter(ordersAdapter);
-                                }else{
-                                    recyclerView.setVisibility(View.GONE);
-                                    no_orders.setVisibility(View.VISIBLE);
-                                    order_status_text.setText("No Prepairing Orders Available");
-                                }
-                            }
-                        }
-                    }
+                    getCurrentOrders("Prepairing");
                 }else if (item.getItemId()==R.id.order_shipping) {
-                    if(ordersList!=null){
-                        orders = new ArrayList<>();
-                        for(Order order: ordersList){
-                            if(order.getOrderStatus().equalsIgnoreCase("On The Way")){
-                                orders.add(order);
-                                if(orders!=null&&orders.size()!=0){
-                                    recyclerView.setVisibility(View.VISIBLE);
-                                    no_orders.setVisibility(View.GONE);
-                                    ordersAdapter = new RecievedOrdersAdapter(RecievedOrderActivity.this,orders);
-                                    recyclerView.setAdapter(ordersAdapter);
-                                }else{
-                                    recyclerView.setVisibility(View.GONE);
-                                    no_orders.setVisibility(View.VISIBLE);
-                                    order_status_text.setText("No Shipping Orders Available");
-                                }
-                            }
-                        }
-                    }
+                    getCurrentOrders("On The Way");
                 }else if (item.getItemId()==R.id.order_shipped) {
-                    if(ordersList!=null){
-                        orders = new ArrayList<>();
-                        for(Order order: ordersList){
-                            if(order.getOrderStatus().equalsIgnoreCase("Delivered")){
-                                orders.add(order);
-                                if(orders!=null&&orders.size()!=0){
-                                    recyclerView.setVisibility(View.VISIBLE);
-                                    no_orders.setVisibility(View.GONE);
-                                    ordersAdapter = new RecievedOrdersAdapter(RecievedOrderActivity.this,orders);
-                                    recyclerView.setAdapter(ordersAdapter);
-                                }else{
-                                    recyclerView.setVisibility(View.GONE);
-                                    no_orders.setVisibility(View.VISIBLE);
-                                    order_status_text.setText("No Delivered Orders Available");
-                                }
-                            }
-                        }
-                    }
+                    getCurrentOrders("Delivered");
                 }
                 return true;
             }
@@ -185,50 +99,55 @@ public class RecievedOrderActivity extends BaseActivity {
                     @Override
                     public void run() {
                         mSwipeRefreshLayout.setRefreshing(false);
-                        getOrders();
+                        getCurrentOrders(status);
                     }
                 }, 3000);
             }
         });
+
+        NestedScrollView nested_content = (NestedScrollView) findViewById(R.id.nested_scroll_view);
+        nested_content.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY < oldScrollY) { // up
+                    // animateSearchBar(false);
+                    animateBottomNavigation(false);
+                }
+                if (scrollY > oldScrollY) { // down
+                    // animateSearchBar(true);
+                    animateBottomNavigation(true);
+                }
+            }
+        });
     }
 
-    private void getOrders() {
+    boolean isBottomAnchorNavigationHide = false;
+
+    private void animateBottomNavigation(final boolean hide) {
+        if (isBottomAnchorNavigationHide && hide || !isBottomAnchorNavigationHide && !hide) return;
+        isBottomAnchorNavigationHide = hide;
+        int moveY = hide ? (2 * bottomNavigationView.getHeight()) : 0;
+        bottomNavigationView.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+    }
+
+    private void getCurrentOrders(String order_status) {
+        status = order_status;
         mService = ApiClient.getClient().create(OrderApi.class);
-        Call<Results> call = mService.getOrder();
+        Call<Results> call = mService.getCurrentOrders(user.getFirmId(),order_status);
         call.enqueue(new Callback<Results>() {
             @Override
             public void onResponse(Call<Results> call, Response<Results> response) {
                 if (response.code() == 200 ) {
                     List<Order> orders = response.body().getOrder();
-                    ordersList = new ArrayList<>();
                     if(orders!=null&&orders.size()!=0){
-                        for(Order order:orders){
-                            if(order!=null&&order.getFirmId().equalsIgnoreCase(user.getFirmId())){
-                                if(order!=null&&!user.getUserType().equalsIgnoreCase("User")) {
-                                    if (order.getFirmId().equalsIgnoreCase(user.getFirmId())) {
-                                        ordersList.add(order);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if(ordersList!=null&&ordersList.size()!=0) {
-                        orders = new ArrayList<>();
-                        for (Order order : ordersList) {
-                            if (order.getOrderStatus().equalsIgnoreCase("Pending")) {
-                                orders.add(order);
-                                if (orders != null && orders.size() != 0) {
-                                    recyclerView.setVisibility(View.VISIBLE);
-                                    no_orders.setVisibility(View.GONE);
-                                    ordersAdapter = new RecievedOrdersAdapter(RecievedOrderActivity.this, orders);
-                                    recyclerView.setAdapter(ordersAdapter);
-                                } else {
-                                    recyclerView.setVisibility(View.GONE);
-                                    no_orders.setVisibility(View.VISIBLE);
-                                    order_status_text.setText("No New Orders Available");
-                                }
-                            }
-                        }
+                        recyclerView.setVisibility(View.VISIBLE);
+                        no_orders.setVisibility(View.GONE);
+                        ordersAdapter = new RecievedOrdersAdapter(RecievedOrderActivity.this,orders);
+                        recyclerView.setAdapter(ordersAdapter);
+                    }else{
+                        recyclerView.setVisibility(View.GONE);
+                        no_orders.setVisibility(View.VISIBLE);
+                        order_status_text.setText("No "+order_status+" Orders Available");
                     }
 
                 } else {
@@ -258,14 +177,8 @@ public class RecievedOrderActivity extends BaseActivity {
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
-        getOrders();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        getOrders();
+        getCurrentOrders("Pending");
     }
 }

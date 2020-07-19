@@ -40,7 +40,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
         OffersCategory offer = offers.get(position);
         if(offer!=null){
             holder.circular_image_name.setText(offer.getCategoryName());
-            Picasso.with(mCtx).load(offer.getLink()).placeholder(R.drawable.no_image).into(holder.circular_image);
+            Picasso.with(mCtx).load(offer.getLink()).into(holder.circular_image);
             holder.offers_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

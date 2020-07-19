@@ -1,72 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:id="@+id/appRoot"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/bg_background"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <RelativeLayout
-        android:layout_marginTop="@dimen/margin_60"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.mancj.materialsearchbar.MaterialSearchBar
-            android:id="@+id/searchBar"
-            android:layout_alignParentTop="true"
-            app:mt_speechMode="false"
-            app:mt_hint="Enter Your Drink"
-            android:background="@drawable/bg_background"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:layout_marginTop="50dp"
-            android:id="@+id/swipeToRefresh"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/subcategory_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="none"
-                android:scrollbarAlwaysDrawHorizontalTrack="true"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    </RelativeLayout>
+    android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    android:gravity="center"
+    android:orientation="vertical">
 
 
-    <RelativeLayout
-        android:id="@+id/bottom_anchor_layout"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/ivEmptyStates"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="10sp"
+        app:srcCompat="@drawable/ic_mode_edit_black_18dp" />
+
+
+    <TextView
+        android:id="@+id/tvInfo"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_alignParentBottom="true"
-        tools:ignore="MissingConstraints">
-
-        <include
-            android:id="@+id/footerView"
-            layout="@layout/view_bottom_anchor" />
-
-    </RelativeLayout>
-
-    <FrameLayout
-        android:id="@+id/no_result_found"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:scaleType="fitXY"
-            android:background="@drawable/no_result_found"/>
-
-    </FrameLayout>
-
-</RelativeLayout>
+        android:layout_marginBottom="100dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:text="Please add your content here."
+        android:textColor="#848484"
+        android:textSize="15sp" />
+</LinearLayout>

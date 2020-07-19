@@ -27,7 +27,7 @@
                 <TextView
                     android:id="@+id/item_discount"
                     android:layout_width="80dp"
-                    android:layout_height="30dp"
+                    android:layout_height="25dp"
                     android:layout_marginTop="@dimen/margin_10"
                     android:gravity="center"
                     android:text="Save 30%"
@@ -62,7 +62,7 @@
 
                     <ImageView
                         android:id="@+id/item_image"
-                        android:layout_width="70dp"
+                        android:layout_width="90dp"
                         android:layout_height="70dp"
                         android:layout_centerHorizontal="true"
                         android:layout_marginLeft="10dp"
@@ -142,7 +142,7 @@
 
                    <LinearLayout
                        android:id="@+id/add_item_layout"
-                       android:layout_width="60dp"
+                       android:layout_width="70dp"
                        android:layout_height="30dp"
                        android:layout_marginEnd="20dp"
                        android:layout_weight="0.3"
@@ -179,12 +179,12 @@
 
                                <TextView
                                    android:id="@+id/remove_item"
-                                   android:layout_width="wrap_content"
+                                   android:layout_width="30dp"
                                    android:layout_height="wrap_content"
                                    android:gravity="center"
                                    android:text="-"
                                    android:textColor="@color/red"
-                                   android:textSize="14sp"
+                                   android:textSize="20sp"
                                    android:textStyle="bold" />
 
                                <TextView
@@ -192,7 +192,8 @@
                                    android:layout_width="wrap_content"
                                    android:layout_height="wrap_content"
                                    android:gravity="center"
-                                   android:paddingLeft="10dp"
+                                   android:paddingLeft="5dp"
+                                   android:paddingEnd="5dp"
                                    android:text="1"
                                    android:textColor="@color/black"
                                    android:textSize="14sp"
@@ -200,13 +201,13 @@
 
                                <TextView
                                    android:id="@+id/add_item"
-                                   android:layout_width="wrap_content"
+                                   android:layout_width="30dp"
                                    android:layout_height="wrap_content"
                                    android:gravity="center"
-                                   android:paddingLeft="10dp"
+                                   android:paddingEnd="5dp"
                                    android:text="+"
                                    android:textColor="@color/red"
-                                   android:textSize="14sp"
+                                   android:textSize="20sp"
                                    android:textStyle="normal" />
 
                            </LinearLayout>

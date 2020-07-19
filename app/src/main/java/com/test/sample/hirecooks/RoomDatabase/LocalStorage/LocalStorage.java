@@ -19,7 +19,6 @@ public class LocalStorage {
     public static final String ADVERTISE_IMAGE = "advertise_image";
     public static final String CATEGORY = "category";
     public static final String FAVORITE_CATEGORY = "fav_category";
-
     private static final String IS_USER_LOGIN = "IsUserLoggedIn";
 
 
@@ -104,13 +103,31 @@ public class LocalStorage {
         editor.commit();
     }
 
+    public String getFavourite() {
+        if (sharedPreferences.contains("FAVOURITE"))
+            return sharedPreferences.getString("FAVOURITE", null);
+        else return null;
+    }
+
+
+    public void setFavourite(String cart) {
+        Editor editor = sharedPreferences.edit();
+        editor.putString("FAVOURITE", cart);
+        editor.commit();
+    }
+
+    public void deleteFavourite() {
+        Editor editor = sharedPreferences.edit();
+        editor.remove("FAVOURITE");
+        editor.commit();
+    }
+
 
     public String getOrder() {
         if (sharedPreferences.contains("ORDER"))
             return sharedPreferences.getString("ORDER", null);
         else return null;
     }
-
 
     public void setOrder(String order) {
         Editor editor = sharedPreferences.edit();
@@ -123,6 +140,5 @@ public class LocalStorage {
         editor.remove("ORDER");
         editor.commit();
     }
-
 
 }

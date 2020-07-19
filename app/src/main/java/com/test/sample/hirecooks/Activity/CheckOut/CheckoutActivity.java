@@ -7,7 +7,7 @@ import android.view.View;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
-import com.test.sample.hirecooks.BaseActivity;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Fragments.ConfirmFragment;
 import com.test.sample.hirecooks.R;
 

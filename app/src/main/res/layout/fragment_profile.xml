@@ -5,202 +5,159 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/appRoot">
+    android:layout_gravity="center"
+    android:id="@+id/appRoot"
+    tools:context=".Activity.Users.UserSignInActivity">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
+        android:layout_marginTop="@dimen/margin_30"
+        android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="@dimen/margin_20"
+            tools:ignore="MissingConstraints">
 
-            <LinearLayout
-                android:layout_marginTop="@dimen/margin_60"
+            <FrameLayout
+                android:id="@+id/profile_image_layout"
+                android:layout_width="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:backgroundTint="@color/gray_btn_bg_color"
+                    android:background="@drawable/ic_profile_user"/>
+
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/editTextUsername"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_design"
+                android:hint="@string/user_name"
+                android:paddingRight="30dp"
+                android:drawablePadding="30dp"
+                android:drawableStart="@drawable/ic_profiles"
+                android:inputType="text"
+                android:paddingLeft="30dp"
+                android:textSize="@dimen/size_14"
+                android:textAlignment="viewStart"
+                android:elevation="2dp"/>
+
+
+            <EditText
+                android:id="@+id/editTextEmail"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_design"
+                android:hint="@string/email"
+                android:paddingRight="30dp"
+                android:drawablePadding="30dp"
+                android:drawableStart="@drawable/ic_email"
+                android:inputType="textEmailAddress"
+                android:paddingLeft="30dp"
+                android:textSize="@dimen/size_14"
+                android:textAlignment="viewStart"
+                android:elevation="2dp"/>
+
+            <EditText
+                android:id="@+id/editTextPhone"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_design"
+                android:hint="@string/phone"
+                android:inputType="phone"
+                android:paddingRight="30dp"
+                android:drawablePadding="30dp"
+                android:drawableStart="@drawable/ic_phone"
+                android:paddingLeft="30dp"
+                android:textSize="@dimen/size_14"
+                android:textAlignment="viewStart"
+                android:imeOptions="actionDone"
+                android:elevation="2dp"/>
+
+            <EditText
+                android:visibility="gone"
+                android:id="@+id/editTextFirmId"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_design"
+                android:hint="@string/firmid"
+                android:inputType="text"
+                android:paddingLeft="30dp"
+                android:textSize="@dimen/size_14"
+                android:textAlignment="viewStart"
+                android:imeOptions="actionDone"
+                android:elevation="2dp"/>
+
+            <EditText
+                android:visibility="gone"
+                android:id="@+id/editTextUserType"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_design"
+                android:hint="@string/user_type"
+                android:inputType="text"
+                android:paddingLeft="30dp"
+                android:textSize="@dimen/size_14"
+                android:textAlignment="viewStart"
+                android:imeOptions="actionDone"
+                android:elevation="2dp"/>
+
+            <RadioGroup
+                android:id="@+id/radioGender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                tools:ignore="MissingConstraints">
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <RadioButton
+                    android:id="@+id/radioMale"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:text="Male" />
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_marginLeft="19dp"
-                        android:layout_marginRight="10dp"
-                        android:id="@+id/profile_image"
-                        android:layout_width="90dp"
-                        android:layout_height="90dp"
-                        android:src="@drawable/ic_launcher" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="15dp">
-
-                        <TextView
-                            android:id="@+id/edit_profile_image"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="Edit profile"
-                            android:gravity="center_vertical"
-                            android:drawablePadding="10dp"
-                            android:drawableRight="@drawable/ic_mode_edit_black_18dp"
-                            android:textColor="#ef4e33"
-                            android:textSize="14sp"/>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/editTextUsername_layout"
-                    android:layout_width="match_parent"
+                <RadioButton
+                    android:id="@+id/radioFemale"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="16dp"
-                    android:hint="@string/username">
+                    android:text="Female" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextUsername"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:inputType="text"
-                        android:textSize="@dimen/size_14"
-                        android:textAlignment="viewStart" />
+            </RadioGroup>
 
-                </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/buttonUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/update"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:elevation="5dp"
+                android:textAllCaps="true"
+                android:background="@drawable/rounded"/>
 
+        </LinearLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/editTextEmail_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="16dp"
-                    app:boxStrokeColor="@color/style_color_primary"
-                    android:hint="@string/email">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextEmail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:textSize="@dimen/size_14"
-                        android:inputType="textEmailAddress"
-                        android:textAlignment="viewStart" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/editTextPhone_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="16dp"
-                    app:boxStrokeColor="@color/style_color_primary"
-                    android:hint="@string/phone">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextPhone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:textSize="@dimen/size_14"
-                        android:inputType="phone"
-                        android:textAlignment="viewStart" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <RadioGroup
-                    android:id="@+id/radioGender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="16dp">
-
-                    <RadioButton
-                        android:id="@+id/radioMale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Male" />
-
-                    <RadioButton
-                        android:id="@+id/radioFemale"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Female" />
-
-                </RadioGroup>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:visibility="gone"
-                    android:id="@+id/editTextFirmId_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="16dp"
-                    app:boxStrokeColor="@color/style_color_primary"
-                    android:hint="@string/firmid">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextFirmId"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:textSize="@dimen/size_14"
-                        android:inputType="number"
-                        android:textAlignment="viewStart" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:visibility="gone"
-                    android:id="@+id/editTextUserType_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="16dp"
-                    app:boxStrokeColor="@color/style_color_primary"
-                    android:hint="@string/user_type">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextUserType"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:textSize="@dimen/size_14"
-                        android:inputType="number"
-                        android:textAlignment="viewStart" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/buttonUpdate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginEnd="16dp"
-                    android:textSize="@dimen/size_14"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:textColor="@color/white"
-                    android:text="@string/update"
-                    android:background="@color/style_color_primary"/>
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

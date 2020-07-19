@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,6 +21,8 @@ import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.APIUrl;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class VendersAdapter extends RecyclerView.Adapter<VendersAdapter.ViewHolder> {
     private Context mCtx;
@@ -46,7 +47,7 @@ public class VendersAdapter extends RecyclerView.Adapter<VendersAdapter.ViewHold
             if(!venders.getImage().isEmpty()){
                 Picasso.with(mCtx).load(APIUrl.PROFILE_URL+venders.getImage()).into(holder.venders_image);
             }
-            holder.text.setText(venders.getName());
+           // holder.text.setText(venders.getName());
             holder.vender_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -67,7 +68,7 @@ public class VendersAdapter extends RecyclerView.Adapter<VendersAdapter.ViewHold
         return vender==null?0:vender.size();
     }
     class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView venders_image;
+        private CircleImageView venders_image;
         private LinearLayout vender_layout;
         private TextView text;
 
@@ -75,7 +76,7 @@ public class VendersAdapter extends RecyclerView.Adapter<VendersAdapter.ViewHold
             super(itemLayoutView);
             venders_image = itemLayoutView.findViewById(R.id.venders_image);
             vender_layout = itemLayoutView.findViewById(R.id.vender_layout);
-            text = itemLayoutView.findViewById(R.id.text);
+          //  text = itemLayoutView.findViewById(R.id.text);
         }
     }
 }

@@ -1,106 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/appRoot"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_scrollFlags="scroll|enterAlways|snap">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.mancj.materialsearchbar.MaterialSearchBar
-                android:id="@+id/searchBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:foregroundGravity="center"
-                android:layout_marginEnd="@dimen/margin_20"
-                app:mt_speechMode="true"
-                app:mt_navIconEnabled="true"
-                app:mt_placeholder="Search Products"/>
-
-        </com.google.android.material.appbar.MaterialToolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:layout_marginTop="60dp"
-        android:id="@+id/swipeToRefresh"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <androidx.core.widget.NestedScrollView
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeToRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_gravity="center_vertical">
 
-            <ScrollView
+          <androidx.core.widget.NestedScrollView
+            android:id="@+id/nested_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:scrollingCache="true">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true">
+                android:layout_height="wrap_content"
+                android:descendantFocusability="blocksDescendants"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:visibility="gone"
-                        android:id="@+id/subcategory_recycler"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scrollbars="none"
-                        android:layoutAnimation="@anim/layout_animation_fall_down"
-                        android:scrollbarAlwaysDrawHorizontalTrack="true"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginBottom="10dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="90dp"
+                        android:layout_height="match_parent"
                         android:orientation="vertical">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:visibility="visible"
+                            android:id="@+id/subcategory_recycler"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scrollbars="none"
+                            android:layoutAnimation="@anim/layout_animation_fall_down"
+                            android:scrollbarAlwaysDrawHorizontalTrack="true"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="90dp"
+                            android:orientation="vertical">
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
-                </LinearLayout>
-
-            </ScrollView>
+            </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </LinearLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/sort"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            app:srcCompat="@android:drawable/ic_menu_sort_by_size"
-            android:contentDescription="@string/submit"
-            android:layout_marginBottom="60dp"
-            android:layout_marginEnd="16dp"
-            app:backgroundTint="@color/black"/>
+    <!-- search bar layout -->
+    <include
+        android:id="@+id/search_bar"
+        layout="@layout/search_layout" />
 
-        <RelativeLayout
-            android:id="@+id/bottom_anchor_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            android:layout_alignParentBottom="true">
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/sort"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+        android:contentDescription="@string/submit"
+        android:layout_marginBottom="60dp"
+        android:layout_marginEnd="16dp"
+        app:backgroundTint="@color/black"/>
+
+    <RelativeLayout
+        android:id="@+id/bottom_anchor_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true">
 
         <include
             android:id="@+id/footerView"
@@ -124,7 +113,6 @@
             android:gravity="center"
             android:orientation="vertical">
 
-
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -139,7 +127,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:gravity="center"
-                android:textStyle="italic"
+                android:textStyle="normal"
                 android:text="Subcategory Not Addedd"
                 android:textColor="#848484"
                 android:textSize="15sp" />
@@ -179,7 +167,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:gravity="center"
-                android:textStyle="italic"
+                android:textStyle="normal"
                 android:text="No Vender Found in This Area"
                 android:textColor="#848484"
                 android:textSize="15sp" />
@@ -213,9 +201,7 @@
             android:gravity="center"
             android:text="No Result Found"
             android:textColor="@color/black"
-            android:textStyle="bold" />
+            android:textStyle="normal" />
     </FrameLayout>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-</RelativeLayout>
+    </RelativeLayout>

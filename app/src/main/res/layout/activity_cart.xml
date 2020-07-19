@@ -16,42 +16,36 @@
         android:layout_height="wrap_content">
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/nested_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <ScrollView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fillViewport="true">
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:visibility="visible"
+                    android:id="@+id/recyclerview_cart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none"
+                    android:scrollbarAlwaysDrawHorizontalTrack="true"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="70dp"
                     android:orientation="vertical">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:visibility="visible"
-                        android:id="@+id/recyclerview_cart"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scrollbars="none"
-                        android:scrollbarAlwaysDrawHorizontalTrack="true"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="70dp"
-                        android:orientation="vertical">
-
-                    </LinearLayout>
 
                 </LinearLayout>
 
-            </ScrollView>
+            </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
 
@@ -74,25 +68,49 @@
         android:id="@+id/empty_cart_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:visibility="gone">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@drawable/empty_cart_img"/>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/shop_now"
-            android:layout_marginTop="200dp"
-            android:layout_gravity="center"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/gen_black"
-            android:background="@drawable/round_corners"
-            android:text="@string/shop_now">
+            <ImageView
+                android:id="@+id/ivEmptyStates"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="10sp"
+                app:srcCompat="@drawable/ic_launcher" />
 
-        </androidx.appcompat.widget.AppCompatButton>
+
+            <TextView
+                android:id="@+id/tvInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="100dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center"
+                android:textStyle="normal"
+                android:text="Your Cart is Empty "
+                android:textColor="#848484"
+                android:textSize="15sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/shop_now"
+                android:layout_gravity="center"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gen_black"
+                android:background="@drawable/round_corners"
+                android:text="@string/shop_now">
+
+            </androidx.appcompat.widget.AppCompatButton>
+        </LinearLayout>
 
     </FrameLayout>
 </RelativeLayout>

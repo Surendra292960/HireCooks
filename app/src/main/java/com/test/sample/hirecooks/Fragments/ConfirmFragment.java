@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.test.sample.hirecooks.Adapter.Checkout.CheckoutCartAdapter;
-import com.test.sample.hirecooks.BaseActivity;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Fragments.CheckOut.AddressFragment;
 import com.test.sample.hirecooks.Models.Cart.Cart;
 import com.test.sample.hirecooks.Models.Order.Order;
@@ -52,15 +52,7 @@ public class ConfirmFragment extends Fragment {
         shipping = view.findViewById(R.id.shipping_amount);
         proceed_to_checkout = view.findViewById(R.id.proceed_to_checkout);
         progressDialog = new ProgressDialog(getContext());
-        gson = new Gson();
-        orderList = ((BaseActivity) getActivity()).getOrderList();
-
         setUpCartRecyclerview();
-        if (orderList.isEmpty()) {
-            id = "1";
-        } else {
-            id = String.valueOf(orderList.size() + 1);
-        }
 
         _total = ((BaseActivity) getActivity()).getTotalPrice();
         _shipping = 0.0;

@@ -1,4 +1,5 @@
 package com.test.sample.hirecooks.WebApis;
+
 import com.test.sample.hirecooks.Models.BannerResponse.Banners;
 import com.test.sample.hirecooks.Models.Category.Categories;
 import com.test.sample.hirecooks.Models.HotelImage;
@@ -6,6 +7,7 @@ import com.test.sample.hirecooks.Models.Images.Image;
 import com.test.sample.hirecooks.Models.ImagesResponse.Images;
 import com.test.sample.hirecooks.Models.MenuResponse.Menus;
 import com.test.sample.hirecooks.Models.TokenResponse.TokenResult;
+import com.test.sample.hirecooks.Models.TokenResponse.Tokens;
 import com.test.sample.hirecooks.Models.UsersResponse.UsersResponse;
 import com.test.sample.hirecooks.Models.users.MessageResponse;
 import com.test.sample.hirecooks.Models.users.Messages;
@@ -127,11 +129,8 @@ public interface UserApi {
     Call<TokenResult> getTokenFromServer(
             @Field("userId") int userId);
 
-    @FormUrlEncoded
-    @POST("getTokenByFirmId")
-    Call<TokenResult> getTokenByFirmId(
-            @Field("firm_id") String firm_id,
-            @Field("userId") int userId);
+    @GET("getTokens")
+    Call<Tokens> getTokens();
 
     //gettingUserImages
     @FormUrlEncoded

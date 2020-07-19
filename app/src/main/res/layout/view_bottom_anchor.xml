@@ -5,35 +5,10 @@
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:layout_gravity="center_horizontal|top"
-    android:background="@color/gen_black"
     android:orientation="vertical">
-<!--
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/gray_btn_bg_pressed_color" />-->
-
-    <TextView
-        android:id="@+id/new_offers_banner"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_centerVertical="true"
-        android:background="#70000000"
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:freezesText="true"
-        android:gravity="center_vertical"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:paddingLeft="10dp"
-        android:scrollHorizontally="true"
-        android:singleLine="true"
-        android:text="@string/offer_banner"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:visibility="gone"/>
 
     <RelativeLayout
+        android:id="@+id/bottom_anchor"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/white"

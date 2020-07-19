@@ -45,7 +45,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public void onBindViewHolder(CategoryAdapter.ViewHolder holder, int position) {
         Category category = categories.get(position);
         holder.categoryName.setText(category.getCategoryName());
-        Picasso.with(mCtx).load(category.getLink()).placeholder(R.drawable.no_image).into(holder.categoryImage);
+        Picasso.with(mCtx).load(category.getLink()).into(holder.categoryImage);
         holder.categoryLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

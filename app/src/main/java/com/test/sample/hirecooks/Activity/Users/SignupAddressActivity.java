@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -29,7 +31,7 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.BaseActivity;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Result;
 import com.test.sample.hirecooks.R;
@@ -50,17 +52,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SignupAddressActivity extends BaseActivity {
-    private EditText  lat, lng, editTextPinCode, location;
-    Button saveMapDetailsBtn;
-    GoogleMap mMap;
-    MapView mapView;
+    private EditText  lat, lng, editTextPinCode;
+    private Button saveMapDetailsBtn;
+    private GoogleMap mMap;
+    private MapView mapView;
+    private TextView location;
     private TrackGPS trackGPS;
     private double mLatitude, mLongitude;
     private Map maps;
     private int mMapId ;
     private DecimalFormat df2 = new DecimalFormat(".##########");
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
-    String TAG = "MAPLOCATION",placeId;
+    private String TAG = "MAPLOCATION",placeId;
     private View appRoot;
     private ProgressBarUtil progressBarUtil;
     private String subAddress,pinCode;
@@ -72,9 +75,8 @@ public class SignupAddressActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         try {
             setContentView(R.layout.activity_signup_address);
+            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             progressBarUtil = new ProgressBarUtil(this);
-            Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
             appRoot = findViewById(R.id.appRoot);
             mapView = findViewById(R.id.google_map_view);
             location = findViewById(R.id.location_et);
@@ -161,7 +163,7 @@ public class SignupAddressActivity extends BaseActivity {
                     Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
                     location.setText(place.getName() + "," + place.getAddress());
 
-                    LatLng latLng = new LatLng(place.getLatLng().longitude, place.getLatLng().longitude);
+                    LatLng latLng = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
                     getAddress(latLng);
 
                     placeId = place.getId();

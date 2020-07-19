@@ -24,6 +24,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,20 +35,20 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Activity.AddorRemoveCallbacks;
 import com.test.sample.hirecooks.Activity.ProductDatails.ProductDetailsActivity;
-import com.test.sample.hirecooks.Activity.SubCategory.SubCategoryDetails.SubCategoryDetails;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.BaseActivity;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Models.Cart.Cart;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
+import com.test.sample.hirecooks.Models.SubCategory.Response.SubCategories;
+import com.test.sample.hirecooks.Models.SubCategory.Response.SubCategory;
 import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
 import com.test.sample.hirecooks.Models.VendersCategory.VendersCategory;
-import com.test.sample.hirecooks.Models.VendersSubCategory.Result;
 import com.test.sample.hirecooks.Models.VendersSubCategory.VendersSubcategory;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
-import com.test.sample.hirecooks.WebApis.VendersApi;
+import com.test.sample.hirecooks.WebApis.ProductApi;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -62,11 +63,12 @@ public class VenderSubCategoryProducts extends BaseActivity implements MaterialS
     private RecyclerView vender_subcategory_products_recycler;
     private VendersCategory vendersCategory;
     private ProgressBarUtil progressBarUtil;
-    private List<VendersSubcategory> vendersSubcategoryList;
+    private List<SubCategory> vendersSubcategoryList;
     private TextView item_count,checkout_amount,checkout;
     private List<Cart> cartList;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private String categoryName;
+    private View bottom_anchor;
     private FrameLayout no_result_found,no_search_result_found;
     private RelativeLayout bottom_anchor_layout;
     private MaterialSearchBar searchBar;
@@ -98,10 +100,6 @@ public class VenderSubCategoryProducts extends BaseActivity implements MaterialS
         bottom_anchor_layout = findViewById(R.id.bottom_anchor_layout);
         searchBar = findViewById(R.id.searchBar);
         drawer = findViewById(R.id.drawer_layout);
-        View view = findViewById(R.id.footerView);
-        item_count = view.findViewById(R.id.item_count);
-        checkout_amount = view.findViewById(R.id.checkout_amount);
-        checkout = view.findViewById(R.id.checkout);
 
         searchBar.setHint("Search ");
         searchBar.setCardViewElevation(10);
@@ -109,6 +107,27 @@ public class VenderSubCategoryProducts extends BaseActivity implements MaterialS
         searchBar.setOnSearchActionListener(this);
         searchBar.setSpeechMode(true);
         searchBar.setRoundedSearchBarEnabled(true);
+
+        View view = findViewById(R.id.footerView);
+        item_count =  view.findViewById(R.id.item_count);
+        bottom_anchor =  view.findViewById(R.id.bottom_anchor);
+        checkout_amount = view.findViewById(R.id.checkout_amount);
+        checkout = view.findViewById(R.id.checkout);
+
+        NestedScrollView nested_content = (NestedScrollView) findViewById(R.id.nested_scroll_view);
+        nested_content.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY < oldScrollY) { // up
+                    // animateSearchBar(false);
+                    animateBottomAnchor(false);
+                }
+                if (scrollY > oldScrollY) { // down
+                    // animateSearchBar(true);
+                    animateBottomAnchor(true);
+                }
+            }
+        });
 
         mSwipeRefreshLayout = findViewById(R.id.swipeToRefresh);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -169,18 +188,28 @@ public class VenderSubCategoryProducts extends BaseActivity implements MaterialS
     }
 
 
+
+    boolean isBottomAnchorNavigationHide = false;
+
+    private void animateBottomAnchor(final boolean hide) {
+        if (isBottomAnchorNavigationHide && hide || !isBottomAnchorNavigationHide && !hide) return;
+        isBottomAnchorNavigationHide = hide;
+        int moveY = hide ? (2 * bottom_anchor.getHeight()) : 0;
+        bottom_anchor.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+    }
+
     private void startSearch(CharSequence text) {
-        List<VendersSubcategory>  subCategoryFilteredList = new ArrayList<>();
-        List<VendersSubcategory>  filteredList = new ArrayList<>();
-        List<VendersSubcategory>  list = new ArrayList<>();
-        List<VendersSubcategory> result=new ArrayList<>();
+        List<SubCategory>  subCategoryFilteredList = new ArrayList<>();
+        List<SubCategory>  filteredList = new ArrayList<>();
+        List<SubCategory>  list = new ArrayList<>();
+        List<SubCategory> result=new ArrayList<>();
         try{
-            for (VendersSubcategory vendersSubcategory : vendersSubcategoryList) {
+            for (SubCategory vendersSubcategory : vendersSubcategoryList) {
                 for (Map map : Constants.NEARBY_USER_LOCATION) {
                     for(UserResponse vender:Constants.NEARBY_VENDERS){
-                        if (map.getFirm_id().equalsIgnoreCase(vendersSubcategory.getFirmId())&&vender.getFirmId().equalsIgnoreCase(vendersSubcategory.getFirmId())) {
+                        if (map.getFirm_id().equalsIgnoreCase(vendersSubcategory.getFirm_id())&&vender.getFirmId().equalsIgnoreCase(vendersSubcategory.getFirm_id())) {
                             list.add(vendersSubcategory);
-                            Set<VendersSubcategory> newList = new LinkedHashSet<>(list);
+                            Set<SubCategory> newList = new LinkedHashSet<>(list);
                             filteredList = new ArrayList<>(newList);
                         }
                     }
@@ -240,32 +269,32 @@ public class VenderSubCategoryProducts extends BaseActivity implements MaterialS
 
     private void getVendersSubCategoryProducts(final int subcategory) {
         progressBarUtil.showProgress();
-        VendersApi mService = ApiClient.getClient().create(VendersApi.class);
-        Call<Result> call = mService.getVendersSubCategoryBySubCategoryId(subcategory);
-        call.enqueue(new Callback<Result>() {
+        ProductApi mService = ApiClient.getClient().create(ProductApi.class);
+        Call<SubCategories> call = mService.getSubCategory(subcategory);
+        call.enqueue(new Callback<SubCategories>() {
             @SuppressLint("WrongConstant")
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
+            public void onResponse(Call<SubCategories> call, Response<SubCategories> response) {
                 int statusCode = response.code();
                 if (statusCode == 200) {
-                    vendersSubcategoryList = response.body().getVendersSubcategory();
+                    vendersSubcategoryList = response.body().getSubcategory();
                     progressBarUtil.hideProgress();
                     if(vendersSubcategoryList!=null&&vendersSubcategoryList.size()!=0){
-                        List<VendersSubcategory> list = new ArrayList<>();
-                        List<VendersSubcategory> filteredList = new ArrayList<>();
-                        for (VendersSubcategory vendersSubcategory : vendersSubcategoryList) {
+                        List<SubCategory> list = new ArrayList<>();
+                        List<SubCategory> filteredList = new ArrayList<>();
+                        for (SubCategory vendersSubcategory : vendersSubcategoryList) {
                             for (Map map : Constants.NEARBY_USER_LOCATION) {
                                 for(UserResponse vender:Constants.NEARBY_VENDERS){
-                                    if (map.getFirm_id().equalsIgnoreCase(vendersSubcategory.getFirmId())&&vender.getFirmId().equalsIgnoreCase(vendersSubcategory.getFirmId())) {
+                                    if (map.getFirm_id().equalsIgnoreCase(vendersSubcategory.getFirm_id())&&vender.getFirmId().equalsIgnoreCase(vendersSubcategory.getFirm_id())) {
                                         list.add(vendersSubcategory);
-                                        Set<VendersSubcategory> newList = new LinkedHashSet<>(list);
+                                        Set<SubCategory> newList = new LinkedHashSet<>(list);
                                         filteredList = new ArrayList<>(newList);
                                     }
                                 }
                             }
                         }
                         if(filteredList!=null&&filteredList.size()!=0){
-                            Constants.NEARBY_VENDERS_SUBCATEGORY = filteredList;
+                            Constants.SUBCATEGORY = filteredList;
                            /* displayLastDrink(filteredList);
                             buildSuggestList(filteredList);*/
                             vender_subcategory_products_recycler.setHasFixedSize(true);
@@ -291,7 +320,7 @@ public class VenderSubCategoryProducts extends BaseActivity implements MaterialS
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<SubCategories> call, Throwable t) {
                 progressBarUtil.hideProgress();
                 System.out.println("Suree : " + t.getMessage());
             }
@@ -364,7 +393,7 @@ public class VenderSubCategoryProducts extends BaseActivity implements MaterialS
     }
 
     public class VenderSubCategoryAdapter extends RecyclerView.Adapter<VenderSubCategoryProducts.VenderSubCategoryAdapter.MyViewHolder> {
-        List<VendersSubcategory> productList;
+        List<SubCategory> productList;
         Context mCtx;
         String Tag;
         LocalStorage localStorage;
@@ -373,7 +402,7 @@ public class VenderSubCategoryProducts extends BaseActivity implements MaterialS
         String weight;
         private int discount = 0, discountPercentage = 0, displayrate = 0,sellRate = 0,displayRate = 0, SubTotal = 0,Quantity = 0;
 
-        public VenderSubCategoryAdapter(Context mCtx, List<VendersSubcategory> productList) {
+        public VenderSubCategoryAdapter(Context mCtx, List<SubCategory> productList) {
             this.productList = productList;
             this.mCtx = mCtx;
         }
@@ -389,7 +418,7 @@ public class VenderSubCategoryProducts extends BaseActivity implements MaterialS
         @Override
         public void onBindViewHolder(@NonNull final VenderSubCategoryProducts.VenderSubCategoryAdapter.MyViewHolder holder, final int position) {
 
-            final VendersSubcategory product = productList.get(position);
+            final SubCategory product = productList.get(position);
             localStorage = new LocalStorage(mCtx);
             gson = new Gson();
             cartList = ((BaseActivity) mCtx).getCartList();
@@ -407,7 +436,7 @@ public class VenderSubCategoryProducts extends BaseActivity implements MaterialS
                 holder.imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(mCtx, SubCategoryDetails.class));
+                        //startActivity(new Intent(mCtx, SubCategoryDetails.class));
                     }
                 });
 
@@ -461,14 +490,14 @@ public class VenderSubCategoryProducts extends BaseActivity implements MaterialS
                             }
                         }
                     }else {
-                        if (product.getId() != 0 && product.getName() != null && product.getLink() != null && product.getDiscription() != null && sellRate != 0 && displayrate != 0 && product.getFirmId() != null) {
+                        if (product.getId() != 0 && product.getName() != null && product.getLink() != null && product.getDiscription() != null && sellRate != 0 && displayrate != 0 && product.getFirm_id() != null) {
                             sellRate = product.getSellRate();
                             displayRate = product.getDisplayRate();
                             if (Quantity == 0) {
                                 Quantity = 1;
                                 SubTotal = (sellRate * Quantity);
                                 if (mCtx instanceof VenderSubCategoryProducts) {
-                                    Cart cart = new Cart(product.getId(), product.getName(),  product.getLink(), product.getDiscription(), sellRate, displayRate, SubTotal, 1, weight, product.getFirmId());
+                                    Cart cart = new Cart(product.getId(), product.getName(),  product.getLink(), product.getDiscription(), sellRate, displayRate, SubTotal, 1, weight, product.getFirm_id());
                                     cartList = ((BaseActivity) mCtx).getCartList();
                                     cartList.add(cart);
                                     String cartStr = gson.toJson(cartList);
@@ -518,7 +547,7 @@ public class VenderSubCategoryProducts extends BaseActivity implements MaterialS
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
                     Intent intent = new Intent(mCtx, ProductDetailsActivity.class);
-                    bundle.putSerializable("VendersSubCategory",productList.get(position));
+                    bundle.putSerializable("SubCategory",productList.get(position));
                     intent.putExtras(bundle);
                     intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     mCtx.startActivity(intent);
@@ -556,10 +585,9 @@ public class VenderSubCategoryProducts extends BaseActivity implements MaterialS
                 add_item_layout = itemView.findViewById(R.id.add_item_layout);
                 available_stock = itemView.findViewById(R.id.available_stock);
                 cardview = itemView.findViewById(R.id.cardview);
-                not_available = itemView.findViewById(R.id.not_available);
                 discription = itemView.findViewById(R.id.item_descriptions);
             }
         }
     }
-    
+
 }

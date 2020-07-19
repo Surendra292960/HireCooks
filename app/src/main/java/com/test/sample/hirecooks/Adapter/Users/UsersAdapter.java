@@ -68,7 +68,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final UserResponse user = users.get(position);
         if (!TextUtils.isEmpty(user.getImage())) {
-            Picasso.with(mCtx).load(APIUrl.PROFILE_URL+user.getImage()).placeholder(R.drawable.no_image).into(holder.textViewImage);
+            Picasso.with(mCtx).load(APIUrl.PROFILE_URL+user.getImage()).into(holder.textViewImage);
         }
 
         holder.textViewId.setText("ID:  "+user.getId());

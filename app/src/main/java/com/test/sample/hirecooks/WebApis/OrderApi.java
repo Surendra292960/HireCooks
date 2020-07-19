@@ -48,6 +48,12 @@ public interface OrderApi {
     Call<Results> getOrderByUserId(
             @Field("userId") int userId);
 
+    @FormUrlEncoded
+    @POST("getCurrentOrders")
+    Call<Results> getCurrentOrders(
+            @Field("firm_id") String firmId,
+            @Field("order_status") String order_status);
+
     @GET("getOrder")
     Call<Results> getOrder();
 

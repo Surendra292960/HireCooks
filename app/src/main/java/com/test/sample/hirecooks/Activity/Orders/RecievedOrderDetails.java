@@ -33,25 +33,25 @@ public class RecievedOrderDetails extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void setData(Order orders) {
        if(orders!=null){
-           order_id.setText("   =>  # "+orders.getOrderId());
-           product_name.setText("   =>  "+orders.getProductName());
-           product_sellRate.setText("   =>  "+orders.getProductSellRate());
-           product_displayRate.setText("    =>  "+orders.getProductDisplayRate());
-           product_discount.setText("   =>  "+orders.getProductDiscount()+" %");
-           product_quantity.setText("   =>  "+orders.getProductQuantity());
-           product_totalAmount.setText("    =>  "+orders.getProductTotalAmount());
-           order_status.setText("   =>  "+orders.getOrderStatus());
-           firm_id.setText("    =>  "+orders.getFirmId());
-           userId.setText("     =>  "+orders.getUserId());
-           order_date_time.setText("    =>  "+orders.getOrderDateTime());
-           order_weight.setText("   =>  "+orders.getOrderWeight());
-           payment_method.setText("     =>  "+orders.getPaymentMethod());
-           order_address.setText("     =>   "+orders.getOrderAddress());
-           name.setText("     =>    "+orders.getName());
-           email.setText("    =>    "+orders.getEmail());
-           phone.setText("    =>    "+orders.getPhone());
-           order_confirm.setText("    =>    "+orders.getOrderConfirm());
-           firm_address.setText("   =>  "+orders.getFirmAddress());
+           order_id.setText("   :  # "+orders.getOrderId());
+           product_name.setText("   :  "+orders.getProductName());
+           product_sellRate.setText("   :  "+orders.getProductSellRate());
+           product_displayRate.setText("    :  "+orders.getProductDisplayRate());
+           product_discount.setText("   :  "+orders.getProductDiscount()+" %");
+           product_quantity.setText("   :  "+orders.getProductQuantity());
+           product_totalAmount.setText("    :  "+orders.getProductTotalAmount());
+           order_status.setText("   :  "+orders.getOrderStatus());
+           firm_id.setText("    :  "+orders.getFirmId());
+           userId.setText("     :  "+orders.getUserId());
+           order_date_time.setText("    :  "+orders.getOrderDateTime());
+           order_weight.setText("   :  "+orders.getOrderWeight());
+           payment_method.setText("     :  "+orders.getPaymentMethod());
+           order_address.setText("     :   "+orders.getOrderAddress());
+           name.setText("     :    "+orders.getName());
+           email.setText("    :    "+orders.getEmail());
+           phone.setText("    :    "+orders.getPhone());
+           order_confirm.setText("    :    "+orders.getOrderConfirm());
+           firm_address.setText("   :  "+orders.getFirmAddress());
        }
     }
 

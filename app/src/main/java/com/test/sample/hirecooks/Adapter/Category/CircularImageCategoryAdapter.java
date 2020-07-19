@@ -33,7 +33,7 @@ public class CircularImageCategoryAdapter extends RecyclerView.Adapter<CircularI
         Offer offer = offers.get(position);
         if(offer!=null){
             holder.circular_image_category_name.setText(offer.getName());
-            Picasso.with(mCtx).load(offer.getLink()).placeholder(R.drawable.no_image).into(holder.circular_category_image);
+            Picasso.with(mCtx).load(offer.getLink()).into(holder.circular_category_image);
         }
     }
 

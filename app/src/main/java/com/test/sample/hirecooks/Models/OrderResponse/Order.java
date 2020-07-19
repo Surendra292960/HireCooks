@@ -1,319 +1,369 @@
 package com.test.sample.hirecooks.Models.OrderResponse;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
 public class Order implements Serializable {
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+    @SerializedName("order_id")
+    @Expose
+    private String orderId;
+    @SerializedName("product_name")
+    @Expose
+    private String productName;
+    @SerializedName("product_sellRate")
+    @Expose
+    private Integer productSellRate;
+    @SerializedName("product_displayRate")
+    @Expose
+    private Integer productDisplayRate;
+    @SerializedName("product_discount")
+    @Expose
+    private Integer productDiscount;
+    @SerializedName("product_quantity")
+    @Expose
+    private Integer productQuantity;
+    @SerializedName("product_totalAmount")
+    @Expose
+    private Double productTotalAmount;
+    @SerializedName("order_status")
+    @Expose
+    private String orderStatus;
+    @SerializedName("product_image")
+    @Expose
+    private String productImage;
+    @SerializedName("firm_id")
+    @Expose
+    private String firmId;
+    @SerializedName("userId")
+    @Expose
+    private Integer userId;
+    @SerializedName("order_date_time")
+    @Expose
+    private String orderDateTime;
+    @SerializedName("order_weight")
+    @Expose
+    private String orderWeight;
+    @SerializedName("payment_method")
+    @Expose
+    private String paymentMethod;
+    @SerializedName("order_placeId")
+    @Expose
+    private String orderPlaceId;
+    @SerializedName("order_latitude")
+    @Expose
+    private String orderLatitude;
+    @SerializedName("order_longitude")
+    @Expose
+    private String orderLongitude;
+    @SerializedName("order_address")
+    @Expose
+    private String orderAddress;
+    @SerializedName("order_sub_address")
+    @Expose
+    private String orderSubAddress;
+    @SerializedName("order_pincode")
+    @Expose
+    private Integer orderPincode;
+    @SerializedName("name")
+    @Expose
+    private String name;
+    @SerializedName("email")
+    @Expose
+    private String email;
+    @SerializedName("phone")
+    @Expose
+    private String phone;
+    @SerializedName("firm_lat")
+    @Expose
+    private String firmLat;
+    @SerializedName("firm_lng")
+    @Expose
+    private String firmLng;
+    @SerializedName("firm_address")
+    @Expose
+    private String firmAddress;
+    @SerializedName("firm_pincode")
+    @Expose
+    private String firmPincode;
+    @SerializedName("order_confirm")
+    @Expose
+    private String orderConfirm;
 
-@SerializedName("id")
-@Expose
-private String id;
-@SerializedName("name")
-@Expose
-private String name;
-@SerializedName("email")
-@Expose
-private String email;
-@SerializedName("gender")
-@Expose
-private String gender;
-@SerializedName("phone")
-@Expose
-private String phone;
-@SerializedName("signup_date")
-@Expose
-private String signupDate;
-@SerializedName("order_id")
-@Expose
-private String orderId;
-@SerializedName("product_name")
-@Expose
-private String productName;
-@SerializedName("product_sellRate")
-@Expose
-private String productSellRate;
-@SerializedName("product_displayRate")
-@Expose
-private String productDisplayRate;
-@SerializedName("product_discount")
-@Expose
-private String productDiscount;
-@SerializedName("product_quantity")
-@Expose
-private String productQuantity;
-@SerializedName("product_totalAmount")
-@Expose
-private String productTotalAmount;
-@SerializedName("order_status")
-@Expose
-private String orderStatus;
-@SerializedName("product_image")
-@Expose
-private String productImage;
-@SerializedName("order_date_time")
-@Expose
-private String orderDateTime;
-@SerializedName("order_weight")
-@Expose
-private String orderWeight;
-@SerializedName("payment_method")
-@Expose
-private String paymentMethod;
-@SerializedName("order_placeId")
-@Expose
-private String orderPlaceId;
-@SerializedName("order_latitude")
-@Expose
-private String orderLatitude;
-@SerializedName("order_longitude")
-@Expose
-private String orderLongitude;
-@SerializedName("order_address")
-@Expose
-private String orderAddress;
-@SerializedName("order_pincode")
-@Expose
-private String orderPincode;
-@SerializedName("latitude")
-@Expose
-private String latitude;
-@SerializedName("longitude")
-@Expose
-private String longitude;
-@SerializedName("address")
-@Expose
-private String address;
-@SerializedName("pincode")
-@Expose
-private String pincode;
-@SerializedName("placeId")
-@Expose
-private String placeId;
 
-public String getId() {
-return id;
-}
+    public Order(Integer id, String orderId, String productName, Integer productSellRate, Integer productDisplayRate, Integer productDiscount, Integer productQuantity, Double productTotalAmount, String orderStatus, String productImage, String firmId, Integer userId, String orderDateTime, String orderWeight, String paymentMethod, String name, String email, String phone) {
+        this.id = id;
+        this.orderId = orderId;
+        this.productName = productName;
+        this.productSellRate = productSellRate;
+        this.productDisplayRate = productDisplayRate;
+        this.productDiscount = productDiscount;
+        this.productQuantity = productQuantity;
+        this.productTotalAmount = productTotalAmount;
+        this.orderStatus = orderStatus;
+        this.productImage = productImage;
+        this.firmId = firmId;
+        this.userId = userId;
+        this.orderDateTime = orderDateTime;
+        this.orderWeight = orderWeight;
+        this.paymentMethod = paymentMethod;
+        this.orderPlaceId = orderPlaceId;
+        this.orderLatitude = orderLatitude;
+        this.orderLongitude = orderLongitude;
+        this.orderAddress = orderAddress;
+        this.orderSubAddress = orderSubAddress;
+        this.orderPincode = orderPincode;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.firmLat = firmLat;
+        this.firmLng = firmLng;
+        this.firmAddress = firmAddress;
+        this.firmPincode = firmPincode;
+        this.orderConfirm = orderConfirm;
+    }
 
-public void setId(String id) {
-this.id = id;
-}
+    public Order(int id, String orderId, String orderDateTime, double productTotalAmount, String orderStatus) {
+        this.id = id;
+        this.orderId = orderId;
+        this.orderDateTime = orderDateTime;
+        this.productTotalAmount = productTotalAmount;
+        this.orderStatus = orderStatus;
 
-public String getName() {
-return name;
-}
+    }
 
-public void setName(String name) {
-this.name = name;
-}
+    public Integer getId() {
+        return id;
+    }
 
-public String getEmail() {
-return email;
-}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-public void setEmail(String email) {
-this.email = email;
-}
+    public String getOrderId() {
+        return orderId;
+    }
 
-public String getGender() {
-return gender;
-}
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 
-public void setGender(String gender) {
-this.gender = gender;
-}
+    public String getProductName() {
+        return productName;
+    }
 
-public String getPhone() {
-return phone;
-}
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
 
-public void setPhone(String phone) {
-this.phone = phone;
-}
+    public Integer getProductSellRate() {
+        return productSellRate;
+    }
 
-public String getSignupDate() {
-return signupDate;
-}
+    public void setProductSellRate(Integer productSellRate) {
+        this.productSellRate = productSellRate;
+    }
 
-public void setSignupDate(String signupDate) {
-this.signupDate = signupDate;
-}
+    public Integer getProductDisplayRate() {
+        return productDisplayRate;
+    }
 
-public String getOrderId() {
-return orderId;
-}
+    public void setProductDisplayRate(Integer productDisplayRate) {
+        this.productDisplayRate = productDisplayRate;
+    }
 
-public void setOrderId(String orderId) {
-this.orderId = orderId;
-}
+    public Integer getProductDiscount() {
+        return productDiscount;
+    }
 
-public String getProductName() {
-return productName;
-}
+    public void setProductDiscount(Integer productDiscount) {
+        this.productDiscount = productDiscount;
+    }
 
-public void setProductName(String productName) {
-this.productName = productName;
-}
+    public Integer getProductQuantity() {
+        return productQuantity;
+    }
 
-public String getProductSellRate() {
-return productSellRate;
-}
+    public void setProductQuantity(Integer productQuantity) {
+        this.productQuantity = productQuantity;
+    }
 
-public void setProductSellRate(String productSellRate) {
-this.productSellRate = productSellRate;
-}
+    public Double getProductTotalAmount() {
+        return productTotalAmount;
+    }
 
-public String getProductDisplayRate() {
-return productDisplayRate;
-}
+    public void setProductTotalAmount(Double productTotalAmount) {
+        this.productTotalAmount = productTotalAmount;
+    }
 
-public void setProductDisplayRate(String productDisplayRate) {
-this.productDisplayRate = productDisplayRate;
-}
+    public String getOrderStatus() {
+        return orderStatus;
+    }
 
-public String getProductDiscount() {
-return productDiscount;
-}
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 
-public void setProductDiscount(String productDiscount) {
-this.productDiscount = productDiscount;
-}
+    public String getProductImage() {
+        return productImage;
+    }
 
-public String getProductQuantity() {
-return productQuantity;
-}
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
+    }
 
-public void setProductQuantity(String productQuantity) {
-this.productQuantity = productQuantity;
-}
+    public String getFirmId() {
+        return firmId;
+    }
 
-public String getProductTotalAmount() {
-return productTotalAmount;
-}
+    public void setFirmId(String firmId) {
+        this.firmId = firmId;
+    }
 
-public void setProductTotalAmount(String productTotalAmount) {
-this.productTotalAmount = productTotalAmount;
-}
+    public Integer getUserId() {
+        return userId;
+    }
 
-public String getOrderStatus() {
-return orderStatus;
-}
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
-public void setOrderStatus(String orderStatus) {
-this.orderStatus = orderStatus;
-}
+    public String getOrderDateTime() {
+        return orderDateTime;
+    }
 
-public String getProductImage() {
-return productImage;
-}
+    public void setOrderDateTime(String orderDateTime) {
+        this.orderDateTime = orderDateTime;
+    }
 
-public void setProductImage(String productImage) {
-this.productImage = productImage;
-}
+    public String getOrderWeight() {
+        return orderWeight;
+    }
 
-public String getOrderDateTime() {
-return orderDateTime;
-}
+    public void setOrderWeight(String orderWeight) {
+        this.orderWeight = orderWeight;
+    }
 
-public void setOrderDateTime(String orderDateTime) {
-this.orderDateTime = orderDateTime;
-}
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
 
-public String getOrderWeight() {
-return orderWeight;
-}
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
 
-public void setOrderWeight(String orderWeight) {
-this.orderWeight = orderWeight;
-}
+    public String getOrderPlaceId() {
+        return orderPlaceId;
+    }
 
-public String getPaymentMethod() {
-return paymentMethod;
-}
+    public void setOrderPlaceId(String orderPlaceId) {
+        this.orderPlaceId = orderPlaceId;
+    }
 
-public void setPaymentMethod(String paymentMethod) {
-this.paymentMethod = paymentMethod;
-}
+    public String getOrderLatitude() {
+        return orderLatitude;
+    }
 
-public String getOrderPlaceId() {
-return orderPlaceId;
-}
+    public void setOrderLatitude(String orderLatitude) {
+        this.orderLatitude = orderLatitude;
+    }
 
-public void setOrderPlaceId(String orderPlaceId) {
-this.orderPlaceId = orderPlaceId;
-}
+    public String getOrderLongitude() {
+        return orderLongitude;
+    }
 
-public String getOrderLatitude() {
-return orderLatitude;
-}
+    public void setOrderLongitude(String orderLongitude) {
+        this.orderLongitude = orderLongitude;
+    }
 
-public void setOrderLatitude(String orderLatitude) {
-this.orderLatitude = orderLatitude;
-}
+    public String getOrderAddress() {
+        return orderAddress;
+    }
 
-public String getOrderLongitude() {
-return orderLongitude;
-}
+    public void setOrderAddress(String orderAddress) {
+        this.orderAddress = orderAddress;
+    }
 
-public void setOrderLongitude(String orderLongitude) {
-this.orderLongitude = orderLongitude;
-}
+    public String getOrderSubAddress() {
+        return orderSubAddress;
+    }
 
-public String getOrderAddress() {
-return orderAddress;
-}
+    public void setOrderSubAddress(String orderSubAddress) {
+        this.orderSubAddress = orderSubAddress;
+    }
 
-public void setOrderAddress(String orderAddress) {
-this.orderAddress = orderAddress;
-}
+    public Integer getOrderPincode() {
+        return orderPincode;
+    }
 
-public String getOrderPincode() {
-return orderPincode;
-}
+    public void setOrderPincode(Integer orderPincode) {
+        this.orderPincode = orderPincode;
+    }
 
-public void setOrderPincode(String orderPincode) {
-this.orderPincode = orderPincode;
-}
+    public String getName() {
+        return name;
+    }
 
-public String getLatitude() {
-return latitude;
-}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-public void setLatitude(String latitude) {
-this.latitude = latitude;
-}
+    public String getEmail() {
+        return email;
+    }
 
-public String getLongitude() {
-return longitude;
-}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-public void setLongitude(String longitude) {
-this.longitude = longitude;
-}
+    public String getPhone() {
+        return phone;
+    }
 
-public String getAddress() {
-return address;
-}
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
-public void setAddress(String address) {
-this.address = address;
-}
+    public String getFirmLat() {
+        return firmLat;
+    }
 
-public String getPincode() {
-return pincode;
-}
+    public void setFirmLat(String firmLat) {
+        this.firmLat = firmLat;
+    }
 
-public void setPincode(String pincode) {
-this.pincode = pincode;
-}
+    public String getFirmLng() {
+        return firmLng;
+    }
 
-public String getPlaceId() {
-return placeId;
-}
+    public void setFirmLng(String firmLng) {
+        this.firmLng = firmLng;
+    }
 
-public void setPlaceId(String placeId) {
-this.placeId = placeId;
-}
+    public String getFirmAddress() {
+        return firmAddress;
+    }
 
+    public void setFirmAddress(String firmAddress) {
+        this.firmAddress = firmAddress;
+    }
+
+    public String getFirmPincode() {
+        return firmPincode;
+    }
+
+    public void setFirmPincode(String firmPincode) {
+        this.firmPincode = firmPincode;
+    }
+
+    public String getOrderConfirm() {
+        return orderConfirm;
+    }
+
+    public void setOrderConfirm(String orderConfirm) {
+        this.orderConfirm = orderConfirm;
+    }
 }

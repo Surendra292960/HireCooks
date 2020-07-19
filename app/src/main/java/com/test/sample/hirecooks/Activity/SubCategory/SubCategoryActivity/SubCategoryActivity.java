@@ -28,6 +28,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,7 +43,7 @@ import com.test.sample.hirecooks.Activity.AddorRemoveCallbacks;
 import com.test.sample.hirecooks.Activity.CheckOut.CheckoutActivity;
 import com.test.sample.hirecooks.Activity.ProductDatails.ProductDetailsActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.BaseActivity;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Models.Cart.Cart;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
@@ -79,7 +80,6 @@ public class SubCategoryActivity extends BaseActivity {
     private List<NewProductSubcategory> newProductSubcategories;
     private List<OffersSubcategory> offersSubcategories;
     private ProgressBarUtil progressBarUtil;
-    private View appRoot;
     private Category category;
     private OffersCategory offersCategory;
     private NewProductCategory newProductCategory;
@@ -92,6 +92,7 @@ public class SubCategoryActivity extends BaseActivity {
     private FrameLayout no_result_found, no_vender_found,no_search_result_found;
     private List<Map> maps;
     private User user;
+    private View searchbar_interface_layout,bottom_anchor,appRoot;
     private FloatingActionButton sort;
 
     @Override
@@ -130,6 +131,7 @@ public class SubCategoryActivity extends BaseActivity {
         cartList = new ArrayList<>();
         cartList = getCartList();
         if (!cartList.isEmpty()) {
+            animateBottomAnchor(false);
             for(int i=0; i<cartList.size(); i++){
                 if(cartList.get(i).getItemQuantity()<=1&&cartList.size()<=1){
                     bottom_anchor_layout.setAnimation(AnimationUtils.loadAnimation(this,R.anim.fade_transition_animation));
@@ -149,19 +151,38 @@ public class SubCategoryActivity extends BaseActivity {
         appRoot = findViewById(R.id.appRoot);
         sort = findViewById(R.id.sort);
         recyclerView = findViewById(R.id.subcategory_recycler);
-        searchBar=findViewById(R.id.searchBar);
         no_result_found=findViewById(R.id.no_result_found);
         no_vender_found=findViewById(R.id.no_vender_found);
         no_search_result_found=findViewById(R.id.no_search_result_found);
         bottom_anchor_layout = findViewById(R.id.bottom_anchor_layout);
+
+        View search_view = findViewById(R.id.search_bar);
+        searchBar=search_view.findViewById(R.id.searchBar);
+        searchbar_interface_layout=search_view.findViewById(R.id.searchbar_interface_layout);
+        searchbar_interface_layout.setVisibility(View.VISIBLE);
         searchBar.setHint("Search ");
         searchBar.setCardViewElevation(10);
-        searchBar.setRoundedSearchBarEnabled(true);
 
         View view = findViewById(R.id.footerView);
         item_count =  view.findViewById(R.id.item_count);
+        bottom_anchor =  view.findViewById(R.id.bottom_anchor);
         checkout_amount = view.findViewById(R.id.checkout_amount);
         checkout = view.findViewById(R.id.checkout);
+
+        NestedScrollView nested_content = (NestedScrollView) findViewById(R.id.nested_scroll_view);
+        nested_content.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY < oldScrollY) { // up
+                    animateSearchBar(false);
+                    animateBottomAnchor(false);
+                }
+                if (scrollY > oldScrollY) { // down
+                    animateSearchBar(true);
+                    animateBottomAnchor(true);
+                }
+            }
+        });
 
         mSwipeRefreshLayout = findViewById(R.id.swipeToRefresh);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -348,7 +369,26 @@ public class SubCategoryActivity extends BaseActivity {
             e.printStackTrace();
         }
     }
-    
+
+
+    boolean isBottomAnchorNavigationHide = false;
+
+    private void animateBottomAnchor(final boolean hide) {
+        if (isBottomAnchorNavigationHide && hide || !isBottomAnchorNavigationHide && !hide) return;
+        isBottomAnchorNavigationHide = hide;
+        int moveY = hide ? (2 * bottom_anchor.getHeight()) : 0;
+        bottom_anchor.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+    }
+
+    boolean isSearchBarHide = false;
+
+    private void animateSearchBar(final boolean hide) {
+        if (isSearchBarHide && hide || !isSearchBarHide && !hide) return;
+        isSearchBarHide = hide;
+        int moveY = hide ? -(2 * searchbar_interface_layout.getHeight()) : 0;
+        searchbar_interface_layout.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+    }
+
     private void getOfferSubCategory(final int subcategoryid) {
         progressBarUtil.showProgress();
         ProductApi mService = ApiClient.getClient().create(ProductApi.class);
@@ -445,7 +485,6 @@ public class SubCategoryActivity extends BaseActivity {
                         no_result_found.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    Connection(SubCategoryActivity.this);
                     Toast.makeText(SubCategoryActivity.this, R.string.failed_due_to + statusCode, Toast.LENGTH_LONG).show();
                 }
             }
@@ -498,7 +537,6 @@ public class SubCategoryActivity extends BaseActivity {
                     }
 
                 } else {
-                    Connection(SubCategoryActivity.this);
                     Toast.makeText(SubCategoryActivity.this, R.string.failed_due_to + statusCode, Toast.LENGTH_LONG).show();
                 }
             }
@@ -564,7 +602,6 @@ public class SubCategoryActivity extends BaseActivity {
             public void onFailure(Call<OffersSubcategories> call, Throwable t) {
                 progressBarUtil.hideProgress();
                 System.out.println("Suree : " + t.getMessage());
-
             }
         });
     }
@@ -754,6 +791,13 @@ public class SubCategoryActivity extends BaseActivity {
                     holder.item_not_in_stock.setVisibility(View.VISIBLE);
                     holder.add_item_layout.setVisibility(View.GONE);
                 }
+                if(offerSubcategory.getAcceptingOrder()==1){
+                    holder.order_not_accepting.setVisibility(View.GONE);
+                    holder.add_item_layout.setVisibility(View.VISIBLE);
+                }else{
+                    holder.order_not_accepting.setVisibility(View.VISIBLE);
+                    holder.add_item_layout.setVisibility(View.GONE);
+                }
                 holder.name.setText(offerSubcategory.getName());
                 holder.discription.setText(offerSubcategory.getDiscription());
                 Picasso.with(context).load(offerSubcategory.getLink()).into(holder.imageView);
@@ -802,8 +846,6 @@ public class SubCategoryActivity extends BaseActivity {
                                         localStorage.setCart(cartStr);
                                         notifyItemChanged(position);
                                         getCart();
-
-                                      
                                     }
                                 }
                             }else{
@@ -826,7 +868,7 @@ public class SubCategoryActivity extends BaseActivity {
                                        ((AddorRemoveCallbacks) context).onAddProduct();
                                        notifyItemChanged(position);
                                        getCart();
-                                     
+
                                    }
                                } else {
                                    Toast.makeText(context, "Please Add Quantity", Toast.LENGTH_SHORT).show();
@@ -890,7 +932,7 @@ public class SubCategoryActivity extends BaseActivity {
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             ImageView imageView;
-            TextView discount, name, sellrate, quantity,displayRate,item_not_in_stock,discription;
+            TextView discount, name, sellrate, quantity,displayRate,order_not_accepting,item_not_in_stock,discription;
             ImageView add_item, remove_item;
             LinearLayout add_item_layout;
             CardView cardview;
@@ -910,6 +952,7 @@ public class SubCategoryActivity extends BaseActivity {
                 cardview = itemView.findViewById(R.id.cardview);
                 discription = itemView.findViewById(R.id.item_descriptions);
                 item_not_in_stock = itemView.findViewById(R.id.item_not_in_stock);
+                order_not_accepting = itemView.findViewById(R.id.order_not_accepting);
             }
         }
     }
@@ -953,7 +996,13 @@ public class SubCategoryActivity extends BaseActivity {
                     holder.add_item_layout.setVisibility(View.GONE);
                     holder.item_not_in_stock.setVisibility(View.VISIBLE);
                 }
-
+                if(product.getAcceptingOrder()==1){
+                    holder.order_not_accepting.setVisibility(View.GONE);
+                    holder.add_item_layout.setVisibility(View.VISIBLE);
+                }else{
+                    holder.order_not_accepting.setVisibility(View.VISIBLE);
+                    holder.add_item_layout.setVisibility(View.GONE);
+                }
          /*       if(product.getAvailableStock()>0){
                     holder.item_not_in_stock.setVisibility(View.GONE);
                     holder.not_available.setVisibility(View.GONE);
@@ -1018,7 +1067,7 @@ public class SubCategoryActivity extends BaseActivity {
                                 localStorage.setCart(cartStr);
                                 notifyItemChanged(position);
                                 getCart();
-                              
+
                             }
                         }
                     }else {
@@ -1037,7 +1086,7 @@ public class SubCategoryActivity extends BaseActivity {
                                     ((AddorRemoveCallbacks) context).onAddProduct();
                                     notifyItemChanged(position);
                                     getCart();
-                                  
+
                                 }
                             } else {
                                 Toast.makeText(context, "Please Add Quantity", Toast.LENGTH_SHORT).show();
@@ -1082,7 +1131,6 @@ public class SubCategoryActivity extends BaseActivity {
                     Intent intent = new Intent(context, ProductDetailsActivity.class);
                     bundle.putSerializable("SubCategory",productList.get(position));
                     intent.putExtras(bundle);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     context.startActivity(intent);
                 }
             });
@@ -1100,7 +1148,7 @@ public class SubCategoryActivity extends BaseActivity {
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             ImageView imageView;
-            TextView discount, name, sellrate, quantity, displayRate,available_stock,not_available,item_not_in_stock,discription;
+            TextView discount, name, sellrate, quantity, displayRate,order_not_accepting,available_stock,item_not_in_stock,discription;
             ImageView add_item, remove_item;
             LinearLayout add_item_layout;
             CardView cardview;
@@ -1118,9 +1166,9 @@ public class SubCategoryActivity extends BaseActivity {
                 add_item_layout = itemView.findViewById(R.id.add_item_layout);
                 available_stock = itemView.findViewById(R.id.available_stock);
                 cardview = itemView.findViewById(R.id.cardview);
-                not_available = itemView.findViewById(R.id.not_available);
                 item_not_in_stock = itemView.findViewById(R.id.item_not_in_stock);
                 discription = itemView.findViewById(R.id.item_descriptions);
+                order_not_accepting = itemView.findViewById(R.id.order_not_accepting);
             }
         }
     }

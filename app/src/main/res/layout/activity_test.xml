@@ -1,121 +1,117 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:id="@+id/appRoot"
+    tools:context=".Activity.Users.UserSignInActivity">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_view"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardUseCompatPadding="true">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:orientation="vertical"
+            android:layout_margin="@dimen/margin_20"
+            tools:ignore="MissingConstraints">
 
-            <!-- Product Image -->
+            <View
+                android:id="@+id/otp_view"
+                android:layout_width="match_parent"
+                android:layout_height="70dp" />
 
-            <LinearLayout
-                android:id="@+id/idLinearLayoutProductImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="-50dp"
+                android:background="@drawable/ic_launcher"/>
 
-                <ImageView
-                    android:id="@+id/item_image"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:scaleType="fitXY"/>
+            <EditText
+                android:id="@+id/editTextUsername"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/edit_text_design"
+                android:hint="@string/username"
+                android:paddingLeft="30dp"
+                android:textSize="@dimen/size_14"
+                android:inputType="text"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:elevation="2dp"/>
 
-            </LinearLayout>
 
-            <!-- Rest of the product info and add/remove to/from cart symbols -->
+            <EditText
+                android:id="@+id/editTextEmail"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/edit_text_design"
+                android:hint="@string/email"
+                android:paddingLeft="30dp"
+                android:textSize="@dimen/size_14"
+                android:inputType="textEmailAddress"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:elevation="2dp"/>
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/editTextPhone"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_design"
+                android:hint="@string/phone"
+                android:inputType="phone"
+                android:paddingLeft="30dp"
+                android:textSize="@dimen/size_14"
+                android:textAlignment="viewStart"
+                android:imeOptions="actionDone"
+                android:elevation="2dp"/>
+
+            <RadioGroup
+                android:id="@+id/radioGender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:orientation="horizontal"
-                android:weightSum="2"
-                android:id="@+id/idTopLayout">
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp">
 
-                <LinearLayout
-                    android:layout_weight="1.8"
-                    android:layout_width="0dp"
+                <RadioButton
+                    android:id="@+id/radioMale"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:text="Male" />
 
-                    <TextView
-                        android:id="@+id/item_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="90dp"
-                        android:textSize="14sp"
-                        android:textColor="@color/black" />
+                <RadioButton
+                    android:id="@+id/radioFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Female" />
 
-                    <TextView
-                        android:id="@+id/item_short_desc"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_5"
-                        android:layout_marginStart="90dp"
-                        android:textSize="12sp"
-                        android:textColor="@android:color/darker_gray" />
+            </RadioGroup>
 
-                    <RatingBar
-                        android:id="@+id/rating"
-                        android:layout_marginTop="@dimen/margin_5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="90dp"
-                        android:numStars="5"
-                        android:rating="4"
-                        style="?android:attr/ratingBarStyleSmall"
-                        android:theme="@style/RatingBar"/>
+            <TextView
+                android:id="@+id/buttonUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/update"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:elevation="5dp"
+                android:textAllCaps="true"
+                android:background="@drawable/rounded"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginStart="90dp"
-                        android:orientation="horizontal">
+        </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/item_displayrate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="DisplayRate"
-                            android:textSize="12sp"
-                            tools:textColor="@android:color/darker_gray" />
-
-                        <TextView
-                            android:id="@+id/item_sellrate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="SellRate"
-                            android:textSize="12sp"
-                            android:paddingLeft="@dimen/margin_10"
-                            android:textColor="@color/black"  />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_marginTop="5dp"
-                        android:layout_marginLeft="80dp"
-                        android:id="@+id/item_discount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp"
-                        android:paddingLeft="@dimen/margin_10"
-                        android:textColor="@color/red"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

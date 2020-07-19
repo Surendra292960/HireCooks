@@ -7,9 +7,7 @@
     android:clipChildren="false"
     android:clipToPadding="false"
     app:edPosition="1"
-    app:edMenuSize="260dp"
-    android:background="@color/white"
-    app:edMenuBackground="#dddddd">
+    app:edMenuSize="260dp">
 
     <!--content-->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -33,7 +31,7 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bye_burger"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:backgroundTint="@color/white"
             android:background="@drawable/boottom_navigation"
@@ -45,26 +43,10 @@
             app:menu="@menu/bottom_nav_menu"
             android:elevation="10dp"/>
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/toolbar_layout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
-                app:contentScrim="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-                <include
-                    android:id="@+id/toolbar"
-                    layout="@layout/view_feed_toolbar"/>
-
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-        </com.google.android.material.appbar.AppBarLayout>
+        <include
+            android:id="@+id/toolbar_interface"
+            layout="@layout/view_feed_toolbar"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

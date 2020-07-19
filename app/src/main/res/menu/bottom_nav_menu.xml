@@ -14,7 +14,7 @@
      android:icon="@drawable/ic_shopping_cart"
      android:enabled="true"
      app:showAsAction="ifRoom"
-     android:title="Orders"/>
+     android:title="My Orders"/>
 
  <item
      android:id="@+id/navigation_profile"
@@ -24,11 +24,11 @@
      android:title="Profile" />
 
  <item
-     android:id="@+id/navigation_search"
-     android:icon="@drawable/ic_search"
+     android:id="@+id/navigation_notification"
+     android:icon="@drawable/ic_notifications"
      android:enabled="true"
      app:showAsAction="ifRoom"
-     android:title="Search"/>
+     android:title="Notifications"/>
 
 
 </menu>

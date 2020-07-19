@@ -9,10 +9,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.test.sample.hirecooks.Activity.Home.MainActivity;
 import com.test.sample.hirecooks.Adapter.Orders.OrdersAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Order.Order;
@@ -42,6 +45,7 @@ public class OrdersFragment extends Fragment {
     private LinearLayout no_orders;
     private Context context;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    MainActivity mainActivity;
 
     public OrdersFragment() {
         // Required empty public constructor
@@ -67,6 +71,23 @@ public class OrdersFragment extends Fragment {
         user = SharedPrefManager.getInstance(getActivity()).getUser();
         recyclerView = view.findViewById(R.id.orders_recycler);
         no_orders = view.findViewById(R.id.no_orders);
+
+
+        NestedScrollView nested_content = (NestedScrollView) view.findViewById(R.id.nested_scroll_view);
+        nested_content.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY < oldScrollY) { // up
+                    animateNavigation(false);
+                   // animateToolBar(false);
+                }
+                if (scrollY > oldScrollY) { // down
+                    animateNavigation(true);
+                   // animateToolBar(true);
+                }
+            }
+        });
+
         mSwipeRefreshLayout = view.findViewById(R.id.swipeToRefresh);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -84,6 +105,26 @@ public class OrdersFragment extends Fragment {
         getOrders();
         return view;
     }
+
+
+
+    boolean isNavigationHide = false;
+
+    private void animateNavigation(final boolean hide) {
+        if (isNavigationHide && hide || !isNavigationHide && !hide) return;
+        isNavigationHide = hide;
+        int moveY = hide ? (2 * mainActivity.mNavigationView.getHeight()) : 0;
+        mainActivity.mNavigationView.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+    }
+
+/*    boolean isToolBarHide = false;
+
+    private void animateToolBar(final boolean hide) {
+        if (isToolBarHide && hide || !isToolBarHide && !hide) return;
+        isToolBarHide = hide;
+        int moveY = hide ? -(2 * mainActivity.toolbar_layout.getHeight()) : 0;
+        mainActivity.toolbar_layout.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+    }*/
 
     private void getOrders() {
         progressBarUtil.showProgress();
@@ -130,7 +171,13 @@ public class OrdersFragment extends Fragment {
 
     @Override
     public void onResume() {
-        super.onResume();
         getOrders();
+        super.onResume();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mainActivity = (MainActivity)context;
     }
 }

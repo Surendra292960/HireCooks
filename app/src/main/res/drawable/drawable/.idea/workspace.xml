@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0ef44c3b-8cbd-4ef9-978a-ecb936ccbd1f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../../../../../../.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ic_email.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ic_filter_none_black_24dp.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ic_search_interface.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/slide1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/slide2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/slide3.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/slide4.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tomato.jpeg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ic_profiles.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../layout/search_layout.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../../aFileChooser/build/intermediates/manifest_merge_blame_file/debugAndroidTest/manifest-merger-blame-debug-androidTest-report.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../../aFileChooser/build/intermediates/manifest_merge_blame_file/debugAndroidTest/manifest-merger-blame-debug-androidTest-report.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Cart/CartActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Cart/CartActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Home/LandingScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Home/LandingScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Home/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Home/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Menus/MenuActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Menus/MenuActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Orders/RecievedOrderActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Orders/RecievedOrderActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Orders/RecievedOrderDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Orders/RecievedOrderDetails.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/ProductDatails/ProductDetailsActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/ProductDatails/ProductDetailsActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/SubCategory/SubCategoryActivity/SubCategoryActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/SubCategory/SubCategoryActivity/SubCategoryActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/SubCategory/VendersSubCategory/VendersSubcategoryActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/SubCategory/VendersSubCategory/VendersSubcategoryActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Users/SignupAddressActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Users/SignupAddressActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Users/UserSignInActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Users/UserSignInActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Users/UserSignUpActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/Users/UserSignUpActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/VenderSubCategory/VenderSubCategoryProducts.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Activity/VenderSubCategory/VenderSubCategoryProducts.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Adapter/Category/CategoryAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Adapter/Category/CategoryAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Adapter/Category/CircularImageCategoryAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Adapter/Category/CircularImageCategoryAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Adapter/Category/NewProductCategoryAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Adapter/Category/NewProductCategoryAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Adapter/Offer/OfferAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Adapter/Offer/OfferAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Adapter/SearchAdapter/SearchAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Adapter/SearchAdapter/SearchAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Adapter/Users/UsersAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Adapter/Users/UsersAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Adapter/Venders/VendersAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Adapter/Venders/VendersAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/BaseActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/BaseActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Fragments/CheckOut/AddressFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Fragments/CheckOut/AddressFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Fragments/Home/HomeFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Fragments/Home/HomeFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Fragments/OrdersFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Fragments/OrdersFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Fragments/ProfileFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Fragments/ProfileFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Fragments/SearchFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Fragments/SearchFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Models/BannerResponse/Banner.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Models/BannerResponse/Banner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Models/OfferSubCategory/OffersSubcategory.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Models/OfferSubCategory/OffersSubcategory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Models/SearchSubCategory/Search.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Models/SearchSubCategory/Search.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Models/SubCategory/Response/SubCategory.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Models/SubCategory/Response/SubCategory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Models/TokenResponse/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Models/TokenResponse/Token.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Models/TokenResponse/Tokens.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Models/TokenResponse/Tokens.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Notifications/MyFirebaseMessagingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Notifications/MyFirebaseMessagingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/PhoneVerification.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/PhoneVerification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Utils/APIUrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Utils/APIUrl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Utils/Common.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Utils/Common.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Utils/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/Utils/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/WebApis/OrderApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/WebApis/OrderApi.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/WebApis/UserApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../java/com/test/sample/hirecooks/WebApis/UserApi.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bg.9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bg_background.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../card_background.9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ic_favorite_border_black_24dp.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ic_favorite_border_black_24dp.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/round_border_button.xml" beforeDir="false" afterPath="$PROJECT_DIR$/round_border_button.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ic_comment_outline_grey.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ic_phone.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ic_phone.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ic_profile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ic_profile.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ic_share.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ic_share.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../no_image.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../no_orders.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../no_result_found.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../not_in_stock.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../offer1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../offer2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../slid1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../slid2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../slid3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../slid4.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../slid5.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/activity_cart.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/activity_cart.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/activity_phone_verification.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/activity_phone_verification.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/activity_product_details.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/activity_product_details.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/activity_recieved_order.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/activity_recieved_order.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/activity_signup_address.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/activity_signup_address.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/activity_sub_category.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/activity_sub_category.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/activity_test.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/activity_test.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/activity_vender_sub_category_products.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/activity_vender_sub_category_products.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/activity_venders_subcategory.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/activity_venders_subcategory.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/category_cardview.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/category_cardview.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/checkout_cart_adapter.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/checkout_cart_adapter.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/circular_image_category.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/circular_image_category.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/connection_dialog.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/fragment_address.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/fragment_address.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/fragment_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/fragment_home.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/fragment_orders.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/fragment_orders.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/fragment_profile.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/fragment_profile.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/fragment_search.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/fragment_search.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/item_horizontal_layout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/item_horizontal_layout.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/new_product_category_cardview.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/new_product_category_cardview.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/new_product_subcategory.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/new_product_subcategory.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/offer_cardview.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/offer_cardview.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/recyclerview_cart.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/recyclerview_cart.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/subcategory_cardview.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/subcategory_cardview.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/venders_recyclerview.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/venders_recyclerview.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/view_bottom_anchor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/view_bottom_anchor.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../layout/view_feed_toolbar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../layout/view_feed_toolbar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../menu/drawer_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../menu/drawer_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../values/colors.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../values/strings.xml" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../../../.." />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="674" />
+    <option name="y" value="2" />
+    <option name="width" value="784" />
+    <option name="height" value="744" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane" />
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0ef44c3b-8cbd-4ef9-978a-ecb936ccbd1f" name="Default Changelist" comment="" />
+      <created>1595057660481</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1595057660481</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" visible="true" weight="0.21196063" />
+      <window_info id="Structure" side_tool="true" />
+      <window_info id="Image Layers" />
+      <window_info id="Designer" />
+      <window_info id="Resources Explorer" />
+      <window_info id="Capture Tool" />
+      <window_info id="Favorites" side_tool="true" />
+      <window_info id="Captures" order="0" weight="0.25" />
+      <window_info anchor="bottom" id="Version Control" />
+      <window_info anchor="bottom" id="TODO" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="right" id="Capture Analysis" />
+      <window_info anchor="right" id="Theme Preview" />
+      <window_info anchor="right" id="Android WiFi ADB" />
+      <window_info anchor="right" id="Palette&#9;" />
+    </layout>
+  </component>
+</project>

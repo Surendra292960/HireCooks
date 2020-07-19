@@ -2,7 +2,6 @@ package com.test.sample.hirecooks.Activity.Menus;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -60,16 +59,15 @@ public class MenuActivity extends AppCompatActivity {
                     if (response.body() != null) {
                         adapter = new MenuAdapter(MenuActivity.this, response.body().getMenus());
                         menusRecyclerView.setAdapter(adapter);
-                        Toast.makeText(getApplicationContext(), "Suree: " + response.code(), Toast.LENGTH_LONG);
                     } else {
-                        Toast.makeText(getApplicationContext(), "Suree: " + response.code() + response.errorBody() + response.message(), Toast.LENGTH_LONG);
+
                     }
                 }
             }
             @SuppressLint("ShowToast")
             @Override
             public void onFailure(Call<Menus> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"Suree: "+t.getMessage(),Toast.LENGTH_LONG);
+
             }
         });
     }
@@ -85,16 +83,16 @@ public class MenuActivity extends AppCompatActivity {
                 if(statusCode==200) {
                     if (response.body() != null) {
                         displayImage(response.body().getBanners());
-                        Toast.makeText(getApplicationContext(), "Suree: " + response.code(), Toast.LENGTH_LONG);
+
                     } else {
-                        Toast.makeText(getApplicationContext(), "Suree: " + response.code() + response.errorBody() + response.message(), Toast.LENGTH_LONG);
+
                     }
                 }
             }
             @SuppressLint("ShowToast")
             @Override
             public void onFailure(Call<Banners> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"Suree: "+t.getMessage(),Toast.LENGTH_LONG);
+
             }
         });
     }

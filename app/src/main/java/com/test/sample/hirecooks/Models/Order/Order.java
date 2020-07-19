@@ -94,6 +94,43 @@ public class Order implements Serializable {
     @Expose
     private String orderConfirm;
 
+
+    public Order(Integer id, String orderId, String productName, Integer productSellRate, Integer productDisplayRate, Integer productDiscount, Integer productQuantity, Double productTotalAmount, String orderStatus, String productImage, String firmId, Integer userId, String orderDateTime, String orderWeight, String paymentMethod, String name, String email, String phone) {
+        this.id = id;
+        this.orderId = orderId;
+        this.productName = productName;
+        this.productSellRate = productSellRate;
+        this.productDisplayRate = productDisplayRate;
+        this.productDiscount = productDiscount;
+        this.productQuantity = productQuantity;
+        this.productTotalAmount = productTotalAmount;
+        this.orderStatus = orderStatus;
+        this.productImage = productImage;
+        this.firmId = firmId;
+        this.userId = userId;
+        this.orderDateTime = orderDateTime;
+        this.orderWeight = orderWeight;
+        this.paymentMethod = paymentMethod;
+        this.orderPlaceId = orderPlaceId;
+        this.orderLatitude = orderLatitude;
+        this.orderLongitude = orderLongitude;
+        this.orderAddress = orderAddress;
+        this.orderSubAddress = orderSubAddress;
+        this.orderPincode = orderPincode;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.firmLat = firmLat;
+        this.firmLng = firmLng;
+        this.firmAddress = firmAddress;
+        this.firmPincode = firmPincode;
+        this.orderConfirm = orderConfirm;
+    }
+
+    public Order() {
+
+    }
+
     public Integer getId() {
         return id;
     }
