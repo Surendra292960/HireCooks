@@ -7,6 +7,5 @@ import android.view.ViewGroup;
 
 public interface UploadCallBack {
     View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
-
     void onProgressUpdate(int percentage);
 }

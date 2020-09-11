@@ -5,13 +5,13 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Models.users.Result;
 import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.WebApis.UserApi;
 
@@ -23,7 +23,7 @@ import retrofit2.Response;
 
 public class ForgotPasswordActivity extends BaseActivity implements View.OnClickListener{
     private EditText editTextEmail,editTextPassword,editTextConPassword;
-    private TextView button_submit_password;
+    private Button button_submit_password;
     private View appRoot;
     private ProgressBarUtil progressBarUtil;
     private UserApi mService;

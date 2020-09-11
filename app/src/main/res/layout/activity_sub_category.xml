@@ -41,6 +41,7 @@
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:visibility="visible"
+                            android:layout_marginTop="@dimen/margin_10"
                             android:id="@+id/subcategory_recycler"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -98,7 +99,7 @@
     </RelativeLayout>
 
     <FrameLayout
-        android:layout_marginTop="@dimen/margin_50"
+        android:layout_marginTop="@dimen/margin_80"
         android:id="@+id/no_result_found"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -136,7 +137,7 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_marginTop="@dimen/margin_50"
+        android:layout_marginTop="@dimen/margin_80"
         android:id="@+id/no_vender_found"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -176,32 +177,18 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_marginTop="@dimen/margin_50"
+        android:layout_marginTop="@dimen/margin_80"
         android:visibility="gone"
         android:id="@+id/no_search_result_found"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
             android:id="@+id/no_result_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/no_results" />
-
-        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:id="@+id/over_text"
-            android:layout_marginTop="50dp"
-            android:background="#fafafa"
-            android:backgroundTint="#fafafa"
-            android:gravity="center"
-            android:text="No Result Found"
-            android:textColor="@color/black"
-            android:textStyle="normal" />
+            android:background="@drawable/no_results" />
     </FrameLayout>
 
     </RelativeLayout>

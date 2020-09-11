@@ -77,7 +77,7 @@
     <string name="location" translatable="false">Pick Your Location</string>
     <string name="latitude" translatable="false">Latitude</string>
     <string name="longitude" translatable="false">Longitude</string>
-    <string name="popular_products" translatable="false">OUR POPULAR PRODUCTS</string>
+    <string name="popular_products" translatable="false">Our Popular Products</string>
     <string name="default_notification_channel_id" translatable="false">Channel Id</string>
     <string name="search" translatable="false">Search</string>
     <string name="dialog_text" translatable="false">What Do you want ?</string>
@@ -90,7 +90,7 @@
     <string name="resend_otp" translatable="false">Resend OTP</string>
     <string name="offline" translatable="false">OFFLINE</string>
     <string name="task" translatable="false">Your Task</string>
-    <string name="search_items" translatable="false">Search a iteams...</string>
+    <string name="search_items" translatable="false">Search items...</string>
     <string name="our_popular_product" translatable="false">OUR POPULAR PRODUCTS</string>
     <string name="already_have_account" translatable="false">already have account ? </string>
     <string name="don_t_have_account" translatable="false">don`t have account ?</string>
@@ -113,7 +113,7 @@
     <string name="submit" translatable="false">Submit</string>
     <string name="promo" translatable="false">Promo</string>
     <string name="promo_code" translatable="false">Promo Code</string>
-    <string name="pay_online" translatable="false">Pay Online</string>
+    <string name="pay_now" translatable="false">Pay Now</string>
     <string name="cash_on_delivery" translatable="false">Cash On Delivery</string>
     <string name="payable_rs_00" translatable="false">Payable Rs 00</string>
     <string name="your_order_will_deliver_in_3_hrs" translatable="false">Your Order will deliver in 3 hrs</string>
@@ -126,7 +126,34 @@
     <string name="standard_delivery_within_2_4_hrs" translatable="false">  &#x20; &#x2009; &#x200A; Standard Delivery within 2–4 Hrs</string>
     <string name="forgot_pass" translatable="false">Forgot Password</string>
     <string name="enter_mobile_number" translatable="false">Enter Mobile Number</string>
-
+    <string name="my_wishlist" translatable="false">My WishList</string>
+    <string name="messages" translatable="false">Messages</string>
+    <string name="recived_order" translatable="false">Recived Order</string>
+    <string name="logout" translatable="false">Logout</string>
+    <string name="terms_and_condition" translatable="false">Terms and Condition</string>
+    <string name="share" translatable="false">Share</string>
+    <string name="up_to_u20b9_200_free_delivery" translatable="false">UP TO ₹. 200 FREE Delivery</string>
+    <string name="add" translatable="false">ADD +</string>
+    <string name="similar" translatable="false">Similar</string>
+    <string name="wishlist" translatable="false">Wishlist</string>
+    <string name="detail" translatable="false">Details</string>
+    <string name="not_in_stock" translatable="false">Not in Stock</string>
+    <string name="order_not_accepting" translatable="false">Order Not Accepting</string>
+    <string name="_0" translatable="false">0</string>
+    <string name="no_result_found" translatable="false">No Result Found</string>
+    <string name="your_cart_is_empty" translatable="false">Your Cart is Empty</string>
+    <string name="items" translatable="false">Items</string>
+    <string name="order_on" translatable="false">Order On</string>
+    <string name="totalamount" translatable="false">TotalAmount</string>
+    <string name="order_address" translatable="false">Order Address</string>
+    <string name="payment_method" translatable="false">payment method</string>
+    <string name="repeat_order" translatable="false">Repeat Order</string>
+    <string name="available" translatable="false">Available</string>
+    <string name="you_have_no_orders" translatable="false">You have no orders</string>
+    <string name="edit" translatable="false">Edit</string>
+    <string name="turn_on" translatable="false">Please turn on</string>
+    <string name="turn_off" translatable="false">Please turn off</string>
+    <string name="airplane_on" translatable="false">You have turned on the airplane mode.</string>
 
     <string-array name="uploadImages">
         <item>Pick from gallery</item>

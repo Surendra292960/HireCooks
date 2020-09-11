@@ -10,9 +10,7 @@
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dateTextAppearance="@style/CalenderViewDateCustomText"
-        android:theme="@style/CardView.Dark"
-        android:weekDayTextAppearance="@style/CalenderViewWeekCustomText" />
+        android:theme="@style/CardView.Dark"/>
 
     <TextView
         android:id="@+id/date"

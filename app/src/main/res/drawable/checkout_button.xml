@@ -11,11 +11,12 @@
         android:color="@color/style_color_primary"></stroke>
 
 
+
     <!-- Here is the corner radius -->
     <corners
-        android:bottomLeftRadius="0dp"
-        android:bottomRightRadius="0dp"
-        android:topLeftRadius="0dp"
-        android:topRightRadius="0dp" />
+        android:bottomLeftRadius="20dp"
+        android:bottomRightRadius="20dp"
+        android:topLeftRadius="20dp"
+        android:topRightRadius="20dp"/>
 
 </shape>

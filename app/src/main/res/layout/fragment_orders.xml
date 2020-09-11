@@ -8,8 +8,6 @@
     tools:context=".Activity.Orders.RecievedOrderActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -45,14 +43,13 @@
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-
-                    <LinearLayout
+                    <View
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="70dp"
                         android:orientation="vertical">
 
-                    </LinearLayout>
+                    </View>
 
                 </LinearLayout>
 
@@ -60,7 +57,7 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:id="@+id/no_orders"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -73,8 +70,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginBottom="10sp"
-            app:srcCompat="@drawable/ic_launcher" />
-
+            app:srcCompat="@drawable/ic_launcher"
+            android:contentDescription="@string/app_name" />
 
         <TextView
             android:id="@+id/order_status_text"
@@ -84,11 +81,13 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:gravity="center"
-            android:text="You have no orders"
-            android:textStyle="italic"
+            android:text="@string/you_have_no_orders"
+            android:textStyle="normal"
             android:textColor="#848484"
             android:textSize="15sp" />
+
     </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

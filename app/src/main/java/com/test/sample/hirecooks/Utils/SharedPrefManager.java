@@ -126,4 +126,17 @@ public class SharedPrefManager {
         editor.apply();
         return true;
     }
+
+
+    public void savePrefValue(String key,String value){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key,value);
+        editor.commit();
+    }
+
+    public String getPrefValue(String key){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(key, null);
+    }
 }

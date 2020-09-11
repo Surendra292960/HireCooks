@@ -1,35 +1,41 @@
 package com.test.sample.hirecooks.Fragments;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.navigation.NavigationView;
 import com.ipaulpro.afilechooser.utils.FileUtils;
 import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
+import com.test.sample.hirecooks.Activity.ManageAddress.SecondryAddressActivity;
+import com.test.sample.hirecooks.Activity.Users.UpdateProfile;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Models.users.Result;
+import com.test.sample.hirecooks.Libraries.Slider.HomeSliderAdapter;
 import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.APIUrl;
-import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.ProgressRequestBody;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
@@ -38,6 +44,8 @@ import com.test.sample.hirecooks.WebApis.UserApi;
 
 import java.io.File;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MultipartBody;
@@ -49,9 +57,7 @@ import static android.app.Activity.RESULT_OK;
 import static com.test.sample.hirecooks.Utils.Constants.USER_PROFILE;
 
 public class ProfileFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener, UploadCallBack {
-    private TextView buttonUpdate;
-    private EditText editTextUsername, editTextEmail,editTextPhone, editTextFirmId,editTextUserType;
-    private RadioGroup radioGender;
+    private TextView user_name,manage_address;
     private View appRoot;
     private CircleImageView profile_image;
     private User user;
@@ -60,7 +66,15 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
     private Uri selectedFileUri;
     private UserApi mService;
     private MainActivity mainActivity;
-    private FrameLayout profile_image_layout;
+    private ImageButton profile_image_layout,edit_profile,sendBtn;
+    private String[] text = {"Javatpoint is passionate to offer better technical content to the world." , "Please check your internet connection and try after some time",  "Android is a mobile operating system developed by Google."};
+    private Integer[] images = { R.drawable.ic_airport_shuttle_black_24dp, R.drawable.ic_logout, R.drawable.ic_favorite_black_24dp};
+    Timer timer;
+    ViewPager viewPager;
+    private int dotscount;
+    private ImageView[] dots;
+    LinearLayout sliderDotspanel;
+    int page_position = 0;
 
     public static ProfileFragment newInstance() {
         Bundle args = new Bundle();
@@ -73,37 +87,38 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        progressBarUtil = new ProgressBarUtil(getActivity());
-        buttonUpdate = view.findViewById(R.id.buttonUpdate);
+        progressBarUtil = new ProgressBarUtil(mainActivity);
         appRoot = view.findViewById(R.id.appRoot);
         profile_image_layout = view.findViewById(R.id.profile_image_layout);
-        editTextUsername = view.findViewById(R.id.editTextUsername);
-        editTextEmail = view.findViewById(R.id.editTextEmail);
-        editTextPhone = view.findViewById(R.id.editTextPhone);
-        editTextUserType = view.findViewById(R.id.editTextUserType);
-        editTextFirmId = view.findViewById(R.id.editTextFirmId);
         profile_image = view.findViewById(R.id.profile_image);
-        radioGender = view.findViewById(R.id.radioGender);
-        user = SharedPrefManager.getInstance(getActivity()).getUser();
-        editTextUsername.setText(user.getName());
-        editTextEmail.setText(user.getEmail());
-        editTextPhone.setText(user.getPhone());
-        editTextUserType.setText(user.getUserType());
-        editTextFirmId.setText(user.getFirmId());
+        edit_profile = view.findViewById(R.id.edit_profile);
+        manage_address = view.findViewById(R.id.manage_address);
+        user_name = view.findViewById(R.id.user_name);
+        sendBtn = view.findViewById(R.id.sendBtn);
+        user_name.setVisibility(View.VISIBLE);
+        user = SharedPrefManager.getInstance(mainActivity).getUser();
+        user_name.setText(user.getName());
         if (USER_PROFILE!=null) {
-            Picasso.with(getActivity()).load(APIUrl.PROFILE_URL+USER_PROFILE).into(profile_image);
+            Picasso.with(mainActivity).load(APIUrl.PROFILE_URL+USER_PROFILE).into(profile_image);
         }
 
-        if (user.getGender().equalsIgnoreCase("male")) {
-            radioGender.check(R.id.radioMale);
-        } else {
-            radioGender.check(R.id.radioFemale);
-        }
-
-        buttonUpdate.setOnClickListener(new View.OnClickListener() {
+        sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateUser();
+               // startActivity(new Intent(getActivity(), MobileActivity.class));
+            }
+        });
+        manage_address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), SecondryAddressActivity.class));
+            }
+        });
+
+        edit_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), UpdateProfile.class));
             }
         });
 
@@ -111,7 +126,11 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
             @Override
             public void onClick(View v) {
                 if(user!=null)
-                    chooseImage();
+                    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS}, 101);
+
+                    }
+                chooseImage();
             }
         });
 
@@ -120,15 +139,56 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (scrollY < oldScrollY) { // up
-                   // animateNavigation(false);
-                   // animateToolBar(false);
+                    animateNavigation(false);
+                    animateToolBar(false);
                 }
                 if (scrollY > oldScrollY) { // down
-                   // animateNavigation(true);
-                  //  animateToolBar(true);
+                    animateNavigation(true);
+                    animateToolBar(true);
                 }
             }
         });
+
+        timer = new Timer();
+        viewPager = view.findViewById(R.id.viewPager);
+        sliderDotspanel = view.findViewById(R.id.SliderDots);
+        HomeSliderAdapter viewPagerAdapter = new HomeSliderAdapter(getContext(), text,images);
+        viewPager.setAdapter(viewPagerAdapter);
+        dotscount = viewPagerAdapter.getCount();
+        dots = new ImageView[dotscount];
+
+        for (int i = 0; i < dotscount; i++) {
+            dots[i] = new ImageView(getContext());
+            dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.non_active_dot));
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(8, 0, 8, 0);
+            sliderDotspanel.addView(dots[i], params);
+
+        }
+
+        dots[0].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active_dot));
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                for (int i = 0; i < dotscount; i++) {
+                    dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.non_active_dot));
+                }
+
+                dots[position].setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active_dot));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        scheduleSlider();
 
         return view;
     }
@@ -151,10 +211,46 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
         mainActivity.toolbar_layout.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
     }
 
-    private void chooseImage() {
-        startActivityForResult(Intent.createChooser(FileUtils.createGetContentIntent(),"Select a File"), PICK_FILE_REQUEST);
+    public void scheduleSlider() {
+
+        final Handler handler = new Handler();
+
+        final Runnable update = new Runnable() {
+            public void run() {
+                if (page_position == dotscount) {
+                    page_position = 0;
+                } else {
+                    page_position = page_position + 1;
+                }
+                viewPager.setCurrentItem(page_position, true);
+            }
+        };
+
+        timer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                handler.post(update);
+            }
+        }, 500, 4000);
     }
 
+    @Override
+    public void onStop() {
+        timer.cancel();
+        super.onStop();
+    }
+
+    @Override
+    public void onPause() {
+        timer.cancel();
+        super.onPause();
+    }
+
+    private void chooseImage() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent , PICK_FILE_REQUEST );
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -174,11 +270,12 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
 
     private void uploadFile() {
         if(selectedFileUri!=null) {
-            File file=FileUtils.getFile(getActivity(),selectedFileUri);
-            String fileName= SharedPrefManager.getInstance(getActivity()).getUser().getPhone() + FileUtils.getExtension(file.toString());
+            File file=FileUtils.getFile(mainActivity,selectedFileUri);
+            String fileName= SharedPrefManager.getInstance(mainActivity).getUser().getEmail() + FileUtils.getExtension(file.toString());
             ProgressRequestBody requestFile=new ProgressRequestBody(file, this);
             final MultipartBody.Part body=MultipartBody.Part.createFormData("uploaded_file",fileName,requestFile);
-            final MultipartBody.Part userPhone=MultipartBody.Part.createFormData("phone",SharedPrefManager.getInstance(getActivity()).getUser().getPhone());
+            final MultipartBody.Part userPhone=MultipartBody.Part.createFormData("phone",SharedPrefManager.getInstance(mainActivity).getUser().getPhone());
+            System.out.println("Test "+userPhone);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -187,12 +284,12 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
                             .enqueue(new Callback<String>() {
                                 @Override
                                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                                    Toast.makeText(getActivity(), response.body(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mainActivity, response.body(), Toast.LENGTH_SHORT).show();
                                 }
 
                                 @Override
                                 public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                                    Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mainActivity, t.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             });
                 }
@@ -200,56 +297,14 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
         }
     }
 
-
     @Override
     public void onProgressUpdate(int percentage) {
 
     }
 
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-    }
-
-
-    private void updateUser() {
-        progressBarUtil.showProgress();
-        final RadioButton radioSex = getActivity().findViewById(radioGender.getCheckedRadioButtonId());
-        String name = editTextUsername.getText().toString().trim();
-        String email = editTextEmail.getText().toString().trim();
-        String phone = editTextPhone.getText().toString().trim();
-        String firmId = SharedPrefManager.getInstance(getActivity()).getUser().getFirmId();
-        String userType = SharedPrefManager.getInstance(getActivity()).getUser().getUserType();
-        String image = null;
-        String bikeNumber = "Null";
-        String gender = radioSex.getText().toString();
-
-        mService = ApiClient.getClient().create(UserApi.class);
-        User user = new User(SharedPrefManager.getInstance(getActivity()).getUser().getId(), name, email, phone, gender, firmId, userType);
-        Call<Result> call = mService.updateUser(user.getId(), user.getName(), user.getEmail(),user.getPhone(), user.getGender(), user.getFirmId(), user.getUserType(), bikeNumber);
-        call.enqueue(new Callback<Result>() {
-            @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
-                int statusCode = response.code();
-                if(statusCode==200&&response.body().getError()==false){
-                    progressBarUtil.hideProgress();
-                    if (!response.body().getError()) {
-                        Constants.CurrentUser = response.body();
-                        SharedPrefManager.getInstance(getActivity()).userLogin(Constants.CurrentUser.getUser());
-                        Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                }else{
-                    Toast.makeText(getActivity(), response.body().getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Result> call, Throwable t) {
-                progressBarUtil.hideProgress();
-                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
     }
 
     @Override

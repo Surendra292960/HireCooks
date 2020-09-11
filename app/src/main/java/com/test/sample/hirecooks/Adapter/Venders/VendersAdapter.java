@@ -45,7 +45,13 @@ public class VendersAdapter extends RecyclerView.Adapter<VendersAdapter.ViewHold
         UserResponse venders = vender.get(position);
         if(venders!=null){
             if(!venders.getImage().isEmpty()){
-                Picasso.with(mCtx).load(APIUrl.PROFILE_URL+venders.getImage()).into(holder.venders_image);
+               if(venders.getImage().contains("https://")){
+                   Picasso.with(mCtx).load(venders.getImage()).into(holder.venders_image);
+               } else if (venders.getImage().contains(" ")) {
+
+               }else{
+                   Picasso.with(mCtx).load(APIUrl.PROFILE_URL+venders.getImage()).into(holder.venders_image);
+               }
             }
            // holder.text.setText(venders.getName());
             holder.vender_layout.setOnClickListener(new View.OnClickListener() {

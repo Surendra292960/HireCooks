@@ -34,6 +34,7 @@ public class Map implements Serializable {
     @Expose
     private String firm_id;
 
+
     public Integer getMapId() {
         return mapId;
     }
@@ -105,4 +106,5 @@ public class Map implements Serializable {
     public void setFirm_id(String firm_id) {
         this.firm_id = firm_id;
     }
+
 }

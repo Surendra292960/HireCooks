@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottomSheet"
+    android:layout_marginTop="@dimen/margin_100"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    app:behavior_peekHeight="?actionBarSize"
+    app:layout_behavior="@string/bottom_sheet_behavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/margin_50"
+                android:text="Search location"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_14" />
+
+            <ImageButton
+                android:id="@+id/cancel_search_location"
+                android:layout_width="@dimen/margin_60"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/ic_clear_black_18dp"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:id="@+id/searchbar_interface_layout">
+
+            <ImageButton
+                android:visibility="visible"
+                android:id="@+id/back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/searchBar"
+                android:paddingLeft="50dp"
+                android:paddingTop="10dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="10dp"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/ic_search_interface"/>
+
+            <EditText
+                android:id="@+id/searchBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_border_button"
+                android:ems="10"
+                android:layout_margin="@dimen/margin_20"
+                android:hint="@string/search"
+                android:inputType="textPersonName"
+                android:paddingLeft="70dp"
+                android:paddingTop="10dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="10dp"
+                android:textColor="#999999"
+                android:textSize="@dimen/size_14"
+                android:imeOptions="actionSearch"
+                android:focusableInTouchMode="true" />
+
+            <ImageButton
+                android:visibility="gone"
+                android:id="@+id/clear_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/searchBar"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/searchBar"
+                android:layout_marginRight="40dp"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/quantum_ic_clear_grey600_24"/>
+
+        </RelativeLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_20"
+                    android:layout_marginEnd="@dimen/margin_20"
+                    android:text="Use current location"
+                    android:drawablePadding="@dimen/margin_10"
+                    android:textSize="@dimen/size_14"
+                    android:textColor="@color/red"
+                    android:drawableStart="@drawable/ic_my_location_black_24dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_marginStart="@dimen/margin_20"
+                    android:layout_marginEnd="@dimen/margin_20"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:layout_height="1dp"
+                    android:background="@color/gray_btn_bg_color"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_20"
+                    android:layout_marginEnd="@dimen/margin_20"
+                    android:layout_marginTop="@dimen/margin_20"
+                    android:text="Nearby locations"
+                    android:drawablePadding="@dimen/margin_10"
+                    android:textSize="@dimen/size_14"
+                    android:textColor="@color/black"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_margin="@dimen/margin_20"
+                    android:id="@+id/recyclerview_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+
+</LinearLayout>

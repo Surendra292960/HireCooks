@@ -1,54 +1,43 @@
 package com.test.sample.hirecooks.Activity.Users;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.media.ExifInterface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.test.sample.hirecooks.Adapter.Users.GalleryAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.HotelImage;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.Action;
-import com.test.sample.hirecooks.Utils.UploadCallBack;
 import com.test.sample.hirecooks.WebApis.UserApi;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -65,23 +54,26 @@ public class UploadImagesActivity extends AppCompatActivity {
     String TAG = "UploadImagesActivity";
     String[] selectedImageList;
     int childcount = 0, count = 0;
+
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
         super.onCreate ( savedInstanceState );
         try {
             setContentView ( R.layout.activity_upload_images );
-            setTitle ( "Upload Images" );
+            setTitle ( "Upload CooksImages" );
             getSupportActionBar ( ).setDisplayHomeAsUpEnabled ( true );
             getSupportActionBar ( ).setHomeButtonEnabled ( true );
             addImage = findViewById ( R.id.add_hotel_image );
             mLinearLayout = findViewById ( R.id.add_hotel_iamge_view_parent );
             mUploadImages = findViewById ( R.id.upload_images_btn );
+
             addImage.setOnClickListener ( new View.OnClickListener ( ) {
                 @Override
                 public void onClick ( View v ) {
                     selectImage ( );
                 }
-            } );
+            });
+
             mUploadImages.setOnClickListener ( new View.OnClickListener ( ) {
                 @Override
                 public void onClick ( View v ) {
@@ -115,14 +107,13 @@ public class UploadImagesActivity extends AppCompatActivity {
                     } catch ( Exception ex ) {
                         ex.printStackTrace ( );
                     }
-
                 }
             } );
         } catch ( Exception e ) {
             e.printStackTrace ( );
         }
-
     }
+
     public void selectImage ( ) {
         try {
             final String[] imageSelectionArray = { "Gallery" , "Cancel" };
@@ -133,14 +124,12 @@ public class UploadImagesActivity extends AppCompatActivity {
                 @Override
                 public void onClick ( DialogInterface dialog , int which ) {
                     if ( imageSelectionArray[ which ].equals ( "Gallery" ) ) {
-                        boolean result = ApiClient.checkPermissionOfCamera ( UploadImagesActivity.this , Manifest.permission.READ_EXTERNAL_STORAGE
-                                , "This App Needs Storage Permission" );
+                        boolean result = ApiClient.checkPermissionOfCamera ( UploadImagesActivity.this , Manifest.permission.READ_EXTERNAL_STORAGE, "This App Needs Storage Permission" );
                         if ( result ) {
                             gotoGallery ( );
                         }
                     } else if ( imageSelectionArray[ which ].equals ( "Take Photo" ) ) {
-                        boolean result = ApiClient.checkPermissionOfCamera ( UploadImagesActivity.this , Manifest.permission.CAMERA ,
-                                "This Application Needs Camera Permission" );
+                        boolean result = ApiClient.checkPermissionOfCamera ( UploadImagesActivity.this , Manifest.permission.CAMERA , "This Application Needs Camera Permission" );
                         if ( result ) {
                             gotoCamera ( );
                         }
@@ -148,22 +137,25 @@ public class UploadImagesActivity extends AppCompatActivity {
                         dialog.dismiss ( );
                     }
                 }
-            } );
+            });
+
             AlertDialog dialog = builder.create ( );
             dialog.show ( );
         } catch ( Exception e ) {
             e.printStackTrace ( );
         }
-
     }
+
     private void gotoCamera ( ) {
         Intent cameraIntent = new Intent ( MediaStore.ACTION_IMAGE_CAPTURE );
         startActivityForResult ( cameraIntent , REQUEST_CAMERA );
     }
+
     private void gotoGallery ( ) {
         Intent i = new Intent ( Action.ACTION_MULTIPLE_PICK );
         startActivityForResult ( i , 200 );
     }
+
     @Override
     protected void onActivityResult ( int requestCode , int resultCode , Intent data ) {
         super.onActivityResult ( requestCode , resultCode , data );
@@ -175,6 +167,7 @@ public class UploadImagesActivity extends AppCompatActivity {
             }
         }
     }
+
     private void onImageCaptureResult ( Intent data ) {
         try {
             if ( data != null ) {
@@ -183,12 +176,11 @@ public class UploadImagesActivity extends AppCompatActivity {
                     addView ( null , ApiClient.getResizedBitmap ( bitmap , 700 ) );
                 }
             }
-
         } catch ( Exception e ) {
             e.printStackTrace ( );
         }
-
     }
+
     private void onSelectImageFromGalleryResult ( Intent data ) {
         try {
             String[] all_path = data.getStringArrayExtra ( "all_path" );
@@ -203,8 +195,8 @@ public class UploadImagesActivity extends AppCompatActivity {
         } catch ( Exception e ) {
             e.printStackTrace ( );
         }
-
     }
+
     public void addView ( String uri , Bitmap bitmap ) {
         LayoutInflater vi = ( LayoutInflater ) getApplicationContext ( ).getSystemService ( Context.LAYOUT_INFLATER_SERVICE );
         try {
@@ -221,8 +213,8 @@ public class UploadImagesActivity extends AppCompatActivity {
         } catch ( Exception e ) {
             e.printStackTrace ( );
         }
-
     }
+
     public void uploadImages ( final HotelImage hotelImage ) {
         UserApi api = ApiClient.getClient ( ).create ( UserApi.class );
         final Call< HotelImage > HotelImagereaponse = api.uploadImages (hotelImage);
@@ -234,7 +226,7 @@ public class UploadImagesActivity extends AppCompatActivity {
                         if ( response.body ( ) != null ) {
                             ++ count;
                             if ( childcount == count ) {
-                          /*      Toast.makeText ( UploadImagesActivity.this , "Image Uploaded Successfully" , Toast.LENGTH_SHORT ).show ( );
+                                /* Toast.makeText ( UploadImagesActivity.this , "Image Uploaded Successfully" , Toast.LENGTH_SHORT ).show ( );
                                 Intent back = new Intent ( UploadImagesActivity.this , HotelImagesList.class );
                                 startActivity ( back );
                                 UploadImagesActivity.this.finish ( );*/
@@ -257,7 +249,7 @@ public class UploadImagesActivity extends AppCompatActivity {
                 Toast.makeText ( UploadImagesActivity.this , "Please check your Internet Connection try after sometime" , Toast.LENGTH_SHORT ).show ( );
                 return;
             }
-        } );
+        });
     }
 
     public String compressImage ( String filePath , String caption , String order , boolean hide ) {
@@ -283,7 +275,6 @@ public class UploadImagesActivity extends AppCompatActivity {
             } else {
                 actualHeight = ( int ) maxHeight;
                 actualWidth = ( int ) maxWidth;
-
             }
         }
         options.inSampleSize = calculateInSampleSize ( options , actualWidth , actualHeight );
@@ -349,7 +340,7 @@ public class UploadImagesActivity extends AppCompatActivity {
 
     }
     public String getFilename ( String filePath ) {
-        File file = new File ( Environment.getExternalStorageDirectory ( ).getPath ( ) , "MyFolder/Images" );
+        File file = new File ( Environment.getExternalStorageDirectory ( ).getPath ( ) , "MyFolder/CooksImages" );
         if ( ! file.exists ( ) ) {
             file.mkdirs ( );
         }
@@ -405,14 +396,14 @@ public class UploadImagesActivity extends AppCompatActivity {
                         }
                         HotelImage hotelImage = new HotelImage ( );
                         if ( cap == null || cap.isEmpty ( ) ) {
-                        ///    hotelImage.setCaption ( 0 );
+                        // hotelImage.setCaption ( 0 );
                         } else {
-//                            hotelImage.setCaption (Integer.valueOf(cap));
+                        // hotelImage.setCaption (Integer.valueOf(cap));
                         }
                         if ( order == null || order.isEmpty ( ) ) {
                             hotelImage.setImageOrder ( 0 );
                         } else {
-                           // hotelImage.setImageOrder ( Integer.parseInt ( order ) );
+                         // hotelImage.setImageOrder ( Integer.parseInt ( order ) );
                         }
                         if ( hide ) {
                             String example = "true";
@@ -423,10 +414,11 @@ public class UploadImagesActivity extends AppCompatActivity {
 
                         }
                         uploadImages ( hotelImage );
-                        if ( filePath.contains ( "MyFolder/Images" ) ) {
+                        if ( filePath.contains ( "MyFolder/CooksImages" ) ) {
                             file.delete ( );
                         }
                     }
+
                     @Override
                     public void onFailure ( Call < String > call , Throwable t ) {
                         Log.d ( TAG , "Error " + t.getMessage ( ) );

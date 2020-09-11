@@ -35,7 +35,7 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Activity.AddorRemoveCallbacks;
-import com.test.sample.hirecooks.Activity.CheckOut.CheckoutActivity;
+import com.test.sample.hirecooks.Activity.Orders.PlaceOrderActivity;
 import com.test.sample.hirecooks.Activity.ProductDatails.ProductDetailsActivity;
 import com.test.sample.hirecooks.Adapter.Category.VendersCategoryAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
@@ -100,7 +100,7 @@ public class VendersSubcategoryActivity extends BaseActivity {
         getCart();
         //getVendersCategory();
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null&&Constants.NEARBY_USER_LOCATION!=null) {
+        if (bundle != null&&Constants.NEARBY_VENDERS_LOCATION !=null) {
             vender = (UserResponse) bundle.getSerializable("Vender");
             if (vender != null) {
                 Objects.requireNonNull(getSupportActionBar()).setTitle(vender.getName());
@@ -167,7 +167,7 @@ public class VendersSubcategoryActivity extends BaseActivity {
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(VendersSubcategoryActivity.this, CheckoutActivity.class));
+                startActivity(new Intent(VendersSubcategoryActivity.this, PlaceOrderActivity.class));
             }
         });
     }
@@ -185,7 +185,7 @@ public class VendersSubcategoryActivity extends BaseActivity {
                     ArrayList<VendersCategory> filteredList = new ArrayList<>();
                     if(vendersCategory!=null&&vendersCategory.size()!=0) {
                         for (VendersCategory vendersCategory : vendersCategory) {
-                            for (Map map : Constants.NEARBY_USER_LOCATION) {
+                            for (Map map : Constants.NEARBY_VENDERS_LOCATION) {
                                 if (map.getFirm_id().equalsIgnoreCase(vendersCategory.getFirmId()) && vender.getFirmId().equalsIgnoreCase(vendersCategory.getFirmId())) {
                                     list.add(vendersCategory);
                                     Set<VendersCategory> newList = new LinkedHashSet<>(list);
@@ -229,7 +229,7 @@ public class VendersSubcategoryActivity extends BaseActivity {
                         List<Banner> filteredList = new ArrayList<>();
                         if(banners!=null&&banners.size()!=0) {
                             for (Banner banner : banners) {
-                                for (Map map : Constants.NEARBY_USER_LOCATION) {
+                                for (Map map : Constants.NEARBY_VENDERS_LOCATION) {
                                     if (map.getFirm_id().equalsIgnoreCase(banner.getFirmId()) && vender.getFirmId().equalsIgnoreCase(banner.getFirmId())) {
                                         list.add(banner);
                                         Set<Banner> newList = new LinkedHashSet<>(list);
@@ -279,7 +279,7 @@ public class VendersSubcategoryActivity extends BaseActivity {
                     List<OffersSubcategory> filteredList = new ArrayList<>();
                     if(offersSubcategories!=null&&offersSubcategories.size()!=0){
                         for (OffersSubcategory offersSubcategory : offersSubcategories) {
-                            for (Map map : Constants.NEARBY_USER_LOCATION) {
+                            for (Map map : Constants.NEARBY_VENDERS_LOCATION) {
                                 if (map.getFirm_id().equalsIgnoreCase(offersSubcategory.getFirm_id()) && vender.getFirmId().equalsIgnoreCase(offersSubcategory.getFirm_id())) {
                                     list.add(offersSubcategory);
                                     Set<OffersSubcategory> newList = new LinkedHashSet<>(list);
@@ -329,7 +329,7 @@ public class VendersSubcategoryActivity extends BaseActivity {
                         List<SubCategory> list = new ArrayList<>();
                         List<SubCategory> filteredList = new ArrayList<>();
                         for (SubCategory vendersSubcategory : vendersSubcategories) {
-                            for (Map map : Constants.NEARBY_USER_LOCATION) {
+                            for (Map map : Constants.NEARBY_VENDERS_LOCATION) {
                                 if (map.getFirm_id().equalsIgnoreCase(vendersSubcategory.getFirm_id())&&vender.getFirmId().equalsIgnoreCase(vendersSubcategory.getFirm_id())) {
                                     list.add(vendersSubcategory);
                                     Set<SubCategory> newList = new LinkedHashSet<>(list);
@@ -381,7 +381,7 @@ public class VendersSubcategoryActivity extends BaseActivity {
                         List<NewProductSubcategory> list = new ArrayList<>();
                         List<NewProductSubcategory> filteredList = new ArrayList<>();
                         for (NewProductSubcategory newProductSubcategory : newProductSubcategories) {
-                            for (Map map : Constants.NEARBY_USER_LOCATION) {
+                            for (Map map : Constants.NEARBY_VENDERS_LOCATION) {
                                 if (map.getFirm_id().equalsIgnoreCase(newProductSubcategory.getFirm_id())&&vender.getFirmId().equalsIgnoreCase(newProductSubcategory.getFirm_id())) {
                                     list.add(newProductSubcategory);
                                     Set<NewProductSubcategory> newList = new LinkedHashSet<>(list);
@@ -497,6 +497,13 @@ public class VendersSubcategoryActivity extends BaseActivity {
                     holder.add_item_layout.setVisibility(View.VISIBLE);
                 }else{
                     holder.item_not_in_stock.setVisibility(View.VISIBLE);
+                    holder.add_item_layout.setVisibility(View.GONE);
+                }
+                if(offerSubcategory.getAcceptingOrder()==1){
+                    holder.order_not_accepting.setVisibility(View.GONE);
+                    holder.add_item_layout.setVisibility(View.VISIBLE);
+                }else{
+                    holder.order_not_accepting.setVisibility(View.VISIBLE);
                     holder.add_item_layout.setVisibility(View.GONE);
                 }
                 holder.name.setText(offerSubcategory.getName());
@@ -635,7 +642,7 @@ public class VendersSubcategoryActivity extends BaseActivity {
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             ImageView imageView;
-            TextView discount, name, sellrate, quantity,displayRate,item_not_in_stock,discription;
+            TextView discount, name, sellrate, quantity,displayRate,item_not_in_stock,discription,order_not_accepting;
             ImageView add_item, remove_item;
             LinearLayout add_item_layout;
             CardView cardview;
@@ -655,6 +662,7 @@ public class VendersSubcategoryActivity extends BaseActivity {
                 cardview = itemView.findViewById(R.id.cardview);
                 discription = itemView.findViewById(R.id.item_descriptions);
                 item_not_in_stock = itemView.findViewById(R.id.item_not_in_stock);
+                order_not_accepting = itemView.findViewById(R.id.order_not_accepting);
             }
         }
     }
@@ -696,7 +704,13 @@ public class VendersSubcategoryActivity extends BaseActivity {
                 }else{
                     holder.add_item_layout.setVisibility(View.GONE);
                 }
-
+                if(product.getAcceptingOrder()==1){
+                    holder.order_not_accepting.setVisibility(View.GONE);
+                    holder.add_item_layout.setVisibility(View.VISIBLE);
+                }else{
+                    holder.order_not_accepting.setVisibility(View.VISIBLE);
+                    holder.add_item_layout.setVisibility(View.GONE);
+                }
                 holder.name.setText(product.getName());
                 holder.discription.setText(product.getDiscription());
                 Picasso.with(context).load(product.getLink()).into(holder.imageView);
@@ -828,7 +842,7 @@ public class VendersSubcategoryActivity extends BaseActivity {
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             ImageView imageView;
-            TextView discount, name, sellrate, quantity, displayRate,available_stock,not_available,discription;
+            TextView discount, name, sellrate, quantity, displayRate,available_stock,not_available,discription,order_not_accepting;
             ImageView add_item, remove_item;
             LinearLayout add_item_layout;
             CardView cardview;
@@ -847,6 +861,7 @@ public class VendersSubcategoryActivity extends BaseActivity {
                 available_stock = itemView.findViewById(R.id.available_stock);
                 cardview = itemView.findViewById(R.id.cardview);
                 discription = itemView.findViewById(R.id.item_descriptions);
+                order_not_accepting = itemView.findViewById(R.id.order_not_accepting);
             }
         }
     }

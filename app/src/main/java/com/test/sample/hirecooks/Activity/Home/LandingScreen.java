@@ -1,6 +1,7 @@
 package com.test.sample.hirecooks.Activity.Home;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -11,13 +12,15 @@ import android.widget.Button;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.test.sample.hirecooks.Activity.Users.PhoneVerification;
 import com.test.sample.hirecooks.Activity.Users.UserSignInActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Models.users.Result;
 import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Constants;
+import com.test.sample.hirecooks.Utils.EncryptPassword;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.UserApi;
@@ -33,11 +36,19 @@ public class LandingScreen extends BaseActivity {
     private User user;
     private ProgressBarUtil progressBarUtil;
     private static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
+    private EncryptPassword encryptPassword;
 
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing_screen);
+        user = SharedPrefManager.getInstance(this).getUser();
+        try {
+            encryptPassword = new EncryptPassword();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         initializeViews();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkAndRequestPermissions()) {
@@ -47,8 +58,10 @@ public class LandingScreen extends BaseActivity {
 
         }
         if (SharedPrefManager.getInstance(this).isLoggedIn()) {
+            String user_Id= "user_Id";
+            SharedPrefManager.getInstance(this).savePrefValue("user_Id","123");
+            System.out.println("Pref"+SharedPrefManager.getInstance(this).getPrefValue(user_Id));
             startActivity(new Intent(this, MainActivity.class));
-            //ResultSignIn(user.getEmail(),user.getPassword());
             finish();
         }
     }

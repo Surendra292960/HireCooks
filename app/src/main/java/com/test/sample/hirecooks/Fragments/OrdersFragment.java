@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
@@ -22,7 +21,6 @@ import com.test.sample.hirecooks.Models.Order.Order;
 import com.test.sample.hirecooks.Models.Order.Results;
 import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
-import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.OrderApi;
 
@@ -37,7 +35,6 @@ import retrofit2.Response;
 
 public class OrdersFragment extends Fragment {
     private RecyclerView recyclerView;
-    private ProgressBarUtil progressBarUtil;
     private OrderApi mService;
     private User user;
     private List<Order> ordersList,filteredList;
@@ -67,7 +64,6 @@ public class OrdersFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_orders, container, false);
         context = container.getContext();
-        progressBarUtil = new ProgressBarUtil(getActivity());
         user = SharedPrefManager.getInstance(getActivity()).getUser();
         recyclerView = view.findViewById(R.id.orders_recycler);
         no_orders = view.findViewById(R.id.no_orders);
@@ -117,24 +113,14 @@ public class OrdersFragment extends Fragment {
         mainActivity.mNavigationView.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
     }
 
-/*    boolean isToolBarHide = false;
-
-    private void animateToolBar(final boolean hide) {
-        if (isToolBarHide && hide || !isToolBarHide && !hide) return;
-        isToolBarHide = hide;
-        int moveY = hide ? -(2 * mainActivity.toolbar_layout.getHeight()) : 0;
-        mainActivity.toolbar_layout.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
-    }*/
 
     private void getOrders() {
-        progressBarUtil.showProgress();
         mService = ApiClient.getClient().create(OrderApi.class);
         Call<Results> call = mService.getOrderByUserId(user.getId());
         call.enqueue(new Callback<Results>() {
             @Override
             public void onResponse(Call<Results> call, Response<Results> response) {
                 if (response.code() == 200 ) {
-                    progressBarUtil.hideProgress();
                     List<Order> orders = response.body().getOrder();
                     ordersList = new ArrayList<>();
                     filteredList = new ArrayList<>();
@@ -150,21 +136,18 @@ public class OrdersFragment extends Fragment {
                     if(filteredList!=null&&filteredList.size()!=0){
                         recyclerView.setVisibility(View.VISIBLE);
                         no_orders.setVisibility(View.GONE);
-                        Toast.makeText(getActivity(),response.body().getMessage(), Toast.LENGTH_SHORT).show();
                         ordersAdapter = new OrdersAdapter(getActivity(),filteredList);
                         recyclerView.setAdapter(ordersAdapter);
                     }else{
                         recyclerView.setVisibility(View.GONE);
                         no_orders.setVisibility(View.VISIBLE);
                     }
-                } else {
-                    Toast.makeText(getActivity(),"Failed due to: "+response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Results> call, Throwable t) {
-                Toast.makeText(getActivity(),R.string.error, Toast.LENGTH_SHORT).show();
+                System.out.println("Suree :"+t.getMessage());
             }
         });
     }
@@ -173,6 +156,12 @@ public class OrdersFragment extends Fragment {
     public void onResume() {
         getOrders();
         super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getOrders();
     }
 
     @Override

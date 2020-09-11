@@ -41,7 +41,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="22sp"
+                    android:textSize="16dp"
                     android:textStyle="bold"
                     android:textColor="@color/paint_color"
                     android:textAlignment="center"
@@ -74,7 +74,7 @@
                                  android:layout_width="wrap_content"
                                  android:layout_height="wrap_content"
                                  app:ccp_defaultNameCode="IN"
-                                 app:ccp_textSize="@dimen/size_16"/>
+                                 app:ccp_textSize="@dimen/size_14"/>
 
                              <EditText
                                  android:id="@+id/editTextPhone"
@@ -84,7 +84,7 @@
                                  android:inputType="phone"
                                  android:singleLine="true"
                                  android:background="@null"
-                                 android:textSize="@dimen/size_16"/>
+                                 android:textSize="@dimen/size_14"/>
 
                          </LinearLayout>
 
@@ -108,6 +108,28 @@
                          android:layout_height="wrap_content"
                          android:orientation="vertical">
 
+                         <TextView
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:textSize="@dimen/size_14"
+                             android:textColor="@color/dark_gray"
+                             android:gravity="left"
+                             android:text="Enter Verification Code Sent on"
+                             android:layout_marginStart="@dimen/margin_40"
+                             android:drawablePadding="@dimen/margin_10"/>
+
+                         <TextView
+                             android:id="@+id/user_phone_number"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:textSize="@dimen/size_14"
+                             android:textColor="@color/dark_gray"
+                             android:gravity="left"
+                             android:text="7055292960"
+                             android:layout_marginStart="@dimen/margin_40"
+                             android:drawablePadding="@dimen/margin_10"
+                             android:drawableEnd="@drawable/ic_mode_edit_black_18dp"/>
+
                          <com.test.sample.hirecooks.Libraries.PinView.PinView
                              android:layout_margin="@dimen/size_16"
                              android:layout_gravity="center"
@@ -123,6 +145,19 @@
                              app:itemRadius="10dp"
                              app:lineColor="@android:color/darker_gray"
                              app:viewType="rectangle" />
+
+                         <TextView
+                             android:layout_marginBottom="@dimen/size_16"
+                             android:layout_marginStart="@dimen/margin_60"
+                             android:layout_marginEnd="@dimen/margin_60"
+                             android:id="@+id/timerTV"
+                             android:visibility="gone"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:textSize="@dimen/size_14"
+                             android:textColor="@color/style_color_primary"
+                             android:gravity="right"
+                             android:text="1:00.0"/>
 
                          <androidx.appcompat.widget.AppCompatButton
                              android:visibility="visible"

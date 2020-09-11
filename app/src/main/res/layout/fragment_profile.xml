@@ -10,7 +10,6 @@
     tools:context=".Activity.Users.UserSignInActivity">
 
     <androidx.core.widget.NestedScrollView
-        android:layout_marginTop="@dimen/margin_30"
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,142 +19,157 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="@dimen/margin_20"
             tools:ignore="MissingConstraints">
 
-            <FrameLayout
-                android:id="@+id/profile_image_layout"
+            <View
                 android:layout_width="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center"
+                android:background="@color/white"
+                android:layout_height="50dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/circle"
+                android:elevation="2dp"
                 android:orientation="vertical">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profile_image"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:layout_marginTop="@dimen/margin_20"
                     android:layout_gravity="center"
                     android:clickable="true"
                     android:backgroundTint="@color/gray_btn_bg_color"
                     android:background="@drawable/ic_profile_user"/>
 
-            </FrameLayout>
-
-            <EditText
-                android:id="@+id/editTextUsername"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/edit_text_design"
-                android:hint="@string/user_name"
-                android:paddingRight="30dp"
-                android:drawablePadding="30dp"
-                android:drawableStart="@drawable/ic_profiles"
-                android:inputType="text"
-                android:paddingLeft="30dp"
-                android:textSize="@dimen/size_14"
-                android:textAlignment="viewStart"
-                android:elevation="2dp"/>
-
-
-            <EditText
-                android:id="@+id/editTextEmail"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/edit_text_design"
-                android:hint="@string/email"
-                android:paddingRight="30dp"
-                android:drawablePadding="30dp"
-                android:drawableStart="@drawable/ic_email"
-                android:inputType="textEmailAddress"
-                android:paddingLeft="30dp"
-                android:textSize="@dimen/size_14"
-                android:textAlignment="viewStart"
-                android:elevation="2dp"/>
-
-            <EditText
-                android:id="@+id/editTextPhone"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/edit_text_design"
-                android:hint="@string/phone"
-                android:inputType="phone"
-                android:paddingRight="30dp"
-                android:drawablePadding="30dp"
-                android:drawableStart="@drawable/ic_phone"
-                android:paddingLeft="30dp"
-                android:textSize="@dimen/size_14"
-                android:textAlignment="viewStart"
-                android:imeOptions="actionDone"
-                android:elevation="2dp"/>
-
-            <EditText
-                android:visibility="gone"
-                android:id="@+id/editTextFirmId"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/edit_text_design"
-                android:hint="@string/firmid"
-                android:inputType="text"
-                android:paddingLeft="30dp"
-                android:textSize="@dimen/size_14"
-                android:textAlignment="viewStart"
-                android:imeOptions="actionDone"
-                android:elevation="2dp"/>
-
-            <EditText
-                android:visibility="gone"
-                android:id="@+id/editTextUserType"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/edit_text_design"
-                android:hint="@string/user_type"
-                android:inputType="text"
-                android:paddingLeft="30dp"
-                android:textSize="@dimen/size_14"
-                android:textAlignment="viewStart"
-                android:imeOptions="actionDone"
-                android:elevation="2dp"/>
-
-            <RadioGroup
-                android:id="@+id/radioGender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="16dp">
-
-                <RadioButton
-                    android:id="@+id/radioMale"
+                <TextView
+                    android:id="@+id/user_name"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Male" />
+                    android:layout_gravity="center"
+                    android:textStyle="normal"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/size_14"
+                    android:drawablePadding="10dp"
+                    android:layout_margin="@dimen/margin_10"
+                    android:drawableEnd="@drawable/verified"/>
 
-                <RadioButton
-                    android:id="@+id/radioFemale"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/sendBtn"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="60dp"
+                        android:background="@drawable/gray_circle"
+                        android:elevation="2dp"
+                        app:srcCompat="@android:drawable/ic_menu_send"/>
+
+                    <ImageButton
+                        android:id="@+id/profile_image_layout"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_margin="@dimen/margin_40"
+                        android:background="@drawable/gray_circle"
+                        android:elevation="5dp"
+                        app:srcCompat="@android:drawable/ic_menu_camera" />
+
+                    <ImageButton
+                        android:id="@+id/edit_profile"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginEnd="60dp"
+                        android:background="@drawable/gray_circle"
+                        android:elevation="2dp"
+                        app:srcCompat="@android:drawable/ic_menu_edit" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_100">
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Female" />
+                    android:layout_alignParentTop="true"/>
 
-            </RadioGroup>
+                <LinearLayout
+                    android:id="@+id/SliderDots"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"/>
+
+            </RelativeLayout>
 
             <TextView
-                android:id="@+id/buttonUpdate"
+                android:layout_margin="@dimen/margin_5"
+                android:id="@+id/manage_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address Book"
+                android:textColor="@color/style_color_primary"
+                android:textStyle="bold"
+                android:gravity="left"
+                android:textSize="@dimen/size_14"
+                android:textAllCaps="false"
+                android:drawablePadding="@dimen/margin_20"
+                android:drawableStart="@drawable/ic_map"/>
+
+            <TextView
+                android:layout_margin="@dimen/margin_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chat"
+                android:textColor="@color/style_color_primary"
+                android:textStyle="bold"
+                android:gravity="left"
+                android:textSize="@dimen/size_14"
+                android:textAllCaps="false"
+                android:drawablePadding="@dimen/margin_20"
+                android:drawableStart="@drawable/ic_message_black_24dp"/>
+
+            <TextView
+                android:layout_margin="@dimen/margin_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:textSize="@dimen/size_14"
+                android:textColor="@color/style_color_primary"
+                android:textStyle="bold"
+                android:gravity="left"
+                android:textAllCaps="false"
+                android:drawablePadding="@dimen/margin_20"
+                android:drawableStart="@drawable/ic_logout"/>
+
+            <Button
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/update"
+                android:layout_margin="20dp"
+                android:text="Start"
                 android:gravity="center"
-                android:textColor="@color/white"
+                android:textColor="@color/style_color_primary"
                 android:textStyle="bold"
-                android:elevation="5dp"
+                android:elevation="2dp"
+                android:textSize="@dimen/size_12"
                 android:textAllCaps="true"
-                android:background="@drawable/rounded"/>
+                android:background="@drawable/rounded_white"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="70dp"/>
 
         </LinearLayout>
 

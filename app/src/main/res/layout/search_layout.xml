@@ -1,33 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/searchbar_interface_layout"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:layout_scrollFlags="scroll|enterAlways|snap">
+        android:id="@+id/searchbar_interface_layout"
+        tools:ignore="MissingConstraints">
 
-        <com.google.android.material.appbar.MaterialToolbar
+        <ImageButton
+            android:visibility="gone"
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/searchBar"
+            android:paddingLeft="50dp"
+            android:paddingTop="10dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="10dp"
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/ic_arrow_back_black_24dp"/>
+
+        <EditText
+            android:id="@+id/searchBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white">
+            android:background="@drawable/search_layout"
+            android:ems="10"
+            android:layout_margin="@dimen/margin_20"
+            android:hint="@string/search"
+            android:inputType="textPersonName"
+            android:paddingLeft="70dp"
+            android:paddingTop="10dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="10dp"
+            android:textColor="#999999"
+            android:textSize="16sp"
+            android:imeOptions="actionSearch"
+            android:focusableInTouchMode="true" />
 
-            <com.mancj.materialsearchbar.MaterialSearchBar
-                android:id="@+id/searchBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:foregroundGravity="center"
-                android:backgroundTintMode="multiply"
-                android:layout_marginEnd="@dimen/margin_20"/>
+        <ImageButton
+            android:visibility="gone"
+            android:id="@+id/clear_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/searchBar"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/searchBar"
+            android:layout_marginRight="40dp"
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/quantum_ic_clear_grey600_24"/>
 
-        </com.google.android.material.appbar.MaterialToolbar>
+    </RelativeLayout>
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

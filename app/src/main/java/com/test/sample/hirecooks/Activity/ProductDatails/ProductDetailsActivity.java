@@ -1,12 +1,16 @@
 package com.test.sample.hirecooks.Activity.ProductDatails;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.SpannableString;
 import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
@@ -15,16 +19,18 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.test.sample.hirecooks.Activity.AddorRemoveCallbacks;
-import com.test.sample.hirecooks.Activity.CheckOut.CheckoutActivity;
-import com.test.sample.hirecooks.Utils.BaseActivity;
+import com.test.sample.hirecooks.Activity.Orders.PlaceOrderActivity;
 import com.test.sample.hirecooks.Models.Cart.Cart;
 import com.test.sample.hirecooks.Models.OfferSubCategory.OffersSubcategory;
 import com.test.sample.hirecooks.Models.SearchSubCategory.Search;
@@ -32,9 +38,15 @@ import com.test.sample.hirecooks.Models.SubCategory.Response.SubCategory;
 import com.test.sample.hirecooks.Models.VendersSubCategory.VendersSubcategory;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Constants;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import static android.view.View.GONE;
 
 public class ProductDetailsActivity extends BaseActivity {
@@ -227,8 +239,7 @@ public class ProductDetailsActivity extends BaseActivity {
          checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ProductDetailsActivity.this, CheckoutActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+                startActivity(new Intent(ProductDetailsActivity.this, PlaceOrderActivity.class));
             }
         });
 
@@ -250,7 +261,7 @@ public class ProductDetailsActivity extends BaseActivity {
                             ((AddorRemoveCallbacks) ProductDetailsActivity.this).onAddProduct();
                             subcategoryAdapter.notifyDataSetChanged();
                             getFavourites();
-                            Toast.makeText(ProductDetailsActivity.this, "Added as Favourite", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProductDetailsActivity.this, "Added to Wishlist", Toast.LENGTH_SHORT).show();
                         }
                     }else{
                         Toast.makeText(ProductDetailsActivity.this, "This item can`t be add please remove item and try again", Toast.LENGTH_SHORT).show();
@@ -270,7 +281,7 @@ public class ProductDetailsActivity extends BaseActivity {
                             ((AddorRemoveCallbacks) ProductDetailsActivity.this).onAddProduct();
                             offerSubCategoryadapter.notifyDataSetChanged();
                             getFavourites();
-                            Toast.makeText(ProductDetailsActivity.this, "Added as Favourite", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProductDetailsActivity.this, "Added to Wishlist", Toast.LENGTH_SHORT).show();
                         }
                     }else{
                         Toast.makeText(ProductDetailsActivity.this, "This item can`t be add please remove item and try again", Toast.LENGTH_SHORT).show();
@@ -290,7 +301,7 @@ public class ProductDetailsActivity extends BaseActivity {
                             ((AddorRemoveCallbacks) ProductDetailsActivity.this).onAddProduct();
                             searchAdapter.notifyDataSetChanged();
                             getFavourites();
-                            Toast.makeText(ProductDetailsActivity.this, "Added as Favourite", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProductDetailsActivity.this, "Added to Wishlist", Toast.LENGTH_SHORT).show();
                         }
                     }else{
                         Toast.makeText(ProductDetailsActivity.this, "This item can`t be add please remove item and try again", Toast.LENGTH_SHORT).show();
@@ -299,7 +310,7 @@ public class ProductDetailsActivity extends BaseActivity {
             }
         });
 
-        add_item_layout.setOnClickListener(new View.OnClickListener() {
+        addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(subCategory!=null){
@@ -513,23 +524,11 @@ public class ProductDetailsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
              if(subCategory!=null&&subCategory.getLink()!=null){
-                 Intent shareIntent = new Intent();
-                 shareIntent.setAction(Intent.ACTION_SEND);
-                 shareIntent.putExtra(Intent.EXTRA_STREAM, subCategory.getLink());
-                 shareIntent.setType("image/jpeg");
-                 startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send)));
+                 shareItem(subCategory.getLink());
              }else if(offerSubCategory!=null&&offerSubCategory.getLink()!=null){
-                 Intent shareIntent = new Intent();
-                 shareIntent.setAction(Intent.ACTION_SEND);
-                 shareIntent.putExtra(Intent.EXTRA_STREAM, offerSubCategory.getLink());
-                 shareIntent.setType("image/jpeg");
-                 startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send)));
+                 shareItem(offerSubCategory.getLink());
              }else if(search!=null&&search.getLink()!=null){
-                 Intent shareIntent = new Intent();
-                 shareIntent.setAction(Intent.ACTION_SEND);
-                 shareIntent.putExtra(Intent.EXTRA_STREAM, search.getLink());
-                 shareIntent.setType("image/jpeg");
-                 startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send)));
+                 shareItem(search.getLink());
              }
             }
         });
@@ -557,6 +556,33 @@ public class ProductDetailsActivity extends BaseActivity {
         isBottomAnchorNavigationHide = hide;
         int moveY = hide ? (2 * bottom_anchor.getHeight()) : 0;
         bottom_anchor.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+    }
+
+    public void shareItem(String url) {
+        Picasso.with(getApplicationContext()).load(url).into(new Target() {
+            @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("image/*");
+                i.putExtra(Intent.EXTRA_STREAM, getLocalBitmapUri(bitmap));
+                startActivity(Intent.createChooser(i, "Share Image"));
+            }
+            @Override public void onBitmapFailed(Drawable errorDrawable) { }
+            @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
+        });
+    }
+
+    public Uri getLocalBitmapUri(Bitmap bmp) {
+        Uri bmpUri = null;
+        try {
+            File file =  new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
+            FileOutputStream out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.close();
+            bmpUri = Uri.fromFile(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bmpUri;
     }
 
     private void getFavourites(){
@@ -631,7 +657,7 @@ public class ProductDetailsActivity extends BaseActivity {
         }
     }
 
-    @Override
+/*    @Override
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
@@ -644,7 +670,7 @@ public class ProductDetailsActivity extends BaseActivity {
             this.finish();
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     public class OfferSubCategoryHorizontalAdapter extends RecyclerView.Adapter<ProductDetailsActivity.OfferSubCategoryHorizontalAdapter.MyViewHolder> {
         List<OffersSubcategory> productList;
@@ -810,7 +836,7 @@ public class ProductDetailsActivity extends BaseActivity {
                     bundle.putSerializable("OfferSubCategory",productList.get(position));
                     intent.putExtras(bundle);
                     context.startActivity(intent);
-                    ((ProductDetailsActivity) context).finish();
+                   // ((ProductDetailsActivity) context).finish();
                 }
             });
         }
@@ -1018,7 +1044,7 @@ public class ProductDetailsActivity extends BaseActivity {
                     bundle.putSerializable("SubCategory",productList.get(position));
                     intent.putExtras(bundle);
                     context.startActivity(intent);
-                    ((ProductDetailsActivity) context).finish();
+                  //  ((ProductDetailsActivity) context).finish();
                 }
             });
         }
@@ -1228,7 +1254,7 @@ public class ProductDetailsActivity extends BaseActivity {
                     bundle.putSerializable("Search",productList.get(position));
                     intent.putExtras(bundle);
                     context.startActivity(intent);
-                    ((ProductDetailsActivity) context).finish();
+                   // ((ProductDetailsActivity) context).finish();
                 }
             });
         }

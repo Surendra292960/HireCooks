@@ -1,3 +1,4 @@
+/*
 package com.test.sample.hirecooks.Activity.Users;
 
 import android.content.Intent;
@@ -16,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.ipaulpro.afilechooser.utils.FileUtils;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Models.Images.Image;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.UploadCallBack;
 import com.test.sample.hirecooks.WebApis.UserApi;
@@ -113,7 +113,7 @@ public class AddUserImagesActivity extends AppCompatActivity implements UploadCa
         MultipartBody.Builder builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
         // Map is used to multipart the file using okhttp3.RequestBody
-        // Multiple Images
+        // Multiple CooksImages
         for (int i = 0; i < filePaths.size(); i++) {
             File file = new File(filePaths.get(i));
             builder.addFormDataPart("files[]", file.getName(), RequestBody.create(MediaType.parse("multipart/form-data"), file));
@@ -137,7 +137,8 @@ public class AddUserImagesActivity extends AppCompatActivity implements UploadCa
             }
         });
     }
-   /* private void uploadFile() {
+   */
+/* private void uploadFile() {
         if(selectedFileUri!=null){
         mService = ApiClient.getClient().create(UserApi.class);
         MultipartBody.Builder builder = new MultipartBody.Builder();
@@ -146,7 +147,7 @@ public class AddUserImagesActivity extends AppCompatActivity implements UploadCa
         builder.addFormDataPart("desc", "Lorem ipsum");
         // Single Image
         builder.addFormDataPart("files",file1.getName(), RequestBody.create(MediaType.parse("image/*"), file1));
-        // Multiple Images
+        // Multiple CooksImages
         for (int i = 0; i <filePaths.size() ; i++) {
             File file = new File(filePaths.get(i));
             RequestBody requestImage = RequestBody.create(MediaType.parse("multipart/form-data"), file);
@@ -167,7 +168,8 @@ public class AddUserImagesActivity extends AppCompatActivity implements UploadCa
                 Toast.makeText(getBaseContext(),t.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });    }
-}*/
+}*//*
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -192,3 +194,4 @@ public class AddUserImagesActivity extends AppCompatActivity implements UploadCa
         return super.onOptionsItemSelected(item);
     }
 }
+*/

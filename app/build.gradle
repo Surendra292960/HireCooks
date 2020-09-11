@@ -33,9 +33,16 @@ android {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
+
+    repositories {
+        mavenCentral()
+    }
 }
 
 dependencies {
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support:support-annotations:24.0.0'
+    androidTestImplementation 'com.android.support.test:runner:0.5'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation "com.android.support:appcompat-v7:28.0.0"
@@ -61,6 +68,11 @@ dependencies {
     implementation project(':flowingdrawer-core')
     implementation project(':aFileChooser')
     implementation 'de.hdodenhof:circleimageview:3.0.0'
+    implementation 'com.asksira.android:loopingviewpager:1.1.2'
+    implementation 'com.github.cdflynn:checkview:v1.1'
+    implementation 'com.google.android.play:core:1.8.0'
+    implementation 'org.jsoup:jsoup:1.10.1'
+    
     //Retrofit2
     implementation 'com.squareup.retrofit2:retrofit:2.6.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
@@ -68,27 +80,30 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
     implementation 'com.github.bumptech.glide:glide:4.8.0'
-    implementation 'com.afollestad.material-dialogs:core:3.1.1'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
+    implementation 'com.henryblue.ijkplayerlibrary:ijkplayer-java:1.0.1'
+
     //Maps
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
     implementation 'com.google.android.gms:play-services-places:17.0.0'
-    implementation 'com.google.android.libraries.places:places:2.1.0'
+    implementation 'com.google.android.libraries.places:places:2.3.0'
     //Firebase
-    implementation 'com.google.firebase:firebase-auth:19.2.0'
-    implementation 'com.google.firebase:firebase-messaging:20.1.0'
-    implementation 'com.google.firebase:firebase-messaging:20.1.0'
-    implementation "com.google.firebase:firebase-core:17.2.1"
+    implementation 'com.google.firebase:firebase-auth:19.3.2'
+    implementation 'com.google.firebase:firebase-messaging:20.2.4'
+    implementation "com.google.firebase:firebase-core:17.5.0"
     implementation "com.google.android.gms:play-services-gcm:17.0.0"
-    implementation 'com.google.firebase:firebase-database:19.2.0'
-    implementation 'com.google.android.gms:play-services-location:11.2.0'
-    implementation 'com.google.firebase:firebase-messaging-directboot:20.2.0'
+    implementation 'com.google.firebase:firebase-database:19.4.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.firebase:firebase-messaging-directboot:20.2.4'
     //Facebook
-    implementation 'com.facebook.android:account-kit-sdk:5.+'
+    implementation 'com.facebook.android:account-kit-sdk:5.4.0'
     implementation 'com.facebook.fresco:fresco:0.14.1'
     implementation 'com.jjoe64:graphview:4.2.2'
+    //Razorpay
+    implementation 'com.razorpay:checkout:1.5.16'
     //Slider
     implementation 'com.daimajia.slider:library:1.1.5@aar'
     // Rx JAVA
@@ -99,7 +114,9 @@ dependencies {
     // Material Dialog Library
     implementation 'com.github.TutorialsAndroid:KAlertDialog:v4.1'
     // Material Design Library
+    implementation 'com.robertlevonyan.view:MaterialChipView:2.0.4'
     implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.afollestad.material-dialogs:core:3.1.1'
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.orhanobut:dialogplus:1.11@aar'
     implementation 'com.google.android.material:material:1.1.0-alpha01'

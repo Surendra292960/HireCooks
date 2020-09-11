@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -32,11 +33,11 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.hbb20.CountryCodePicker;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Models.TokenResponse.TokenResult;
 import com.test.sample.hirecooks.Models.users.Result;
 import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.OnClickRateLimitedDecoratedListener;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
@@ -59,7 +60,8 @@ public class UserSignUpActivity extends BaseActivity {
     private RadioGroup radioGender;
     private ProgressBarUtil progressBarUtil;
     private UserApi mService;
-    private TextView location_picker, buttonSignUp, txtSignIn;
+    private TextView location_picker, txtSignIn,verified;
+    private Button buttonSignUp;
     private String deviceId;
     private FirebaseAuth mAuth;
     private FirebaseUser firebaseUser;
@@ -89,6 +91,7 @@ public class UserSignUpActivity extends BaseActivity {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         appRoot = findViewById(R.id.appRoot);
         buttonSignUp = findViewById(R.id.buttonSignUp);
+        verified = findViewById(R.id.verified);
         txtSignIn = findViewById(R.id.txtSignIn);
         editTextName = findViewById(R.id.editTextUsername);
         editTextEmail = findViewById(R.id.editTextEmail);
@@ -106,7 +109,13 @@ public class UserSignUpActivity extends BaseActivity {
         radioGender = findViewById(R.id.radioGender);
         buttonSignUp = findViewById(R.id.buttonSignUp);
 
-        editTextPhone.setText(Constants.CurrentUserPhoneNumber);
+        if(Constants.CurrentUserPhoneNumber!=null){
+            verified.setVisibility(View.VISIBLE);
+            editTextPhone.setText(Constants.CurrentUserPhoneNumber);
+        }else{
+            verified.setVisibility(View.GONE);
+        }
+
         buttonSignUp.setOnClickListener(new OnClickRateLimitedDecoratedListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

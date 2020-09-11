@@ -57,4 +57,5 @@ public interface MapApi {
     Call<Example> getNearByUsers(
             @Field("latitude") String latitude,
             @Field("longitude") String longitude);
+
 }

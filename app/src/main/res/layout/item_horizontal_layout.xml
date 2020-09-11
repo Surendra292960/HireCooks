@@ -55,7 +55,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="110dp"
                         android:textSize="14sp"
-                        android:textColor="@color/gen_black" />
+                        android:textStyle="normal"
+                        android:textAllCaps="false"
+                        android:textColor="@color/dark_gray"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                     <TextView
                         android:id="@+id/item_short_desc"
@@ -64,7 +67,8 @@
                         android:layout_marginTop="@dimen/margin_5"
                         android:layout_marginStart="110dp"
                         android:textSize="12sp"
-                        android:textColor="@android:color/darker_gray" />
+                        android:textColor="@android:color/darker_gray"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                     <RatingBar
                         android:id="@+id/rating"
@@ -88,18 +92,18 @@
                      android:id="@+id/item_displayrate"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="DisplayRate"
                      android:textSize="12sp"
-                     tools:textColor="@android:color/darker_gray" />
+                     tools:textColor="@android:color/darker_gray"
+                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                  <TextView
                      android:id="@+id/item_sellrate"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="SellRate"
                      android:textSize="12sp"
                      android:paddingLeft="@dimen/margin_10"
-                     android:textColor="@color/gen_black"  />
+                     android:textColor="@color/gen_black"
+                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
              </LinearLayout>
 
@@ -111,7 +115,8 @@
                         android:layout_height="wrap_content"
                         android:textSize="12sp"
                         android:paddingLeft="@dimen/margin_10"
-                        android:textColor="@color/red"/>
+                        android:textColor="@color/red"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                 </LinearLayout>
 
@@ -142,10 +147,11 @@
                                 android:layout_height="30dp"
                                 android:layout_gravity="center"
                                 android:gravity="center"
-                                android:text="ADD +"
-                                android:textColor="@color/dark_gray"
+                                android:text="@string/add"
+                                android:textColor="@color/gray_btn_bg_pressed_color"
                                 android:textSize="12sp"
-                                android:visibility="visible" />
+                                android:visibility="visible"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                             <LinearLayout
                                 android:id="@+id/quantity_ll"
@@ -164,7 +170,8 @@
                                     android:text="-"
                                     android:textColor="@color/red"
                                     android:textSize="20sp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"
+                                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                                 <TextView
                                     android:id="@+id/item_count"
@@ -176,7 +183,8 @@
                                     android:text="1"
                                     android:textColor="@color/gen_black"
                                     android:textSize="14sp"
-                                    android:textStyle="normal" />
+                                    android:textStyle="normal"
+                                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                                 <TextView
                                     android:id="@+id/add_item"
@@ -187,7 +195,8 @@
                                     android:text="+"
                                     android:textColor="@color/red"
                                     android:textSize="20sp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"
+                                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                             </LinearLayout>
 
@@ -201,7 +210,8 @@
                                 android:text="Not in Stock"
                                 android:textColor="@color/red"
                                 android:textSize="12sp"
-                                android:visibility="gone" />
+                                android:visibility="gone"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                         </FrameLayout>
 
@@ -226,7 +236,8 @@
                                 android:gravity="center"
                                 android:text="Order Not Accepting"
                                 android:textColor="@color/red"
-                                android:textSize="12sp"/>
+                                android:textSize="12sp"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                         </FrameLayout>
 
@@ -253,7 +264,8 @@
                    android:text="@string/message_txt"
                     android:textSize="12sp"
                     android:textStyle="normal"
-                    android:textColor="@color/gen_black"/>
+                    android:textColor="@color/dark_gray"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                 <TextView
                     android:visibility="gone"
@@ -264,9 +276,12 @@
                     android:paddingRight="45dip"
                     android:textSize="15dp"
                     android:textStyle="bold"
-                    android:textColor="@color/gen_black" />
+                    android:textColor="@color/dark_gray"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
             </LinearLayout>
 
         </RelativeLayout>
+
     </androidx.cardview.widget.CardView>
+
 </LinearLayout>

@@ -177,8 +177,14 @@ public class RecievedOrderActivity extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStop() {
+        super.onStop();
+        getCurrentOrders("Pending");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
         getCurrentOrders("Pending");
     }
 }

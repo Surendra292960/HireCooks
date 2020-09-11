@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/place_item_view"
+    android:orientation="vertical">
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/white"
+      android:orientation="horizontal"
+      android:weightSum="2">
+
+      <LinearLayout
+          android:layout_weight="1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:background="@color/white">
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:maxLines="1"
+              android:paddingEnd="@dimen/margin_20"
+              android:drawableStart="@drawable/ic_location_on"
+              android:textSize="14sp"/>
+
+      </LinearLayout>
+
+      <LinearLayout
+          android:layout_weight="1"
+          android:layout_margin="@dimen/margin_10"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+
+          <TextView
+              android:id="@+id/address"
+              android:layout_margin="@dimen/margin_5"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textSize="12sp"
+              android:textColor="@color/gray_btn_bg_pressed_color"
+              android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+          <TextView
+              android:id="@+id/area"
+              android:layout_margin="@dimen/margin_5"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:maxLines="1"
+              android:textSize="12sp"
+              android:textColor="@color/gray_btn_bg_pressed_color"
+              android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+      </LinearLayout>
+
+  </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_btn_bg_color"/>
+</LinearLayout>

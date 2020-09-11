@@ -16,11 +16,11 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,10 +29,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
-import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Models.Cart.Cart;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,9 +58,8 @@ public class FavouriteActivity extends BaseActivity {
         setContentView(R.layout.activity_favourite);
         Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Favourite");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("My WishList");
         initViews();
-       // getCart();
         getFavourites();
     }
 
@@ -194,13 +193,11 @@ public class FavouriteActivity extends BaseActivity {
             this.FavouriteList = FavouriteList;
         }
 
-
         @Override
         public FavouriteAdapter.CartViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(mCtx).inflate(R.layout.recyclerview_cart, parent, false);
+            View view = LayoutInflater.from(mCtx).inflate(R.layout.checkout_cart_adapter, parent, false);
             return new FavouriteAdapter.CartViewHolder(view);
         }
-
 
         @SuppressLint("SetTextI18n")
         @Override
@@ -219,10 +216,9 @@ public class FavouriteActivity extends BaseActivity {
                     holder.itemQuantity.setText(""+cart.getItemQuantity());
                 }
                 if(cart.getWeight()!=null){
-                    holder.item_weight.setVisibility(View.VISIBLE);
-                    holder.item_weight.setText(cart.getWeight());
+                    holder.itemDesc.setText(cart.getWeight());
                 }else{
-                    holder.item_weight.setVisibility(View.GONE);
+                    holder.itemDesc.setText(cart.getDesc());
                 }
                 holder.itemImage.setAnimation(AnimationUtils.loadAnimation(mCtx,R.anim.fade_transition_animation));
                 Picasso.with(mCtx).load(cart.getLink()).into(holder.itemImage);
@@ -260,9 +256,9 @@ public class FavouriteActivity extends BaseActivity {
         }
 
         class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-            TextView itemName, itemDesc, itemTotalAmt,itemAdd,itemRemove,itemQuantity,itemDelete,item_weight;
+            TextView itemName, itemDesc, itemTotalAmt,itemAdd,itemRemove,itemQuantity,itemDelete;
             ImageView itemImage;
-            CardView cardlist_item;
+            LinearLayout add_item_layout;
 
             public CartViewHolder(View itemView) {
                 super(itemView);
@@ -270,12 +266,12 @@ public class FavouriteActivity extends BaseActivity {
                 itemDesc = itemView.findViewById(R.id.item_short_desc);
                 itemTotalAmt = itemView.findViewById(R.id.total_Amount);
                 itemImage = itemView.findViewById(R.id.product_thumb);
+                add_item_layout = itemView.findViewById(R.id.add_item_layout);
+                add_item_layout.setVisibility(View.GONE);
                 itemAdd = itemView.findViewById(R.id.add_item);
                 itemRemove = itemView.findViewById(R.id.remove_item);
                 itemQuantity = itemView.findViewById(R.id.item_count);
                 itemDelete = itemView.findViewById(R.id.item_delete);
-                item_weight = itemView.findViewById(R.id.item_weight);
-                cardlist_item = itemView.findViewById(R.id.cardlist_item);
                 itemView.setOnClickListener(this);
             }
 

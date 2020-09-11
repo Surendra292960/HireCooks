@@ -32,7 +32,6 @@ import com.test.sample.hirecooks.Models.users.MessageResponse;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Tasks.Activity.TaskActivity;
 import com.test.sample.hirecooks.Utils.APIUrl;
-import com.test.sample.hirecooks.Utils.EncryptPassword;
 import com.test.sample.hirecooks.Utils.OnButtonClickListener;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.UserApi;
@@ -146,8 +145,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                         String seedValue = user.getPassword();
                         try {
 
-                            normalTextDec = EncryptPassword.decrypt(seedValue, normalTextEnc.trim());
-                         System.out.println("Suree: "+normalTextDec.trim());
+                           // normalTextDec = EncryptPassword.decrypt(seedValue, normalTextEnc.trim());
+                         //System.out.println("Suree: "+normalTextDec.trim());
 
                         } catch (Exception e) {
                             // TODO Auto-generated catch block

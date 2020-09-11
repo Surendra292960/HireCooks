@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -18,7 +19,6 @@ import com.test.sample.hirecooks.Activity.Home.MainActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Models.users.Result;
-import com.test.sample.hirecooks.Activity.Home.PhoneVerification;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
@@ -34,7 +34,8 @@ import retrofit2.Response;
 
 public class UserSignInActivity extends BaseActivity implements View.OnClickListener {
     private EditText editTextEmail,editTextPassword;
-    private TextView buttonSignIn, txtSignUp,txtForgotPasswrd;
+    private Button buttonSignIn;
+    private TextView txtSignUp,txtForgotPasswrd;
     private View appRoot;
     private ProgressBarUtil progressBarUtil;
     private UserApi mService;
@@ -119,7 +120,7 @@ public class UserSignInActivity extends BaseActivity implements View.OnClickList
                             finish();
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }else{
-                            ShowToast("You Cant Access");
+                            ShowToast("You Can`t Access");
                         }
                     } else {
                         ShowToast(response.body().getMessage());

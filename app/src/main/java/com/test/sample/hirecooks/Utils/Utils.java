@@ -38,7 +38,7 @@ public class Utils {
     public static final String MESSAGE_FRAGMENT = "MessageFragment";
     public static final String USERS_FRAGMENT = "UsersFragment";
     public static final String COOKS_FRAGMENT = "OrdersFragment";
-    public static final String SEARCH_FRAGMENT_TAG = "SearchFragment";
+    public static final String SEARCH_FRAGMENT_TAG = "NotificationFragment";
     public static final String SETTINGS_FRAGMENT_TAG = "SettingsFragment";
     public static final String OTP_LOGIN_TAG = "OTPLogingFragment";
     public static final String CONTACT_US_FRAGMENT = "ContactUs";
@@ -238,7 +238,7 @@ public class Utils {
 
                 // Enter from right
                 case SLIDE_RIGHT:
-                    fragmentTransaction.setCustomAnimations(R.anim.slide_right,
+                    fragmentTransaction.setCustomAnimations(R.anim.slide_in_right,
                             R.anim.slide_out_right);
 
                     break;
@@ -304,7 +304,7 @@ public class Utils {
                         break;
                     // Enter from right
                     case SLIDE_RIGHT:
-                        transaction.setCustomAnimations(R.anim.slide_right,
+                        transaction.setCustomAnimations(R.anim.slide_in_right,
                                 R.anim.slide_out_right);
                         break;
                     case FADE_IN:

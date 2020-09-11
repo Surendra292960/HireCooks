@@ -2,6 +2,7 @@ package com.test.sample.hirecooks.Fragments.Home;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -26,18 +28,21 @@ import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.test.sample.hirecooks.Activity.Cooks.CooksActivity;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
 import com.test.sample.hirecooks.Adapter.Category.CategoryAdapter;
 import com.test.sample.hirecooks.Adapter.Category.CircularImageCategoryAdapter;
 import com.test.sample.hirecooks.Adapter.Category.NewProductCategoryAdapter;
+import com.test.sample.hirecooks.Adapter.Cooks.CooksPromotionAdapter;
+import com.test.sample.hirecooks.Adapter.CooksPromotion.ToolPromotionAdapter;
 import com.test.sample.hirecooks.Adapter.Home.FeedProperties;
 import com.test.sample.hirecooks.Adapter.Offer.OfferAdapter;
 import com.test.sample.hirecooks.Adapter.Venders.VendersAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Libraries.Slider.SliderLayout;
 import com.test.sample.hirecooks.Models.Category.Categories;
 import com.test.sample.hirecooks.Models.Category.Category;
+import com.test.sample.hirecooks.Models.CooksPromotion.CooksPromotion;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Example;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.NewProductsCategory.NewProductCategories;
@@ -49,6 +54,7 @@ import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
 import com.test.sample.hirecooks.Models.UsersResponse.UsersResponse;
 import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.NetworkUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
@@ -70,7 +76,7 @@ public class HomeFragment extends Fragment{
     private Context context;
     private SliderLayout mDemoSlider;
     private ScrollView scrollView;
-    private RecyclerView offer_recycler_view,recyclerView,recyclerView2,my_recycler_view3,venders_recycler_view;
+    private RecyclerView offer_recycler_view,recyclerView,recyclerView2,my_recycler_view3,venders_recycler_view,cooks_promotion_recycler,tool_Pager;
     private ArrayList<FeedProperties> os_versions;
     private AutoCompleteTextView autoComplete;
     private CategoryAdapter mAdapter;
@@ -79,6 +85,7 @@ public class HomeFragment extends Fragment{
     private UserApi mService;
     private List<Category> categories;
     MainActivity mainActivity;
+    private TextView cook_seeall;
     private float mToolbarBarHeight;
     CoordinatorLayout.LayoutParams layoutParams;
     private List<Map> maps;
@@ -101,12 +108,13 @@ public class HomeFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         context = container.getContext();
         initViews(view);
-        if(NetworkUtil.checkInternetConnection(getActivity())) {
+        if(NetworkUtil.checkInternetConnection(mainActivity)) {
             getMapDetails();
             getCategory();
             getOfferCategory();
             getNewProductCategory();
             getOffer();
+            getCooks();
         }
         else {
             baseActivity.showAlert(getResources().getString(R.string.no_internet));
@@ -131,18 +139,60 @@ public class HomeFragment extends Fragment{
     }
 
     @SuppressLint("WrongConstant")
+    private void getCooks() {
+        List<CooksPromotion> cooksPromotion = new ArrayList<>();
+        cooksPromotion.add(new CooksPromotion(0,"Robert Disuja","North Tadka", "https://cdn.cdnparenting.com/articles/2018/12/12122639/1206944158-H-1024x700.jpg","https://image.flaticon.com/icons/svg/196/196907.svg","#ff6347"));
+        cooksPromotion.add(new CooksPromotion(1,"Robert Disuja","South Dish", "https://www.thespruceeats.com/thmb/6Cofsx3edLVIJ76F6EDwYBqNs_k=/3752x2110/smart/filters:no_upscale()/south-indian-food-548291937-588b4fcd5f9b5874ee174914.jpg","https://image.flaticon.com/icons/svg/196/196907.svg","#FF9933"));
+        cooksPromotion.add(new CooksPromotion(2,"Robert Disuja","Maharashtrian Tadka", "https://3.bp.blogspot.com/-ntTxWOO7Kns/VxVUOcL4O0I/AAAAAAAADZc/7hfjhMherIYrMxQQ1snTg57_CF1Y96r6QCLcB/s1600/DSC_0189_Fotor%2Bnew2.jpg","https://image.flaticon.com/icons/svg/196/196907.svg","#FF9933"));
+        cooksPromotion.add(new CooksPromotion(3,"Robert Disuja","Vegitables", "https://www.vegetables.co.nz/assets/Uploads/vegetables.jpg","https://image.flaticon.com/icons/svg/196/196907.svg","#ff6347"));
+        cooksPromotion.add(new CooksPromotion(5,"Robert Disuja","Gujrti Tadka", "https://zaykakatadka.files.wordpress.com/2014/11/dhokla2.jpg","https://image.flaticon.com/icons/svg/196/196907.svg","#ff6347"));
+
+        getCategoryCooks(cooksPromotion);
+    }
+
+    @SuppressLint("WrongConstant")
+    private void getCategoryCooks(List<CooksPromotion> cooksPromotion) {
+        CooksPromotionAdapter mAdapter = new CooksPromotionAdapter( getActivity(),cooksPromotion);
+        cooks_promotion_recycler.setAdapter ( mAdapter );
+
+        LinearLayoutManager tlinearLayoutManager = new LinearLayoutManager(mainActivity);
+        if (mainActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            tlinearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+        } else {
+            tlinearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+        }
+        cooks_promotion_recycler.setLayoutManager(tlinearLayoutManager);
+        cooks_promotion_recycler.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    @SuppressLint("WrongConstant")
     private void getCategoryOffer(List<Offer> offers){
-        CircularImageCategoryAdapter adapter = new CircularImageCategoryAdapter(getActivity(),offers);
+        if(offers.size()!=0&&offers!=null){
+        CircularImageCategoryAdapter adapter = new CircularImageCategoryAdapter(mainActivity,offers);
         recyclerView2.setAdapter(adapter);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        ToolPromotionAdapter Adapter = new ToolPromotionAdapter( getActivity(),offers);
+        tool_Pager.setAdapter ( Adapter );
+
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
+        if (mainActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
         } else {
             linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
         }
-        recyclerView2.setLayoutManager(linearLayoutManager);
-        recyclerView2.setItemAnimator(new DefaultItemAnimator());
+            recyclerView2.setLayoutManager(linearLayoutManager);
+            recyclerView2.setItemAnimator(new DefaultItemAnimator());
+
+            LinearLayoutManager mlinearLayoutManager = new LinearLayoutManager(mainActivity);
+            if (mainActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                mlinearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+            } else {
+                mlinearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+            }
+            tool_Pager.setLayoutManager(mlinearLayoutManager);
+            tool_Pager.setItemAnimator(new DefaultItemAnimator());
+        }
     }
 
     public static HomeFragment newInstance() {
@@ -160,7 +210,7 @@ public class HomeFragment extends Fragment{
             public void onResponse(Call<com.test.sample.hirecooks.Models.MapLocationResponse.Result> call, Response<com.test.sample.hirecooks.Models.MapLocationResponse.Result> response) {
                 if (response.code() == 200 && response.body() != null && response.body().getMaps() != null) {
                     try{
-                        getNearByUsers(response.body().getMaps());
+                        getNearByVenders(response.body().getMaps());
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -176,7 +226,7 @@ public class HomeFragment extends Fragment{
         });
     }
 
-    public void getNearByUsers(final Map map) {
+    public void getNearByVenders(final Map map) {
         MapApi mapApi = ApiClient.getClient().create(MapApi.class);
         Call<Example> call = mapApi.getNearByUsers(map.getLatitude(),map.getLongitude());
         call.enqueue(new Callback<Example>() {
@@ -186,7 +236,8 @@ public class HomeFragment extends Fragment{
                 if(response.code() == 200 && response.body() != null) {
                     try{
                         maps = response.body().getMaps();
-                        Constants.NEARBY_USER_LOCATION = response.body().getMaps();
+                        Constants.NEARBY_COOKS = response.body().getMaps();
+                        Constants.NEARBY_VENDERS_LOCATION = response.body().getMaps();
                         getVenders();
                     }catch (Exception e){
                         e.printStackTrace();
@@ -221,7 +272,7 @@ public class HomeFragment extends Fragment{
                             if(usersResponse.getId()==user.getId()&&usersResponse.getEmail().equalsIgnoreCase(user.getEmail())){
                                 Constants.USER_PROFILE = usersResponse.getImage();
                             }
-                            for (Map map : Constants.NEARBY_USER_LOCATION) {
+                            for (Map map : Constants.NEARBY_VENDERS_LOCATION) {
                                 if (map.getFirm_id().equalsIgnoreCase(usersResponse.getFirmId())) {
                                     if (!usersResponse.getUserType().equalsIgnoreCase("User")&&!usersResponse.getFirmId().equalsIgnoreCase("Not_Available")) {
                                         vendersList.add(usersResponse);
@@ -234,11 +285,11 @@ public class HomeFragment extends Fragment{
                         }
                     }
                     if(filteredList!=null&&filteredList.size()!=0){
-                        VendersAdapter adapter = new VendersAdapter(getActivity(),filteredList);
+                        VendersAdapter adapter = new VendersAdapter(mainActivity,filteredList);
                         venders_recycler_view.setAdapter(adapter);
                         venders_recycler_view.setVisibility(View.VISIBLE);
-                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
+                        if (mainActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                             linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
                         }else{
                             linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
@@ -274,11 +325,11 @@ public class HomeFragment extends Fragment{
                 int statusCode = response.code();
                 if(statusCode==200){
                   List<OffersCategory> categories = response.body().getOffersCategory();
-                    OfferAdapter adapter = new OfferAdapter(getActivity(),categories);
+                    OfferAdapter adapter = new OfferAdapter(mainActivity,categories);
                     offer_recycler_view.setAdapter(adapter);
 
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
+                    if (mainActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                         linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
                     }else{
                         linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
@@ -314,12 +365,12 @@ public class HomeFragment extends Fragment{
                 if(statusCode==200){
                   List<NewProductCategory> categories = response.body().getNewProductCategory();
                     my_recycler_view3.setHasFixedSize(true);
-                    my_recycler_view3.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    NewProductCategoryAdapter adapter = new NewProductCategoryAdapter(getActivity(),categories);
+                    my_recycler_view3.setLayoutManager(new LinearLayoutManager(mainActivity));
+                    NewProductCategoryAdapter adapter = new NewProductCategoryAdapter(mainActivity,categories);
                     my_recycler_view3.setAdapter(adapter);
 
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
+                    if (mainActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                         linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
                     }else {
                         linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
@@ -351,11 +402,11 @@ public class HomeFragment extends Fragment{
                 if(statusCode==200){
                     categories = response.body().getCategory();
                     recyclerView.setHasFixedSize(true);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                    mAdapter = new CategoryAdapter(getActivity(),categories);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
+                    mAdapter = new CategoryAdapter(mainActivity,categories);
                     recyclerView.setAdapter(mAdapter);
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
+                    if (mainActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                         linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
                     } else {
                         linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
@@ -379,10 +430,13 @@ public class HomeFragment extends Fragment{
     @RequiresApi(api = Build.VERSION_CODES.M)
     @SuppressLint({"WrongConstant", "ClickableViewAccessibility"})
     private void initViews(View view) {
-        Fresco.initialize(getActivity());
+        Fresco.initialize(mainActivity);
         scrollView = view.findViewById(R.id.scrollView);
         baseActivity = new BaseActivity();
         mDemoSlider = view.findViewById(R.id.slider);
+        cook_seeall = view.findViewById(R.id.cook_seeall);
+        cooks_promotion_recycler = view.findViewById(R.id.cooks_promotion_recycler);
+        tool_Pager = view.findViewById(R.id.tool_pager);
         offer_recycler_view = view.findViewById(R.id.offer_recycler_view);
         recyclerView = view.findViewById(R.id.my_recycler_view);
         recyclerView2 = view.findViewById(R.id.my_recycler_view2);
@@ -390,7 +444,7 @@ public class HomeFragment extends Fragment{
         venders_recycler_view = view.findViewById(R.id.venders_recycler_view);
 
         String[] colors = getResources().getStringArray(R.array.colorList);
-        stringAdapter = new ArrayAdapter<>(getActivity(), R.layout.row, colors);
+        stringAdapter = new ArrayAdapter<>(mainActivity, R.layout.row, colors);
 
         HashMap<String, Integer> file_maps = new HashMap<String, Integer>();
         file_maps.put("Groceroies",R.drawable.slide1);
@@ -399,16 +453,16 @@ public class HomeFragment extends Fragment{
         file_maps.put("Householdes", R.drawable.slide4);
 
         for(String name : file_maps.keySet()){
-            TextSliderView textSliderView = new TextSliderView(getActivity());
+            TextSliderView textSliderView = new TextSliderView(mainActivity);
             textSliderView
                     //.description(name)
                     .image(file_maps.get(name))
                     .setScaleType(BaseSliderView.ScaleType.Fit)
-                    //.setOnSliderClickListener((BaseSliderView.OnSliderClickListener) getActivity());
+                    //.setOnSliderClickListener((BaseSliderView.OnSliderClickListener) mainActivity);
             .setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                 @Override
                 public void onSliderClick(BaseSliderView slider) {
-                    //Toast.makeText(getActivity(),"clicked: "+textSliderView,Toast.LENGTH_LONG).show();
+                    //Toast.makeText(mainActivity,"clicked: "+textSliderView,Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -434,6 +488,13 @@ public class HomeFragment extends Fragment{
                     animateNavigation(true);
                     animateToolBar(true);
                 }
+            }
+        });
+
+        cook_seeall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), CooksActivity.class));
             }
         });
     }
@@ -464,11 +525,15 @@ public class HomeFragment extends Fragment{
         mainActivity = (MainActivity)context;
     }
 
-    @Override
+ /*   @Override
     public void onResume() {
-        getCategory();
         super.onResume();
-    }
+        getMapDetails();
+        getCategory();
+        getOfferCategory();
+        getNewProductCategory();
+        getOffer();
+    }*/
 
     @Override
     public void onStop() {

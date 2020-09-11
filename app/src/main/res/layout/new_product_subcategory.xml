@@ -30,7 +30,6 @@
                     android:layout_height="25dp"
                     android:layout_marginTop="@dimen/margin_10"
                     android:gravity="center"
-                    android:text="Save 30%"
                     android:textColor="@color/white"
                     android:textStyle="italic"
                     android:textSize="12sp"
@@ -98,17 +97,18 @@
                                android:layout_height="wrap_content"
                                android:layout_marginTop="@dimen/margin_5"
                                android:layout_marginRight="@dimen/margin_5"
-                               android:text="Item Name "
                                android:textSize="14sp"
                                android:textStyle="normal"
-                               android:textColor="@color/black"/>
+                               android:textColor="@color/dark_gray"
+                               android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
                            <TextView android:id="@+id/item_descriptions"
                                android:layout_width="wrap_content"
                                android:layout_height="wrap_content"
                                android:layout_marginTop="@dimen/margin_5"
                                android:layout_marginRight="@dimen/margin_5"
-                               android:text="Item descriptions"
-                               android:textSize="12sp"/>
+                               android:textColor="@color/dark_gray"
+                               android:textSize="12sp"
+                               android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                        </LinearLayout>
 
@@ -123,18 +123,18 @@
                                android:layout_width="wrap_content"
                                android:layout_height="wrap_content"
                                android:textSize="14sp"
-                               android:text="display rate"
                                android:textStyle="normal"
-                               android:textColor="#4CAF50"/>
+                               android:textColor="@color/dark_gray"
+                               android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                            <TextView android:id="@+id/item_sellrate"
                                android:layout_width="wrap_content"
                                android:layout_height="wrap_content"
-                               android:text="sellrate"
                                android:layout_marginStart="@dimen/margin_20"
                                android:textSize="14sp"
                                android:textStyle="normal"
-                               android:textColor="#4CAF50"/>
+                               android:textColor="#4CAF50"
+                               android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                        </LinearLayout>
 
@@ -150,7 +150,6 @@
                        android:background="@drawable/round_border_button"
                        android:orientation="vertical">
 
-
                        <FrameLayout
                            android:layout_gravity="center"
                            android:layout_width="match_parent"
@@ -163,9 +162,10 @@
                                android:layout_height="30dp"
                                android:layout_gravity="center"
                                android:gravity="center"
-                               android:text="ADD +"
-                               android:textColor="@color/dark_gray"
-                               android:textSize="12sp" />
+                               android:text="@string/add"
+                               android:textColor="@color/gray_btn_bg_pressed_color"
+                               android:textSize="12sp"
+                               android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
 
                            <LinearLayout
@@ -185,7 +185,8 @@
                                    android:text="-"
                                    android:textColor="@color/red"
                                    android:textSize="20sp"
-                                   android:textStyle="bold" />
+                                   android:textStyle="bold"
+                                   android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                                <TextView
                                    android:id="@+id/item_count"
@@ -197,7 +198,8 @@
                                    android:text="1"
                                    android:textColor="@color/black"
                                    android:textSize="14sp"
-                                   android:textStyle="normal" />
+                                   android:textStyle="normal"
+                                   android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                                <TextView
                                    android:id="@+id/add_item"
@@ -208,7 +210,8 @@
                                    android:text="+"
                                    android:textColor="@color/red"
                                    android:textSize="20sp"
-                                   android:textStyle="normal" />
+                                   android:textStyle="normal"
+                                   android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                            </LinearLayout>
 
@@ -219,9 +222,10 @@
                                android:layout_height="30dp"
                                android:layout_gravity="center"
                                android:gravity="center"
-                               android:text="Not in Stock"
+                               android:text="@string/not_in_stock"
                                android:textColor="@color/red"
-                               android:textSize="12sp" />
+                               android:textSize="12sp"
+                               android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                        </FrameLayout>
 

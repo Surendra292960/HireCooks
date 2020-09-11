@@ -42,7 +42,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="22sp"
+                android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@color/gray_btn_bg_pressed_color"
                 android:textAlignment="center"
@@ -54,13 +54,16 @@
                 android:id="@+id/editTextUsername"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/edit_text_design"
-                android:hint="@string/username"
-                android:paddingStart="30dp"
+                android:hint="@string/user_name"
+                android:paddingRight="30dp"
+                android:drawablePadding="30dp"
+                android:drawableStart="@drawable/ic_profile_user"
+                android:inputType="textPersonName"
+                android:paddingLeft="30dp"
                 android:textSize="@dimen/size_14"
-                android:inputType="text"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
+                android:textAlignment="viewStart"
                 android:elevation="2dp"
                 android:autofillHints="@string/username" />
 
@@ -71,11 +74,15 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/edit_text_design"
                 android:hint="@string/email"
+                android:paddingRight="30dp"
+                android:drawablePadding="30dp"
+                android:drawableStart="@android:drawable/sym_action_email"
                 android:inputType="textEmailAddress"
                 android:paddingLeft="30dp"
                 android:textSize="@dimen/size_14"
                 android:textAlignment="viewStart"
-                android:elevation="2dp"/>
+                android:elevation="2dp"
+                android:autofillHints="@string/email"/>
 
 
             <EditText
@@ -85,10 +92,14 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/edit_text_design"
                 android:hint="@string/password"
+                android:paddingRight="30dp"
+                android:drawablePadding="30dp"
+                android:drawableStart="@android:drawable/ic_lock_idle_lock"
                 android:inputType="textPassword"
                 android:paddingLeft="30dp"
                 android:textSize="@dimen/size_14"
                 android:textAlignment="viewStart"
+                android:autofillHints="@string/password"
                 android:elevation="2dp"/>
 
             <EditText
@@ -97,11 +108,15 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/edit_text_design"
-                android:hint="@string/con_password"
+                android:hint="@string/password"
+                android:paddingRight="30dp"
+                android:drawablePadding="30dp"
+                android:drawableStart="@android:drawable/ic_lock_idle_lock"
                 android:inputType="textPassword"
                 android:paddingLeft="30dp"
                 android:textSize="@dimen/size_14"
                 android:textAlignment="viewStart"
+                android:autofillHints="@string/con_password"
                 android:elevation="2dp"/>
 
             <LinearLayout
@@ -116,16 +131,38 @@
                     android:id="@+id/ccp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:ccp_textSize="@dimen/size_14"
                     app:ccp_defaultNameCode="IN" />
 
                 <EditText
                     android:id="@+id/editTextPhone"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/size_14"
                     android:hint="@string/phone"
+                    android:layout_weight="1"
                     android:background="@null"
                     android:inputType="phone"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true" />
+
+                <EditText
+                    android:id="@+id/verified"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/size_14"
+                    android:text="verified"
+                    android:background="@null"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/margin_30"
+                    android:textColor="@color/green_light"
+                    android:drawablePadding="@dimen/margin_5"
+                    android:drawableEnd="@drawable/verified"
                     android:singleLine="true" />
             </LinearLayout>
 
@@ -224,18 +261,18 @@
                 android:elevation="2dp"
                 android:visibility="gone"/>
 
-            <TextView
+            <Button
                 android:id="@+id/buttonSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/sign_up"
                 android:gravity="center"
-                android:textColor="@color/white"
+                android:textColor="@color/style_color_primary"
                 android:textStyle="bold"
                 android:elevation="5dp"
                 android:textAllCaps="true"
-                android:background="@drawable/rounded"/>
+                android:background="@drawable/rounded_white"/>
 
                 <TextView
                     android:id="@+id/txtSignIn"

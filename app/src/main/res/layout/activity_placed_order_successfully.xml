@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.Orders.PlacedOrderSuccessfully">
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:gravity="center"
+       android:orientation="vertical">
+
+       <androidx.appcompat.widget.AppCompatImageView
+           android:id="@+id/done"
+           android:layout_margin="@dimen/margin_30"
+           android:layout_centerVertical="true"
+           android:layout_gravity="center"
+           android:layout_centerHorizontal="true"
+           android:background="@drawable/round_circle"
+           app:srcCompat="@drawable/done_animation"
+           android:layout_width="150dp"
+           android:layout_height="150dp"
+           android:stateListAnimator="@anim/bounce"/>
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           android:text="Your order placed succefully"
+           android:textColor="@color/black"/>
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_margin="@dimen/margin_30"
+         android:padding="@dimen/margin_30"
+         android:background="@drawable/rounded_white"
+         android:orientation="vertical">
+
+         <TextView
+             android:id="@+id/order_id"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center"
+             android:text="Order Id"
+             android:textColor="@color/black"/>
+
+         <TextView
+             android:layout_marginTop="@dimen/margin_5"
+             android:id="@+id/order_totalAmount"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center"
+             android:text="order_totalAmount"
+             android:textColor="@color/black"/>
+
+     </LinearLayout>
+
+   </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

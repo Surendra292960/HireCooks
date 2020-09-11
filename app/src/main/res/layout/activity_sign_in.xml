@@ -35,7 +35,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="22sp"
+                android:textSize="16dp"
                 android:textStyle="bold"
                 android:textColor="@color/gray_btn_bg_pressed_color"
                 android:textAlignment="center"
@@ -48,13 +48,16 @@
                 android:id="@+id/editTextEmail"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/edit_text_design"
                 android:hint="@string/email"
+                android:paddingRight="30dp"
+                android:drawablePadding="30dp"
+                android:drawableStart="@android:drawable/sym_action_email"
+                android:inputType="textEmailAddress"
                 android:paddingLeft="30dp"
                 android:textSize="@dimen/size_14"
-                android:inputType="textEmailAddress"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
+                android:textAlignment="viewStart"
                 android:elevation="2dp"/>
 
             <EditText
@@ -64,6 +67,9 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/edit_text_design"
                 android:hint="@string/password"
+                android:paddingRight="30dp"
+                android:drawablePadding="30dp"
+                android:drawableStart="@android:drawable/ic_lock_idle_lock"
                 android:inputType="textPassword"
                 android:paddingLeft="30dp"
                 android:textSize="@dimen/size_14"
@@ -71,18 +77,18 @@
                 android:imeOptions="actionDone"
                 android:elevation="2dp"/>
 
-            <TextView
+            <Button
                 android:id="@+id/buttonSignIn"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/sign_in"
                 android:gravity="center"
-                android:textColor="@color/white"
+                android:textColor="@color/style_color_primary"
                 android:textStyle="bold"
                 android:elevation="5dp"
                 android:textAllCaps="true"
-                android:background="@drawable/rounded"/>
+                android:background="@drawable/rounded_white"/>
 
              <TextView
                  android:id="@+id/txtForgotPasswrd"

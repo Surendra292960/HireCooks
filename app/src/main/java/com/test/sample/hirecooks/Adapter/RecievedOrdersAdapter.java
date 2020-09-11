@@ -169,7 +169,7 @@ public class RecievedOrdersAdapter extends RecyclerView.Adapter<RecievedOrdersAd
         builder.setPositiveButton("Order Details", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(!user.getUserType().equalsIgnoreCase("User")) {
+                if(!user.getUserType().equalsIgnoreCase("User")&&!user.getUserType().equalsIgnoreCase("Cook")) {
                     Intent intent = new Intent(mCtx, RecievedOrderDetails.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("Orders", order);

@@ -1,164 +1,106 @@
 package com.test.sample.hirecooks;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.os.AsyncTask;
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.WindowManager;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.paytm.pgsdk.PaytmOrder;
-import com.paytm.pgsdk.PaytmPGService;
-import com.paytm.pgsdk.PaytmPaymentTransactionCallback;
-import com.test.sample.hirecooks.Utils.JSONParser;
+import com.razorpay.Checkout;
+import com.razorpay.PaymentResultListener;
+import com.test.sample.hirecooks.Utils.RazorpayPayment;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-/**
- * Created by kamal_bunkar on 15-01-2019.
- */
-
-public class TestActivity extends AppCompatActivity implements PaytmPaymentTransactionCallback {
-
-    String custid="", orderId="", mid="";
+public class TestActivity extends AppCompatActivity implements PaymentResultListener{
+    private Button startpayment;
+    private EditText orderamount;
+    private RazorpayPayment razorpayPayment;
+    private String TAG = "TestActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
-        //initOrderId();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        Intent intent = getIntent();
-        orderId = intent.getExtras().getString("orderid");
-        custid = intent.getExtras().getString("custid");
+        this.getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        |View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        |View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        |View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        |View.SYSTEM_UI_FLAG_FULLSCREEN
+                        |View.SYSTEM_UI_FLAG_IMMERSIVE);
+      /*  razorpayPayment = new RazorpayPayment(TestActivity.this);
+//        startpayment = (Button) findViewById(R.id.startpayment);
+//        orderamount = (EditText) findViewById(R.id.orderamount);
 
-        mid = "eNnjXe00637647587210"; /// your marchant key
-        sendUserDetailTOServerdd dl = new sendUserDetailTOServerdd();
-        dl.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-// vollye , retrofit, asynch
-
-    }
-
-    public class sendUserDetailTOServerdd extends AsyncTask<ArrayList<String>, Void, String> {
-
-        private ProgressDialog dialog = new ProgressDialog(TestActivity.this);
-
-        //private String orderId , mid, custid, amt;
-        String url ="https://www.blueappsoftware.com/payment/payment_paytm/generateChecksum.php";
-        String varifyurl = "https://pguat.paytm.com/paytmchecksum/paytmCallback.jsp";
-        // "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID"+orderId;
-        String CHECKSUMHASH ="";
-
-        @Override
-        protected void onPreExecute() {
-            this.dialog.setMessage("Please wait");
-            this.dialog.show();
-        }
-
-        protected String doInBackground(ArrayList<String>... alldata) {
-            JSONParser jsonParser = new JSONParser(TestActivity.this);
-            String param=
-                    "MID="+mid+
-                            "&ORDER_ID=" + orderId+
-                            "&CUST_ID="+custid+
-                            "&CHANNEL_ID=WAP&TXN_AMOUNT=100&WEBSITE=WEBSTAGING"+
-                            "&CALLBACK_URL="+ varifyurl+"&INDUSTRY_TYPE_ID=Retail";
-
-            JSONObject jsonObject = jsonParser.makeHttpRequest(url,"POST",param);
-            // yaha per checksum ke saht order id or status receive hoga..
-            Log.e("CheckSum result >>",jsonObject.toString());
-            if(jsonObject != null){
-                Log.e("CheckSum result >>",jsonObject.toString());
-                try {
-
-                    CHECKSUMHASH=jsonObject.has("CHECKSUMHASH")?jsonObject.getString("CHECKSUMHASH"):"";
-                    Log.e("CheckSum result >>",CHECKSUMHASH);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        startpayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(orderamount.getText().toString().equals("")) {
+                    Toast.makeText(TestActivity.this, "Amount is empty", Toast.LENGTH_LONG).show();
+                }else {
+                    startPayment();
+                   // razorpayPayment.startPayment(orderamount);
                 }
             }
-            return CHECKSUMHASH;
+        });*/
+    }
+
+    public void startPayment() {
+        /**
+         * You need to pass current activity in order to let Razorpay create CheckoutActivity
+         */
+        final Activity activity = this;
+
+        final Checkout co = new Checkout();
+
+        try {
+            JSONObject options = new JSONObject();
+            options.put("name", "HireCooks");
+            options.put("description", "HireCooks Payment");
+            //You can omit the image option to fetch the image from dashboard
+            options.put("image", "https://rzp-mobile.s3.amazonaws.com/images/rzp.png");
+            options.put("currency", "INR");
+            String payment = orderamount.getText().toString();
+            // amount is in paise so please multiple it by 100
+            //Payment failed Invalid amount (should be passed in integer paise. Minimum value is 100 paise, i.e. ₹ 1)
+            double total = Double.parseDouble(payment);
+            total = total * 100;
+            options.put("amount", total);
+
+            JSONObject preFill = new JSONObject();
+            preFill.put("email", "surendrapalatm@gmail.com");
+            preFill.put("contact", "7055292960");
+
+            options.put("prefill", preFill);
+
+            co.open(activity, options);
+        } catch (Exception e) {
+            Toast.makeText(activity, "Error in payment: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
+    }
 
-        @Override
-        protected void onPostExecute(String result) {
-            Log.e(" setup acc ","  signup result  " + result);
-            if (dialog.isShowing()) {
-                dialog.dismiss();
-            }
+    @Override
+    public void onPaymentSuccess(String s) {
+        // payment successfull pay_DGU19rDsInjcF2
+        Log.e(TAG, " payment successfull "+ s.toString());
+        Toast.makeText(this, "Payment successfully done! " +s, Toast.LENGTH_SHORT).show();
 
-            PaytmPGService Service = PaytmPGService.getStagingService();
-            // when app is ready to publish use production service
-            // PaytmPGService  Service = PaytmPGService.getProductionService();
+    }
 
-            // now call paytm service here
-            //below parameter map is required to construct PaytmOrder object, Merchant should replace below map values with his own values
-            HashMap<String, String> paramMap = new HashMap<String, String>();
-            //these are mandatory parameters
-            paramMap.put("MID", mid); //MID provided by paytm
-            paramMap.put("ORDER_ID", orderId);
-            paramMap.put("CUST_ID", custid);
-            paramMap.put("CHANNEL_ID", "WAP");
-            paramMap.put("TXN_AMOUNT", "100");
-            paramMap.put("WEBSITE", "WEBSTAGING");
-            paramMap.put("CALLBACK_URL" ,varifyurl);
-            //paramMap.put( "EMAIL" , "abc@gmail.com");   // no need
-            // paramMap.put( "MOBILE_NO" , "9144040888");  // no need
-            paramMap.put("CHECKSUMHASH" ,CHECKSUMHASH);
-            //paramMap.put("PAYMENT_TYPE_ID" ,"CC");    // no need
-            paramMap.put("INDUSTRY_TYPE_ID", "Retail");
-
-            PaytmOrder Order = new PaytmOrder(paramMap);
-            Log.e("checksum ", "param "+ paramMap.toString());
-            Service.initialize(Order,null);
-            // start payment service call here
-            Service.startPaymentTransaction(TestActivity.this, true, true, TestActivity.this  );
+    @Override
+    public void onPaymentError(int i, String s) {
+        Log.e(TAG,  "error code "+String.valueOf(i)+" -- Payment failed "+s.toString()  );
+        try {
+            Toast.makeText(this, "Payment error please try again", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.e("OnPaymentError", "Exception in onPaymentError", e);
         }
     }
-
-
-    @Override
-    public void onTransactionResponse(Bundle bundle) {
-        Log.e("checksum ", " respon true " + bundle.toString());
-    }
-
-    @Override
-    public void networkNotAvailable() {
-
-    }
-
-    @Override
-    public void clientAuthenticationFailed(String s) {
-
-    }
-
-    @Override
-    public void someUIErrorOccurred(String s) {
-        Log.e("checksum ", " ui fail respon  "+ s );
-    }
-
-    @Override
-    public void onErrorLoadingWebPage(int i, String s, String s1) {
-        Log.e("checksum ", " error loading pagerespon true "+ s + "  s1 " + s1);
-    }
-
-    @Override
-    public void onBackPressedCancelTransaction() {
-        Log.e("checksum ", " cancel call back respon  " );
-    }
-
-    @Override
-    public void onTransactionCancel(String s, Bundle bundle) {
-        Log.e("checksum ", "  transaction cancel " );
-    }
-
-
 }

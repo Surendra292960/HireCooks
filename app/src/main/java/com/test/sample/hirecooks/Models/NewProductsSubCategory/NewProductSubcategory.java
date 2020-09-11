@@ -35,6 +35,12 @@ private String firm_id;
 @SerializedName("stock")
 @Expose
 private Integer stock;
+@SerializedName("accepting_order")
+@Expose
+private Integer acceptingOrder;
+@SerializedName("available_stock")
+@Expose
+private Integer availableStock;
 
 public Integer getId() {
 return id;
@@ -108,11 +114,28 @@ public void setFirm_id(String firm_id) {
         this.firm_id = firm_id;
     }
 
-    public Integer getStock() {
+public Integer getStock() {
         return stock;
     }
 
-    public void setStock(Integer stock) {
+public void setStock(Integer stock) {
         this.stock = stock;
     }
+
+public Integer getAcceptingOrder() {
+      return acceptingOrder;
+    }
+
+public void setAcceptingOrder(Integer acceptingOrder) {
+      this.acceptingOrder = acceptingOrder;
+    }
+
+public Integer getAvailableStock() {
+      return availableStock;
+    }
+
+public void setAvailableStock(Integer availableStock) {
+      this.availableStock = availableStock;
+    }
+
 }

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/enteraddress_bottomSheet"
+    android:layout_marginTop="@dimen/margin_100"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    app:behavior_peekHeight="?actionBarSize"
+    app:layout_behavior="@string/bottom_sheet_behavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/margin_50"
+                android:text="Enter address details"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_14" />
+
+            <ImageButton
+                android:id="@+id/cancel"
+                android:layout_width="@dimen/margin_60"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/ic_clear_black_18dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/margin_10"
+          android:layout_marginEnd="@dimen/margin_10"
+          android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Address"
+                android:layout_marginStart="@dimen/margin_10"
+                android:layout_marginEnd="@dimen/margin_10"
+                android:layout_gravity="center"
+                android:textColor="@color/gray_btn_bg_color"/>
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal"
+              android:weightSum="2">
+
+              <TextView
+                  android:id="@+id/address"
+                  android:layout_weight="0.4"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="Select Address"
+                  android:layout_gravity="center"
+                  android:drawablePadding="@dimen/margin_10"
+                  android:layout_margin="@dimen/margin_10"
+                  android:textColor="@color/black"
+                  android:textSize="@dimen/size_14"
+                  android:drawableStart="@drawable/checked"/>
+
+              <TextView
+                  android:id="@+id/change_enter_location"
+                  android:layout_weight="1.6"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="Change"
+                  android:gravity="right"
+                  android:layout_gravity="center"
+                  android:textColor="@color/red"
+                  android:textSize="@dimen/size_14"
+                  android:textAllCaps="true"/>
+
+          </LinearLayout>
+
+          <View
+              android:layout_margin="@dimen/margin_10"
+              android:layout_width="match_parent"
+              android:layout_height="0.5dp"
+              android:background="@color/gray_btn_bg_color"/>
+
+            <EditText
+                android:id="@+id/house_number"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_40"
+                android:layout_margin="@dimen/margin_5"
+                android:padding="@dimen/margin_10"
+                android:inputType="text"
+                android:textSize="@dimen/size_14"
+                android:background="@drawable/round_border_button"
+                android:hint="House Number" />
+
+            <EditText
+                android:id="@+id/floor"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_40"
+                android:layout_margin="@dimen/margin_5"
+                android:padding="@dimen/margin_10"
+                android:textSize="@dimen/size_14"
+                android:inputType="text"
+                android:background="@drawable/round_border_button"
+                android:hint="Floor" />
+
+            <EditText
+                android:id="@+id/landmark"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_40"
+                android:layout_margin="@dimen/margin_5"
+                android:padding="@dimen/margin_10"
+                android:textSize="@dimen/size_14"
+                android:inputType="text"
+                android:background="@drawable/round_border_button"
+                android:hint="Landmark" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/Home"
+                    android:layout_margin="@dimen/margin_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/margin_5"
+                    android:background="@drawable/blue_button_background"
+                    android:text="Home" />
+
+                <TextView
+                    android:id="@+id/Office"
+                    android:layout_margin="@dimen/margin_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/margin_5"
+                    android:background="@drawable/blue_button_background"
+                    android:text="Office" />
+
+                <TextView
+                    android:id="@+id/Other"
+                    android:layout_margin="@dimen/margin_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/margin_5"
+                    android:background="@drawable/blue_button_background"
+                    android:text="Other" />
+
+                <TextView
+                    android:id="@+id/work"
+                    android:layout_margin="@dimen/margin_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/margin_5"
+                    android:background="@drawable/blue_button_background"
+                    android:text="Work" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/location_tag"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_40"
+                android:layout_margin="@dimen/margin_5"
+                android:padding="@dimen/margin_10"
+                android:textSize="@dimen/size_14"
+                android:background="@drawable/round_border_button"
+                android:hint="Location Tag"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:inputType="text"
+                android:imeOptions="actionDone"/>
+      </LinearLayout>
+
+        <Button
+            android:id="@+id/save_address"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="20dp"
+            android:text="@string/save_location"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:elevation="5dp"
+            android:inputType="text"
+            android:textAllCaps="true"
+            android:textSize="@dimen/size_12"
+            android:background="@drawable/rounded"/>
+
+    </LinearLayout>
+
+</LinearLayout>

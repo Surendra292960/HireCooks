@@ -84,7 +84,7 @@ public class VenderSubCategoryProducts extends BaseActivity implements MaterialS
         initViews();
         getCart();
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null&& Constants.NEARBY_USER_LOCATION!=null) {
+        if (bundle != null&& Constants.NEARBY_VENDERS_LOCATION !=null) {
             vendersCategory = (VendersCategory) bundle.getSerializable("VendersCategory");
             if (vendersCategory != null) {
                 getVendersSubCategoryProducts(vendersCategory.getCategoryid());
@@ -205,7 +205,7 @@ public class VenderSubCategoryProducts extends BaseActivity implements MaterialS
         List<SubCategory> result=new ArrayList<>();
         try{
             for (SubCategory vendersSubcategory : vendersSubcategoryList) {
-                for (Map map : Constants.NEARBY_USER_LOCATION) {
+                for (Map map : Constants.NEARBY_VENDERS_LOCATION) {
                     for(UserResponse vender:Constants.NEARBY_VENDERS){
                         if (map.getFirm_id().equalsIgnoreCase(vendersSubcategory.getFirm_id())&&vender.getFirmId().equalsIgnoreCase(vendersSubcategory.getFirm_id())) {
                             list.add(vendersSubcategory);
@@ -283,7 +283,7 @@ public class VenderSubCategoryProducts extends BaseActivity implements MaterialS
                         List<SubCategory> list = new ArrayList<>();
                         List<SubCategory> filteredList = new ArrayList<>();
                         for (SubCategory vendersSubcategory : vendersSubcategoryList) {
-                            for (Map map : Constants.NEARBY_USER_LOCATION) {
+                            for (Map map : Constants.NEARBY_VENDERS_LOCATION) {
                                 for(UserResponse vender:Constants.NEARBY_VENDERS){
                                     if (map.getFirm_id().equalsIgnoreCase(vendersSubcategory.getFirm_id())&&vender.getFirmId().equalsIgnoreCase(vendersSubcategory.getFirm_id())) {
                                         list.add(vendersSubcategory);

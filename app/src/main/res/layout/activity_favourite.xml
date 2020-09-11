@@ -95,7 +95,7 @@
             android:layout_marginRight="20dp"
             android:gravity="center"
             android:textStyle="normal"
-            android:text="No Result Found "
+            android:text="@string/no_result_found"
             android:textColor="#848484"
             android:textSize="15sp" />
 

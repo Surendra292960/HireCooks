@@ -57,7 +57,6 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
         userJson = localStorage.getUserLogin();
         progressDialog = new ProgressDialog(BaseActivity.this);
         cartCount();
-
     }
 
     public int cartCount() {
@@ -153,8 +152,7 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
         // create a new Toast using context
         Toast toast = new Toast(getApplicationContext());
         toast.setDuration(Toast.LENGTH_LONG); // set the duration for the Toast
-        toast.setDuration(Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.BOTTOM, 0, 0);
+        toast.setGravity(Gravity.TOP, 0, 0);
         layout.setBackgroundResource(R.color.green_light);
         toastTextView.setShadowLayer(0, 0, 0, 0);
         toast.setView(layout); // set the inflated layout

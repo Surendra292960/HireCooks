@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:elevation="@dimen/margin_10"
         android:id="@+id/bottom_anchor"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -38,7 +39,7 @@
                 android:layout_gravity="top|right"
                 android:background="@drawable/round_text_cart_item"
                 android:gravity="center"
-                android:text="0"
+                android:text="@string/_0"
                 android:textColor="@color/white" />
         </FrameLayout>
 
@@ -58,14 +59,16 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
             android:singleLine="true"
-            android:text="0"
+            android:text="@string/_0"
             android:textColor="@android:color/background_dark"
-            android:textSize="20sp" />
+            android:textSize="@dimen/size_14" />
 
         <FrameLayout
             android:id="@+id/checkout_envelop"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_10"
+            android:background="@drawable/checkout_button"
             android:layout_alignParentRight="true">
 
             <TextView
@@ -76,8 +79,8 @@
                 android:layout_centerVertical="true"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="5dp"
-                android:background="@drawable/checkout_button"
                 android:ellipsize="marquee"
+                android:textAllCaps="true"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:freezesText="true"
@@ -86,10 +89,12 @@
                 android:padding="5dp"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
-                android:text="@string/checkout"
+                android:text="Checkout"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:textSize="@dimen/size_12" />
+
         </FrameLayout>
+
     </RelativeLayout>
 
 </LinearLayout>

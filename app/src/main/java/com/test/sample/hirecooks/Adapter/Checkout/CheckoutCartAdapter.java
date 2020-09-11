@@ -1,3 +1,4 @@
+/*
 package com.test.sample.hirecooks.Adapter.Checkout;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -47,15 +48,14 @@ public class CheckoutCartAdapter extends RecyclerView.Adapter<CheckoutCartAdapte
             if(cart.getWeight()!=null) {
                 holder.attribute.setText("" + cart.getWeight());
             }else{
-                holder.attribute.setText(1+" Item");
+                holder.attribute.setText(cart.getDesc());
             }
             holder.product_name.setText(cart.getName());
             sellRate = cart.getSellRate();
             Quantity = cart.getItemQuantity();
             SubTotal = (sellRate*Quantity);
-            holder.item_with_quantity.setText(Quantity+" x "+sellRate+" =  \u20B9 "+SubTotal);
             holder.total_amount.setText("\u20B9 "+SubTotal);
-            holder.product_sellRate.setText("Sell Rate \u20B9: "+sellRate);
+           // holder.product_sellRate.setText("\u20B9: "+sellRate);
             holder.imageView.setAnimation(AnimationUtils.loadAnimation(mCtx, R.anim.fade_transition_animation));
             Picasso.with(mCtx).load(cart.getLink()).into(holder.imageView);
         }
@@ -68,7 +68,7 @@ public class CheckoutCartAdapter extends RecyclerView.Adapter<CheckoutCartAdapte
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView product_name,total_amount, attribute,item_with_quantity,product_sellRate;
+        TextView product_name,product_sellRate,attribute,total_amount;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -77,8 +77,7 @@ public class CheckoutCartAdapter extends RecyclerView.Adapter<CheckoutCartAdapte
             product_name = itemView.findViewById(R.id.product_name);
             attribute = itemView.findViewById(R.id.product_attribute);
             total_amount = itemView.findViewById(R.id.total_amount);
-            item_with_quantity = itemView.findViewById(R.id.item_with_quantity);
-            product_sellRate = itemView.findViewById(R.id.product_sellRate);
         }
     }
 }
+*/

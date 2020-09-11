@@ -1,4 +1,5 @@
 package com.test.sample.hirecooks.Activity.Search;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +12,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,19 +30,18 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
-import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Activity.AddorRemoveCallbacks;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
 import com.test.sample.hirecooks.Activity.ProductDatails.ProductDetailsActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Models.Cart.Cart;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.SearchSubCategory.Result;
 import com.test.sample.hirecooks.Models.SearchSubCategory.Search;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.WebApis.ProductApi;
 
@@ -52,12 +55,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SearchResultActivity extends BaseActivity {
-    private MaterialSearchBar searchBar;
+    private EditText searchBar;
     private RecyclerView recyclerView;
     private List<Search> search;
     private List<Search> searchList;
-    Toolbar toolbar;
+    private Toolbar toolbar;
     private List<Cart> cartList;
+    private ImageButton clear_text,back_button;
     private RelativeLayout bottom_anchor_layout;
     private View bottom_anchor;
     private TextView item_count,checkout_amount,checkout;
@@ -67,6 +71,7 @@ public class SearchResultActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_search_result);
         initViews();
         getCart();
@@ -90,50 +95,61 @@ public class SearchResultActivity extends BaseActivity {
 
         View search_view = findViewById(R.id.search_bar);
         searchBar=search_view.findViewById(R.id.searchBar);
+        clear_text=search_view.findViewById(R.id.clear_text);
+        back_button=search_view.findViewById(R.id.back_button);
         searchbar_interface_layout=search_view.findViewById(R.id.searchbar_interface_layout);
-        searchbar_interface_layout.setVisibility(View.VISIBLE);
-        searchBar.setHint("Search ");
-        searchBar.setCardViewElevation(10);
 
-        searchBar.addTextChangeListener(new TextWatcher() {
+        searchBar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                List<String> suggest = new ArrayList<>();
-             /*   for(String search:suggestList)
-                {
-                    if(search.toLowerCase().contains(searchBar.getText().toLowerCase()))
-                        suggest.add(search);
-                }*/
-                searchBar.setLastSuggestions(suggest);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
+            public void onClick(View v) {
+                clear_text.setVisibility(View.VISIBLE);
+                back_button.setVisibility(View.VISIBLE);
             }
         });
-        searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+        clear_text.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSearchStateChanged(boolean enabled) {
-               /* if(!enabled)
-                    recyclerView.setAdapter(adapter); */// restores full list of drinks
+            public void onClick(View v) {
+                searchBar.setText("");
+            }
+        });
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                back_button.setVisibility(View.GONE);
+                startActivity(new Intent(SearchResultActivity.this, MainActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                startSearch(charSequence);
+                if(charSequence.length() > 0){
+                    clear_text.setVisibility(View.VISIBLE);
+                }else{
+                    clear_text.setVisibility(View.GONE);
+                }
             }
 
             @Override
-            public void onSearchConfirmed(CharSequence text) {
-
-                startSearch(text);
-
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                startSearch(charSequence);
+                if(charSequence.length() > 0){
+                    clear_text.setVisibility(View.VISIBLE);
+                }else{
+                    clear_text.setVisibility(View.GONE);
+                }
             }
 
             @Override
-            public void onButtonClicked(int buttonCode) {
-
+            public void afterTextChanged(Editable editable) {
+                //after the change calling the method and passing the search input
+                startSearch(editable.toString());
+                if(editable.toString().length() > 0){
+                    clear_text.setVisibility(View.VISIBLE);
+                }else{
+                    clear_text.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -197,6 +213,7 @@ public class SearchResultActivity extends BaseActivity {
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 } else {
+                    this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                     no_search_result_found.setVisibility(View.VISIBLE);
                 }
             }
@@ -239,7 +256,7 @@ public class SearchResultActivity extends BaseActivity {
                     List<Search> filteredList = new ArrayList<>();
                     if(search!=null&&search.size()!=0){
                         for(Search search:search){
-                            for(Map map: Constants.NEARBY_USER_LOCATION){
+                            for(Map map: Constants.NEARBY_VENDERS_LOCATION){
                                 if(map.getFirm_id().equalsIgnoreCase(search.getFirmId())){
                                     list.add(search);
                                     Set<Search> newList = new LinkedHashSet<>(list);

@@ -8,7 +8,7 @@
     <color name="white">#fff</color>
     <color name="paint_color">#dddddd</color>
     <color name="fab_color_shadow">#44000000</color>
-    <color name="dark_gray">#808080</color>
+    <color name="dark_gray">#54595C</color>
 
     //TextColor
     <color name="gen_black">#000000</color>
@@ -17,6 +17,12 @@
     <color name="green_light">#43A047</color>
     <color name="grey_light">#E0E0E0</color>
 
+    <color name="colorNoInternetGradStart">#633ea5</color>
+    <color name="colorNoInternetGradCenter">#4b307c</color>
+    <color name="colorNoInternetGradEnd">#39245e</color>
+    <color name="colorNoInternetGradStartH">#ffd07f</color>
+    <color name="colorNoInternetGradCenterH">#f8931d</color>
+    <color name="colorNoInternetGradEndH">#c46137</color>
     <!-- Screens background color-->
     <color name="bg_screen1">#16c266</color>
     <color name="bg_screen2">#90c2bb</color>
@@ -50,5 +56,6 @@
     <color name="line_focused">#3F51B5</color>
     <color name="line_default">#C5CAE9</color>
     <color name="holo_green_dark">#ff669900</color>
+    <color name="notification_color">#2d4153</color>
 
 </resources>

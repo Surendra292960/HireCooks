@@ -2,23 +2,30 @@ package com.test.sample.hirecooks.Activity.Home;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -30,40 +37,54 @@ import androidx.viewpager.widget.ViewPager;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.InstallStatus;
+import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.test.sample.flowingdrawer_core.ElasticDrawer;
 import com.test.sample.flowingdrawer_core.FlowingDrawer;
-import com.test.sample.hirecooks.Activity.Cart.CartActivity;
+import com.test.sample.hirecooks.Activity.Orders.PlaceOrderActivity;
 import com.test.sample.hirecooks.Activity.Search.SearchResultActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Fragments.Home.HomeFragment;
+import com.test.sample.hirecooks.Fragments.Home.MenuListFragment;
+import com.test.sample.hirecooks.Fragments.NotificationFragment;
 import com.test.sample.hirecooks.Fragments.OrdersFragment;
 import com.test.sample.hirecooks.Fragments.ProfileFragment;
-import com.test.sample.hirecooks.Fragments.SearchFragment;
 import com.test.sample.hirecooks.Libraries.BedgeNotification.NotificationCountSetClass;
-import com.test.sample.hirecooks.Fragments.Home.MenuListFragment;
 import com.test.sample.hirecooks.Models.TokenResponse.Token;
 import com.test.sample.hirecooks.Models.TokenResponse.TokenResult;
 import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Services.TrackerService;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.NetworkUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.UserApi;
 
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements OnSuccessListener<AppUpdateInfo> {
     private FlowingDrawer mDrawer;
-    public View appRoot,toolbar_layout;
+    public View appRoot, toolbar_layout;
     public Toolbar toolbar;
     private ViewPager mViewPager;
     private List<Fragment> fragmentList;
@@ -71,10 +92,12 @@ public class MainActivity extends BaseActivity {
     public static int notificationCountCart = 0;
     private User user;
     private UserApi mService;
-    private String deviceId;
+    private String deviceId, currentVersion;
     private Token token;
     private static final int PERMISSIONS_REQUEST = 1;
     private boolean doubleBackToExitPressedOnce = false;
+    private AppUpdateManager appUpdateManager;
+    private static final int REQUEST_CODE = 1234;
 
     @SuppressLint("NewApi")
     @Override
@@ -84,11 +107,15 @@ public class MainActivity extends BaseActivity {
         notificationCountCart = cartCount();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         user = SharedPrefManager.getInstance(this).getUser();
+
         initData();
         initViews();
         setupToolbar();
         setupMenu();
         getTokenFromServer(user.getId());
+
+        appUpdateManager = AppUpdateManagerFactory.create(MainActivity.this);
+        getCurrentVersion();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -165,7 +192,13 @@ public class MainActivity extends BaseActivity {
     }
 
     private void startTrackerService() {
-        startService(new Intent(this, TrackerService.class));
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startService(new Intent(MainActivity.this, TrackerService.class));
+            }
+        },40000);
     }
 
     @Override
@@ -270,7 +303,7 @@ public class MainActivity extends BaseActivity {
         fragmentList.add(HomeFragment.newInstance());
         fragmentList.add(OrdersFragment.newInstance());
         fragmentList.add(ProfileFragment.newInstance());
-        fragmentList.add(SearchFragment.newInstance());
+        fragmentList.add(NotificationFragment.newInstance());
     }
 
     protected void setupToolbar() {
@@ -296,26 +329,39 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            getSupportFragmentManager().popBackStack();
-        } else if (!doubleBackToExitPressedOnce) {
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this,"Please click BACK again to exit.", Toast.LENGTH_SHORT).show();
-
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce = false;
-                }
-            }, 2000);
-        } else {
-            super.onBackPressed();
-            return;
-        }
+        showalertbox();
+        return;
     }
 
-
+    private void showalertbox() {
+        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.exit_alert_layout,null);
+        AppCompatTextView dontCancelBtn = view.findViewById(R.id.no_btn);
+        AppCompatTextView cancelBtn = view.findViewById(R.id.exit_app_btn);
+        dialogBuilder.setView(view);
+        final android.app.AlertDialog dialog = dialogBuilder.create();
+        dialog.show();
+        dontCancelBtn.setOnClickListener( v -> {
+            try {
+                dialog.dismiss();
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } );
+        cancelBtn.setOnClickListener( v -> {
+            try {
+                dialog.dismiss();
+                super.onBackPressed();
+            /*    MainActivity.this.finish();
+                System.exit(0);*/
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } );
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater ( );
@@ -338,7 +384,7 @@ public class MainActivity extends BaseActivity {
             this.finish();
         }else if ( id == R.id.action_cart ) {
             finish();
-            startActivity(new Intent(MainActivity.this, CartActivity.class));
+            startActivity(new Intent(MainActivity.this, PlaceOrderActivity.class));
             return true;
         }else if ( id == R.id.action_searchresult ) {
             finish();
@@ -361,9 +407,116 @@ public class MainActivity extends BaseActivity {
         boolean b = false;
         notificationCountCart = cartCount();
         if(NetworkUtil.checkInternetConnection(MainActivity.this)) {
-
+            initData();
+            HomeFragment.newInstance();
         } else {
             showAlert(getResources().getString(R.string.no_internet));
+        }
+    }
+
+    private void getCurrentVersion ( ) {
+        PackageManager pm = this.getPackageManager ( );
+        PackageInfo pInfo = null;
+        try {
+            pInfo = pm.getPackageInfo ( this.getPackageName ( ) , 0 );
+
+        } catch ( PackageManager.NameNotFoundException e1 ) {
+            e1.printStackTrace ( );
+        }
+        assert pInfo != null;
+        currentVersion = pInfo.versionName;
+        new GetVersionCode ( MainActivity.this , currentVersion ).execute ( );
+
+    }
+
+    private void startUpdate ( final AppUpdateInfo appUpdateInfo ) {
+        final Activity activity = this;
+        new Thread ( ( ) -> {
+            try {
+                appUpdateManager.startUpdateFlowForResult ( appUpdateInfo ,
+                        AppUpdateType.IMMEDIATE ,
+                        activity ,
+                        REQUEST_CODE );
+            } catch ( IntentSender.SendIntentException e ) {
+                e.printStackTrace ( );
+            }
+        } ).start ( );
+    }
+    private void popupSnackbarForCompleteUpdate ( ) {
+        Snackbar snackbar =
+                Snackbar.make (
+                        findViewById ( R.id.activity_main ) ,
+                        "An update has just been downloaded." ,
+                        Snackbar.LENGTH_INDEFINITE );
+        snackbar.setAction ( "RESTART" , view -> appUpdateManager.completeUpdate ( ) );
+        snackbar.setActionTextColor ( getResources ( ).getColor ( R.color.colorPrimary ) );
+        snackbar.show ( );
+    }
+
+    @Override
+    public void onSuccess(AppUpdateInfo appUpdateInfo) {
+        if ( appUpdateInfo.updateAvailability ( ) == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS ) {
+            startUpdate ( appUpdateInfo );
+        } else if ( appUpdateInfo.installStatus ( ) == InstallStatus.DOWNLOADED ) {
+            popupSnackbarForCompleteUpdate ( );
+        } else if ( appUpdateInfo.updateAvailability ( ) == UpdateAvailability.UPDATE_AVAILABLE ) {
+            startUpdate ( appUpdateInfo );
+        }
+    }
+
+    private static class GetVersionCode extends AsyncTask< Void, String, String > {
+        private WeakReference< MainActivity > activityReference;
+        private String currentVersion;
+        // only retain a weak reference to the activity
+            GetVersionCode ( MainActivity context , String currentVersions ) {
+            activityReference = new WeakReference <> ( context );
+            currentVersion = currentVersions;
+        }
+        @Override
+        protected String doInBackground ( Void... voids ) {
+            String newVersion = null;
+            try {
+                Connection connection = Jsoup.connect ( "https://play.google.com/store/apps/details?id=app.hirecook.com.hirecook" + "&hl=en" );
+                Document document = connection.timeout ( 30000 )
+                        .userAgent ( "Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6" )
+                        .referrer ( "http://www.google.com" )
+                        .get ( );
+                Elements versions = document.getElementsByClass ( "htlgb" );
+                for ( int i = 0 ; i < versions.size ( ) ; i++ ) {
+                    newVersion = versions.get ( i ).text ( );
+                    if ( Pattern.matches ( "^[0-9].[0-9].[0-9]{2}$" , newVersion ) ) {
+                        break;
+                    }
+                }
+
+            } catch ( Exception e ) {
+                return newVersion;
+            }
+            return newVersion;
+        }
+        @Override
+        protected void onPostExecute ( String onlineVersion ) {
+            super.onPostExecute ( onlineVersion );
+            if ( onlineVersion != null && ! onlineVersion.isEmpty ( ) ) {
+                if ( ! onlineVersion.equalsIgnoreCase ( currentVersion ) ) {
+                    // get a reference to the activity if it is still there
+                    MainActivity activity = activityReference.get ( );
+                    if ( ! activity.isFinishing ( ) ) {
+                        final AlertDialog.Builder builder = new AlertDialog.Builder ( activity );
+                        builder.setTitle ( "A New Update is Available on Play Store" );
+                        builder.setPositiveButton ( "Update" , ( dialog , which ) -> {
+                            activity.startActivity ( new Intent ( Intent.ACTION_VIEW , Uri.parse
+                                    ( "https://play.google.com/store/apps/details?id=app.hirecook.com.hirecook" ) ) );
+                            dialog.dismiss ( );
+
+                        } );
+                        builder.setNegativeButton ( "Cancel" , ( dialog , which ) -> dialog.dismiss ( ) );
+                        builder.setCancelable ( false );
+                        AlertDialog alertdialog = builder.create ( );
+                        alertdialog.show ( );
+                    }
+                }
+            }
         }
     }
 }

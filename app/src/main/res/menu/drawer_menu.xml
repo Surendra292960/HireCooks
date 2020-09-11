@@ -1,34 +1,34 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:id="@+id/menu_group_1">
         <item
+            android:id="@+id/menu_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="@string/title_home" />
+
+        <item
             android:id="@+id/menu_offers"
             android:icon="@drawable/ic_local_offer_black_24dp"
-            android:title="Offers" />
+            android:title="@string/offer_banner" />
 
         <item
             android:id="@+id/menu_newproducts"
             android:icon="@drawable/ic_fiber_new_black_24dp"
-            android:title="New Products" />
+            android:title="@string/our_new_product" />
 
         <item
             android:id="@+id/menu_popularproducts"
             android:icon="@drawable/ic_grid"
-            android:title="Popular Products" />
+            android:title="@string/popular_products" />
 
         <item
             android:id="@+id/menu_favourite"
-            android:icon="@drawable/ic_favorite_black_24dp"
-            android:title="My WishList"/>
-
-        <item
-            android:id="@+id/menu_about"
-            android:icon="@drawable/ic_profiles"
-            android:title="About Us" />
+            android:icon="@drawable/ic_wishlist_icon"
+            android:title="@string/my_wishlist"/>
 
         <item
             android:id="@+id/menu_message"
             android:icon="@drawable/ic_message_black_24dp"
-            android:title="Messages" />
+            android:title="@string/messages" />
 
     </group>
     <group android:id="@+id/menu_group_2">
@@ -36,22 +36,22 @@
         <item
             android:id="@+id/menu_recieved_orders"
             android:icon="@drawable/ic_format_list_bulleted_black_24dp"
-            android:title="Recived Order"/>
+            android:title="@string/recived_order"/>
 
         <item
             android:id="@+id/logout"
             android:icon="@drawable/ic_logout"
-            android:title="Logout" />
+            android:title="@string/logout" />
 
         <item
             android:id="@+id/menu_terms_and_condition"
             android:icon="@drawable/ic_message_black_24dp"
-            android:title="Terms and Condition" />
+            android:title="@string/terms_and_condition" />
 
         <item
             android:id="@+id/menu_share"
             android:icon="@drawable/ic_share_black_24dp"
-            android:title="Share" />
+            android:title="@string/share" />
 
     </group>
 </menu>

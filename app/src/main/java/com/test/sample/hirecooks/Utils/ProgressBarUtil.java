@@ -27,7 +27,9 @@ public class ProgressBarUtil {
     }
     public void hideProgress(){
         if(progressBar!=null){
-            progressBar.dismiss();
+            if(!((Activity) context).isFinishing()) {
+                progressBar.dismiss();
+            }
         }
     }
 }

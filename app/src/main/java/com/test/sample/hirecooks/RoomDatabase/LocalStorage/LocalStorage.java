@@ -21,7 +21,6 @@ public class LocalStorage {
     public static final String FAVORITE_CATEGORY = "fav_category";
     private static final String IS_USER_LOGIN = "IsUserLoggedIn";
 
-
     private static LocalStorage instance = null;
     SharedPreferences sharedPreferences;
     Editor editor;
@@ -140,5 +139,4 @@ public class LocalStorage {
         editor.remove("ORDER");
         editor.commit();
     }
-
 }

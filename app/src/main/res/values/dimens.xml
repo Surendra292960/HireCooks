@@ -14,6 +14,10 @@
     <dimen name="slide_title">30dp</dimen>
     <dimen name="slide_desc">16dp</dimen>
     <dimen name="desc_padding">40dp</dimen>
+    <dimen name="button_width">118dp</dimen>
+    <dimen name="dialog_width">320dp</dimen>
+    <dimen name="dialog_height">450dp</dimen>
+    <dimen name="dialog_padding">10dp</dimen>
 
     //Margin
     <dimen name="margin_160">160</dimen>
@@ -55,5 +59,7 @@
     <dimen name="pv_pin_view_item_line_width">2dp</dimen>
     <dimen name="pv_pin_view_cursor_width">2dp</dimen>
     <dimen name="pv_pin_view_item_radius">5dp</dimen>
+    <dimen name="check_stroke_width">10dp</dimen>
+    <dimen name="button_size2">38dp</dimen>
 
 </resources>
