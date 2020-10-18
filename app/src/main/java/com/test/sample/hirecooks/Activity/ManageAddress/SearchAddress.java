@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -44,16 +43,19 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.gson.Gson;
 import com.test.sample.hirecooks.Adapter.ManageAddress.PlacesAutoCompleteAdapter;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
+import com.test.sample.hirecooks.Models.MapLocationResponse.Maps;
 import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
-import com.test.sample.hirecooks.RoomDatabase.SecondryAddress_DB.AddressDataBaseClient;
 import com.test.sample.hirecooks.Utils.BaseActivity;
+import com.test.sample.hirecooks.Utils.Common;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.Utils.TrackGPS;
+import com.test.sample.hirecooks.WebApis.MapApi;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -61,6 +63,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAdapter.ClickListener {
     private EditText lat, lng, editTextPinCode, searchBar;
@@ -90,6 +98,8 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
     private List<Map> mapList;
     ProgressBar progress_bar;
     private TextView enterAddress,change_enter_location,house_number,floor,landmark,location_tag,save_address,current_location,Other,Office,Home,Work;
+    private MapApi mService = Common.getAPI();
+    CompositeDisposable compositeDisposable=new CompositeDisposable();
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -431,6 +441,10 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
         try{
             if(mapList!=null&&mapList.size()!=0){
                 for (Map map:mapList){
+                    map.setHouseNumber(house_number.getText().toString());
+                    map.setFloor(floor.getText().toString());
+                    map.setLandmark(landmark.getText().toString());
+                    map.setLocationType(location_tag.getText().toString());
                     validateFields(map);
                 }
 
@@ -440,7 +454,7 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
                 }
 
                 String latitude = lat.getText().toString().trim();
-                String longitude = lat.getText().toString().trim();
+                String longitude = lng.getText().toString().trim();
                 String mplaceId = null;
                 if(placeId!=null){
                     mplaceId = placeId;
@@ -455,6 +469,10 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
                     map.setPincode(Integer.parseInt(pinCode));
                     map.setPlaceId(mplaceId);
                     map.setUserId(user.getId());
+                    map.setHouseNumber(house_number.getText().toString());
+                    map.setFloor(floor.getText().toString());
+                    map.setLandmark(landmark.getText().toString());
+                    map.setLocationType(location_tag.getText().toString());
                     if(!user.getFirmId().equalsIgnoreCase("Not_Available")){
                         map.setFirm_id(user.getFirmId());
                     }else{
@@ -470,134 +488,111 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
     }
 
     private void validateFields(Map map) {
+       /* ValidationClass validationClass = new ValidationClass();
+        ValidationCallBack validationCallBack = validationClass.getValidationType(SearchAddress.this,"ADDRESS");
+        if(validationCallBack.addressValidation(map)){
 
+        }*/
+        //validationClass.
         String address = map.getAddress();
         String latitude = map.getLatitude();
-        String  longitude = map.getLongitude();
-        String  placeId = map.getPlaceId();
-        String  pinCode = String.valueOf(map.getPincode());
-        String  subAddress = map.getSubAddress();
-        int  userId = SharedPrefManager.getInstance(this).getUser().getId();
-        String  mHouseNumber = house_number.getText().toString().trim();
-        String  mLandmark = landmark.getText().toString().trim();
-        String  mFloor = floor.getText().toString().trim();
-        String  mLocationTag = location_tag.getText().toString().trim();
-        String  firmId = null;
-        if(user.getFirmId().equalsIgnoreCase("Not_Available")){
+        String longitude = map.getLongitude();
+        String placeId = map.getPlaceId();
+        String pinCode = String.valueOf( map.getPincode() );
+        String subAddress = map.getSubAddress();
+        int userId = SharedPrefManager.getInstance( this ).getUser().getId();
+        String mHouseNumber = map.getHouseNumber();
+        String mLandmark = map.getLandmark();
+        String mFloor = map.getFloor();
+        String mLocationTag = map.getLocationType();
+        String firmId = null;
+        if (user.getFirmId().equalsIgnoreCase( "Not_Available" )) {
             firmId = map.getFirm_id();
-        }else{
+        } else {
             firmId = map.getFirm_id();
         }
 
-        if (TextUtils.isEmpty(address)) {
-            Toast.makeText(this, "fill Address", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty( address )) {
+            Toast.makeText( this, "fill Address", Toast.LENGTH_SHORT ).show();
             return;
-        }else if (TextUtils.isEmpty(latitude)) {
-            Toast.makeText(this, "fill latitude", Toast.LENGTH_SHORT).show();
+        }if (TextUtils.isEmpty( latitude )) {
+            Toast.makeText( this, "fill latitude", Toast.LENGTH_SHORT ).show();
             return;
-        }else if (TextUtils.isEmpty(longitude)) {
-            Toast.makeText(this, "fill longitude", Toast.LENGTH_SHORT).show();
+        }if (TextUtils.isEmpty( longitude )) {
+            Toast.makeText( this, "fill longitude", Toast.LENGTH_SHORT ).show();
             return;
-        }else if (TextUtils.isEmpty(placeId)) {
-            Toast.makeText(this, "fill placeId", Toast.LENGTH_SHORT).show();
+        }if (TextUtils.isEmpty( placeId )) {
+            Toast.makeText( this, "fill placeId", Toast.LENGTH_SHORT ).show();
             return;
-        }else if (TextUtils.isEmpty(pinCode)) {
-            Toast.makeText(this, "fill pinCode", Toast.LENGTH_SHORT).show();
+        }if (TextUtils.isEmpty( pinCode )) {
+            Toast.makeText( this, "fill pinCode", Toast.LENGTH_SHORT ).show();
             return;
-        }else if (TextUtils.isEmpty(subAddress)) {
-            Toast.makeText(this, "fill subAddress", Toast.LENGTH_SHORT).show();
+        }if (TextUtils.isEmpty( subAddress )) {
+            Toast.makeText( this, "fill subAddress", Toast.LENGTH_SHORT ).show();
             return;
-        }else if (userId == 0) {
-            Toast.makeText(this, "fill userId", Toast.LENGTH_SHORT).show();
+        }if (userId == 0) {
+            Toast.makeText( this, "fill userId", Toast.LENGTH_SHORT ).show();
             return;
-        }else if (TextUtils.isEmpty(firmId)) {
-            Toast.makeText(this, "fill firmId", Toast.LENGTH_SHORT).show();
+        }if (TextUtils.isEmpty( firmId )) {
+            Toast.makeText( this, "fill firmId", Toast.LENGTH_SHORT ).show();
             return;
-        }else if (TextUtils.isEmpty(mHouseNumber)) {
-            Toast.makeText(this, "fill houseNumber", Toast.LENGTH_SHORT).show();
+        }if (TextUtils.isEmpty( mHouseNumber )) {
+            Toast.makeText( this, "fill houseNumber", Toast.LENGTH_SHORT ).show();
             return;
-        }else if (TextUtils.isEmpty(mFloor)) {
-            Toast.makeText(this, "fill floor Number", Toast.LENGTH_SHORT).show();
+        }if (TextUtils.isEmpty( mFloor )) {
+            Toast.makeText( this, "fill floor Number", Toast.LENGTH_SHORT ).show();
             return;
-        }else if (TextUtils.isEmpty(mLandmark)) {
-            Toast.makeText(this, "fill landmark", Toast.LENGTH_SHORT).show();
+        }if (TextUtils.isEmpty( mLandmark )) {
+            Toast.makeText( this, "fill landmark", Toast.LENGTH_SHORT ).show();
             return;
-        }else if (TextUtils.isEmpty(mLocationTag)) {
-            Toast.makeText(this, "fill LocationTag", Toast.LENGTH_SHORT).show();
+        }if (TextUtils.isEmpty( mLocationTag )) {
+            Toast.makeText( this, "fill LocationTag", Toast.LENGTH_SHORT ).show();
             return;
         }
+        ApiServiceCall(map);
 
-            class SaveAddress extends AsyncTask<Void, Void, Void> {
-
-            @Override
-            protected Void doInBackground(Void... voids) {
-                //creating a task
-                com.test.sample.hirecooks.RoomDatabase.SecondryAddress_DB.Address mAddress = new com.test.sample.hirecooks.RoomDatabase.SecondryAddress_DB.Address();
-                mAddress.setLatitude(latitude);
-                mAddress.setLongitude(longitude);
-                mAddress.setAddress(address);
-                mAddress.setSub_address(subAddress);
-                mAddress.setPincode(Integer.parseInt(pinCode));
-                mAddress.setPlaceId(placeId);
-                mAddress.setUserId(userId);
-                mAddress.setHouse_number(mHouseNumber);
-                mAddress.setFloor(mFloor);
-                mAddress.setLandmark(mLandmark);
-                mAddress.setLocation_tag(mLocationTag);
-                if(user.getFirmId()!=null){
-                    mAddress.setFirm_id(user.getFirmId());
-                }else{
-                    mAddress.setFirm_id("NULL");
-                }
-
-                //adding to database
-                AddressDataBaseClient.getInstance(getApplicationContext()).getAddressDatabase().addressDao().insert(mAddress);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                finish();
-            }
-        }
-
-        SaveAddress st = new SaveAddress();
-        st.execute();
     }
 
-
-
-   /* public void postMapDetails(final Map postMaps) {
+    private void ApiServiceCall(Map map) {
+        Gson gson = new Gson();
+        String json = gson.toJson( map );
+        System.out.println( "Suree: "+json );
         progressBarUtil.showProgress();
-        MapApi mapApi = ApiClient.getClient().create(MapApi.class);
-        Call<Result> postMapDetailsResponse = mapApi.addMapDetails(postMaps.getLatitude(),postMaps.getLongitude(),postMaps.getAddress(),postMaps.getSubAddress(),
-                String.valueOf(postMaps.getPincode()),postMaps.getPlaceId(),postMaps.getUserId(),postMaps.getFirm_id());
-        postMapDetailsResponse.enqueue(new Callback<Result>() {
-            @Override
-            public void onResponse(@NonNull Call<Result> call, @NonNull Response<Result> response) {
-                progressBarUtil.hideProgress();
-                if(response.code() == 200 && response.body() != null&&response.body().getError()==false) {
-                    try{
-                        ShowToast("Location Saved Successfully");
-                        finish();
-                        //startActivity(new Intent(SearchAddress.this,UserSignInActivity.class));
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
-                else {
-                    ShowToast("Failed due to :"+response.code());
-                }
-            }
+        mService.createAddress(map.getLatitude(),map.getLongitude(),map.getAddress(),map.getSubAddress(), String.valueOf( map.getPincode() ),
+                map.getPlaceId(),map.getUserId(),map.getFirm_id(),map.getHouseNumber(),map.getFloor(),map.getLandmark(),map.getLocationType())
+                .subscribeOn( Schedulers.io())
+                .observeOn( AndroidSchedulers.mainThread())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(new Observer<Maps>() {
 
-            @Override
-            public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
-                progressBarUtil.hideProgress();
-                ShowToast("Please Check Internet Connection");
-            }
-        });
-    }*/
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Maps result) {
+                        if(!result.getError()){
+                            ShowToast( result.getMessage() );
+                            SearchAddress.this.finish();
+                        }else{
+                            ShowToast( result.getMessage() );
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        progressBarUtil.hideProgress();
+                        ShowToast(t.getMessage());
+                        System.out.println("New data received: " + t.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        progressBarUtil.hideProgress();
+                    }
+                });
+    }
 
     @Override
     protected void onResume() {
@@ -612,8 +607,7 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
         this.finish();
     }
 
-
-    @Override
+        @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
@@ -637,4 +631,5 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
     public void enterLocationbottomSheetDialogClose(View view) {
         enterLocationbottomSheetDialog.hide();
     }
+
 }

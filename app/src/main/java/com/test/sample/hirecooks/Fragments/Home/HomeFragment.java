@@ -216,7 +216,7 @@ public class HomeFragment extends Fragment{
                     }
 
                 } else {
-                    baseActivity.ShowToast(getResources().getString(R.string.failed_due_to)+response.body().getMessage());
+                 //   baseActivity.ShowToast(getResources().getString(R.string.failed_due_to)+response.body().getMessage());
                 }
             }
 

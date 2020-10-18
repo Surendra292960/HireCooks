@@ -79,7 +79,7 @@
     <string name="longitude" translatable="false">Longitude</string>
     <string name="popular_products" translatable="false">Our Popular Products</string>
     <string name="default_notification_channel_id" translatable="false">Channel Id</string>
-    <string name="search" translatable="false">Search</string>
+    <string name="search_products" translatable="false">Search Products</string>
     <string name="dialog_text" translatable="false">What Do you want ?</string>
     <string name="ok" translatable="false">Ok</string>
     <string name="no_internet" translatable="false">No Internet Connection</string>
@@ -150,10 +150,22 @@
     <string name="repeat_order" translatable="false">Repeat Order</string>
     <string name="available" translatable="false">Available</string>
     <string name="you_have_no_orders" translatable="false">You have no orders</string>
-    <string name="edit" translatable="false">Edit</string>
+    <string name="update_image" translatable="false">Update Images</string>
     <string name="turn_on" translatable="false">Please turn on</string>
     <string name="turn_off" translatable="false">Please turn off</string>
     <string name="airplane_on" translatable="false">You have turned on the airplane mode.</string>
+    <string name="add_address" translatable="false">Add Address</string>
+    <string name="caption" translatable="false">Caption/ (Optional)</string>
+    <string name="imageurl_1" translatable="false">ImageUrl_1</string>
+    <string name="imageurl_2" translatable="false">ImageUrl_2</string>
+    <string name="imageurl_3" translatable="false">ImageUrl_3</string>
+    <string name="imageurl_4" translatable="false">ImageUrl_4</string>
+    <string name="select_your_location_here_by_click_on_icon"  translatable="false">Select Your Location Here By Click on Icon</string>
+    <string name="edit_address"  translatable="false">Edit Address</string>
+    <string name="upload_images"  translatable="false">Upload Images</string>
+    <string name="click_on_image_to_update"  translatable="false">Click on Image to Update</string>
+    <string name="search_cooks" translatable="false">Search Cooks...</string>
+    <string name="search_location">Search Location</string>
 
     <string-array name="uploadImages">
         <item>Pick from gallery</item>
@@ -186,6 +198,12 @@
         <item>Delivered</item>
         <item>on the way</item>
         <item>Cancelled</item>
+    </string-array>
+
+    <string-array name="user_type">
+        <item>Please Select </item>
+        <item>User</item>
+        <item>Cook</item>
     </string-array>
 
 </resources>

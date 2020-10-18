@@ -1,5 +1,6 @@
 package com.test.sample.hirecooks.Activity.SubCategory.SubCategoryActivity;
 
+import android.animation.Animator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -46,6 +47,7 @@ import com.test.sample.hirecooks.Activity.AddorRemoveCallbacks;
 import com.test.sample.hirecooks.Activity.Orders.PlaceOrderActivity;
 import com.test.sample.hirecooks.Activity.ProductDatails.ProductDetailsActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
+import com.test.sample.hirecooks.Libraries.CustomeAnimation.CircleAnimationUtil;
 import com.test.sample.hirecooks.Models.Cart.Cart;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
@@ -99,6 +101,7 @@ public class SubCategoryActivity extends BaseActivity {
     private FloatingActionButton sort;
     private int categoryId,offercategoryId,newsubcategoryId = 0;
     private String CATEGORY_NAME;
+    private int height;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -414,7 +417,35 @@ public class SubCategoryActivity extends BaseActivity {
         searchbar_interface_layout.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
     }
 
-    private void getOfferSubCategory(final int subcategoryid) {
+    private void makeFlyAnimation(ImageView targetView) {
+
+        RelativeLayout destView = (RelativeLayout) findViewById( R.id.bottom_anchor_layout );
+
+        new CircleAnimationUtil().attachActivity( this ).setTargetView( targetView ).setMoveDuration( 1000 ).setDestView( destView ).setAnimationListener( new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                getCart();
+                Toast.makeText( SubCategoryActivity.this, "Continue Shopping...", Toast.LENGTH_SHORT ).show();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        } ).startAnimation();
+
+    }
+        private void getOfferSubCategory(final int subcategoryid) {
         progressBarUtil.showProgress();
         ProductApi mService = ApiClient.getClient().create(ProductApi.class);
         Call<OffersSubcategories> call = mService.getOfferSubCategory(subcategoryid);
@@ -987,6 +1018,7 @@ public class SubCategoryActivity extends BaseActivity {
         public int getItemViewType(int position) {
             return position;
         }
+
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             ImageView imageView;

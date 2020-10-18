@@ -40,7 +40,6 @@ import com.test.sample.hirecooks.Models.TokenResponse.Tokens;
 import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
-import com.test.sample.hirecooks.RoomDatabase.SecondryAddress_DB.Address;
 import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.OnClickRateLimitedDecoratedListener;
@@ -85,7 +84,7 @@ public class PlaceOrderActivity extends BaseActivity {
     private int RESULT_OK;
     final int UPI_PAYMENT = 0;
     private String status = "";
-    private Address address;
+    private Map address;
     private RazorpayPayment razorpayPayment;
 
     @Override
@@ -97,7 +96,7 @@ public class PlaceOrderActivity extends BaseActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle("Place Order");
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
-            address = (Address) bundle.getSerializable("address");
+            address = (Map) bundle.getSerializable("address");
             if(address!=null){
 
             }
@@ -462,7 +461,7 @@ public class PlaceOrderActivity extends BaseActivity {
                             maps.setUserId(address.getUserId());
                             maps.setPincode(address.getPincode());
                             maps.setAddress(address.getAddress());
-                            maps.setSubAddress(address.getSub_address());
+                            maps.setSubAddress(address.getSubAddress());
                             editTextAddress.setText(address.getAddress());
                         }else{
                             maps = response.body().getMaps();

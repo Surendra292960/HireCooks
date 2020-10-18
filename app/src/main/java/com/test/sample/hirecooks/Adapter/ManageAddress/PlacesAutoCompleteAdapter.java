@@ -214,26 +214,30 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
                            e.printStackTrace();
                         }
 
-                        Map address = new Map();
-                        address.setAddress(String.valueOf(mResultList.get(getAdapterPosition()).address));
-                        address.setPincode(Integer.parseInt(pinCode));
-                        address.setSubAddress(String.valueOf(mResultList.get(getAdapterPosition()).area));
-                        if(!SharedPrefManager.getInstance(mContext).getUser().getFirmId().equalsIgnoreCase("Not_Available")){
-                            address.setFirm_id(SharedPrefManager.getInstance(mContext).getUser().getFirmId());
-                        }else{
-                            address.setFirm_id(SharedPrefManager.getInstance(mContext).getUser().getFirmId());
-                        }
-                        address.setLatitude(String.valueOf(place.getLatLng().latitude));
-                        address.setLongitude(String.valueOf(place.getLatLng().longitude));
-                        address.setPlaceId(placeId);
-                        address.setUserId(SharedPrefManager.getInstance(mContext).getUser().getId());
-                        ///////////////////////////////
-                        Bundle bundle = new Bundle();
-                        Intent intent = new Intent(mContext, SearchAddress.class);
-                        bundle.putSerializable("address", address);
-                        intent.putExtras(bundle);
-                        mContext.startActivity(intent);
-                        ((Activity)mContext).finish();
+                     try{
+                         Map address = new Map();
+                         address.setAddress(String.valueOf(mResultList.get(getAdapterPosition()).address));
+                         address.setPincode(Integer.parseInt(pinCode));
+                         address.setSubAddress(String.valueOf(mResultList.get(getAdapterPosition()).area));
+                         if(!SharedPrefManager.getInstance(mContext).getUser().getFirmId().equalsIgnoreCase("Not_Available")){
+                             address.setFirm_id(SharedPrefManager.getInstance(mContext).getUser().getFirmId());
+                         }else{
+                             address.setFirm_id(SharedPrefManager.getInstance(mContext).getUser().getFirmId());
+                         }
+                         address.setLatitude(String.valueOf(place.getLatLng().latitude));
+                         address.setLongitude(String.valueOf(place.getLatLng().longitude));
+                         address.setPlaceId(placeId);
+                         address.setUserId(SharedPrefManager.getInstance(mContext).getUser().getId());
+                         ///////////////////////////////
+                         Bundle bundle = new Bundle();
+                         Intent intent = new Intent(mContext, SearchAddress.class);
+                         bundle.putSerializable("address", address);
+                         intent.putExtras(bundle);
+                         mContext.startActivity(intent);
+                         ((Activity)mContext).finish();
+                     }catch (Exception e){
+                         e.printStackTrace();
+                     }
                         //////////////////////////////
                     }
                 }).addOnFailureListener(new OnFailureListener() {

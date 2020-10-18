@@ -148,9 +148,11 @@
                     android:imeOptions="actionDone"
                     android:singleLine="true" />
 
-                <EditText
+                <TextView
                     android:id="@+id/verified"
                     android:visibility="gone"
+                    android:focusableInTouchMode="false"
+                    android:focusable="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/size_14"
@@ -247,19 +249,63 @@
                 android:elevation="2dp"
                 android:visibility="gone"/>
 
-            <EditText
-                android:id="@+id/editTextUserType"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/edit_text_design"
-                android:hint="@string/usertype"
-                android:inputType="text"
-                android:paddingLeft="30dp"
-                android:textSize="@dimen/size_14"
-                android:textAlignment="viewStart"
-                android:elevation="2dp"
-                android:visibility="gone"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <RelativeLayout
+                    android:layout_weight="1"
+                    android:layout_width="@dimen/margin_160"
+                    android:layout_height="@dimen/margin_50"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="@string/user_type"
+                        android:paddingLeft="50dp"
+                        android:textColor="@color/text_color"
+                        android:gravity="center_vertical"
+                        android:textSize="@dimen/size_14"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_weight="1"
+                    android:layout_width="@dimen/margin_120"
+                    android:layout_height="@dimen/margin_50"
+                    android:paddingStart="@dimen/margin_10"
+                    android:background="@drawable/edit_text_design"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/editTextUserType"
+                        android:text="@string/add_address"
+                        android:layout_width="@dimen/margin_160"
+                        android:layout_height="@dimen/margin_50"
+                        android:textSize="12sp"
+                        android:textStyle="normal"
+                        android:textAllCaps="true"
+                        android:entries="@array/user_type"
+                        android:spinnerMode="dropdown"
+                        android:textColor="@color/dark_gray"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:paddingEnd="@dimen/margin_20"
+                        app:srcCompat="@android:drawable/arrow_down_float"
+                        android:entries="@array/user_type"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/buttonSignUp"

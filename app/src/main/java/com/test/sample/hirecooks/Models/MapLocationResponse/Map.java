@@ -2,6 +2,7 @@ package com.test.sample.hirecooks.Models.MapLocationResponse;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 public class Map implements Serializable {
@@ -32,8 +33,19 @@ public class Map implements Serializable {
     private Integer userId;
     @SerializedName("firm_id")
     @Expose
-    private String firm_id;
-
+    private String firmId;
+    @SerializedName("houseNumber")
+    @Expose
+    private String houseNumber;
+    @SerializedName("floor")
+    @Expose
+    private String floor;
+    @SerializedName("landmark")
+    @Expose
+    private String landmark;
+    @SerializedName("location_type")
+    @Expose
+    private String locationType;
 
     public Integer getMapId() {
         return mapId;
@@ -100,11 +112,43 @@ public class Map implements Serializable {
     }
 
     public String getFirm_id() {
-        return firm_id;
+        return firmId;
     }
 
-    public void setFirm_id(String firm_id) {
-        this.firm_id = firm_id;
+    public void setFirm_id(String firmId) {
+        this.firmId = firmId;
+    }
+
+    public String getHouseNumber() {
+        return houseNumber;
+    }
+
+    public void setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
+    }
+
+    public String getFloor() {
+        return floor;
+    }
+
+    public void setFloor(String floor) {
+        this.floor = floor;
+    }
+
+    public String getLandmark() {
+        return landmark;
+    }
+
+    public void setLandmark(String landmark) {
+        this.landmark = landmark;
+    }
+
+    public String getLocationType() {
+        return locationType;
+    }
+
+    public void setLocationType(String locationType) {
+        this.locationType = locationType;
     }
 
 }

@@ -1,198 +1,181 @@
 package com.test.sample.hirecooks.Activity.Users;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.libraries.places.widget.AutocompleteActivity;
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Result;
 import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Constants;
-import com.test.sample.hirecooks.Utils.ProgressBarUtil;
-import com.test.sample.hirecooks.Utils.TrackGPS;
 import com.test.sample.hirecooks.WebApis.MapApi;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SignupAddressActivity extends BaseActivity {
-    private EditText  lat, lng, editTextPinCode;
-    private Button saveMapDetailsBtn;
-    private GoogleMap mMap;
-    private MapView mapView;
-    private TextView location;
-    private TrackGPS trackGPS;
-    private double mLatitude, mLongitude;
-    private Map maps;
-    private int mMapId ;
-    private DecimalFormat df2 = new DecimalFormat(".##########");
-    private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
-    private String TAG = "MAPLOCATION",placeId;
-    private View appRoot;
-    private ProgressBarUtil progressBarUtil;
-    private String subAddress,pinCode;
+    private TextView locationText;
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private FusedLocationProviderClient client;
+    private GoogleSignInAccount account;
+    private String subAddress;
+    private String pinCode;
+    private LatLng latLng;
 
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        try {
-            setContentView(R.layout.activity_signup_address);
-            this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-            progressBarUtil = new ProgressBarUtil(this);
-            appRoot = findViewById(R.id.appRoot);
-            mapView = findViewById(R.id.google_map_view);
-            location = findViewById(R.id.location_et);
-            lat = findViewById(R.id.lat_et);
-            lng = findViewById(R.id.lng_et);
-            editTextPinCode = findViewById(R.id.editTextPinCode);
-            saveMapDetailsBtn = findViewById(R.id.save_map);
-            trackGPS = new TrackGPS(this);
-            mapView.onCreate(savedInstanceState);
-            mapView.onResume();
+        super.onCreate( savedInstanceState );
+        setContentView( R.layout.activity_signup_address );
+        initViews();
 
-            try {
-                // Initialize Places.
-                Places.initialize(getApplicationContext(), Constants.locationApiKey);
-                // Create a new Places client instance.
-                // PlacesClient placesClient = Places.createClient(this);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            location.setOnClickListener(v -> {
-                searchLocation();
-            });
-
-            mapView.getMapAsync(googleMap -> {
-                mMap = googleMap;
-                if (ActivityCompat.checkSelfPermission(SignupAddressActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(SignupAddressActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-
-                mMap.getUiSettings().setZoomControlsEnabled(true);
-                mMap.setMyLocationEnabled(true);
-                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                mMap.getProjection().getVisibleRegion().latLngBounds.getCenter();
-
-                if(trackGPS.canGetLocation()) {
-                    mLatitude = trackGPS.getLatitude();
-                    mLongitude = trackGPS.getLongitude();
-                }
-
-                LatLng latLng = new LatLng(mLatitude,mLongitude);
-                String add = getAddress(latLng);
-                location.setText(add);
-                lat.setText(df2.format(mLatitude)+"");
-                lng.setText(df2.format(mLongitude)+"");
-                final CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(17).build();
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                mMap.setOnMapClickListener(latLng1 -> {
-                    lat.setText(df2.format(latLng1.latitude)+"");
-                    lng.setText(df2.format(latLng1.longitude)+"");
-                    String add1 = getAddress(latLng1);
-                    location.setText(add1);
-                    mMap.clear();
-                    mMap.addMarker(new MarkerOptions().position(latLng).title("Marker in " + lat +" "+ lng));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                    CameraPosition cameraPosition1 = new CameraPosition.Builder().target(latLng1).zoom(17).build();
-                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition1));
-                });
-            });
-
-            saveMapDetailsBtn.setOnClickListener(v -> validateFields());
-
-        }catch (Exception e) {
-            e.printStackTrace();
+        if (checkLocationPermission()) {
+            getCurrentLocation();
         }
     }
 
-    private void searchLocation() {
-        location.setText("");
-        lat.setText("");
-        lng.setText("");
-        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME, Place.Field.ADDRESS);
-        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(getApplicationContext());
-        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+    private void initViews ( ) {
+        client = LocationServices.getFusedLocationProviderClient(SignupAddressActivity.this);
+        account = GoogleSignIn.getLastSignedInAccount(SignupAddressActivity.this);
+        locationText = findViewById(R.id.location_et);
+
+        locationText.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkLocationPermission()) {
+                    getCurrentLocation();
+                }
+            }
+        } );
     }
 
-    @SuppressLint("SetTextI18n")
+    private void setLocation(Location location) {
+        latLng = new LatLng( location.getLatitude(), location.getLongitude() );
+        locationText.setText( String.valueOf( getAddress( latLng ) ) );
+
+        Map postMaps = new Map();
+        postMaps.setLatitude(String.valueOf( location.getLatitude() ));
+        postMaps.setLongitude(String.valueOf( location.getLongitude( )));
+        postMaps.setAddress(getAddress( latLng ));
+        postMaps.setSubAddress(subAddress);
+        postMaps.setPincode(Integer.parseInt(pinCode));
+        postMaps.setUserId( Constants.SIGNUP_USER.getId());
+        postMaps.setFirm_id(Constants.SIGNUP_USER.getFirmId());
+        postMaps.setPlaceId("Not_Available");
+        postMapDetails(postMaps);
+    }
+
+    private boolean checkLocationPermission() {
+        //check the location permissions and return true or false.
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            //permissions granted
+            Toast.makeText(getApplicationContext(), "permissions granted", Toast.LENGTH_LONG).show();
+            return true;
+        } else {
+            //permissions NOT granted
+            //if permissions are NOT granted, ask for permissions
+            Toast.makeText(getApplicationContext(), "Please enable permissions", Toast.LENGTH_LONG).show();
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new AlertDialog.Builder(this)
+                        .setTitle("Permissions request")
+                        .setMessage("we need your permission for location in order to show you this example")
+                        .setPositiveButton("Ok, I agree", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //Prompt the user once explanation has been shown
+                                ActivityCompat.requestPermissions(SignupAddressActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+                            }
+                        })
+                        .create()
+                        .show();
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        }
+    }
+
+    public void getCurrentLocation() {
+        if ( ActivityCompat.checkSelfPermission ( this , android.Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission ( this , android.Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED ) {
+            //request the last location and add a listener to get the response. then update the UI.
+            client.getLastLocation ( ).addOnSuccessListener ( this , location -> {
+                // Got last known location.
+                if ( location != null ) {
+                    setLocation (location);
+                } else {
+                    Toast.makeText ( SignupAddressActivity.this , "location: IS NULL" , Toast.LENGTH_SHORT ).show ( );
+                }
+            } ).addOnFailureListener ( this , new OnFailureListener( ) {
+                @Override
+                public void onFailure ( @NonNull Exception e ) {
+                    Toast.makeText ( SignupAddressActivity.this , "getCurrentLocation FAILED" , Toast.LENGTH_LONG ).show ( );
+                }
+            } );
+        } else {//client
+            Toast.makeText ( this , "getCurrentLocation ERROR" , Toast.LENGTH_LONG ).show ( );
+        }
+    }
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        try {
-            if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
-                if (resultCode == RESULT_OK) {
-                    Place place = Autocomplete.getPlaceFromIntent(data);
-                    Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-                    location.setText(place.getName() + "," + place.getAddress());
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted
+                    getCurrentLocation();
+                } else {
+                    // permission denied
+                    /*TextView locationText = findViewById(R.id.locationText);
+                    locationText.setText("location: permission denied");*/
 
-                    LatLng latLng = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
-                    getAddress(latLng);
-
-                    placeId = place.getId();
-                    lat.setText(df2.format(Objects.requireNonNull(place.getLatLng()).latitude) + "");
-                    lng.setText(df2.format(place.getLatLng().longitude) + "");
-
-                    if (mMap != null) {
-                        mMap.clear();
-                        CameraPosition cameraPosition1 = new CameraPosition.Builder().target(place.getLatLng()).zoom(17).build();
-                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition1));
-                    }
-                    Log.i(TAG, "Place: " + place.getName());
-                } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                    // TODO: Handle the error.
-                    Status status = Autocomplete.getStatusFromIntent(data);
-                    Log.i(TAG, status.getStatusMessage());
-                }/*else if (resultCode == RESULT_CANCELED) {
-                 *//* The user canceled the operation. *//*
-                }*/
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+                    new AlertDialog.Builder(SignupAddressActivity.this)
+                            .setMessage("Cannot get the location!")
+                            .setPositiveButton("OK", null)
+                            .setNegativeButton("Cancel", null)
+                            .create()
+                            .show();
+                }
         }
     }
 
-    private String getAddress(LatLng latLng) {
-        Geocoder geocoder = new Geocoder(SignupAddressActivity.this, Locale.getDefault());
+    private String getAddress( LatLng latLng) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         String result = null;
         try {
-            List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            List < Address > addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 10);
             if (addressList != null && addressList.size() > 0) {
                 Address address = addressList.get(0);
                 pinCode = address.getPostalCode();
@@ -205,61 +188,22 @@ public class SignupAddressActivity extends BaseActivity {
                 return result;
             }
             return result;
-        } catch (IOException e) {
-            Log.e("SignupAddressActivity", "Unable connect to Geocoder", e);
+        } catch ( IOException e) {
+            Log.e("MapLocation", "Unable connect to Geocoder", e);
             return result;
         }
     }
 
-    public void validateFields() {
-        try{
-            String address = location.getText().toString();
-            String latitude = lat.getText().toString();
-            String longitude = lng.getText().toString();
-
-            if(address.isEmpty()) {
-                location.setError("Should not be empty");
-                location.requestFocus();
-            }
-            else if(latitude.isEmpty()) {
-                lat.setError("Should not be empty");
-                lat.requestFocus();
-            }
-            else if(longitude.isEmpty()) {
-                lng.setError("Should not be empty");
-                lng.requestFocus();
-            }
-            if(placeId==null){
-                placeId = "Not_Available";
-            }
-
-            else {
-                Map postMaps = new Map();
-                postMaps.setLatitude(latitude);
-                postMaps.setLongitude(longitude);
-                postMaps.setAddress(address);
-                postMaps.setSubAddress(subAddress);
-                postMaps.setPincode(Integer.parseInt(pinCode));
-                postMaps.setUserId(Constants.SIGNUP_USER.getId());
-                postMaps.setFirm_id(Constants.SIGNUP_USER.getFirmId());
-                postMaps.setPlaceId(placeId);
-                postMapDetails(postMaps);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
     public void postMapDetails(final Map postMaps) {
-        progressBarUtil.showProgress();
         MapApi mapApi = ApiClient.getClient().create(MapApi.class);
         Call<Result> postMapDetailsResponse = mapApi.addMapDetails(postMaps.getLatitude(),postMaps.getLongitude(),postMaps.getAddress(),postMaps.getSubAddress(),
                 String.valueOf(postMaps.getPincode()),postMaps.getPlaceId(),postMaps.getUserId(),postMaps.getFirm_id());
         postMapDetailsResponse.enqueue(new Callback<Result>() {
             @Override
             public void onResponse(@NonNull Call<Result> call, @NonNull Response<Result> response) {
-                progressBarUtil.hideProgress();
-                if(response.code() == 200 && response.body() != null&&response.body().getError()==false) {
+                int statusCode = response.code();
+                if(statusCode == 200) {
                     try{
                         ShowToast("Location Saved Successfully");
                         finish();
@@ -275,7 +219,6 @@ public class SignupAddressActivity extends BaseActivity {
 
             @Override
             public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
-                progressBarUtil.hideProgress();
                 ShowToast("Please Check Internet Connection");
             }
         });

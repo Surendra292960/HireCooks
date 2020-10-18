@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
 import com.mxn.soul.flowingdrawer_core.BuildConfig;
+import com.test.sample.hirecooks.Activity.Cooks.CooksActivity;
 import com.test.sample.hirecooks.Activity.Favourite.FavouriteActivity;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
 import com.test.sample.hirecooks.Activity.Orders.RecievedOrderActivity;
@@ -66,6 +67,10 @@ public class MenuListFragment extends Fragment implements UploadCallBack {
                 bundle.putSerializable("CategoryName" , "Offers");
                 intent.putExtras(bundle);
                 startActivity(intent);
+            } else if (id == R.id.menu_cooks) {
+                Intent intent = new Intent( getActivity(), CooksActivity.class );
+                intent.putExtra(  "type", "AllCooks"  );
+                startActivity( intent );
             } else if (id == R.id.menu_popularproducts) {
                 Bundle bundle = new Bundle();
                 Intent intent = new Intent(getActivity(), SubCategoryActivity.class);

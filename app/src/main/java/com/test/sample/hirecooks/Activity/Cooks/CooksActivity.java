@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,9 +24,11 @@ import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
 import com.test.sample.hirecooks.Models.UsersResponse.UsersResponse;
 import com.test.sample.hirecooks.Models.cooks.Cooks;
+import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
+import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.UserApi;
 
 import java.util.ArrayList;
@@ -41,24 +44,34 @@ public class CooksActivity extends AppCompatActivity {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView profile_list_recycler_view;
     private Cooks cooks;
+    private String type;
+    private User user;
+    private List<UserResponse> allCook,filterCook,searchList,cook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        this.getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Cooks");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Nearby Cooks");
+
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             cooks = (Cooks) bundle.getSerializable("Cooks");
+            type= bundle.getString("type");
             if (cooks != null) {
+            }
+            if(type!=null){
+                Objects.requireNonNull(getSupportActionBar()).setTitle(type);
             }
         }
         initViews();
     }
 
     private void initViews() {
+            user = SharedPrefManager.getInstance( CooksActivity.this ).getUser();
             progressBarUtil = new ProgressBarUtil(this);
             mSwipeRefreshLayout = findViewById(R.id.swipeToRefresh);
             profile_list_recycler_view = findViewById(R.id.profile_list_recycler_view);
@@ -89,21 +102,9 @@ public class CooksActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<UsersResponse> call, @NonNull Response<UsersResponse> response) {
                 int statusCode = response.code();
                 if (statusCode == 200) {
-                    List<UserResponse> filterCook = new ArrayList<>();
-                    progressBarUtil.hideProgress();
-                    mSwipeRefreshLayout.onFinishTemporaryDetach();
-                    if (response.body() != null) {
-                        for (UserResponse userResponse : response.body().getUsersResponses()) {
-                            if (userResponse.getUserType().equalsIgnoreCase("Cook")) {
-                                for(Map map: Constants.NEARBY_COOKS) {
-                                    if(userResponse.getId().equals(map.getUserId())){
-                                        filterCook.add(userResponse);
-                                    }
-                                }
-                            }
-                        }
-                        CooksAdapter adapter = new CooksAdapter(CooksActivity.this, filterCook);
-                        profile_list_recycler_view.setAdapter(adapter);
+                    if(response.body().getUsersResponses()!=null){
+                        progressBarUtil.hideProgress();
+                        setCookData(response.body().getUsersResponses());
                     }
                 }
             }
@@ -117,13 +118,50 @@ public class CooksActivity extends AppCompatActivity {
         });
     }
 
+    private void setCookData(List<UserResponse> userList) {
+        cook = new ArrayList<>();
+        filterCook = new ArrayList<>();
+        allCook = new ArrayList<>();
+        searchList = new ArrayList<>();
+        mSwipeRefreshLayout.onFinishTemporaryDetach();
+        if (userList!= null) {
+            for (UserResponse userResponse : userList) {
+                if (userResponse.getUserType().equalsIgnoreCase("Cook")) {
+                    if (type != null && type.equalsIgnoreCase( "AllCooks" )) {
+                        allCook.add( userResponse );
+                        searchList.add( userResponse );
+                    } else {
+                        for (Map map : Constants.NEARBY_COOKS) {
+                            if (userResponse.getId().equals(map.getUserId())) {
+                                filterCook.add( userResponse );
+                                searchList.add( userResponse );
+                            }
+                        }
+                    }
+                }
+            }
+            setAdapter(type,allCook,filterCook,cook);
+        }
+    }
+
+    private void setAdapter(String type, List<UserResponse> allCook, List<UserResponse> filterCook, List<UserResponse> cook) {
+        if(type!=null&&allCook!=null&&allCook.size()!=0){
+            CooksAdapter adapter = new CooksAdapter(CooksActivity.this, allCook);
+            profile_list_recycler_view.setAdapter(adapter);
+        }else if(type==null&&filterCook!=null&&filterCook.size()!=0){
+            CooksAdapter adapter = new CooksAdapter(CooksActivity.this, filterCook);
+            profile_list_recycler_view.setAdapter(adapter);
+        }else if(type==null&&cook!=null&&cook.size()!=0){
+            CooksAdapter adapter = new CooksAdapter(CooksActivity.this, filterCook);
+            profile_list_recycler_view.setAdapter(adapter);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        // Inflate menu to add items to action bar if it is present.
         inflater.inflate(R.menu.search_menu, menu);
         MenuItem searchItem = menu.getItem(0);
-        // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -139,10 +177,39 @@ public class CooksActivity extends AppCompatActivity {
     }
 
     private void handleIntent(Intent intent) {
-
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             //use the query to search your data somehow
+            startSearch(query);
+        }
+    }
+
+    private void startSearch(CharSequence text) {
+        List<UserResponse> filterList = new ArrayList<>();
+        try {
+            if (searchList != null && searchList.size() != 0) {
+                for (int i = 0; i < searchList.size(); i++) {
+                    String cookName = "";
+
+                    if (searchList.get(i).getName() != null) {
+                        cookName = searchList.get(i).getName();
+                    }
+
+                    if (cookName.toLowerCase().contains(String.valueOf(text).toLowerCase())) {
+                        filterList.add(searchList.get(i));
+                    }
+                }
+
+                if (filterList.size() != 0 && filterList != null) {
+                    CooksAdapter adapter = new CooksAdapter(CooksActivity.this, filterList);
+                    profile_list_recycler_view.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                } else {
+                    this.getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

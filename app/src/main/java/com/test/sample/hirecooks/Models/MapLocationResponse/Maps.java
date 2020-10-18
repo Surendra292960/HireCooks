@@ -1,30 +1,44 @@
 package com.test.sample.hirecooks.Models.MapLocationResponse;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
 public class Maps implements Serializable {
+    @SerializedName("error")
+    @Expose
+    private Boolean error;
+    @SerializedName("message")
+    @Expose
+    private String message;
     @SerializedName("maps")
     @Expose
-    private ArrayList<Map> maps;
-    private Map map = null;
+    private List<Map> maps = null;
 
-    public Maps() {
+    public Boolean getError() {
+        return error;
     }
 
-    public ArrayList<Map> getMaps() {
+    public void setError(Boolean error) {
+        this.error = error;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public List<Map> getMaps() {
         return maps;
     }
 
-    public void setMaps(ArrayList<Map> maps) {
+    public void setMaps(List<Map> maps) {
         this.maps = maps;
     }
-    public Map getMap() {
-        return map;
-    }
 
-    public void setMap(Map map) {
-        this.map = map;
-    }
 }

@@ -46,6 +46,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".Activity.Cooks.UpdateCookImage"></activity>
+        <activity android:name=".Activity.Cooks.AddCookImages" />
+        <activity android:name=".Activity.Cooks.CookImagesList" />
         <activity android:name=".Activity.Cooks.CooksDetailsActivity" />
         <activity
             android:name=".Activity.Orders.PlacedOrderSuccessfully"

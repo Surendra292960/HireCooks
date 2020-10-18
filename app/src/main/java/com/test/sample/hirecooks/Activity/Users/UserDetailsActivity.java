@@ -67,7 +67,7 @@ public class UserDetailsActivity extends AppCompatActivity {
             textViewName.setText(userResponse.getName());
             textViewEmail.setText("Email:  "+userResponse.getEmail());
             textViewGender.setText("Gender:  "+userResponse.getGender());
-            textViewUserType.setText("UserType:  "+userResponse.getUserType());
+            textViewUserType.setText("UserTypeAdapter:  "+userResponse.getUserType());
             textViewPhone.setText("phone:  "+userResponse.getPhone());
             textViewAddress.setText("Address:  "+userResponse.getAddress());
         }

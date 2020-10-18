@@ -68,22 +68,86 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/cook_image"
-                        android:layout_width="@dimen/margin_80"
-                        android:layout_height="@dimen/margin_80"
-                        android:scaleType="fitXY"/>
-
-                    <TextView
-                        android:id="@+id/cook_name"
-                        android:gravity="left"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/user"
-                        android:textColor="@color/dark_gray"
-                        android:textSize="@dimen/size_14"
-                        android:paddingStart="@dimen/margin_5"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_weight="0.1"
+                            android:id="@+id/cook_image"
+                            android:layout_width="@dimen/margin_80"
+                            android:layout_height="@dimen/margin_80"
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            app:civ_border_width="2dp"
+                            app:civ_border_color="@color/gray_btn_bg_color"/>
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:visibility="invisible"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/update_image"
+                            android:textColor="@color/red"
+                            android:gravity="end"
+                            android:layout_gravity="center_vertical"
+                            android:textStyle="bold"
+                            android:paddingEnd="@dimen/margin_10"
+                            android:textSize="@dimen/size_16"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+                        <TextView
+                            android:id="@+id/edit_cookImages"
+                            android:visibility="gone"
+                            android:layout_weight="1"
+                            android:layout_margin="@dimen/margin_5"
+                            android:text="@string/upload_images"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp"
+                            android:textStyle="normal"
+                            android:textAllCaps="true"
+                            android:padding="8dp"
+                            android:paddingEnd="@dimen/margin_20"
+                            android:gravity="end"
+                            android:background="@drawable/rzp_border"
+                            android:textColor="@color/red"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+                    </LinearLayout>
+
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:orientation="horizontal"
+                     android:weightSum="2">
+
+                      <TextView
+                          android:layout_weight="1"
+                          android:id="@+id/cook_name"
+                          android:layout_width="@dimen/margin_100"
+                          android:layout_height="wrap_content"
+                          android:text="@string/user"
+                          android:textColor="@color/dark_gray"
+                          android:textSize="@dimen/size_14"
+                          android:paddingStart="@dimen/margin_5"
+                          android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+                     <TextView
+                         android:layout_weight="1"
+                         android:gravity="end"
+                         android:id="@+id/update_images"
+                         android:paddingEnd="@dimen/margin_5"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:text="@string/click_on_image_to_update"
+                         android:textColor="@color/dark_gray"
+                         android:textSize="@dimen/size_14"
+                         android:layout_gravity="center"
+                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+                    </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/cooks_images_recycler"
@@ -111,18 +175,41 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:layout_margin="@dimen/margin_5"
-                            android:text="address"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:textStyle="normal"
-                            android:textAllCaps="true"
-                            android:padding="8dp"
-                            android:background="@drawable/rzp_border"
-                            android:textColor="@color/dark_gray"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_margin="@dimen/margin_5"
+                                android:text="@string/address"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12sp"
+                                android:textStyle="normal"
+                                android:textAllCaps="true"
+                                android:padding="8dp"
+                                android:background="@drawable/rzp_border"
+                                android:textColor="@color/dark_gray"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+
+                            <TextView
+                                android:id="@+id/edit_address"
+                                android:visibility="gone"
+                                android:layout_margin="@dimen/margin_5"
+                                android:text="@string/edit_address"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="12sp"
+                                android:textStyle="normal"
+                                android:textAllCaps="true"
+                                android:padding="8dp"
+                                android:background="@drawable/rzp_border"
+                                android:textColor="@color/red"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_margin="@dimen/margin_5"

@@ -2,24 +2,31 @@ package com.test.sample.hirecooks.Activity.ManageAddress;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
+import com.test.sample.hirecooks.Models.MapLocationResponse.Maps;
 import com.test.sample.hirecooks.R;
-import com.test.sample.hirecooks.RoomDatabase.SecondryAddress_DB.Address;
-import com.test.sample.hirecooks.RoomDatabase.SecondryAddress_DB.AddressDataBaseClient;
+import com.test.sample.hirecooks.Utils.BaseActivity;
+import com.test.sample.hirecooks.Utils.Common;
+import com.test.sample.hirecooks.Utils.ProgressBarUtil;
+import com.test.sample.hirecooks.WebApis.MapApi;
 
 import java.util.Objects;
 
-public class UpdateAddressActivity extends AppCompatActivity {
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
+public class UpdateAddressActivity extends BaseActivity {
     private EditText mAddress, mSubAddress, mPincode,mhouse_number,mfloor,mlandmark,mlocation_tag;
+    private Map address;
+    private ProgressBarUtil progressBarUtil;
+    private MapApi mService = Common.getAPI();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +35,18 @@ public class UpdateAddressActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Update Address");
         setContentView(R.layout.activity_update_secondry_address);
+        initViews();
+        Bundle bundle = getIntent().getExtras();
+        if(bundle!=null){
+           address = (Map) getIntent().getSerializableExtra("address");
+           if(address!=null){
+               loadAddress(address);
+           }
+        }
+    }
+
+    private void initViews() {
+        progressBarUtil = new ProgressBarUtil( this );
         mAddress = findViewById(R.id.address);
         mSubAddress = findViewById(R.id.subAddress);
         mPincode = findViewById(R.id.pincode);
@@ -35,28 +54,23 @@ public class UpdateAddressActivity extends AppCompatActivity {
         mfloor = findViewById(R.id.floor);
         mlandmark = findViewById(R.id.landmark);
         mlocation_tag = findViewById(R.id.location_tag);
-        final Address address = (Address) getIntent().getSerializableExtra("address");
-
-        loadAddress(address);
 
         findViewById(R.id.button_update).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_LONG).show();
-                updateAddress(address);
+                validateData();
             }
         });
 
         findViewById(R.id.button_delete).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(UpdateAddressActivity.this);
                 builder.setTitle("Are you sure?");
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        deleteAddress(address);
+                         deleteAddress(address);
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -72,17 +86,17 @@ public class UpdateAddressActivity extends AppCompatActivity {
         });
     }
 
-    private void loadAddress( Address address) {
+    private void loadAddress( Map address) {
         mAddress.setText(address.getAddress());
-        mSubAddress.setText(address.getSub_address());
-        mPincode.setText(""+address.getPincode());
-        mhouse_number.setText(""+address.getHouse_number());
-        mfloor.setText(""+address.getFloor());
-        mlandmark.setText(""+address.getLandmark());
-        mlocation_tag.setText(""+address.getLocation_tag());
+        mSubAddress.setText(address.getSubAddress());
+        mPincode.setText(String.valueOf( address.getPincode() ));
+        mhouse_number.setText(String.valueOf(address.getHouseNumber()));
+        mfloor.setText(String.valueOf(address.getFloor()));
+        mlandmark.setText(String.valueOf(address.getLandmark()));
+        mlocation_tag.setText(String.valueOf(address.getLocationType()));
     }
 
-    private void updateAddress(final Address address) {
+    private void validateData() {
         final String sAddress = mAddress.getText().toString().trim();
         final String sSubAddress = mSubAddress.getText().toString().trim();
         final String sPincode = mPincode.getText().toString().trim();
@@ -92,83 +106,131 @@ public class UpdateAddressActivity extends AppCompatActivity {
         final String sLocation_tag = mlocation_tag.getText().toString().trim();
 
         if (sAddress.isEmpty()) {
-            mAddress.setError("Address required");
+            mAddress.setError( "Address required" );
             mAddress.requestFocus();
             return;
-        }else if (sSubAddress.isEmpty()) {
-            mSubAddress.setError("SubAddress required");
+        }if (sSubAddress.isEmpty()) {
+            mSubAddress.setError( "SubAddress required" );
             mSubAddress.requestFocus();
             return;
-        }else if (sPincode.isEmpty()) {
-            mPincode.setError("Pincode required");
+        }if (sPincode.isEmpty()) {
+            mPincode.setError( "Pincode required" );
             mPincode.requestFocus();
             return;
-        }else if (sHouseNumber.isEmpty()) {
-            mhouse_number.setError("HouseNumber required");
+        }if (sHouseNumber.isEmpty()) {
+            mhouse_number.setError( "HouseNumber required" );
             mhouse_number.requestFocus();
             return;
-        }else if (sFloor.isEmpty()) {
-            mfloor.setError("Floor required");
+        }if (sFloor.isEmpty()) {
+            mfloor.setError( "Floor required" );
             mfloor.requestFocus();
             return;
-        }else if (sLandMark.isEmpty()) {
-            mlandmark.setError("LandMark required");
+        }if (sLandMark.isEmpty()) {
+            mlandmark.setError( "LandMark required" );
             mlandmark.requestFocus();
             return;
-        }else if (sLocation_tag.isEmpty()) {
-            mlocation_tag.setError("Location Tag required");
+        }if (sLocation_tag.isEmpty()) {
+            mlocation_tag.setError( "Location Tag required" );
             mlocation_tag.requestFocus();
             return;
         }
 
-        class UpdateAddress extends AsyncTask<Void, Void, Void> {
-
-            @Override
-            protected Void doInBackground(Void... voids) {
-                address.setAddress(sAddress);
-                address.setSub_address(sSubAddress);
-                address.setPincode(Integer.parseInt(sPincode));
-                address.setHouse_number(sHouseNumber);
-                address.setFloor(sFloor);
-                address.setLandmark(sLandMark);
-                address.setLocation_tag(sLocation_tag);
-                AddressDataBaseClient.getInstance(getApplicationContext()).getAddressDatabase().addressDao().update(address);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_LONG).show();
-                UpdateAddressActivity.this.finish();
-                startActivity(new Intent(UpdateAddressActivity.this, SecondryAddressActivity.class));
-            }
-        }
-
-        UpdateAddress ut = new UpdateAddress();
-        ut.execute();
+        setAddressData();
     }
 
-    private void deleteAddress(final Address address) {
-        class DeleteAddress extends AsyncTask<Void, Void, Void> {
+    private void setAddressData() {
+        Map map = new Map();
+        map.setMapId( address.getMapId() );
+        map.setLatitude( address.getLatitude() );
+        map.setLongitude( address.getLongitude() );
+        map.setAddress( mAddress.getText().toString() );
+        map.setSubAddress( mSubAddress.getText().toString() );
+        map.setPincode(Integer.parseInt( mPincode.getText().toString() ));
+        map.setPlaceId( address.getPlaceId() );
+        map.setUserId( address.getUserId() );
+        map.setFirm_id( address.getFirm_id() );
+        map.setHouseNumber( mhouse_number.getText().toString() );
+        map.setFloor( mfloor.getText().toString() );
+        map.setLandmark( mlandmark.getText().toString() );
+        map.setLocationType( mlocation_tag.getText().toString() );
 
-            @Override
-            protected Void doInBackground(Void... voids) {
-                AddressDataBaseClient.getInstance(getApplicationContext()).getAddressDatabase().addressDao().delete(address);
-                return null;
-            }
+        updateAddress(map);
+    }
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_LONG).show();
-                UpdateAddressActivity.this.finish();
-                startActivity(new Intent(UpdateAddressActivity.this, SecondryAddressActivity.class));
-            }
-        }
+    private void updateAddress(Map address) {
+        progressBarUtil.showProgress();
+        mService.updateAddress(address.getMapId(),address.getLatitude(),address.getLongitude(),address.getAddress(),address.getSubAddress(), String.valueOf( address.getPincode() ),
+                address.getPlaceId(),address.getUserId(),address.getFirm_id(),address.getHouseNumber(),address.getFloor(),address.getLandmark(),address.getLocationType())
+                .subscribeOn( Schedulers.io())
+                .observeOn( AndroidSchedulers.mainThread())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(new Observer<Maps>() {
 
-        DeleteAddress dt = new DeleteAddress();
-        dt.execute();
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Maps result) {
+                        if(!result.getError()){
+                            ShowToast(result.getMessage());
+                            UpdateAddressActivity.this.finish();
+                        }else {
+                            ShowToast( result.getMessage() );
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        progressBarUtil.hideProgress();
+                        ShowToast(t.getMessage());
+                        System.out.println("New data received: " + t.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        progressBarUtil.hideProgress();
+                    }
+                });
+    }
+
+    private void deleteAddress(Map address) {
+        progressBarUtil.showProgress();
+        mService.deleteAddress(address.getMapId())
+                .subscribeOn( Schedulers.io())
+                .observeOn( AndroidSchedulers.mainThread())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(new Observer<Maps>() {
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Maps result) {
+                        if(!result.getError()){
+                            progressBarUtil.hideProgress();
+                            ShowToast(result.getMessage());
+                            UpdateAddressActivity.this.finish();
+                        }else {
+                            ShowToast( result.getMessage() );
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        progressBarUtil.hideProgress();
+                        ShowToast(t.getMessage());
+                        System.out.println("New data received: " + t.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        progressBarUtil.hideProgress();
+                    }
+                });
     }
 
     @Override

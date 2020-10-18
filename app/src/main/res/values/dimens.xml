@@ -20,7 +20,7 @@
     <dimen name="dialog_padding">10dp</dimen>
 
     //Margin
-    <dimen name="margin_160">160</dimen>
+    <dimen name="margin_160">160dp</dimen>
     <dimen name="margin_120">120dp</dimen>
     <dimen name="margin_100">100dp</dimen>
     <dimen name="margin_80">80dp</dimen>

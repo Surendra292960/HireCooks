@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.hbb20.CountryCodePicker;
+import com.test.sample.hirecooks.Adapter.SpinnerAdapter.UserTypeAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.TokenResponse.TokenResult;
 import com.test.sample.hirecooks.Models.users.Result;
@@ -45,6 +47,7 @@ import com.test.sample.hirecooks.Utils.TrackGPS;
 import com.test.sample.hirecooks.WebApis.UserApi;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -56,8 +59,9 @@ import retrofit2.Response;
 public class UserSignUpActivity extends BaseActivity {
     private static final String TAG = "UserSignUpActivity" ;
     private EditText editTextName, editTextEmail, editTextPassword,editTextConPassword,
-            editTextPinCode,editTextFirmId,editTextUserType,editTextAddress,editTextPhone;
+            editTextPinCode,editTextFirmId,editTextAddress,editTextPhone;
     private RadioGroup radioGender;
+    private Spinner editTextUserType;
     private ProgressBarUtil progressBarUtil;
     private UserApi mService;
     private TextView location_picker, txtSignIn,verified;
@@ -71,6 +75,7 @@ public class UserSignUpActivity extends BaseActivity {
     GoogleMap mMap;
     private TrackGPS trackGPS;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
+    private List<String> user_type_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +113,14 @@ public class UserSignUpActivity extends BaseActivity {
         radioGender = findViewById(R.id.radioGender);
         radioGender = findViewById(R.id.radioGender);
         buttonSignUp = findViewById(R.id.buttonSignUp);
+
+        String[] userType_array = this.getResources().getStringArray(R.array.user_type);
+        user_type_list = new ArrayList<>();
+        for(String text:userType_array) {
+            user_type_list.add(text);
+        }
+        UserTypeAdapter spinnerArrayAdapter = new UserTypeAdapter(this, user_type_list);
+        editTextUserType.setAdapter( spinnerArrayAdapter );
 
         if(Constants.CurrentUserPhoneNumber!=null){
             verified.setVisibility(View.VISIBLE);
@@ -167,7 +180,8 @@ public class UserSignUpActivity extends BaseActivity {
         String cpassword = editTextConPassword.getText().toString().trim();
         String phone = editTextPhone.getText().toString().trim();
         String firmId = "Not_Available";
-        String user_type = "User";
+        String user_type = editTextUserType.getSelectedItem().toString();
+
         String bikeNumber = "Null";
 
         String gender = radioSex.getText().toString();
@@ -191,6 +205,9 @@ public class UserSignUpActivity extends BaseActivity {
         }if (TextUtils.isEmpty(cpassword)) {
             editTextConPassword.setError("Please enter confirm password");
             editTextConPassword.requestFocus();
+            return;
+        }if (!user_type.isEmpty()&&user_type.equalsIgnoreCase( "Please Select" )) {
+            ShowToast( "Please Select User Type" );
             return;
         }
         if (password.equals(cpassword)) {
@@ -231,6 +248,7 @@ public class UserSignUpActivity extends BaseActivity {
                     }
                     finish();
                     startActivity(new Intent(UserSignUpActivity.this,SignupAddressActivity.class));
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 }
                 else{
                     ShowToast(response.body().getMessage());

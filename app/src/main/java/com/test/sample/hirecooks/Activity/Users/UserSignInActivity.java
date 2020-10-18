@@ -114,7 +114,8 @@ public class UserSignInActivity extends BaseActivity implements View.OnClickList
                         Constants.CurrentUser = response.body();
                         if(Constants.CurrentUser.getUser().getUserType().equalsIgnoreCase("User")||
                                 Constants.CurrentUser.getUser().getUserType().equalsIgnoreCase("Manager")||
-                                        Constants.CurrentUser.getUser().getUserType().equalsIgnoreCase("SuperAdmin")){
+                                Constants.CurrentUser.getUser().getUserType().equalsIgnoreCase("SuperAdmin")||
+                                Constants.CurrentUser.getUser().getUserType().equalsIgnoreCase("Cook")){
                             ShowToast("Login Successfull");
                             SharedPrefManager.getInstance(getApplicationContext()).userLogin(Constants.CurrentUser.getUser());
                             finish();

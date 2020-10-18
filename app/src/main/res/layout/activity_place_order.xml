@@ -124,6 +124,8 @@
                                     android:layout_weight="1"
                                     android:textSize="@dimen/size_12"
                                     android:textStyle="normal"
+                                    android:drawablePadding="@dimen/margin_10"
+                                    android:drawableStart="@drawable/ic_location_on"
                                     android:textColor="@color/gray_btn_bg_pressed_color"
                                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
 

@@ -11,6 +11,11 @@
             android:title="@string/offer_banner" />
 
         <item
+            android:id="@+id/menu_cooks"
+            android:icon="@drawable/ic_profiles"
+            android:title="@string/cook" />
+
+        <item
             android:id="@+id/menu_newproducts"
             android:icon="@drawable/ic_fiber_new_black_24dp"
             android:title="@string/our_new_product" />

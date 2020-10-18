@@ -70,7 +70,7 @@
                 android:background="@drawable/round_border_button"
                 android:ems="10"
                 android:layout_margin="@dimen/margin_20"
-                android:hint="@string/search"
+                android:hint="@string/search_location"
                 android:inputType="textPersonName"
                 android:paddingLeft="70dp"
                 android:paddingTop="10dp"

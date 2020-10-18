@@ -1,29 +1,38 @@
 package com.test.sample.hirecooks.Activity.ManageAddress;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.test.sample.hirecooks.Adapter.Users.AddressAdapter;
+import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
+import com.test.sample.hirecooks.Models.MapLocationResponse.Maps;
 import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
 import com.test.sample.hirecooks.R;
-import com.test.sample.hirecooks.RoomDatabase.SecondryAddress_DB.Address;
-import com.test.sample.hirecooks.RoomDatabase.SecondryAddress_DB.AddressDataBaseClient;
+import com.test.sample.hirecooks.Utils.BaseActivity;
+import com.test.sample.hirecooks.Utils.Common;
+import com.test.sample.hirecooks.Utils.ProgressBarUtil;
+import com.test.sample.hirecooks.WebApis.MapApi;
 
 import java.util.List;
 import java.util.Objects;
 
-public class SecondryAddressActivity extends AppCompatActivity {
-    private Button buttonAddAddress;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
+public class SecondryAddressActivity extends BaseActivity {
+    private TextView buttonAddAddress;
     private RecyclerView recyclerView;
     private UserResponse userResponse;
+    private ProgressBarUtil progressBarUtil;
+    private MapApi mService = Common.getAPI();;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +42,7 @@ public class SecondryAddressActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setTitle("My Address");
         initViews();
-        getAddress();
+        ApiServiceCall();
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
             userResponse = (UserResponse)bundle.getSerializable("User");
@@ -41,6 +50,7 @@ public class SecondryAddressActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        progressBarUtil = new ProgressBarUtil( this );
         recyclerView = findViewById(R.id.recyclerview_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         buttonAddAddress = findViewById(R.id.floating_button_add);
@@ -56,36 +66,44 @@ public class SecondryAddressActivity extends AppCompatActivity {
         });
     }
 
+    private void ApiServiceCall() {
+        progressBarUtil.showProgress();
+        mService.getAllAddress()
+                .subscribeOn( Schedulers.io())
+                .observeOn( AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Maps>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-    private void getAddress() {
-        class GetAddress extends AsyncTask<Void, Void, List<Address>> {
+                    }
 
-            @Override
-            protected List<com.test.sample.hirecooks.RoomDatabase.SecondryAddress_DB.Address> doInBackground(Void... voids) {
-                List<com.test.sample.hirecooks.RoomDatabase.SecondryAddress_DB.Address> addresskList = AddressDataBaseClient
-                        .getInstance(getApplicationContext())
-                        .getAddressDatabase()
-                        .addressDao()
-                        .getAll();
-                return addresskList;
-            }
+                    @Override
+                    public void onNext(Maps result) {
+                        callAdapter(result.getMaps());
+                    }
 
-            @Override
-            protected void onPostExecute(List<com.test.sample.hirecooks.RoomDatabase.SecondryAddress_DB.Address> address) {
-                super.onPostExecute(address);
-                AddressAdapter adapter = new AddressAdapter(SecondryAddressActivity.this, address);
-                recyclerView.setAdapter(adapter);
-            }
-        }
+                    @Override
+                    public void onError(Throwable e) {
+                        ShowToast(e.getMessage());
+                    }
 
-        GetAddress gt = new GetAddress();
-        gt.execute();
+                    @Override
+                    public void onComplete() {
+                        progressBarUtil.hideProgress();
+                    }
+                });
+
+    }
+
+    private void callAdapter(List<Map> map) {
+        AddressAdapter adapter = new AddressAdapter(SecondryAddressActivity.this, map);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getAddress();
+        ApiServiceCall();
     }
 
     @Override
