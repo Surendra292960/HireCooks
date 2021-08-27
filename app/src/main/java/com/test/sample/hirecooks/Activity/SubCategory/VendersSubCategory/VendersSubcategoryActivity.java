@@ -36,10 +36,9 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Activity.AddorRemoveCallbacks;
 import com.test.sample.hirecooks.Activity.Orders.PlaceOrderActivity;
-import com.test.sample.hirecooks.Activity.ProductDatails.ProductDetailsActivity;
+import com.test.sample.hirecooks.Activity.ProductDatails.DetailsActivity;
 import com.test.sample.hirecooks.Adapter.Category.VendersCategoryAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Models.BannerResponse.Banner;
 import com.test.sample.hirecooks.Models.BannerResponse.Banners;
 import com.test.sample.hirecooks.Models.Cart.Cart;
@@ -55,6 +54,7 @@ import com.test.sample.hirecooks.Models.VendersCategory.Result;
 import com.test.sample.hirecooks.Models.VendersCategory.VendersCategory;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.DividerItemDecoration;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
@@ -619,7 +619,7 @@ public class VendersSubcategoryActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         Bundle bundle = new Bundle();
-                        Intent intent = new Intent(context, ProductDetailsActivity.class);
+                        Intent intent = new Intent(context, DetailsActivity.class);
                         bundle.putSerializable("OfferSubCategory",offerSubcategoryList.get(position));
                         intent.putExtras(bundle);
                         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -821,7 +821,7 @@ public class VendersSubcategoryActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
-                    Intent intent = new Intent(context, ProductDetailsActivity.class);
+                    Intent intent = new Intent(context, DetailsActivity.class);
                     bundle.putSerializable("SubCategory",productList.get(position));
                     intent.putExtras(bundle);
                     intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);

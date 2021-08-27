@@ -206,13 +206,12 @@
 
                     </LinearLayout>
 
-                  <!--           <ImageView android:id="@+id/item_wishlist"
+                             <TextView android:id="@+id/colorName"
                                  android:layout_width="wrap_content"
                                  android:layout_height="wrap_content"
                                  android:layout_weight="0.3"
                                  android:layout_gravity="center_vertical"
-                                 card_view:srcCompat="@drawable/ic_favorite_border_black_24dp"/>
--->
+                                 android:text="@string/cook"/>
                 </LinearLayout>
 
             </LinearLayout>

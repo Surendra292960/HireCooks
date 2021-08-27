@@ -96,6 +96,7 @@ public class LocalStorage {
         editor.commit();
     }
 
+
     public void deleteCart() {
         Editor editor = sharedPreferences.edit();
         editor.remove("CART");

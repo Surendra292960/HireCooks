@@ -1,3 +1,4 @@
+/*
 package com.test.sample.hirecooks.Activity.SubCategory.SubCategoryActivity;
 
 import android.animation.Animator;
@@ -625,11 +626,13 @@ public class SubCategoryActivity extends BaseActivity {
                                     list.add(offersSubcategory);
                                     Set<OffersSubcategory> newList = new LinkedHashSet<>(list);
                                     filteredList = new ArrayList<>(newList);
-                                }/*else if (map.getFirm_id().equalsIgnoreCase(offersSubcategory.getFirm_id())&&vender.getFirmId().equalsIgnoreCase(offersSubcategory.getFirm_id())) {
+                                }*/
+/*else if (map.getFirm_id().equalsIgnoreCase(offersSubcategory.getFirm_id())&&vender.getFirmId().equalsIgnoreCase(offersSubcategory.getFirm_id())) {
                                     list.add(offersSubcategory);
                                     Set<OffersSubcategory> newList = new LinkedHashSet<>(list);
                                     filteredList = new ArrayList<>(newList);
-                                }*/
+                                }*//*
+
                             }
                         }
                         if(filteredList!=null&&filteredList.size()!=0){
@@ -683,11 +686,13 @@ public class SubCategoryActivity extends BaseActivity {
                                     list.add(subCategory);
                                     Set<SubCategory> newList = new LinkedHashSet<>(list);
                                     filteredList = new ArrayList<>(newList);
-                                }/*else if (map.getFirm_id().equalsIgnoreCase(subCategory.getFirm_id())&&vender.getFirmId().equalsIgnoreCase(subCategory.getFirm_id())) {
+                                }*/
+/*else if (map.getFirm_id().equalsIgnoreCase(subCategory.getFirm_id())&&vender.getFirmId().equalsIgnoreCase(subCategory.getFirm_id())) {
                                     list.add(subCategory);
                                     Set<SubCategory> newList = new LinkedHashSet<>(list);
                                     filteredList = new ArrayList<>(newList);
-                                }*/
+                                }*//*
+
                             }
                         }
                         if(filteredList!=null&&filteredList.size()!=0){
@@ -1093,7 +1098,8 @@ public class SubCategoryActivity extends BaseActivity {
                     holder.order_not_accepting.setVisibility(View.VISIBLE);
                     holder.add_item_layout.setVisibility(View.GONE);
                 }
-         /*       if(product.getAvailableStock()>0){
+         */
+/*       if(product.getAvailableStock()>0){
                     holder.item_not_in_stock.setVisibility(View.GONE);
                     holder.not_available.setVisibility(View.GONE);
                     holder.add_item_layout.setVisibility(View.VISIBLE);
@@ -1105,7 +1111,8 @@ public class SubCategoryActivity extends BaseActivity {
                     holder.available_stock.setVisibility(View.GONE);
                     holder.add_item_layout.setVisibility(View.GONE);
                     holder.add_item_layout.setVisibility(View.GONE);
-                }*/
+                }*//*
+
 
                 holder.name.setText(product.getName());
                 holder.discription.setText(product.getDiscription());
@@ -1354,7 +1361,8 @@ public class SubCategoryActivity extends BaseActivity {
                             displayRate = subcategory.getDisplayRate();
 
                          //   double value = 0.0,mPerGmPrice = 0.0,mSellRate = 0.0,mWeight = 0.0,mSubTotal = 0.0;
-                       /*     value = ((double) sellRate) / 1000;
+                       */
+/*     value = ((double) sellRate) / 1000;
                            // mPerGmPrice = ((int)sellRate/1000);
                             mPerGmPrice = value;
                             holder.item_sellrate.setText("\u20B9 " + mPerGmPrice);
@@ -1377,7 +1385,8 @@ public class SubCategoryActivity extends BaseActivity {
                                 mSellRate = mPerGmPrice * mWeight;
                                 weight = weight+" kg";
                                 holder.item_sellrate.setText("\u20B9 " + mSellRate);
-                            }*/
+                            }*//*
+
 
                             Quantity = 1;
                             if (subcategory.getId() != 0 && subcategory.getName() != null && subcategory.getLink() != null && subcategory.getDiscription() != null && mSellRate != 0 && displayrate != 0 && weight != null && subcategory.getFirm_id() != null) {
@@ -1494,9 +1503,11 @@ public class SubCategoryActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
 
-                 /* Intent intent = new Intent(v.getContext(), SecondPage.class);
+                 */
+/* Intent intent = new Intent(v.getContext(), SecondPage.class);
                     v.getContext().startActivity(intent);
-                    Toast.makeText(v.getContext(), "os version is: " + feed.getTitle(), Toast.LENGTH_SHORT).show();*/
+                    Toast.makeText(v.getContext(), "os version is: " + feed.getTitle(), Toast.LENGTH_SHORT).show();*//*
+
                     }
                 });
             }
@@ -1559,3 +1570,4 @@ public class SubCategoryActivity extends BaseActivity {
     }
 }
 
+*/

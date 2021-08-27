@@ -19,14 +19,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.test.sample.hirecooks.Adapter.RecievedOrdersAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Utils.BaseActivity;
-import com.test.sample.hirecooks.Models.Order.Order;
-import com.test.sample.hirecooks.Models.Order.Results;
+import com.test.sample.hirecooks.Models.NewOrder.OrdersTable;
+import com.test.sample.hirecooks.Models.NewOrder.Root;
 import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.OrderApi;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,6 +46,7 @@ public class RecievedOrderActivity extends BaseActivity {
     BottomNavigationView bottomNavigationView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private static String status = null;
+    private List<Root> newOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,30 +135,44 @@ public class RecievedOrderActivity extends BaseActivity {
     private void getCurrentOrders(String order_status) {
         status = order_status;
         mService = ApiClient.getClient().create(OrderApi.class);
-        Call<Results> call = mService.getCurrentOrders(user.getFirmId(),order_status);
-        call.enqueue(new Callback<Results>() {
+        Call<List<Root>> call = mService.getCurrentOrders(order_status);
+        call.enqueue(new Callback<List<Root>>() {
             @Override
-            public void onResponse(Call<Results> call, Response<Results> response) {
+            public void onResponse(Call<List<Root>> call, Response<List<Root>> response) {
                 if (response.code() == 200 ) {
-                    List<Order> orders = response.body().getOrder();
-                    if(orders!=null&&orders.size()!=0){
-                        recyclerView.setVisibility(View.VISIBLE);
-                        no_orders.setVisibility(View.GONE);
-                        ordersAdapter = new RecievedOrdersAdapter(RecievedOrderActivity.this,orders);
-                        recyclerView.setAdapter(ordersAdapter);
+                newOrder = new ArrayList<>(  );
+                newOrder = response.body();
+                for(Root root:newOrder){
+                    if(root.getError()==false){
+                        Toast.makeText( RecievedOrderActivity.this, root.getMessage(), Toast.LENGTH_SHORT ).show();
+                        List<OrdersTable> orders = root.getOrders_table();
+                        if(orders!=null&&orders.size()!=0){
+                            recyclerView.setVisibility(View.VISIBLE);
+                            no_orders.setVisibility(View.GONE);
+                            ordersAdapter = new RecievedOrdersAdapter(RecievedOrderActivity.this,orders);
+                            recyclerView.setAdapter(ordersAdapter);
+                        }else{
+                            recyclerView.setVisibility(View.GONE);
+                            no_orders.setVisibility(View.VISIBLE);
+                            order_status_text.setText("No "+order_status+" Orders Available");
+                        }
                     }else{
-                        recyclerView.setVisibility(View.GONE);
+                        Toast.makeText( RecievedOrderActivity.this, root.getMessage(), Toast.LENGTH_SHORT ).show();
+                        recyclerView.setVisibility( View.GONE );
                         no_orders.setVisibility(View.VISIBLE);
                         order_status_text.setText("No "+order_status+" Orders Available");
                     }
-
+                }
                 } else {
-                    Toast.makeText(RecievedOrderActivity.this,"Failed due to: "+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RecievedOrderActivity.this,"Failed due to: "+response.code(), Toast.LENGTH_SHORT).show();
+                    recyclerView.setVisibility( View.GONE );
+                    no_orders.setVisibility(View.VISIBLE);
+                    order_status_text.setText("No "+order_status+" Orders Available");
                 }
             }
 
             @Override
-            public void onFailure(Call<Results> call, Throwable t) {
+            public void onFailure(Call<List<Root>> call, Throwable t) {
                 Toast.makeText(RecievedOrderActivity.this,R.string.error, Toast.LENGTH_SHORT).show();
             }
         });

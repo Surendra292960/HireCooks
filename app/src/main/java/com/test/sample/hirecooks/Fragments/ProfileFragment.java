@@ -29,6 +29,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.ipaulpro.afilechooser.utils.FileUtils;
 import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
+import com.test.sample.hirecooks.Activity.ManageAccount.ManageProducts.ProductCategoryList;
 import com.test.sample.hirecooks.Activity.ManageAddress.SecondryAddressActivity;
 import com.test.sample.hirecooks.Activity.Users.UpdateProfile;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
@@ -57,7 +58,7 @@ import static android.app.Activity.RESULT_OK;
 import static com.test.sample.hirecooks.Utils.Constants.USER_PROFILE;
 
 public class ProfileFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener, UploadCallBack {
-    private TextView user_name,manage_address;
+    private TextView user_name,manage_address,manage_account;
     private View appRoot;
     private CircleImageView profile_image;
     private User user;
@@ -91,6 +92,7 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
         appRoot = view.findViewById(R.id.appRoot);
         profile_image_layout = view.findViewById(R.id.profile_image_layout);
         profile_image = view.findViewById(R.id.profile_image);
+        manage_account = view.findViewById(R.id.manage_account);
         edit_profile = view.findViewById(R.id.edit_profile);
         manage_address = view.findViewById(R.id.manage_address);
         user_name = view.findViewById(R.id.user_name);
@@ -100,6 +102,17 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
         user_name.setText(user.getName());
         if (USER_PROFILE!=null) {
             Picasso.with(mainActivity).load(APIUrl.PROFILE_URL+USER_PROFILE).into(profile_image);
+        }
+        if(user.getFirmId()!=null &&!user.getFirmId().equalsIgnoreCase( "Not_Available" )){
+            if(user.getUserType().equalsIgnoreCase( "SuperAdmin" )||user.getUserType().equalsIgnoreCase( "Admin" )|| user.getUserType().equalsIgnoreCase( "Manager" )) {
+                manage_account.setVisibility( View.VISIBLE );
+                manage_account.setOnClickListener( new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity( new Intent( getActivity(), ProductCategoryList.class ) );
+                    }
+                } );
+            }
         }
 
         sendBtn.setOnClickListener(new View.OnClickListener() {

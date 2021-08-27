@@ -104,7 +104,9 @@ public class TrackerService extends Service {
                         Log.d(TAG, "location update " + location);
                         ref.setValue(String.valueOf(location));
                         LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
-                        setMapDetails(latLng);
+                        if(user!=null){
+                            setMapDetails(latLng);
+                        }
                         Constants.USER_CURRENT_LOCATION = latLng;
                     }
                 }
@@ -122,8 +124,10 @@ public class TrackerService extends Service {
         map.setPincode(pinCode);
         map.setFirm_id(user.getFirmId());
 
-        if(user.getUserType().equalsIgnoreCase("User")&&user.getFirmId().equalsIgnoreCase("Not_Available")){
-            updateMapDetails(map);
+        if(user.getUserType()!=null){
+            if(user.getUserType().equalsIgnoreCase("User")){
+                //updateMapDetails(map);
+            }
         }
     }
 

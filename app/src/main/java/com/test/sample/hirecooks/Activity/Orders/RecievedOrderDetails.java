@@ -4,16 +4,15 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import com.test.sample.hirecooks.Models.Order.Order;
+import com.test.sample.hirecooks.Models.NewOrder.Order;
 import com.test.sample.hirecooks.R;
-
 import java.util.Objects;
 
 public class RecievedOrderDetails extends AppCompatActivity {
-    private TextView order_id, product_name, product_sellRate, product_displayRate, product_discount,
-            product_quantity, product_totalAmount, order_status, firm_id, userId,
-            order_date_time, order_weight, payment_method, order_address, name, email, phone, firm_address, order_confirm;
+    private TextView order_id, product_name, product_sellRate, product_displayRate,
+            product_discount, product_quantity, product_totalAmount, firm_id, firm_address;
     private Order orders;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,27 +30,17 @@ public class RecievedOrderDetails extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void setData(Order orders) {
+    private void setData(com.test.sample.hirecooks.Models.NewOrder.Order orders) {
        if(orders!=null){
-           order_id.setText("   :  # "+orders.getOrderId());
-           product_name.setText("   :  "+orders.getProductName());
-           product_sellRate.setText("   :  "+orders.getProductSellRate());
-           product_displayRate.setText("    :  "+orders.getProductDisplayRate());
-           product_discount.setText("   :  "+orders.getProductDiscount()+" %");
-           product_quantity.setText("   :  "+orders.getProductQuantity());
-           product_totalAmount.setText("    :  "+orders.getProductTotalAmount());
-           order_status.setText("   :  "+orders.getOrderStatus());
-           firm_id.setText("    :  "+orders.getFirmId());
-           userId.setText("     :  "+orders.getUserId());
-           order_date_time.setText("    :  "+orders.getOrderDateTime());
-           order_weight.setText("   :  "+orders.getOrderWeight());
-           payment_method.setText("     :  "+orders.getPaymentMethod());
-           order_address.setText("     :   "+orders.getOrderAddress());
-           name.setText("     :    "+orders.getName());
-           email.setText("    :    "+orders.getEmail());
-           phone.setText("    :    "+orders.getPhone());
-           order_confirm.setText("    :    "+orders.getOrderConfirm());
-           firm_address.setText("   :  "+orders.getFirmAddress());
+           order_id.setText(            " Order ID      :  # "+orders.getOrderId());
+           product_name.setText(        "Product Name   :  "+orders.getName());
+           product_sellRate.setText(    "Sellrate       :  "+orders.getSellRate());
+           product_displayRate.setText( "DisplayRate    :  "+orders.getDisplayRate());
+           product_discount.setText(    "Discount       :  "+orders.getDiscount());
+           product_quantity.setText(    "Quantity       :  "+orders.getQuantity());
+           product_totalAmount.setText( "Total Amount   :  "+orders.getTotalAmount());
+           firm_id.setText(             "FirmId         :  "+orders.getFirmId());
+           firm_address.setText(        "Address        :  "+orders.getFirmAddress());
        }
     }
 
@@ -63,17 +52,7 @@ public class RecievedOrderDetails extends AppCompatActivity {
         product_discount = findViewById(R.id.product_discount);
         product_quantity = findViewById(R.id.product_quantity);
         product_totalAmount = findViewById(R.id.product_totalAmount);
-        order_status = findViewById(R.id.order_status);
         firm_id = findViewById(R.id.firm_id);
-        userId = findViewById(R.id.userId);
-        order_date_time = findViewById(R.id.order_date_time);
-        order_weight = findViewById(R.id.order_weight);
-        payment_method = findViewById(R.id.payment_method);
-        order_confirm = findViewById(R.id.order_confirm);
-        order_address = findViewById(R.id.order_address);
-        name = findViewById(R.id.username);
-        email = findViewById(R.id.email);
-        phone = findViewById(R.id.phone);
         firm_address = findViewById(R.id.firm_address);
     }
 

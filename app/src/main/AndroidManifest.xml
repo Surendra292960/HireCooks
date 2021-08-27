@@ -46,7 +46,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activity.Cooks.UpdateCookImage"></activity>
+        <activity android:name=".Activity.ManageAccount.ManageProducts.AddActivity"></activity>
+        <activity android:name=".Activity.ManageAccount.ManageProducts.StartEditSubCategoryActivity" />
+        <activity android:name=".Activity.ManageAccount.ManageProducts.StartEditCategory" />
+        <activity android:name=".Activity.ManageAccount.ManageProducts.EditSubCategoryActivity" />
+        <activity android:name=".Activity.ManageAccount.ManageProducts.EditCategoryActivity" />
+        <activity android:name=".Activity.ManageAccount.ManageProducts.ProductCategoryList" />
+        <activity android:name=".Activity.ProductDatails.DetailsActivity" />
+        <activity android:name=".SubCategoryActivity" />
+        <activity android:name=".Activity.Cooks.UpdateCookImage" />
         <activity android:name=".Activity.Cooks.AddCookImages" />
         <activity android:name=".Activity.Cooks.CookImagesList" />
         <activity android:name=".Activity.Cooks.CooksDetailsActivity" />
@@ -98,6 +106,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:taskAffinity="" />
+        <activity android:name=".Activity.Orders.MyOrdersActivity" />
         <activity android:name=".Activity.Home.CalenderViewActivity" />
         <activity
             android:name=".Activity.SubCategory.SubCategoryActivity.SubCategoryActivity"

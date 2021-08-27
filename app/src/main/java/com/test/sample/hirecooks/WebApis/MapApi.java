@@ -2,6 +2,7 @@ package com.test.sample.hirecooks.WebApis;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Example;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Maps;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Result;
+
 import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.DELETE;

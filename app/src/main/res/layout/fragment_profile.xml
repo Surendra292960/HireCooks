@@ -154,6 +154,19 @@
                 android:drawablePadding="@dimen/margin_20"
                 android:drawableStart="@drawable/ic_logout"/>
 
+            <TextView
+                android:id="@+id/manage_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Manage Yor Account"
+                android:textSize="@dimen/size_14"
+                android:padding="@dimen/margin_10"
+                android:visibility="gone"
+                android:background="@drawable/rzp_border"
+                android:textColor="@color/style_color_primary"
+                android:layout_marginEnd="@dimen/margin_10"
+                android:textAllCaps="false"/>
+
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="60dp"

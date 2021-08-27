@@ -362,6 +362,7 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
             }
         } );
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater ( );

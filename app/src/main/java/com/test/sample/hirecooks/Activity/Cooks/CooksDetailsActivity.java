@@ -25,6 +25,7 @@ import com.test.sample.hirecooks.Models.MapLocationResponse.Result;
 import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
 import com.test.sample.hirecooks.Models.cooks.Request.CooksImages;
 import com.test.sample.hirecooks.Models.cooks.Request.CooksImagesResult;
+import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.APIUrl;
 import com.test.sample.hirecooks.Utils.BaseActivity;
@@ -54,6 +55,7 @@ public class CooksDetailsActivity extends BaseActivity {
     private ImageView imageView;
     private ProgressBarUtil progressBarUtil;
     private CookImages mService = Common.getCookImagesAPI();
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class CooksDetailsActivity extends BaseActivity {
     @SuppressLint("WrongConstant")
     private void initViews() {
         progressBarUtil = new ProgressBarUtil( this );
+        user = SharedPrefManager.getInstance( this ).getUser();
         cooks_images_recycler = findViewById(R.id.cooks_images_recycler);
         phone_number = findViewById(R.id.phone_number);
         address = findViewById(R.id.address);
@@ -125,21 +128,16 @@ public class CooksDetailsActivity extends BaseActivity {
         cook_name.setText(users.getName());
         profile_type.setText(users.getUserType());
 
-        if(SharedPrefManager.getInstance( this ).getUser().getUserType().equalsIgnoreCase( "Cook" )){
-            if(SharedPrefManager.getInstance( this ).getUser().getId().equals( users.getId() )) {
+        if(user.getUserType().equalsIgnoreCase( "Cook" )){
+            if(user.getId().equals( users.getId())) {
                 edit_cookImages.setVisibility( View.VISIBLE );
                 edit_address.setVisibility( View.VISIBLE );
                 update_images.setVisibility( View.VISIBLE );
-            }else{
-                edit_cookImages.setVisibility( View.GONE );
-                edit_address.setVisibility( View.GONE );
-                update_images.setVisibility( View.GONE );
             }
-
-        }else {
-            edit_cookImages.setVisibility( View.GONE );
-            edit_address.setVisibility( View.GONE );
-            update_images.setVisibility( View.GONE );
+        }else if(user.getUserType().equalsIgnoreCase( "SuperAdmin" )){
+            edit_cookImages.setVisibility( View.VISIBLE );
+            edit_address.setVisibility( View.VISIBLE );
+            update_images.setVisibility( View.VISIBLE );
         }
     }
 

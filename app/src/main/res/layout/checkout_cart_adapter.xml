@@ -71,7 +71,7 @@
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                     <TextView
-                        android:id="@+id/total_Amount"
+                        android:id="@+id/item_sellrate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_5"

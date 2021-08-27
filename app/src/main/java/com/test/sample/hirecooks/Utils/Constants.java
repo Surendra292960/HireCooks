@@ -1,4 +1,5 @@
 package com.test.sample.hirecooks.Utils;
+
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.view.MotionEvent;
@@ -8,6 +9,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.OfferSubCategory.OffersSubcategory;
 import com.test.sample.hirecooks.Models.SubCategory.Response.SubCategory;
+import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.Models.TokenResponse.TokenResult;
 import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
 import com.test.sample.hirecooks.Models.users.Result;
@@ -26,6 +28,7 @@ public class Constants {
     public static String CurrentUserPhoneNumber = null;
     public static TokenResult CurrentToken = null;
     public static List<SubCategory> SUBCATEGORY = null;
+    public static List<Subcategory> SUBCATEGORYs = null;
     public static List<OffersSubcategory> OFFER_SUBCATEGORY = null;
     public static List<com.test.sample.hirecooks.Models.SearchSubCategory.Search> SEARCH = null;
     public static List<Map> NEARBY_VENDERS_LOCATION = null;

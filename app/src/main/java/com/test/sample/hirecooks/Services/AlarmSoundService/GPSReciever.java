@@ -3,7 +3,6 @@ package com.test.sample.hirecooks.Services.AlarmSoundService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 public class GPSReciever extends BroadcastReceiver {
     @Override
@@ -22,11 +21,11 @@ public class GPSReciever extends BroadcastReceiver {
         if (intent.getAction().matches("android.location.GPS_ENABLED_CHANGE")) {
             boolean enabled = intent.getBooleanExtra("enabled",false);
             if(enabled){
-                Toast.makeText(context, "Enable", Toast.LENGTH_SHORT).show();
+                System.out.println( "Suree : "+ " Enable" );
              /*   Intent pushIntent = new Intent(context, LocationListenerService.class);
                 context.startService(pushIntent);*/
             }else{
-                Toast.makeText(context, "Disable", Toast.LENGTH_SHORT).show();
+                System.out.println( "Suree : "+ " Disable" );
             }
         }
 

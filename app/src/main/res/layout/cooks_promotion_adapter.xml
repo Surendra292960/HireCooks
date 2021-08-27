@@ -18,7 +18,7 @@
         card_view:cardUseCompatPadding="true" >
 
         <FrameLayout
-            android:background="#5e000000"
+            android:background="@color/smoke_white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

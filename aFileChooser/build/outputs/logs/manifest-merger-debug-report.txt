@@ -1,25 +1,25 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml:17:2-20:13
-INJECTED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml:17:2-20:13
-INJECTED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml:17:2-20:13
+ADDED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml:17:2-20:13
+INJECTED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml:17:2-20:13
+INJECTED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml:17:2-20:13
 	package
-		ADDED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml:18:5-40
-		INJECTED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml
-		INJECTED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml
+		ADDED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml:18:5-40
+		INJECTED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml
+		INJECTED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml
 	xmlns:android
-		ADDED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml:17:12-70
+		ADDED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml:17:12-70
 uses-sdk
-INJECTED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml
-INJECTED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml
-INJECTED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml
-INJECTED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml
+INJECTED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml
+INJECTED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml
+INJECTED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml
+INJECTED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml
-		ADDED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml
-		INJECTED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml
+		INJECTED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml
+		ADDED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml
+		INJECTED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml
-		ADDED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml
-		INJECTED from D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml
+		INJECTED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml
+		ADDED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml
+		INJECTED from D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml

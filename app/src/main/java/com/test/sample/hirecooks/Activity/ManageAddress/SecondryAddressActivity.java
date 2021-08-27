@@ -13,12 +13,15 @@ import com.test.sample.hirecooks.Adapter.Users.AddressAdapter;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Maps;
 import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
+import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Common;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
+import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.MapApi;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,6 +36,7 @@ public class SecondryAddressActivity extends BaseActivity {
     private UserResponse userResponse;
     private ProgressBarUtil progressBarUtil;
     private MapApi mService = Common.getAPI();;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,7 @@ public class SecondryAddressActivity extends BaseActivity {
 
     private void initViews() {
         progressBarUtil = new ProgressBarUtil( this );
+        user = SharedPrefManager.getInstance( this ).getUser();
         recyclerView = findViewById(R.id.recyclerview_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         buttonAddAddress = findViewById(R.id.floating_button_add);
@@ -79,7 +84,7 @@ public class SecondryAddressActivity extends BaseActivity {
 
                     @Override
                     public void onNext(Maps result) {
-                        callAdapter(result.getMaps());
+                        callAdapter(result);
                     }
 
                     @Override
@@ -95,8 +100,14 @@ public class SecondryAddressActivity extends BaseActivity {
 
     }
 
-    private void callAdapter(List<Map> map) {
-        AddressAdapter adapter = new AddressAdapter(SecondryAddressActivity.this, map);
+    private void callAdapter(Maps result) {
+        List<Map> mapList = new ArrayList<>(  );
+        for(Map map:result.getMaps()){
+            if(Objects.equals( map.getUserId(), user.getId() )) {
+                mapList.add( map );
+            }
+        }
+        AddressAdapter adapter = new AddressAdapter(SecondryAddressActivity.this, mapList);
         recyclerView.setAdapter(adapter);
     }
 

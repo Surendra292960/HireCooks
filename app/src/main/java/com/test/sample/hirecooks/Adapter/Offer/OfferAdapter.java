@@ -1,4 +1,5 @@
 package com.test.sample.hirecooks.Adapter.Offer;
+
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -10,20 +11,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.squareup.picasso.Picasso;
-import com.test.sample.hirecooks.Activity.SubCategory.SubCategoryActivity.SubCategoryActivity;
-import com.test.sample.hirecooks.Models.OfferCategory.OffersCategory;
+import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.SubCategoryActivity;
+
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> {
     private Context mCtx;
-    private List<OffersCategory> offers;
+    private List<Category> offers;
 
-    public OfferAdapter(Context mCtx, List<OffersCategory> offers) {
+    public OfferAdapter(Context mCtx, List<Category> offers) {
         this.mCtx = mCtx;
         this.offers = offers;
     }
@@ -37,9 +41,9 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(OfferAdapter.ViewHolder holder, int position) {
-        OffersCategory offer = offers.get(position);
+        Category offer = offers.get(position);
         if(offer!=null){
-            holder.circular_image_name.setText(offer.getCategoryName());
+            holder.circular_image_name.setText(offer.getName());
             Picasso.with(mCtx).load(offer.getLink()).into(holder.circular_image);
             holder.offers_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -47,7 +51,7 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Intent intent = new Intent(mCtx, SubCategoryActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("offersCategory", offers.get(position));
+                        bundle.putSerializable("Category", offers.get(position));
                         intent.putExtras(bundle);
                         mCtx.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) mCtx).toBundle());
                     }

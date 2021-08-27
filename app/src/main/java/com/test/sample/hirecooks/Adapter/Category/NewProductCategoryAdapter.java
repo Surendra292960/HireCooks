@@ -16,17 +16,17 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
-import com.test.sample.hirecooks.Activity.SubCategory.SubCategoryActivity.SubCategoryActivity;
-import com.test.sample.hirecooks.Models.NewProductsCategory.NewProductCategory;
+import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.SubCategoryActivity;
 
 import java.util.List;
 
 public class NewProductCategoryAdapter extends RecyclerView.Adapter<NewProductCategoryAdapter.ViewHolder> {
     private Context mCtx;
-    private List<NewProductCategory> categories;
+    private List<Category> categories;
 
-    public NewProductCategoryAdapter(Context mCtx, List<NewProductCategory> categories) {
+    public NewProductCategoryAdapter(Context mCtx, List<Category> categories) {
         this.mCtx = mCtx;
         this.categories = categories;
     }
@@ -40,9 +40,9 @@ public class NewProductCategoryAdapter extends RecyclerView.Adapter<NewProductCa
 
     @Override
     public void onBindViewHolder(NewProductCategoryAdapter.ViewHolder holder, int position) {
-        NewProductCategory newProductCategory = categories.get(position);
+        Category newProductCategory = categories.get(position);
         if(newProductCategory!=null){
-            holder.new_product_category_name.setText(newProductCategory.getCategoryName());
+            holder.new_product_category_name.setText(newProductCategory.getName());
             Picasso.with(mCtx).load(newProductCategory.getLink()).into(holder.new_product_category_image);
 
             holder.cardview.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +51,7 @@ public class NewProductCategoryAdapter extends RecyclerView.Adapter<NewProductCa
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Intent intent = new Intent(mCtx, SubCategoryActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("NewProductCategory", categories.get(position));
+                        bundle.putSerializable("Category", categories.get(position));
                         intent.putExtras(bundle);
                         mCtx.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) mCtx).toBundle());
                     }

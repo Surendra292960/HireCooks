@@ -8,119 +8,288 @@
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="2dp"
+        app:cardElevation="0dp"
         app:cardUseCompatPadding="true">
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:padding="10dp">
-
-            <!-- Product Image -->
-
-            <LinearLayout
-                android:id="@+id/idLinearLayoutProductImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true">
-
-                <ImageView
-                    android:id="@+id/item_image"
-                    android:layout_width="100dp"
-                    android:layout_height="@dimen/margin_80"
-                    android:scaleType="fitXY"/>
-
-            </LinearLayout>
 
             <!-- Rest of the product info and add/remove to/from cart symbols -->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:orientation="horizontal"
                 android:weightSum="2"
                 android:id="@+id/idTopLayout">
 
+                <!-- Product Image -->
+
                 <LinearLayout
-                    android:layout_weight="1.8"
-                    android:layout_width="0dp"
+                    android:id="@+id/idLinearLayoutProductImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:background="@color/smoke_white"
+                    android:layout_weight="1.4">
+
+                    <ImageView
+                        android:id="@+id/item_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0.6"
                     android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="2">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_5"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/item_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/margin_5"
+                                android:textAllCaps="false"
+                                android:textColor="@color/dark_gray"
+                                android:textSize="14sp"
+                                android:textStyle="normal" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="20dp"
+                            android:layout_weight="0.3"
+                            android:gravity="right"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/add_item_layout"
+                                android:layout_width="80dp"
+                                android:layout_height="30dp"
+                                android:visibility="visible"
+                                android:layout_gravity="right"
+                                android:background="@drawable/round_border_button"
+                                android:orientation="horizontal">
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center">
+
+                                    <TextView
+                                        android:id="@+id/add_"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="30dp"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:text="@string/add"
+                                        android:textColor="@color/gray_btn_bg_pressed_color"
+                                        android:textSize="12sp"
+                                        android:visibility="visible" />
+
+                                    <LinearLayout
+                                        android:id="@+id/quantity_ll"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:orientation="horizontal"
+                                        android:visibility="gone">
+
+                                        <TextView
+                                            android:id="@+id/remove_item"
+                                            android:layout_width="30dp"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="center"
+                                            android:text="-"
+                                            android:textColor="@color/red"
+                                            android:textSize="20sp"
+                                            android:textStyle="bold"
+                                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+                                        <TextView
+                                            android:id="@+id/item_count"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="center"
+                                            android:paddingLeft="5dp"
+                                            android:paddingEnd="5dp"
+                                            android:text="1"
+                                            android:textColor="@color/gen_black"
+                                            android:textSize="14sp"
+                                            android:textStyle="normal"
+                                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+                                        <TextView
+                                            android:id="@+id/add_item"
+                                            android:layout_width="30dp"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="center"
+                                            android:paddingEnd="5dp"
+                                            android:text="+"
+                                            android:textColor="@color/red"
+                                            android:textSize="20sp"
+                                            android:textStyle="bold"
+                                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+                                    </LinearLayout>
+
+
+                                    <TextView
+                                        android:id="@+id/item_not_in_stock"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:text="Not in Stock"
+                                        android:textColor="@color/red"
+                                        android:textSize="12sp"
+                                        android:visibility="gone"
+                                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+                                </FrameLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/order_not_accepting"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"
+                                android:orientation="vertical">
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:gravity="center"
+                                        android:text="Order Not Accepting"
+                                        android:textColor="@color/red"
+                                        android:textSize="12sp"
+                                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+                                </FrameLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                 <!--   <TextView
                         android:id="@+id/item_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="110dp"
-                        android:textSize="14sp"
-                        android:textStyle="normal"
+                        android:layout_marginStart="@dimen/margin_10"
                         android:textAllCaps="false"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                         android:textColor="@color/dark_gray"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+                        android:textSize="14sp"
+                        android:textStyle="normal" />-->
+
+                    <TextView
+                        android:id="@+id/item_qty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:maxLines="1"
+                        android:visibility="gone"
+                        android:layout_marginTop="@dimen/margin_5"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/item_short_desc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:maxLines="2"
                         android:layout_marginTop="@dimen/margin_5"
-                        android:layout_marginStart="110dp"
-                        android:textSize="12sp"
                         android:textColor="@android:color/darker_gray"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+                        android:textSize="12sp" />
 
                     <RatingBar
                         android:id="@+id/rating"
-                        android:layout_marginTop="@dimen/margin_5"
+                        style="?android:attr/ratingBarStyleSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="110dp"
+                        android:layout_marginStart="@dimen/margin_5"
                         android:numStars="5"
                         android:rating="4"
-                        style="?android:attr/ratingBarStyleSmall"
-                        android:theme="@style/RatingBar"/>
+                        android:theme="@style/RatingBar" />
 
-                <LinearLayout
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:layout_marginTop="10dp"
-                     android:layout_marginStart="110dp"
-                     android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:orientation="horizontal">
 
-                 <TextView
-                     android:id="@+id/item_displayrate"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:textSize="12sp"
-                     tools:textColor="@android:color/darker_gray"
-                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+                        <TextView
+                            android:id="@+id/item_displayrate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                            android:textSize="14sp"
+                            tools:textColor="@android:color/darker_gray" />
 
-                 <TextView
-                     android:id="@+id/item_sellrate"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:textSize="12sp"
-                     android:paddingLeft="@dimen/margin_10"
-                     android:textColor="@color/gen_black"
-                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+                        <TextView
+                            android:id="@+id/item_sellrate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="@dimen/margin_5"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                            android:textColor="@color/gen_black"
+                            android:textSize="14sp" />
 
-             </LinearLayout>
+                    </LinearLayout>
 
                     <TextView
-                        android:layout_marginTop="5dp"
-                        android:layout_marginLeft="100dp"
                         android:id="@+id/item_discount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="12sp"
-                        android:paddingLeft="@dimen/margin_10"
+                        android:textStyle="italic"
+                        android:paddingStart="@dimen/margin_5"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                         android:textColor="@color/red"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/item_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_5"
+                        android:text="@string/message_txt"
+                        android:textSize="12sp"
+                        android:textStyle="normal"
+                        android:maxLines="3"
+                        android:textColor="@color/dark_gray" />
 
                 </LinearLayout>
 
-                <LinearLayout
+                <!--<LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
@@ -243,7 +412,7 @@
 
                     </LinearLayout>
 
-                </LinearLayout>
+                </LinearLayout>-->
 
             </LinearLayout>
 
@@ -254,7 +423,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/idTopLayout">
 
-                <TextView
+              <!--  <TextView
                     android:id="@+id/item_description"
                     android:layout_marginTop="@dimen/margin_5"
                     android:layout_marginBottom="@dimen/margin_5"
@@ -265,7 +434,7 @@
                     android:textSize="12sp"
                     android:textStyle="normal"
                     android:textColor="@color/dark_gray"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+                    />-->
 
                 <TextView
                     android:visibility="gone"
@@ -276,8 +445,7 @@
                     android:paddingRight="45dip"
                     android:textSize="15dp"
                     android:textStyle="bold"
-                    android:textColor="@color/dark_gray"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+                    android:textColor="@color/dark_gray" />
             </LinearLayout>
 
         </RelativeLayout>

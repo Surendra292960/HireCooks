@@ -19,8 +19,8 @@
 19
 20    <uses-sdk
 21        android:minSdkVersion="19"
-21-->D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml
+21-->D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml
 22        android:targetSdkVersion="28" />
-22-->D:\Suree\DrinkShop-master 2\DrinkShop-master 2\SampleTest\Test\HireCooks\aFileChooser\src\main\AndroidManifest.xml
+22-->D:\Suree\HireCooks\aFileChooser\src\main\AndroidManifest.xml
 23
 24</manifest>

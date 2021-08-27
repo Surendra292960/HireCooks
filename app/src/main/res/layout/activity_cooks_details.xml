@@ -135,6 +135,7 @@
                           android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
                      <TextView
+                         android:visibility="gone"
                          android:layout_weight="1"
                          android:gravity="end"
                          android:id="@+id/update_images"

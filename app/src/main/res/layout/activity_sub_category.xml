@@ -100,6 +100,7 @@
 
     <FrameLayout
         android:layout_marginTop="@dimen/margin_80"
+        android:layout_marginBottom="@dimen/margin_60"
         android:id="@+id/no_result_found"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -129,7 +130,7 @@
                 android:layout_marginRight="20dp"
                 android:gravity="center"
                 android:textStyle="normal"
-                android:text="Subcategory Not Addedd"
+                android:text="No Result found"
                 android:textColor="#848484"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -138,6 +139,7 @@
 
     <FrameLayout
         android:layout_marginTop="@dimen/margin_80"
+        android:layout_marginBottom="@dimen/margin_60"
         android:id="@+id/no_vender_found"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -178,6 +180,7 @@
 
     <FrameLayout
         android:layout_marginTop="@dimen/margin_80"
+        android:layout_marginBottom="@dimen/margin_60"
         android:visibility="gone"
         android:id="@+id/no_search_result_found"
         android:background="@color/white"

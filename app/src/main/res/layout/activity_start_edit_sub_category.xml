@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/activity_item_details"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="10"
+    tools:ignore="NamespaceTypo"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView android:id="@+id/scrollbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9.5"
+        android:scrollbars="none"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="2"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Search Key">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:inputType="text"
+                        android:maxLines="4"
+                        android:id="@+id/search_key"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/subcategory_name">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:inputType="text"
+                        android:maxLines="4"
+                        android:id="@+id/editTextSubCategoryName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="2"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/sellrate">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:inputType="number"
+                        android:id="@+id/editTextSellRate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/displayrate">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:inputType="number"
+                        android:id="@+id/editTextDisplayRate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="2"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Product Unique Key">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:visibility="visible"
+                        android:inputType="text"
+                        android:id="@+id/product_unique_key"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Age">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:inputType="number"
+                        android:visibility="visible"
+                        android:id="@+id/age"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="2"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Brand">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:inputType="text"
+                        android:visibility="visible"
+                        android:id="@+id/product_brand"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Gender">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:inputType="text"
+                        android:maxLines="4"
+                        android:id="@+id/gender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="false"
+                android:hint="@string/address">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/address"
+                    android:inputType="text"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="false"
+                android:hint="@string/firmid">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:inputType="text"
+                    android:id="@+id/editTextFirmId"
+                    android:maxLines="1"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/discription">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:inputType="text"
+                    android:id="@+id/editTextDiscription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/detail_discription">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:inputType="text"
+                    android:id="@+id/editTextDetailDiscription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/shield_url">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:visibility="gone"
+                    android:inputType="text"
+                    android:id="@+id/editTextShiledUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/image_url_2">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextImagetUrl2"
+                    android:maxLines="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/image_url_3">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextImagetUrl3"
+                    android:maxLines="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/image_url_4">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextImagetUrl4"
+                    android:maxLines="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/available_stock">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:visibility="gone"
+                    android:id="@+id/available_stock"
+                    android:maxLines="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Weight">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:visibility="gone"
+                    android:id="@+id/editTextWeight"
+                    android:maxLines="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/weight_text"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/size_16"
+                    android:layout_gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:textColor="@color/style_color_primary"
+                    android:text="Weight : "/>
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/add_weight"
+                    android:layout_width="@dimen/margin_50"
+                    android:layout_height="@dimen/margin_30"
+                    android:textSize="@dimen/size_14"
+                    android:layout_margin="@dimen/margin_10"
+                    android:textStyle="bold"
+                    android:gravity="end"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/margin_5"
+                    android:background="@color/style_color_primary"
+                    android:textColor="@color/white"
+                    android:text="@string/add"/>
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:visibility="visible"
+                    android:id="@+id/weight_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:scrollbarAlwaysDrawHorizontalTrack="true"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+                <ProgressBar
+                    android:id="@+id/weight_progress"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:minHeight="50dp"
+                    android:minWidth="250dp"
+                    android:max="100"
+                    android:layout_gravity="center"
+                    android:indeterminate="true"
+                    android:progress="1" />
+
+            </FrameLayout>
+
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/size_text"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/size_16"
+                    android:layout_gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:textColor="@color/style_color_primary"
+                    android:text="Sizes : "/>
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/add_size"
+                    android:layout_width="@dimen/margin_50"
+                    android:layout_height="@dimen/margin_30"
+                    android:textSize="@dimen/size_14"
+                    android:layout_margin="@dimen/margin_10"
+                    android:textStyle="bold"
+                    android:gravity="end"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/margin_5"
+                    android:background="@color/style_color_primary"
+                    android:textColor="@color/white"
+                    android:text="@string/add"/>
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:visibility="visible"
+                    android:id="@+id/sizes_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:scrollbarAlwaysDrawHorizontalTrack="true"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+                <ProgressBar
+                    android:id="@+id/size_progress"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:minHeight="50dp"
+                    android:minWidth="250dp"
+                    android:max="100"
+                    android:layout_gravity="center"
+                    android:indeterminate="true"
+                    android:progress="1" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/size_16"
+                    android:layout_gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:textColor="@color/style_color_primary"
+                    android:text="Sizes Number : "/>
+
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="@dimen/margin_10"
+                android:visibility="visible"
+                android:id="@+id/sizes_number_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:scrollbarAlwaysDrawHorizontalTrack="true"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/color_text"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/size_16"
+                    android:textStyle="bold"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/style_color_primary"
+                    android:text="Colors : "/>
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/add_color"
+                    android:layout_width="@dimen/margin_50"
+                    android:layout_height="@dimen/margin_30"
+                    android:textSize="@dimen/size_14"
+                    android:layout_margin="@dimen/margin_10"
+                    android:textStyle="bold"
+                    android:gravity="end"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/margin_5"
+                    android:background="@color/style_color_primary"
+                    android:textColor="@color/white"
+                    android:text="@string/add"/>
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:visibility="visible"
+                    android:id="@+id/colors_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:scrollbarAlwaysDrawHorizontalTrack="true"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+                <ProgressBar
+                    android:id="@+id/color_progress"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:minHeight="50dp"
+                    android:minWidth="250dp"
+                    android:max="100"
+                    android:layout_gravity="center"
+                    android:indeterminate="true"
+                    android:progress="1" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/size_16"
+                    android:layout_gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:textColor="@color/style_color_primary"
+                    android:text="Images : "/>
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/add_image"
+                    android:layout_width="@dimen/margin_50"
+                    android:layout_height="@dimen/margin_30"
+                    android:textSize="@dimen/size_14"
+                    android:layout_margin="@dimen/margin_10"
+                    android:textStyle="bold"
+                    android:gravity="end"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/margin_5"
+                    android:background="@color/style_color_primary"
+                    android:textColor="@color/white"
+                    android:text="@string/add"/>
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="@dimen/margin_10"
+                android:visibility="visible"
+                android:id="@+id/images_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:scrollbarAlwaysDrawHorizontalTrack="true"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+            <LinearLayout
+                android:id="@+id/image_upload_btn"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <Button
+                    android:layout_weight="1"
+                    android:id="@+id/btnChoose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="choose Image"/>
+
+                <Button
+                    android:layout_weight="1"
+                    android:id="@+id/btnUpload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="upload Image"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:layout_weight="1"
+                        android:layout_margin="5dp"
+                        android:id="@+id/editTextUploadImage"
+                        android:layout_width="match_parent"
+                        android:scaleType="fitXY"
+                        android:layout_height="180dp"/>
+
+                    <ImageView
+                        android:layout_weight="1"
+                        android:layout_margin="5dp"
+                        android:id="@+id/editTextUploadImage2"
+                        android:layout_width="match_parent"
+                        android:scaleType="fitXY"
+                        android:layout_height="180dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <ImageView
+                        android:layout_weight="1"
+                        android:layout_margin="5dp"
+                        android:id="@+id/editTextUploadImage3"
+                        android:layout_width="match_parent"
+                        android:scaleType="fitXY"
+                        android:layout_height="180dp"/>
+
+                    <ImageView
+                        android:layout_weight="1"
+                        android:layout_margin="5dp"
+                        android:id="@+id/editTextUploadImage4"
+                        android:layout_width="match_parent"
+                        android:scaleType="fitXY"
+                        android:layout_height="180dp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ImageView
+                android:visibility="gone"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:id="@+id/editTextUploadShieldImage"
+                android:layout_width="match_parent"
+                android:scaleType="fitXY"
+                android:layout_height="180dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:elevation="30dp"
+        android:background="@color/colorAccent">
+
+        <TextView android:id="@+id/submit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/style_color_primary"
+            android:text="Submit"
+            android:textAllCaps="true"
+            android:textSize="14dp"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:gravity="center"/>
+    </LinearLayout>
+</LinearLayout>

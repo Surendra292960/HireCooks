@@ -1,3 +1,4 @@
+/*
 package com.test.sample.hirecooks.Activity.ProductDatails;
 
 import android.animation.ObjectAnimator;
@@ -658,6 +659,7 @@ public class ProductDetailsActivity extends BaseActivity {
         }
     }
 
+*/
 /*    @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -671,7 +673,8 @@ public class ProductDetailsActivity extends BaseActivity {
             this.finish();
         }
         return super.onOptionsItemSelected(item);
-    }*/
+    }*//*
+
 
     public class OfferSubCategoryHorizontalAdapter extends RecyclerView.Adapter<ProductDetailsActivity.OfferSubCategoryHorizontalAdapter.MyViewHolder> {
         List<OffersSubcategory> productList;
@@ -1490,3 +1493,4 @@ public class ProductDetailsActivity extends BaseActivity {
         }
     }
 }
+*/

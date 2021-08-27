@@ -1,10 +1,19 @@
 package com.test.sample.hirecooks.WebApis;
 
 
+/*import com.test.sample.hirecooks.Models.NewOrder.OrdersTable;
+import com.test.sample.hirecooks.Models.NewOrder.Root;
+import com.test.sample.hirecooks.Models.Order.Results;*/
+
+import com.test.sample.hirecooks.Models.NewOrder.OrdersTable;
+import com.test.sample.hirecooks.Models.NewOrder.Root;
 import com.test.sample.hirecooks.Models.Order.Results;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -48,12 +57,6 @@ public interface OrderApi {
     Call<Results> getOrderByUserId(
             @Field("userId") int userId);
 
-    @FormUrlEncoded
-    @POST("getCurrentOrders")
-    Call<Results> getCurrentOrders(
-            @Field("firm_id") String firmId,
-            @Field("order_status") String order_status);
-
     @GET("getOrder")
     Call<Results> getOrder();
 
@@ -62,18 +65,34 @@ public interface OrderApi {
     Observable<Results> Adeudos(
             @Field("id") int id_user);
 
-    @FormUrlEncoded
+/*    @FormUrlEncoded
     @PUT("updateOrderStatus/{id}")
     Call<Results> updateOrderStatus(
             @Path("id") Integer id,
-            @Field("order_status") String order_status);
+            @Field("order_status") String order_status);*/
 
-    @FormUrlEncoded
+  /*  @FormUrlEncoded
     @PUT("acceptOrders/{id}")
     Call<Results> acceptOrders(
             @Path("id") Integer id,
-            @Field("order_confirm") String order_confirm);
+            @Field("order_confirm") String order_confirm);*/
 
+    @POST("orders")
+    Call<List<Root>> addOrder(@Body List<OrdersTable> root);
+
+    @POST("orders/{order_status}")
+    Call<List<Root>> getCurrentOrders(@Path("order_status") String order_status);
+
+    @POST("ordersByUserId/{id}")
+    Call<List<Root>> getOrdersByUserId(@Path("id") int id);
+
+    @PUT("orders/{order_id}")
+    Call<List<Root>> updateOrderStatus(
+            @Path("order_id") Integer id,@Body List<OrdersTable> order_status);
+
+    @PUT("confirm_orders/{order_id}")
+    Call<List<Root>> acceptOrders(
+            @Path("order_id") Integer id,@Body List<OrdersTable> confirm_status);
 }
 
 

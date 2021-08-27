@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">HireCook</string>
     <string name="FACEBOOK_APP_ID" translatable="false">741054493063557</string>
     <string name="ACCOUNT_KIT_CLIENT_TOKEN" translatable="false">[ACCOUNT_KIT_CLIENT_TOKEN]</string>
@@ -160,12 +160,28 @@
     <string name="imageurl_2" translatable="false">ImageUrl_2</string>
     <string name="imageurl_3" translatable="false">ImageUrl_3</string>
     <string name="imageurl_4" translatable="false">ImageUrl_4</string>
-    <string name="select_your_location_here_by_click_on_icon"  translatable="false">Select Your Location Here By Click on Icon</string>
-    <string name="edit_address"  translatable="false">Edit Address</string>
-    <string name="upload_images"  translatable="false">Upload Images</string>
-    <string name="click_on_image_to_update"  translatable="false">Click on Image to Update</string>
+    <string name="select_your_location_here_by_click_on_icon" translatable="false">Select Your Location Here By Click on Icon</string>
+    <string name="edit_address" translatable="false">Edit Address</string>
+    <string name="upload_images" translatable="false">Upload Images</string>
+    <string name="click_on_image_to_update" translatable="false">Click on Image to Update</string>
     <string name="search_cooks" translatable="false">Search Cooks...</string>
-    <string name="search_location">Search Location</string>
+    <string name="search_location" tools:ignore="MissingTranslation">Search Location</string>
+    <string name="size" translatable="false">Size :</string>
+    <string name="order_submited_successfully" tools:ignore="MissingTranslation">Order Submited Successfully</string>
+    <string name="myorders" tools:ignore="MissingTranslation">MyOrders</string>
+    <string name="image_url_1" tools:ignore="MissingTranslation">Image Url 1</string>
+    <string name="image_url_2" tools:ignore="MissingTranslation">Image Url 2</string>
+    <string name="image_url_3" tools:ignore="MissingTranslation">Image Url 3</string>
+    <string name="image_url_4" tools:ignore="MissingTranslation">Image Url 4</string>
+    <string name="shield_url" tools:ignore="MissingTranslation">Shield Url / Optional</string>
+    <string name="detail_discription" tools:ignore="MissingTranslation">Detail Discription</string>
+    <string name="subcategory_name" tools:ignore="MissingTranslation">Name</string>
+    <string name="subcategoryid" tools:ignore="MissingTranslation">SubCategoryId</string>
+    <string name="sellrate" tools:ignore="MissingTranslation">SellRate</string>
+    <string name="displayrate" tools:ignore="MissingTranslation">DisplayRate</string>
+    <string name="discription" tools:ignore="MissingTranslation">Discription</string>
+    <string name="available_stock" tools:ignore="MissingTranslation">How much Stock you have</string>
+    <string name="new_password">New Password</string>
 
     <string-array name="uploadImages">
         <item>Pick from gallery</item>

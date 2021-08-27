@@ -16,8 +16,8 @@ import com.mxn.soul.flowingdrawer_core.BuildConfig;
 import com.test.sample.hirecooks.Activity.Cooks.CooksActivity;
 import com.test.sample.hirecooks.Activity.Favourite.FavouriteActivity;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
+import com.test.sample.hirecooks.Activity.Orders.MyOrdersActivity;
 import com.test.sample.hirecooks.Activity.Orders.RecievedOrderActivity;
-import com.test.sample.hirecooks.Activity.SubCategory.SubCategoryActivity.SubCategoryActivity;
 import com.test.sample.hirecooks.Activity.Users.UserSignInActivity;
 import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
@@ -61,17 +61,19 @@ public class MenuListFragment extends Fragment implements UploadCallBack {
                 logout();
             } else if (id == R.id.menu_favourite) {
                 startActivity( new Intent(getActivity(), FavouriteActivity.class));
-            } else if (id == R.id.menu_offers) {
+            }/* else if (id == R.id.menu_offers) {
                 Bundle bundle = new Bundle();
                 Intent intent = new Intent(getActivity(), SubCategoryActivity.class);
-                bundle.putSerializable("CategoryName" , "Offers");
+                bundle.putSerializable("CategoryName" , "Category");
                 intent.putExtras(bundle);
                 startActivity(intent);
-            } else if (id == R.id.menu_cooks) {
+            }*/ else if (id == R.id.menu_cooks) {
                 Intent intent = new Intent( getActivity(), CooksActivity.class );
                 intent.putExtra(  "type", "AllCooks"  );
                 startActivity( intent );
-            } else if (id == R.id.menu_popularproducts) {
+            } else if (id == R.id.menu_myorders) {
+                startActivity(new Intent(getActivity(), MyOrdersActivity.class));
+            } /*else if (id == R.id.menu_popularproducts) {
                 Bundle bundle = new Bundle();
                 Intent intent = new Intent(getActivity(), SubCategoryActivity.class);
                 bundle.putSerializable("CategoryName" , "Popular Products");
@@ -83,7 +85,7 @@ public class MenuListFragment extends Fragment implements UploadCallBack {
                 bundle.putSerializable("CategoryName" , "New Products");
                 intent.putExtras(bundle);
                 startActivity(intent);
-            } else if (id == R.id.menu_share) {
+            }*/ else if (id == R.id.menu_share) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT,

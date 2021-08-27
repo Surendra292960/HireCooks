@@ -31,6 +31,7 @@ import com.google.gson.reflect.TypeToken;
 import com.test.sample.hirecooks.Activity.AddorRemoveCallbacks;
 import com.test.sample.hirecooks.Models.Cart.Cart;
 import com.test.sample.hirecooks.Models.Order.Order;
+import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
 import java.lang.reflect.Type;
@@ -42,7 +43,9 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 10;
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 20;
     List<Cart> cartList = new ArrayList<Cart>();
-    List<Cart> FavouriteList = new ArrayList<Cart>();
+    List<Subcategory> newCartList = new ArrayList<Subcategory>();
+    List<com.test.sample.hirecooks.Models.NewOrder.Order> newOrderList = new ArrayList<com.test.sample.hirecooks.Models.NewOrder.Order>();
+    List<Subcategory> FavouriteList = new ArrayList<>();
     List<Order> orderList = new ArrayList<Order>();
     Gson gson;
     LocalStorage localStorage;
@@ -84,15 +87,53 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
         return cartList;
     }
 
-    public List<Cart> getFavourite() {
+    public int newCartCount() {
+
+        gson = new Gson();
+        if (localStorage.getCart() != null) {
+            String jsonCart = localStorage.getCart();
+            Log.d("CART : ", jsonCart);
+            Type type = new TypeToken<List<Subcategory>>() {
+            }.getType();
+            newCartList = gson.fromJson(jsonCart, type);
+            return newCartList.size();
+        }
+        return 0;
+    }
+
+    public List<Subcategory> getnewCartList() {
+        if (localStorage.getCart() != null) {
+            String jsonCart = localStorage.getCart();
+            Type type = new TypeToken<List<Subcategory>>() {
+            }.getType();
+            newCartList = gson.fromJson(jsonCart, type);
+            return newCartList;
+        }
+        return newCartList;
+    }
+
+    public List<com.test.sample.hirecooks.Models.NewOrder.Order> getNewOrderList() {
+        if (localStorage.getOrder() != null) {
+            String jsonOrder = localStorage.getOrder();
+            //Log.d("CART : ", jsonCart);
+            Type type = new TypeToken<List<com.test.sample.hirecooks.Models.NewOrder.Order>>() {
+            }.getType();
+            orderList = gson.fromJson(jsonOrder, type);
+            return newOrderList;
+        }
+        return newOrderList;
+    }
+
+
+    public List<Subcategory> getFavourite() {
         if (localStorage.getFavourite() != null) {
             String jsonFavourite = localStorage.getFavourite();
-            Type type = new TypeToken<List<Cart>>() {
+            Type type = new TypeToken<List<Subcategory>>() {
             }.getType();
             FavouriteList = gson.fromJson(jsonFavourite, type);
             return FavouriteList;
         }
-        return cartList;
+        return FavouriteList;
     }
 
     public List<Order> getOrderList() {

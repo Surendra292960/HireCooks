@@ -47,7 +47,7 @@ public class PlacedOrderSuccessfully extends AppCompatActivity {
 
     private void setData() {
         order_id.setText("OrderId #"+order.getOrderId());
-        order_totalAmount.setText("Total Amount : "+order.getProductTotalAmount());
+        order_totalAmount.setText("Total Amount : " +order.getProductTotalAmount());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

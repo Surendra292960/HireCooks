@@ -1,7 +1,7 @@
 package com.test.sample.hirecooks.WebApis;
 
 import com.test.sample.hirecooks.Models.BannerResponse.Banners;
-import com.test.sample.hirecooks.Models.Category.Categories;
+import com.test.sample.hirecooks.Models.Category.Example;
 import com.test.sample.hirecooks.Models.HotelImage;
 import com.test.sample.hirecooks.Models.Images.Image;
 import com.test.sample.hirecooks.Models.ImagesResponse.Images;
@@ -15,6 +15,7 @@ import com.test.sample.hirecooks.Models.users.Result;
 import com.test.sample.hirecooks.Utils.APIUrl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -81,9 +82,6 @@ public interface UserApi {
 
     @GET("getBanner")
     Call<Banners> getBanners();
-
-    @GET("getCategory")
-    Call<Categories> getCategory();
 
     //sending message
     @FormUrlEncoded
@@ -161,4 +159,9 @@ public interface UserApi {
     Call<TokenResult> getTokenByUserId(
             @Field("userId") int userId);
 
+    @GET("Category")
+    Call<List<Example>> getCategory();
+
+    @POST("Category/{id}")
+    Call<List<Example>> getCategoryByCatId(@Path( "id" ) int id);
 }

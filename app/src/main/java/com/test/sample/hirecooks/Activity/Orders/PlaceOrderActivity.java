@@ -1,5 +1,4 @@
 package com.test.sample.hirecooks.Activity.Orders;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -19,10 +18,8 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.libraries.places.api.Places;
 import com.google.gson.Gson;
@@ -30,11 +27,12 @@ import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
 import com.test.sample.hirecooks.Activity.ManageAddress.SecondryAddressActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Models.Cart.Cart;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Result;
-import com.test.sample.hirecooks.Models.Order.Order;
-import com.test.sample.hirecooks.Models.Order.Results;
+import com.test.sample.hirecooks.Models.NewOrder.Order;
+import com.test.sample.hirecooks.Models.NewOrder.OrdersTable;
+import com.test.sample.hirecooks.Models.NewOrder.Root;
+import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.Models.TokenResponse.Token;
 import com.test.sample.hirecooks.Models.TokenResponse.Tokens;
 import com.test.sample.hirecooks.Models.users.User;
@@ -42,7 +40,6 @@ import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
 import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Constants;
-import com.test.sample.hirecooks.Utils.OnClickRateLimitedDecoratedListener;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.RazorpayPayment;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
@@ -51,13 +48,14 @@ import com.test.sample.hirecooks.WebApis.MapApi;
 import com.test.sample.hirecooks.WebApis.NotificationApi;
 import com.test.sample.hirecooks.WebApis.OrderApi;
 import com.test.sample.hirecooks.WebApis.UserApi;
-
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-
+import java.util.Set;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -69,12 +67,14 @@ public class PlaceOrderActivity extends BaseActivity {
     private AppCompatButton shop_now;
     private FrameLayout no_result_found;
     GoogleMap mMap;
-    List<Cart> cartList = new ArrayList<>();
     LocalStorage localStorage;
     Gson gson;
     private RecyclerView recyclerView;
-    Double mTotal, mTotalAmount,includedDeliveryCharges,excludedDeliveryCharges;
-    String orderNo;
+    Double mTotal;
+    Double mTotalAmount;
+    Double includedDeliveryCharges;
+    Double excludedDeliveryCharges;
+    int orderNo;
     private User user;
     private Map maps;
     private RadioGroup radioPromo;
@@ -86,6 +86,15 @@ public class PlaceOrderActivity extends BaseActivity {
     private String status = "";
     private Map address;
     private RazorpayPayment razorpayPayment;
+    private OrdersTable orderTable;
+    private Root root;
+    private List<Subcategory> cartList = new ArrayList<>();
+    private com.test.sample.hirecooks.Models.NewOrder.Order order;
+    private List<com.test.sample.hirecooks.Models.NewOrder.Order> orderList;
+    private List<com.test.sample.hirecooks.Models.NewOrder.Order> filteredList = new ArrayList<>(  );
+    private List<OrdersTable> orderTableList = new ArrayList<>(  );
+    private List<Root> rootList = new ArrayList<>(  );
+    private Date location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,11 +114,13 @@ public class PlaceOrderActivity extends BaseActivity {
         initializeViews();
         initViews();
         getCart();
+        getDateAndTime();
         setUpCartRecyclerview();
     }
 
+
     private void getCart() {
-        cartList = getCartList();
+        cartList = getnewCartList();
         if(cartList.size()!=0){
             no_result_found.setVisibility(View.GONE);
             excludedDeliveryCharges = 0.0;
@@ -153,7 +164,7 @@ public class PlaceOrderActivity extends BaseActivity {
         user = SharedPrefManager.getInstance(this).getUser();
 
         Random rnd = new Random();
-        orderNo = String.valueOf(100000000 + rnd.nextInt(900000000));
+        orderNo = 100000000 + rnd.nextInt(900000000);
         localStorage = new LocalStorage(this);
         gson = new Gson();
 
@@ -164,189 +175,182 @@ public class PlaceOrderActivity extends BaseActivity {
             }
         });
 
-        editTextCashOnDelivery.setOnClickListener(new OnClickRateLimitedDecoratedListener(new View.OnClickListener() {
+        editTextCashOnDelivery.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(maps!=null){
-                    if(cartList!=null&&cartList.size()!=0){
-                        Order order = new Order();
-                        order.setOrderId(orderNo);
-                        for(Cart cart:cartList){
-                            //order.setOrderId(orderNo);
-                            order.setProductName(cart.getName());
-                            order.setProductSellRate(cart.getSellRate());
-                            order.setProductDisplayRate(cart.getDisplayRate());
-                            discount = (order.getProductDisplayRate() - order.getProductSellRate());
-                            displayrate = (order.getProductDisplayRate());
-                            discountPercentage = (discount * 100 / displayrate);
-                            order.setProductDiscount(discountPercentage);
-                            order.setProductQuantity(cart.getItemQuantity());
-                            order.setProductTotalAmount(cart.getTotalAmount());
-                            order.setOrderStatus("Pending");
-                            order.setProductImage(cart.getLink());
-                            order.setFirmId(cart.getFirm_id());
-                            order.setUserId(user.getId());
-                            order.setPaymentMethod("COD");
-                            order.setOrderPlaceId(maps.getPlaceId());
-                            order.setOrderLatitude(maps.getLatitude());
-                            order.setOrderLongitude(maps.getLongitude());
-                            order.setOrderAddress(maps.getAddress());
-                            order.setOrderSubAddress(maps.getSubAddress());
-                            order.setOrderPincode(maps.getPincode());
-                            order.setName(user.getName());
-                            order.setEmail(user.getEmail());
-                            order.setPhone(user.getPhone());
-                            order.setFirmLat("Null");
-                            order.setFirmLng("Null");
-                            order.setFirmAddress("Null");
-                            order.setFirmPincode("Null");
-
-                            if(cart.getWeight()==null){
-                                order.setOrderWeight("null");
-                            }else{
-                                order.setOrderWeight(cart.getWeight());
-                            }
-                            if (SharedPrefManager.getInstance(PlaceOrderActivity.this).isLoggedIn()) {
-                                if(order.getOrderId()!=null&&order.getProductName()!=null&&order.getProductSellRate()!=0&&order.getProductDisplayRate()!=0
-                                        &&order.getProductQuantity()!=0&&order.getProductTotalAmount()!=0&&order.getOrderStatus()!=null&&order.getProductImage()!=null
-                                        &&order.getFirmId()!=null&&order.getUserId()!=0&&order.getOrderWeight()!=null&&order.getPaymentMethod()!=null&&order.getOrderPlaceId()!=null
-                                        &&order.getOrderLatitude()!=null&&order.getOrderLongitude()!=null&&order.getOrderAddress()!=null&&order.getOrderPincode()!=0
-                                        &&order.getName()!=null&&order.getEmail()!=null&&order.getPhone()!=null&&order.getFirmLat()!=null&&order.getFirmLng()!=null
-                                        &&order.getFirmAddress()!=null){
-                                    placeOrder(order);
-                                }else{
-                                    Toast.makeText(PlaceOrderActivity.this,"These Item can`t be placed please remove item and try again",Toast.LENGTH_LONG).show();
-                                }
-                            }else{
-                                Toast.makeText(PlaceOrderActivity.this,"Please Login First",Toast.LENGTH_LONG).show();
-                            }
+                orderList = new ArrayList<>( );
+                if(cartList!=null&&cartList.size()!=0){
+                    orderTable = new OrdersTable();
+                    orderTable.setOrder_id(orderNo);
+                    orderTable.setOrder_date_time(getDateAndTime());
+                    orderTable.setTotal_amount(mTotalAmount);
+                    orderTable.setShipping_price(0);
+                    orderTable.setPayment_type("COD");
+                    orderTable.setOrder_status("Pending");
+                    orderTable.setOrder_latitude(maps.getLatitude());
+                    orderTable.setOrder_longitude(maps.getLongitude());
+                    orderTable.setOrder_address(maps.getAddress());
+                    orderTable.setOrder_sub_address(maps.getSubAddress());
+                    orderTable.setOrder_pincode(maps.getPincode());
+                    orderTable.setUser_id(user.getId());
+                    orderTable.setUser_name(user.getName());
+                    orderTable.setUser_email(user.getEmail());
+                    orderTable.setUser_phone(user.getPhone());
+                    for (Subcategory subcategory:cartList){
+                        order = new com.test.sample.hirecooks.Models.NewOrder.Order();
+                        order.setSubcategoryid(Integer.parseInt( subcategory.getSubcategoryid() ));
+                        order.setOrderId( orderNo);
+                        order.setProductUniquekey( subcategory.getProductUniquekey() );
+                        order.setName( subcategory.getName() );
+                        order.setSellRate( subcategory.getSellRate() );
+                        order.setDisplayRate( subcategory.getDisplayRate() );
+                        order.setDiscount( (subcategory.getDisplayRate() - subcategory.getSellRate())*subcategory.getItemQuantity() );
+                        order.setQuantity( subcategory.getItemQuantity() );
+                        order.setTotalAmount( subcategory.getTotalAmount() );
+                        order.setLink2( String.valueOf( subcategory.getImages() ) );
+                        order.setFirmId( subcategory.getFirmId() );
+                        order.setOrderWeight( "Not Required" );
+                        order.setFirmLat(subcategory.getFirmLat());
+                        order.setFirmLng( subcategory.getFirmLng());
+                        order.setFirmAddress( subcategory.getFirmAddress());
+                        order.setFirmPincode(subcategory.getFrimPincode());
+                        order.setBrand(subcategory.getBrand());
+                        order.setGender(subcategory.getGender());
+                        order.setAge(subcategory.getAge());
+                        order.setImages( subcategory.getImages() );
+                        order.setWeights( subcategory.getWeights() );
+                        order.setColors( subcategory.getColors() );
+                        order.setSizes( subcategory.getSizes() );
+                        orderList.add( order );
+                        Set<com.test.sample.hirecooks.Models.NewOrder.Order> newList = new LinkedHashSet<>(orderList);
+                        filteredList = new ArrayList<>(newList);
+                    }
+                    orderTable.setOrders( filteredList );
+                    orderTableList.add( orderTable );
+                    root = new Root();
+                    root.setOrders_table( orderTableList );
+                    if (SharedPrefManager.getInstance(PlaceOrderActivity.this).isLoggedIn()) {
+                        placeOrder( root );
+                    }else{
+                        Toast.makeText( PlaceOrderActivity.this, "Please Login First", Toast.LENGTH_SHORT ).show();
                         }
                     }
                 }else{
-                    Toast.makeText(PlaceOrderActivity.this,"Please Select Address",Toast.LENGTH_LONG).show();
+                    Toast.makeText( PlaceOrderActivity.this, "Please Select Address", Toast.LENGTH_SHORT ).show();
                 }
             }
-        },5000));
+        } );
 
-        editTextPayOnline.setOnClickListener(new OnClickRateLimitedDecoratedListener(new View.OnClickListener() {
+        editTextPayOnline.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(maps!=null){
+                    orderList = new ArrayList<>( );
                     if(cartList!=null&&cartList.size()!=0){
-                        Order order = new Order();
-                        order.setOrderId(orderNo);
-                        for(Cart cart:cartList){
-                            //order.setOrderId(orderNo);
-                            order.setProductName(cart.getName());
-                            order.setProductSellRate(cart.getSellRate());
-                            order.setProductDisplayRate(cart.getDisplayRate());
-                            discount = (order.getProductDisplayRate() - order.getProductSellRate());
-                            displayrate = (order.getProductDisplayRate());
-                            discountPercentage = (discount * 100 / displayrate);
-                            order.setProductDiscount(discountPercentage);
-                            order.setProductQuantity(cart.getItemQuantity());
-                            order.setProductTotalAmount(cart.getTotalAmount());
-                            order.setOrderStatus("Pending");
-                            order.setProductImage(cart.getLink());
-                            order.setFirmId(cart.getFirm_id());
-                            order.setUserId(user.getId());
-                            order.setPaymentMethod("Paid");
-                            order.setOrderPlaceId(maps.getPlaceId());
-                            order.setOrderLatitude(maps.getLatitude());
-                            order.setOrderLongitude(maps.getLongitude());
-                            order.setOrderAddress(maps.getAddress());
-                            order.setOrderSubAddress(maps.getSubAddress());
-                            order.setOrderPincode(maps.getPincode());
-                            order.setName(user.getName());
-                            order.setEmail(user.getEmail());
-                            order.setPhone(user.getPhone());
-                            order.setFirmLat("Null");
-                            order.setFirmLng("Null");
-                            order.setFirmAddress("Null");
-                            order.setFirmPincode("Null");
-                            //order.setFirmName("Null");
+                        orderTable = new OrdersTable();
+                        orderTable.setOrder_id(orderNo);
+                        orderTable.setOrder_date_time(getDateAndTime());
+                        orderTable.setTotal_amount(mTotalAmount);
+                        orderTable.setShipping_price(0);
+                        orderTable.setPayment_type("UPI");
+                        orderTable.setOrder_status("Pending");
+                        orderTable.setOrder_latitude(maps.getLatitude());
+                        orderTable.setOrder_longitude(maps.getLongitude());
+                        orderTable.setOrder_address(maps.getAddress());
+                        orderTable.setOrder_sub_address(maps.getSubAddress());
+                        orderTable.setOrder_pincode(maps.getPincode());
+                        orderTable.setUser_id(user.getId());
+                        orderTable.setUser_name(user.getName());
+                        orderTable.setUser_email(user.getEmail());
+                        orderTable.setUser_phone(user.getPhone());
+                        for (Subcategory subcategory:cartList){
+                            order = new com.test.sample.hirecooks.Models.NewOrder.Order();
+                            order.setSubcategoryid(Integer.parseInt( subcategory.getSubcategoryid() ));
+                            order.setOrderId( orderNo);
+                            order.setProductUniquekey( subcategory.getProductUniquekey() );
+                            order.setName( subcategory.getName() );
+                            order.setSellRate( subcategory.getSellRate() );
+                            order.setDisplayRate( subcategory.getDisplayRate() );
+                            order.setDiscount( (subcategory.getDisplayRate() - subcategory.getSellRate())*subcategory.getItemQuantity() );
+                            order.setQuantity( subcategory.getItemQuantity() );
+                            order.setTotalAmount( subcategory.getTotalAmount() );
+                            order.setLink2( String.valueOf( subcategory.getImages() ) );
+                            order.setFirmId( subcategory.getFirmId() );
+                            order.setOrderWeight( "Not Required" );
+                            order.setFirmLat(subcategory.getFirmLat());
+                            order.setFirmLng( subcategory.getFirmLng());
+                            order.setFirmAddress( subcategory.getFirmAddress());
+                            order.setFirmPincode(subcategory.getFrimPincode());
+                            order.setBrand(subcategory.getBrand());
+                            order.setGender(subcategory.getGender());
+                            order.setAge(subcategory.getAge());
+                            order.setImages( subcategory.getImages() );
+                            order.setWeights( subcategory.getWeights() );
+                            order.setColors( subcategory.getColors() );
+                            order.setSizes( subcategory.getSizes() );
+                            orderList.add( order );
+                            Set<com.test.sample.hirecooks.Models.NewOrder.Order> newList = new LinkedHashSet<>(orderList);
+                            filteredList = new ArrayList<>(newList);
+                        }
+                        orderTable.setOrders( filteredList );
+                        orderTableList.add( orderTable );
+                        root = new Root();
+                        root.setOrders_table( orderTableList );
 
-                            if(cart.getWeight()==null){
-                                order.setOrderWeight("null");
-                            }else{
-                                order.setOrderWeight(cart.getWeight());
+                        if (SharedPrefManager.getInstance(PlaceOrderActivity.this).isLoggedIn()) {
+                            if(mTotalAmount!=0){
+                                razorpayPayment.startPayment(String.valueOf(mTotalAmount));
+
+            /*           payUsingUpi("HireCook","ramveer261@oksbi","Test Payment", String.valueOf(mTotalAmount));
+                                if(status.equals("success")){
+                                    placeOrder(root);
+                                }*/
                             }
-                            if (SharedPrefManager.getInstance(PlaceOrderActivity.this).isLoggedIn()) {
-                                if(order.getOrderId()!=null&&order.getProductName()!=null&&order.getProductSellRate()!=0&&order.getProductDisplayRate()!=0
-                                        &&order.getProductQuantity()!=0&&order.getProductTotalAmount()!=0&&order.getOrderStatus()!=null&&order.getProductImage()!=null
-                                        &&order.getFirmId()!=null&&order.getUserId()!=0&&order.getOrderWeight()!=null&&order.getPaymentMethod()!=null&&order.getOrderPlaceId()!=null
-                                        &&order.getOrderLatitude()!=null&&order.getOrderLongitude()!=null&&order.getOrderAddress()!=null&&order.getOrderPincode()!=0
-                                        &&order.getName()!=null&&order.getEmail()!=null&&order.getPhone()!=null&&order.getFirmLat()!=null&&order.getFirmLng()!=null
-                                        &&order.getFirmAddress()!=null){
-
-                                    if(mTotalAmount!=0){
-                                        razorpayPayment.startPayment(String.valueOf(mTotalAmount));
-
-                                    /*
-                                     payUsingUpi("HireCook","ramveer261@oksbi","Test Payment", String.valueOf(mTotalAmount));
-                                        if(status.equals("success")){
-                                            placeOrder(order);
-                                    }
-                                    */
-
-                                    }
-                                }else{
-                                    Toast.makeText(PlaceOrderActivity.this,"These Item can`t be placed please remove item and try again",Toast.LENGTH_LONG).show();
-                                }
-                            }else{
-                                Toast.makeText(PlaceOrderActivity.this,"Please Login First",Toast.LENGTH_LONG).show();
-                            }
+                        }else{
+                            Toast.makeText( PlaceOrderActivity.this, "Please Login First", Toast.LENGTH_SHORT ).show();
                         }
                     }
                 }else{
-                    Toast.makeText(PlaceOrderActivity.this,"Please Select Address",Toast.LENGTH_LONG).show();
+                    Toast.makeText( PlaceOrderActivity.this, "Please Select Address", Toast.LENGTH_SHORT ).show();
                 }
             }
-        },5000));
-
+        } );
         getMapDetails();
-        //getDateAndTime();
     }
 
-    private void placeOrder(Order order) {
-        Gson gson = new Gson();
-        String json = gson.toJson(order);
-        System.out.println("Order :"+json);
-        mService = ApiClient.getClient().create(OrderApi.class);
-        Call<Results> call = mService.submitOrder(order.getOrderId(),order.getProductName(),order.getProductSellRate(),order.getProductDisplayRate(),
-                order.getProductDiscount(),order.getProductQuantity(), order.getProductTotalAmount(),order.getOrderStatus(),order.getProductImage(),order.getFirmId(),
-                order.getUserId(),order.getOrderWeight(),order.getPaymentMethod(),order.getOrderPlaceId(),order.getOrderLatitude(),order.getOrderLongitude(),
-                order.getOrderAddress(),order.getOrderSubAddress(),order.getOrderPincode(),order.getName(),order.getEmail(),order.getPhone(),order.getFirmLat()
-                ,order.getFirmLng(),order.getFirmAddress(),order.getFirmPincode());
-        call.enqueue(new Callback<Results>() {
+    private void placeOrder(final Root root){
+        mService  = ApiClient.getClient().create(OrderApi.class);
+        Call<List<Root>> call = mService.addOrder(root.getOrders_table());
+        call.enqueue( new Callback<List<Root>>() {
             @Override
-            public void onResponse(Call<Results> call, Response<Results> response) {
-                if (response.code() == 200 &&response.body().getError()==false) {
-                    Toast.makeText(PlaceOrderActivity.this,response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    localStorage.deleteCart();
-                    List<Order> orderList = new ArrayList<>();
-                    for(Order order1:response.body().getOrder()){
-                        orderList.add(order1);
+            public void onResponse(Call<List<Root>> call, Response<List<Root>> response) {
+                if (response.code() == 200 ) {
+                    for(Root root1:response.body()){
+                        if(root1.getError()==false){
+                            Toast.makeText(PlaceOrderActivity.this,root1.getMessage(), Toast.LENGTH_SHORT).show();
+                            localStorage.deleteCart();
+                            getCart();
+                            PlaceOrderActivity.this.finish();
+                            startActivity(new Intent(PlaceOrderActivity.this, MainActivity.class));
+                            getTokenFromServer(root.getOrders_table());
+                        }else{
+                            Toast.makeText(PlaceOrderActivity.this,root1.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                     }
-                    Intent intent = new Intent(PlaceOrderActivity.this,PlacedOrderSuccessfully.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("Order",order);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                    getTokenFromServer(orderList);
                 } else {
-                    Toast.makeText(PlaceOrderActivity.this,response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PlaceOrderActivity.this,response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<Results> call, Throwable t) {
+            public void onFailure(Call<List<Root>> call, Throwable t) {
                 Toast.makeText(PlaceOrderActivity.this,R.string.error, Toast.LENGTH_SHORT).show();
             }
-        });
+        } );
     }
 
-    private void getTokenFromServer(List<Order> orderList) {
+    private void getTokenFromServer(List<OrdersTable> orderList) {
         UserApi mService =  ApiClient.getClient().create(UserApi.class);
         Call<Tokens> call1 = mService.getTokens();
         call1.enqueue(new Callback<Tokens>() {
@@ -357,14 +361,16 @@ public class PlaceOrderActivity extends BaseActivity {
                     progressBarUtil.hideProgress();
                     List<Token> filteredToken = new ArrayList<>();
                     Token tokens = new Token();
-                    for(Order order:orderList){
-                        for(Token token: response.body().getTokens()){
-                            if(token.getFirm_id().equalsIgnoreCase(order.getFirmId())){
-                                tokens.setFirm_id(order.getFirmId());
-                                tokens.setToken(token.getToken());
-                                sendNotification(tokens);
-                            }
-                        }
+                    for(OrdersTable orderTable:orderList){
+                       for(Order order:orderTable.getOrders()){
+                           for(Token token: response.body().getTokens()){
+                               if(token.getFirm_id().equalsIgnoreCase(order.getFirmId())){
+                                   tokens.setFirm_id(order.getFirmId());
+                                   tokens.setToken(token.getToken());
+                                   sendNotification(tokens);
+                               }
+                           }
+                       }
                     }
                     filteredToken.add(tokens);
                     System.out.println("Order Tokens: "+filteredToken);
@@ -405,23 +411,15 @@ public class PlaceOrderActivity extends BaseActivity {
         });
     }
 
-    private void getDateAndTime() {
-        Calendar c = Calendar.getInstance();
-        int seconds = c.get(Calendar.SECOND);
-        int minutes = c.get(Calendar.MINUTE);
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-
-        String time = hour+3 + ":" + minutes + ":" + seconds;
-
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        int month = c.get(Calendar.MONTH);
-        int year = c.get(Calendar.YEAR);
-        String date = day + "-" + month + "-" + year;
-
-       // editTextDeliveryTime.setText(date+"  "+time);
+    public String getDateAndTime()
+    {
+        String dt;
+        Date cal = Calendar.getInstance().getTime();
+        dt = cal.toLocaleString();
+        return dt;
     }
 
-    @Override
+/*    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
@@ -432,7 +430,7 @@ public class PlaceOrderActivity extends BaseActivity {
 
     public void onBackPressed() {
        this.finish();
-    }
+    }*/
 
     private void initializeViews() {
         try {
@@ -487,7 +485,7 @@ public class PlaceOrderActivity extends BaseActivity {
     }
 
     private void setUpCartRecyclerview() {
-        cartList = getCartList();
+        cartList = getnewCartList();
         CheckoutCartAdapter adapter = new CheckoutCartAdapter(PlaceOrderActivity.this,cartList);
         recyclerView.setAdapter(adapter);
     }
@@ -617,10 +615,10 @@ public class PlaceOrderActivity extends BaseActivity {
 
     public class CheckoutCartAdapter extends RecyclerView.Adapter<PlaceOrderActivity.CheckoutCartAdapter.CartViewHolder> {
         private Context mCtx;
-        private List<Cart> cartList;
+        private List<Subcategory> cartList;
         private int DisCount = 0, DisplayRate = 0, DiscountPercentage = 0;
 
-        public CheckoutCartAdapter(Context mCtx, List<Cart> cartList) {
+        public CheckoutCartAdapter(Context mCtx, List<Subcategory> cartList) {
             this.mCtx = mCtx;
             this.cartList = cartList;
         }
@@ -637,9 +635,9 @@ public class PlaceOrderActivity extends BaseActivity {
             if(cartList!=null){
                 localStorage = new LocalStorage(mCtx);
                 gson = new Gson();
-                Cart cart = cartList.get(position);
+                Subcategory cart = cartList.get(position);
                 holder.itemName.setText(cart.getName());
-                holder.itemDesc.setText(cart.getDesc());
+                holder.itemDesc.setText(cart.getDiscription());
 
                 DisCount = (cart.getDisplayRate() - cart.getSellRate());
                 DisplayRate = (cart.getDisplayRate());
@@ -648,9 +646,9 @@ public class PlaceOrderActivity extends BaseActivity {
 
                 if(cart.getItemQuantity()>1){
                     holder.itemQuantity.setText(""+cart.getItemQuantity());
-                    holder.itemTotalAmt.setText("₹ "+cart.getTotalAmount());
+                    holder.itemSellRate.setText("₹ "+cart.getSellRate());
                 }else{
-                    holder.itemTotalAmt.setText("₹ "+cart.getSellRate());
+                    holder.itemSellRate.setText("₹ "+cart.getSellRate());
                     holder.itemQuantity.setText(""+cart.getItemQuantity());
                 }
              /*   if(cart.getWeight()!=null){
@@ -660,7 +658,9 @@ public class PlaceOrderActivity extends BaseActivity {
                     holder.item_weight.setVisibility(View.GONE);
                 }*/
                 holder.itemImage.setAnimation(AnimationUtils.loadAnimation(mCtx,R.anim.fade_transition_animation));
-                Picasso.with(mCtx).load(cart.getLink()).into(holder.itemImage);
+                if(cart.getImages().size()!=0&&cart.getImages()!=null){
+                    Picasso.with(mCtx).load(cart.getImages().get( 0 ).getImage()).into(holder.itemImage);
+                }
 
                 holder.itemAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -744,14 +744,14 @@ public class PlaceOrderActivity extends BaseActivity {
         }
 
         class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-            TextView itemName, itemDesc, itemTotalAmt,itemAdd,itemRemove,itemQuantity,itemDelete,item_discount/*,item_weight*/;
+            TextView itemName, itemDesc, itemSellRate,itemAdd,itemRemove,itemQuantity,itemDelete,item_discount/*,item_weight*/;
             ImageView itemImage;
 
             public CartViewHolder(View itemView) {
                 super(itemView);
                 itemName = itemView.findViewById(R.id.item_name);
                 itemDesc = itemView.findViewById(R.id.item_short_desc);
-                itemTotalAmt = itemView.findViewById(R.id.total_Amount);
+                itemSellRate = itemView.findViewById(R.id.item_sellrate);
                 itemImage = itemView.findViewById(R.id.product_thumb);
                 itemAdd = itemView.findViewById(R.id.add_item);
                 itemRemove = itemView.findViewById(R.id.remove_item);
@@ -765,5 +765,21 @@ public class PlaceOrderActivity extends BaseActivity {
             public void onClick(View view) {
             }
         }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id==android.R.id.home){
+            this.finish();
+            startActivity( new Intent( PlaceOrderActivity.this,MainActivity.class ) );
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

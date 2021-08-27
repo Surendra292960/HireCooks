@@ -42,7 +42,7 @@ public class RazorpayPayment implements PaymentResultListener {
             options.put("amount", total);
 
             JSONObject preFill = new JSONObject();
-            preFill.put("email", "surendrapalatm@gmail.com");
+            preFill.put("email", "hirecook@gmail.com");
             preFill.put("contact", "7055292960");
 
             options.put("prefill", preFill);

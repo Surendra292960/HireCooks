@@ -8,14 +8,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
+import com.test.sample.hirecooks.Models.SubCategory.Image;
 import com.test.sample.hirecooks.R;
+
+import java.util.List;
 
 public class HomeSliderAdapter extends PagerAdapter {
     private Context mCtx;
     private LayoutInflater layoutInflater;
     private String[] text;
     private Integer[] images;
-
+    List<Image> image;
     public HomeSliderAdapter(Context mCtx, String[] text,Integer[] images) {
         this.mCtx = mCtx;
         this.text = text;

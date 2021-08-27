@@ -14,6 +14,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -40,16 +41,11 @@ import com.test.sample.hirecooks.Adapter.Offer.OfferAdapter;
 import com.test.sample.hirecooks.Adapter.Venders.VendersAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Libraries.Slider.SliderLayout;
-import com.test.sample.hirecooks.Models.Category.Categories;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.CooksPromotion.CooksPromotion;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Example;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
-import com.test.sample.hirecooks.Models.NewProductsCategory.NewProductCategories;
-import com.test.sample.hirecooks.Models.NewProductsCategory.NewProductCategory;
 import com.test.sample.hirecooks.Models.Offer.Offer;
-import com.test.sample.hirecooks.Models.OfferCategory.OffersCategories;
-import com.test.sample.hirecooks.Models.OfferCategory.OffersCategory;
 import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
 import com.test.sample.hirecooks.Models.UsersResponse.UsersResponse;
 import com.test.sample.hirecooks.Models.users.User;
@@ -59,7 +55,6 @@ import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.NetworkUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.MapApi;
-import com.test.sample.hirecooks.WebApis.ProductApi;
 import com.test.sample.hirecooks.WebApis.UserApi;
 
 import java.util.ArrayList;
@@ -92,7 +87,10 @@ public class HomeFragment extends Fragment{
     private User user = SharedPrefManager.getInstance(getContext()).getUser();
     private List<UserResponse> vendersList;
     private BaseActivity baseActivity;
-
+    List<com.test.sample.hirecooks.Models.Category.Example> list;
+    List<Category> mCategory ;
+    List<Category> mOfferCategory ;
+    List<Category> mNewProductsCat ;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -111,8 +109,6 @@ public class HomeFragment extends Fragment{
         if(NetworkUtil.checkInternetConnection(mainActivity)) {
             getMapDetails();
             getCategory();
-            getOfferCategory();
-            getNewProductCategory();
             getOffer();
             getCooks();
         }
@@ -168,19 +164,19 @@ public class HomeFragment extends Fragment{
     @SuppressLint("WrongConstant")
     private void getCategoryOffer(List<Offer> offers){
         if(offers.size()!=0&&offers!=null){
-        CircularImageCategoryAdapter adapter = new CircularImageCategoryAdapter(mainActivity,offers);
-        recyclerView2.setAdapter(adapter);
+            CircularImageCategoryAdapter adapter = new CircularImageCategoryAdapter(mainActivity,offers);
+            recyclerView2.setAdapter(adapter);
 
-        ToolPromotionAdapter Adapter = new ToolPromotionAdapter( getActivity(),offers);
-        tool_Pager.setAdapter ( Adapter );
+            ToolPromotionAdapter Adapter = new ToolPromotionAdapter( getActivity(),offers);
+            tool_Pager.setAdapter ( Adapter );
 
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
-        if (mainActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
-        } else {
-            linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
-        }
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
+            if (mainActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+            } else {
+                linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+            }
             recyclerView2.setLayoutManager(linearLayoutManager);
             recyclerView2.setItemAnimator(new DefaultItemAnimator());
 
@@ -216,7 +212,7 @@ public class HomeFragment extends Fragment{
                     }
 
                 } else {
-                 //   baseActivity.ShowToast(getResources().getString(R.string.failed_due_to)+response.body().getMessage());
+                    //   baseActivity.ShowToast(getResources().getString(R.string.failed_due_to)+response.body().getMessage());
                 }
             }
 
@@ -315,114 +311,89 @@ public class HomeFragment extends Fragment{
         });
     }
 
-    private void getOfferCategory() {
-       ProductApi mService = ApiClient.getClient().create(ProductApi.class);
-        Call<OffersCategories> call = mService.getOffersCategory();
-        call.enqueue(new Callback<OffersCategories>() {
-            @SuppressLint("WrongConstant")
-            @Override
-            public void onResponse(Call<OffersCategories> call, Response<OffersCategories> response) {
-                int statusCode = response.code();
-                if(statusCode==200){
-                  List<OffersCategory> categories = response.body().getOffersCategory();
-                    OfferAdapter adapter = new OfferAdapter(mainActivity,categories);
-                    offer_recycler_view.setAdapter(adapter);
-
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
-                    if (mainActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
-                    }else{
-                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
-                    }
-                    RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(20, 20, 20, 20);
-                    linearLayoutManager.canScrollHorizontally();
-
-                    offer_recycler_view.setLayoutManager(linearLayoutManager);
-                    offer_recycler_view.setItemAnimator(new DefaultItemAnimator());
-
-                }
-                else{
-                    baseActivity.ShowToast(getResources().getString(R.string.failed_due_to)+statusCode);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<OffersCategories> call, Throwable t) {
-
-            }
-        });
-    }
-
-    private void getNewProductCategory() {
-       ProductApi mService = ApiClient.getClient().create(ProductApi.class);
-        Call<NewProductCategories> call = mService.getNewProductCategory();
-        call.enqueue(new Callback<NewProductCategories>() {
-            @SuppressLint("WrongConstant")
-            @Override
-            public void onResponse(Call<NewProductCategories> call, Response<NewProductCategories> response) {
-                int statusCode = response.code();
-                if(statusCode==200){
-                  List<NewProductCategory> categories = response.body().getNewProductCategory();
-                    my_recycler_view3.setHasFixedSize(true);
-                    my_recycler_view3.setLayoutManager(new LinearLayoutManager(mainActivity));
-                    NewProductCategoryAdapter adapter = new NewProductCategoryAdapter(mainActivity,categories);
-                    my_recycler_view3.setAdapter(adapter);
-
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
-                    if (mainActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
-                    }else {
-                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
-                    }
-                    my_recycler_view3.setLayoutManager(linearLayoutManager);
-                    my_recycler_view3.setItemAnimator(new DefaultItemAnimator());
-
-                }
-                else{
-                    baseActivity.ShowToast(getResources().getString(R.string.failed_due_to)+statusCode);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<NewProductCategories> call, Throwable t) {
-
-            }
-        });
-    }
 
     private void getCategory() {
+        mCategory = new ArrayList<>(  );
+        mOfferCategory = new ArrayList<>(  );
+        mNewProductsCat = new ArrayList<>(  );
         mService = ApiClient.getClient().create(UserApi.class);
-        Call<Categories> call = mService.getCategory();
-        call.enqueue(new Callback<Categories>() {
+        Call<List<com.test.sample.hirecooks.Models.Category.Example>> call = mService.getCategory();
+        call.enqueue(new Callback<List<com.test.sample.hirecooks.Models.Category.Example>>() {
             @SuppressLint("WrongConstant")
             @Override
-            public void onResponse(Call<Categories> call, Response<Categories> response) {
+            public void onResponse(Call<List<com.test.sample.hirecooks.Models.Category.Example>> call, Response<List<com.test.sample.hirecooks.Models.Category.Example>> response) {
                 int statusCode = response.code();
                 if(statusCode==200){
-                    categories = response.body().getCategory();
-                    recyclerView.setHasFixedSize(true);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
-                    mAdapter = new CategoryAdapter(mainActivity,categories);
-                    recyclerView.setAdapter(mAdapter);
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
-                    if (mainActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
-                    } else {
-                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+                    list = new ArrayList<>();
+                    list = response.body();
+                    for(com.test.sample.hirecooks.Models.Category.Example example:list){
+                        if(example.getError()==false){
+                            categories = example.getCategory();
+                            for(Category category:categories){
+                                if(category.getCategoryid()==2){
+                                    mCategory.add( category );
+                                    recyclerView.setHasFixedSize(true);
+                                    recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
+                                    mAdapter = new CategoryAdapter(mainActivity,mCategory);
+                                    recyclerView.setAdapter(mAdapter);
+                                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
+                                    if (mainActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+                                    } else {
+                                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+                                    }
+                                    recyclerView.setLayoutManager(linearLayoutManager);
+                                    recyclerView.setItemAnimator(new DefaultItemAnimator());
+                                }else if(category.getCategoryid()==1){
+                                    mOfferCategory.add( category );
+                                    OfferAdapter adapter = new OfferAdapter(mainActivity,mOfferCategory);
+                                    offer_recycler_view.setAdapter(adapter);
+
+                                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
+                                    if (mainActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+                                    }else{
+                                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+                                    }
+                                    RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
+                                    params.setMargins(20, 20, 20, 20);
+                                    linearLayoutManager.canScrollHorizontally();
+
+                                    offer_recycler_view.setLayoutManager(linearLayoutManager);
+                                    offer_recycler_view.setItemAnimator(new DefaultItemAnimator());
+
+                                }else if(category.getCategoryid()==3){
+                                    mNewProductsCat.add( category );
+                                    my_recycler_view3.setHasFixedSize(true);
+                                    my_recycler_view3.setLayoutManager(new LinearLayoutManager(mainActivity));
+                                    NewProductCategoryAdapter adapter = new NewProductCategoryAdapter(mainActivity,mNewProductsCat);
+                                    my_recycler_view3.setAdapter(adapter);
+
+                                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mainActivity);
+                                    if (mainActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+                                    }else {
+                                        linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+                                    }
+                                    my_recycler_view3.setLayoutManager(linearLayoutManager);
+                                    my_recycler_view3.setItemAnimator(new DefaultItemAnimator());
+                                }
+                            }
+
+                        }else{
+                            Toast.makeText( mainActivity, example.getMessage(), Toast.LENGTH_SHORT ).show();
+                        }
                     }
-                    recyclerView.setLayoutManager(linearLayoutManager);
-                    recyclerView.setItemAnimator(new DefaultItemAnimator());
 
                 }
                 else{
-                    baseActivity.ShowToast(getResources().getString(R.string.failed_due_to)+response.body().getMessage());
+                    baseActivity.ShowToast(getResources().getString(R.string.failed_due_to)+statusCode);
                 }
             }
 
             @Override
-            public void onFailure(Call<Categories> call, Throwable t) {
-
+            public void onFailure(Call<List<com.test.sample.hirecooks.Models.Category.Example>> call, Throwable t) {
+                Toast.makeText( mainActivity, t.getMessage(), Toast.LENGTH_SHORT ).show();
             }
         });
     }
@@ -459,12 +430,12 @@ public class HomeFragment extends Fragment{
                     .image(file_maps.get(name))
                     .setScaleType(BaseSliderView.ScaleType.Fit)
                     //.setOnSliderClickListener((BaseSliderView.OnSliderClickListener) mainActivity);
-            .setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
-                @Override
-                public void onSliderClick(BaseSliderView slider) {
-                    //Toast.makeText(mainActivity,"clicked: "+textSliderView,Toast.LENGTH_LONG).show();
-                }
-            });
+                    .setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+                        @Override
+                        public void onSliderClick(BaseSliderView slider) {
+                            //Toast.makeText(mainActivity,"clicked: "+textSliderView,Toast.LENGTH_LONG).show();
+                        }
+                    });
 
             textSliderView.bundle(new Bundle());
             mDemoSlider.addSlider(textSliderView);

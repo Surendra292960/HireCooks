@@ -17,9 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Scene;
 
 import com.squareup.picasso.Picasso;
-import com.test.sample.hirecooks.Activity.SubCategory.SubCategoryActivity.SubCategoryActivity;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.SubCategoryActivity;
 
 import java.util.List;
 
@@ -44,13 +44,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @Override
     public void onBindViewHolder(CategoryAdapter.ViewHolder holder, int position) {
         Category category = categories.get(position);
-        holder.categoryName.setText(category.getCategoryName());
+        holder.categoryName.setText(category.getName());
         Picasso.with(mCtx).load(category.getLink()).into(holder.categoryImage);
         holder.categoryLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    Intent intent = new Intent(mCtx,SubCategoryActivity.class);
+                    Intent intent = new Intent(mCtx, SubCategoryActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("Category", categories.get(position));
                     intent.putExtras(bundle);
