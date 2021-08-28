@@ -1,4 +1,5 @@
 package com.test.sample.hirecooks.Activity.Orders;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -6,6 +7,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,8 +20,11 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.libraries.places.api.Places;
 import com.google.gson.Gson;
@@ -43,11 +48,11 @@ import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.RazorpayPayment;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
-import com.test.sample.hirecooks.Utils.SharedPrefToken;
 import com.test.sample.hirecooks.WebApis.MapApi;
 import com.test.sample.hirecooks.WebApis.NotificationApi;
 import com.test.sample.hirecooks.WebApis.OrderApi;
 import com.test.sample.hirecooks.WebApis.UserApi;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,6 +61,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -95,6 +101,8 @@ public class PlaceOrderActivity extends BaseActivity {
     private List<OrdersTable> orderTableList = new ArrayList<>(  );
     private List<Root> rootList = new ArrayList<>(  );
     private Date location;
+    ArrayList<Order> mOrdersTable = new ArrayList<>(  );
+    ArrayList<Token> mTokenList = new ArrayList<>(  );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,6 +196,7 @@ public class PlaceOrderActivity extends BaseActivity {
                     orderTable.setShipping_price(0);
                     orderTable.setPayment_type("COD");
                     orderTable.setOrder_status("Pending");
+                    orderTable.setConfirm_status("Not_Accepted");
                     orderTable.setOrder_latitude(maps.getLatitude());
                     orderTable.setOrder_longitude(maps.getLongitude());
                     orderTable.setOrder_address(maps.getAddress());
@@ -233,11 +242,11 @@ public class PlaceOrderActivity extends BaseActivity {
                     if (SharedPrefManager.getInstance(PlaceOrderActivity.this).isLoggedIn()) {
                         placeOrder( root );
                     }else{
-                        Toast.makeText( PlaceOrderActivity.this, "Please Login First", Toast.LENGTH_SHORT ).show();
+                        showalertbox("Please Login First");
                         }
                     }
                 }else{
-                    Toast.makeText( PlaceOrderActivity.this, "Please Select Address", Toast.LENGTH_SHORT ).show();
+                    showalertbox("Please Select Address");
                 }
             }
         } );
@@ -308,16 +317,17 @@ public class PlaceOrderActivity extends BaseActivity {
                                 }*/
                             }
                         }else{
-                            Toast.makeText( PlaceOrderActivity.this, "Please Login First", Toast.LENGTH_SHORT ).show();
+                            showalertbox("Please Login First");
                         }
                     }
                 }else{
-                    Toast.makeText( PlaceOrderActivity.this, "Please Select Address", Toast.LENGTH_SHORT ).show();
+                    showalertbox("Please Select Address");
                 }
             }
         } );
         getMapDetails();
     }
+
 
     private void placeOrder(final Root root){
         mService  = ApiClient.getClient().create(OrderApi.class);
@@ -354,14 +364,26 @@ public class PlaceOrderActivity extends BaseActivity {
         UserApi mService =  ApiClient.getClient().create(UserApi.class);
         Call<Tokens> call1 = mService.getTokens();
         call1.enqueue(new Callback<Tokens>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(Call<Tokens> call, Response<Tokens> response) {
                 int statusCode = response.code();
                 if(statusCode==200) {
                     progressBarUtil.hideProgress();
-                    List<Token> filteredToken = new ArrayList<>();
                     Token tokens = new Token();
-                    for(OrdersTable orderTable:orderList){
+                    /*List<Token> filteredToken = new ArrayList<>();*/
+                    orderList.forEach(ordersTable -> {
+                        ordersTable.getOrders().forEach( order -> {
+                            response.body().getTokens().forEach( token -> {
+                                if(token.getFirm_id().equalsIgnoreCase( order.getFirmId() )){
+                                    tokens.setFirm_id(order.getFirmId());
+                                    tokens.setToken(token.getToken());
+                                    sendNotification(tokens);
+                                }
+                            });
+                        });});
+
+                 /*   for(OrdersTable orderTable:orderList){
                        for(Order order:orderTable.getOrders()){
                            for(Token token: response.body().getTokens()){
                                if(token.getFirm_id().equalsIgnoreCase(order.getFirmId())){
@@ -371,10 +393,10 @@ public class PlaceOrderActivity extends BaseActivity {
                                }
                            }
                        }
-                    }
-                    filteredToken.add(tokens);
+                    }*/
+                    /*filteredToken.add(tokens);
                     System.out.println("Order Tokens: "+filteredToken);
-                    System.out.println("Suree Token  "+ SharedPrefToken.getInstance(getApplicationContext()).getTokens().getToken());
+                    System.out.println("Suree Token  "+ SharedPrefToken.getInstance(getApplicationContext()).getTokens().getToken());*/
                 }
                 else{
                     Toast.makeText(getApplicationContext(), R.string.failed_due_to+response.code(), Toast.LENGTH_LONG).show();
@@ -398,7 +420,6 @@ public class PlaceOrderActivity extends BaseActivity {
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.code() == 200 ) {
                     localStorage.deleteCart();
-                    PlaceOrderActivity.this.finish();
                     startActivity(new Intent(PlaceOrderActivity.this, MainActivity.class));
                 }
             }

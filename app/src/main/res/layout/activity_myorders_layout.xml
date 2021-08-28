@@ -42,6 +42,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scrollbars="none"
+                            android:layoutAnimation="@anim/layout_animation_fall_down"
                             android:scrollbarAlwaysDrawHorizontalTrack="true"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
@@ -68,6 +69,7 @@
             android:layout_height="match_parent"
             android:layout_margin="20dp"
             android:gravity="center"
+            android:visibility="gone"
             android:orientation="vertical">
 
             <ImageView

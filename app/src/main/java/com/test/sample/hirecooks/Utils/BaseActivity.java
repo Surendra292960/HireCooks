@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -244,6 +245,28 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
         } else {
             return null;
         }
+    }
+
+    public void showalertbox(String string) {
+        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder( this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.show_alert_message,null);
+        TextView ask = view.findViewById( R.id.ask );
+        TextView textView = view.findViewById( R.id.text );
+        ask.setText( string );
+        textView.setText( "Alert !" );
+        AppCompatTextView cancelBtn = view.findViewById(R.id.exit_app_btn);
+        dialogBuilder.setView(view);
+        final android.app.AlertDialog dialog = dialogBuilder.create();
+        dialog.show();
+        cancelBtn.setOnClickListener( v -> {
+            try {
+                dialog.dismiss();
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } );
     }
 
     public void showAlert(String message) {

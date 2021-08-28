@@ -1,5 +1,6 @@
 package com.test.sample.hirecooks.Activity.Orders;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.test.sample.hirecooks.Adapter.RecievedOrdersAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
+import com.test.sample.hirecooks.Models.NewOrder.Order;
 import com.test.sample.hirecooks.Models.NewOrder.OrdersTable;
 import com.test.sample.hirecooks.Models.NewOrder.Root;
 import com.test.sample.hirecooks.Models.users.User;
@@ -137,19 +139,47 @@ public class RecievedOrderActivity extends BaseActivity {
         mService = ApiClient.getClient().create(OrderApi.class);
         Call<List<Root>> call = mService.getCurrentOrders(order_status);
         call.enqueue(new Callback<List<Root>>() {
+            @SuppressLint("NewApi")
             @Override
             public void onResponse(Call<List<Root>> call, Response<List<Root>> response) {
                 if (response.code() == 200 ) {
-                newOrder = new ArrayList<>(  );
-                newOrder = response.body();
-                for(Root root:newOrder){
-                    if(root.getError()==false){
-                        Toast.makeText( RecievedOrderActivity.this, root.getMessage(), Toast.LENGTH_SHORT ).show();
-                        List<OrdersTable> orders = root.getOrders_table();
-                        if(orders!=null&&orders.size()!=0){
+
+                    response.body().forEach(root -> {if(root.getError()==false){
+                       ArrayList<OrdersTable> mOrdersTableList = new ArrayList<>(  );
+                        if(root.getOrders_table()!=null&&root.getOrders_table().size()!=0){
+                            for (OrdersTable ordersTable:root.getOrders_table()){
+                                OrdersTable mFilteredOrdersTable = new OrdersTable();
+                                ArrayList<Order> mFilteredOrders = new ArrayList<>(  );
+                                mFilteredOrdersTable.setOrder_id(ordersTable.getOrder_id());
+                                mFilteredOrdersTable.setOrder_date_time(ordersTable.getOrder_date_time());
+                                mFilteredOrdersTable.setTotal_amount(ordersTable.getTotal_amount());
+                                mFilteredOrdersTable.setShipping_price(ordersTable.getShipping_price());
+                                mFilteredOrdersTable.setPayment_type(ordersTable.getPayment_type());
+                                mFilteredOrdersTable.setOrder_status(ordersTable.getOrder_status());
+                                mFilteredOrdersTable.setConfirm_status(ordersTable.getConfirm_status());
+                                mFilteredOrdersTable.setOrder_latitude(ordersTable.getOrder_latitude());
+                                mFilteredOrdersTable.setOrder_longitude(ordersTable.getOrder_latitude());
+                                mFilteredOrdersTable.setOrder_address(ordersTable.getOrder_address());
+                                mFilteredOrdersTable.setOrder_sub_address(ordersTable.getOrder_sub_address());
+                                mFilteredOrdersTable.setOrder_pincode(ordersTable.getOrder_pincode());
+                                mFilteredOrdersTable.setUser_id(ordersTable.getUser_id());
+                                mFilteredOrdersTable.setUser_name(ordersTable.getUser_name());
+                                mFilteredOrdersTable.setUser_email(ordersTable.getUser_email());
+                                mFilteredOrdersTable.setUser_phone(ordersTable.getUser_phone());
+                                for (Order order:ordersTable.getOrders()){
+                                    if(order.getOrderId()==ordersTable.getOrder_id()){
+                                        if(order.getFirmId().equalsIgnoreCase( user.getFirmId() )) {
+                                            mFilteredOrders.add( order );
+                                            mFilteredOrdersTable.setOrders( mFilteredOrders );
+                                            mOrdersTableList.add( mFilteredOrdersTable );
+                                        }
+                                    }
+                                }
+                            }
+
                             recyclerView.setVisibility(View.VISIBLE);
                             no_orders.setVisibility(View.GONE);
-                            ordersAdapter = new RecievedOrdersAdapter(RecievedOrderActivity.this,orders);
+                            ordersAdapter = new RecievedOrdersAdapter(RecievedOrderActivity.this,mOrdersTableList);
                             recyclerView.setAdapter(ordersAdapter);
                         }else{
                             recyclerView.setVisibility(View.GONE);
@@ -162,7 +192,7 @@ public class RecievedOrderActivity extends BaseActivity {
                         no_orders.setVisibility(View.VISIBLE);
                         order_status_text.setText("No "+order_status+" Orders Available");
                     }
-                }
+                    });
                 } else {
                     Toast.makeText(RecievedOrderActivity.this,"Failed due to: "+response.code(), Toast.LENGTH_SHORT).show();
                     recyclerView.setVisibility( View.GONE );

@@ -1,9 +1,6 @@
 package com.test.sample.hirecooks.Adapter.Orders;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +10,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.test.sample.hirecooks.Activity.Orders.RecievedOrderDetails;
 import com.test.sample.hirecooks.Adapter.RecievedorderDetailAdapter;
 import com.test.sample.hirecooks.Models.NewOrder.OrdersTable;
-import com.test.sample.hirecooks.Models.Order.Order;
 import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
@@ -62,6 +56,7 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.Orders
             holder.itemImage.setAnimation(AnimationUtils.loadAnimation(mCtx, R.anim.fade_transition_animation));
             holder.cardlist_item.setAnimation(AnimationUtils.loadAnimation(mCtx, R.anim.fade_scale_animation));
             holder.update_order_layout.setVisibility( View.GONE );
+            holder.change_order_address.setVisibility( View.GONE );
             if(ordersTable.getOrder_status().equalsIgnoreCase( "Pending" )){
                 holder.image.startAnimation(animation1);
             }else if(ordersTable.getOrder_status().equalsIgnoreCase( "Delivered" )){
@@ -72,9 +67,13 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.Orders
                 @Override
                 public void onClick(View v) {
                     if (ordersTable.getOrders()!=null&&ordersTable.getOrders().size()!=0) {
-                        holder.order_product_layout.setVisibility( View.VISIBLE );
-                        RecievedorderDetailAdapter adapter = new RecievedorderDetailAdapter( mCtx,ordersTable.getOrders() );
-                        holder.order_product_recycler.setAdapter( adapter );
+                        if(holder.order_product_layout.getVisibility()==View.GONE){
+                            holder.order_product_layout.setVisibility( View.VISIBLE );
+                            RecievedorderDetailAdapter adapter = new RecievedorderDetailAdapter( mCtx,ordersTable.getOrders() );
+                            holder.order_product_recycler.setAdapter( adapter );
+                        }else if(holder.order_product_layout.getVisibility()==View.VISIBLE){
+                            holder.order_product_layout.setVisibility( View.GONE );
+                        }
 
                     }else{
                         holder.order_product_layout.setVisibility( View.GONE );
@@ -83,34 +82,6 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.Orders
             });
         }
     }
-
-    public void showAlertDialog(Context context, User user, Order order) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("What do you wants to do ?");
-        builder.setMessage("Are you sure");
-        builder.setPositiveButton("Order Details", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(!user.getUserType().equalsIgnoreCase("User")&&!user.getUserType().equalsIgnoreCase("Cook")) {
-                    Intent intent = new Intent(mCtx, RecievedOrderDetails.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("Orders", order);
-                    intent.putExtras(bundle);
-                    mCtx.startActivity(intent);
-                }
-                dialog.cancel();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
 
     @Override
     public int getItemCount() {
@@ -124,7 +95,7 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.Orders
         CardView cardlist_item;
         LinearLayout update_order_layout,order_product_layout;
         RecyclerView order_product_recycler;
-        AppCompatButton accept_order,order_pending,order_prepairing,order_delivered,order_cancelled,order_ontheway,order_confirm;
+        AppCompatButton accept_order,order_pending,order_prepairing,order_delivered,order_cancelled,order_ontheway,order_confirm,change_order_address;
 
         public OrdersViewHolder(View itemView) {
             super(itemView);
@@ -153,6 +124,7 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.Orders
             payment_method = itemView.findViewById(R.id.payment_method);
             user_name = itemView.findViewById(R.id.user_name);
             phone_number = itemView.findViewById(R.id.user_phone_number);
+            change_order_address = itemView.findViewById(R.id.change_order_address);
             itemView.setOnClickListener(this);
         }
 

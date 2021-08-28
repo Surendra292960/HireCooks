@@ -19,6 +19,7 @@ import com.test.sample.hirecooks.Activity.Home.MainActivity;
 import com.test.sample.hirecooks.Activity.Orders.MyOrdersActivity;
 import com.test.sample.hirecooks.Activity.Orders.RecievedOrderActivity;
 import com.test.sample.hirecooks.Activity.Users.UserSignInActivity;
+import com.test.sample.hirecooks.Activity.subscription.SubscriptionActivity;
 import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.TestActivity;
@@ -61,13 +62,9 @@ public class MenuListFragment extends Fragment implements UploadCallBack {
                 logout();
             } else if (id == R.id.menu_favourite) {
                 startActivity( new Intent(getActivity(), FavouriteActivity.class));
-            }/* else if (id == R.id.menu_offers) {
-                Bundle bundle = new Bundle();
-                Intent intent = new Intent(getActivity(), SubCategoryActivity.class);
-                bundle.putSerializable("CategoryName" , "Category");
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }*/ else if (id == R.id.menu_cooks) {
+            } else if (id == R.id.menu_terms_and_condition) {
+                startActivity( new Intent(getActivity(), SubscriptionActivity.class));
+            } else if (id == R.id.menu_cooks) {
                 Intent intent = new Intent( getActivity(), CooksActivity.class );
                 intent.putExtra(  "type", "AllCooks"  );
                 startActivity( intent );

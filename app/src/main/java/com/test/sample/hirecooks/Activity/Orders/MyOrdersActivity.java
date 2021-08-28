@@ -83,7 +83,6 @@ public class MyOrdersActivity extends BaseActivity {
                     newOrder = response.body();
                     for(Root root:newOrder){
                         if(root.getError()==false){
-                            Toast.makeText( MyOrdersActivity.this, root.getMessage(), Toast.LENGTH_SHORT ).show();
                             List<OrdersTable> orders = root.getOrders_table();
                             if(orders!=null&&orders.size()!=0){
                                 recyclerView.setVisibility(View.VISIBLE);

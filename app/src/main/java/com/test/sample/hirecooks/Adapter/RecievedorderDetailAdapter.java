@@ -51,12 +51,13 @@ public class RecievedorderDetailAdapter extends RecyclerView.Adapter<Recievedord
 
         if(order!=null){
             holder.add_item_layout.setVisibility( View.GONE );
+            holder.discription.setVisibility( View.GONE );
             holder.item_qty.setVisibility( View.VISIBLE );
             holder.name.setText(order.getName());
             holder.item_qty.setText("Quantity : "+order.getQuantity());
-           // holder.item_short_desc.setText(order.getDi());
-           // holder.discription.setText(order.getDetailDiscription());
-            Picasso.with(context).load(order.getImages().get( position ).getImage()).into(holder.imageView);
+            if(order.getImages().size()!=0&&order.getImages()!=null){
+                Picasso.with(context).load(order.getImages().get( 0 ).getImage()).into(holder.imageView);
+            }
 
             if (order.getSellRate() != 0 && order.getDisplayRate()!= 0) {
                 holder.sellrate.setText("\u20B9 " + order.getSellRate());

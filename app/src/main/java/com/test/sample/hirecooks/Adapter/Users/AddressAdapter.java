@@ -1,5 +1,4 @@
 package com.test.sample.hirecooks.Adapter.Users;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,14 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.test.sample.hirecooks.Activity.ManageAddress.UpdateAddressActivity;
 import com.test.sample.hirecooks.Activity.Orders.PlaceOrderActivity;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.R;
-
 import java.util.List;
 
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.TasksViewHolder> {
@@ -27,8 +24,9 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.TasksVie
         this.addressList = addressList;
     }
 
+    @NonNull
     @Override
-    public TasksViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TasksViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mCtx).inflate(R.layout.recyclerview_address, parent, false);
         return new TasksViewHolder(view);
     }
@@ -40,16 +38,13 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.TasksVie
         holder.sub_address.setText(address.getSubAddress());
         holder.location_tag.setText(address.getLocationType());
 
-        holder.edit_address.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle(  );
-                Intent intent = new Intent(mCtx, UpdateAddressActivity.class);
-                bundle.putSerializable("address", address);
-                intent.putExtras( bundle );
-                mCtx.startActivity(intent);
-            }
-        });
+        holder.edit_address.setOnClickListener( v -> {
+            Bundle bundle = new Bundle(  );
+            Intent intent = new Intent(mCtx, UpdateAddressActivity.class);
+            bundle.putSerializable("address", address);
+            intent.putExtras( bundle );
+            mCtx.startActivity(intent);
+        } );
     }
 
     @Override
@@ -60,7 +55,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.TasksVie
     class TasksViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView address, edit_address,location_tag, sub_address;
 
-        public TasksViewHolder(View itemView) {
+        TasksViewHolder(View itemView) {
             super(itemView);
             address = itemView.findViewById(R.id.address);
             edit_address = itemView.findViewById(R.id.edit_address);

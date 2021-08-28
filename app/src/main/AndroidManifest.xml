@@ -46,7 +46,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activity.ManageAccount.ManageProducts.AddActivity"></activity>
+        <activity android:name=".Activity.subscription.SubscriptionActivity"></activity>
+        <activity android:name=".Activity.subscription.DashboardActivity" />
+        <activity android:name=".Activity.ManageAccount.ManageProducts.AddActivity" />
         <activity android:name=".Activity.ManageAccount.ManageProducts.StartEditSubCategoryActivity" />
         <activity android:name=".Activity.ManageAccount.ManageProducts.StartEditCategory" />
         <activity android:name=".Activity.ManageAccount.ManageProducts.EditSubCategoryActivity" />

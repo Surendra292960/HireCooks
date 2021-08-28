@@ -181,8 +181,21 @@
     <string name="displayrate" tools:ignore="MissingTranslation">DisplayRate</string>
     <string name="discription" tools:ignore="MissingTranslation">Discription</string>
     <string name="available_stock" tools:ignore="MissingTranslation">How much Stock you have</string>
-    <string name="new_password">New Password</string>
+    <string name="new_password" tools:ignore="MissingTranslation">New Password</string>
 
+    <string name="subscription_period_prompt" translatable="false">Select your subscription period</string>
+    <string name="subscription_resignup_prompt" translatable="false">To reactivate your subscription, select your subscription period</string>
+    <string name="subscription_update_prompt" translatable="false">To change your subscription, select your new subscription period</string>
+    <string name="subscription_period_monthly" translatable="false">Monthly $1.99</string>
+    <string name="subscription_period_threemonth" translatable="false">Three Month $4.99</string>
+    <string name="subscription_period_sixmonth" translatable="false">Six Month $6.99</string>
+    <string name="subscription_period_yearly" translatable="false">Yearly $11.99</string>
+    <string name="subscription_prompt_continue" translatable="false">Continue</string>
+    <string name="subscription_prompt_cancel" translatable="false">Cancel</string>
+    <string name="content_description_app_loading_image" translatable="false">App loading image</string>
+    <string name="content_description_title_image" translatable="false">80\'s Video Game Style Car Logo</string>
+    <string name="content_desc_gas_gauge_indicator" translatable="false">Gas gauge indicator</string>
+    <string name="content_desc_free_vs_premium_indicator" translatable="false">Free or Premium Image Indicator</string>
     <string-array name="uploadImages">
         <item>Pick from gallery</item>
         <item>Click from camera</item>

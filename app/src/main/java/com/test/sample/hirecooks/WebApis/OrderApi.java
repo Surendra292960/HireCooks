@@ -17,6 +17,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -93,6 +94,10 @@ public interface OrderApi {
     @PUT("confirm_orders/{order_id}")
     Call<List<Root>> acceptOrders(
             @Path("order_id") Integer id,@Body List<OrdersTable> confirm_status);
+
+    @PATCH("/orders/{order_id}")
+    Call<List<OrdersTable>> updateOrderAddresss(
+            @Path("order_id") Integer id,@Body List<OrdersTable> ordersTables);
 }
 
 

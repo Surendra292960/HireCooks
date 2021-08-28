@@ -25,7 +25,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -109,9 +108,9 @@ public class DetailsActivity extends BaseActivity {
     Size size;
     Weight weight;
     Color color;
-    private List<Color> colorsList;
-    private List<Size> sizeList;
-    private List<Weight> weightList;
+    private List<Color> colorsList = new ArrayList<>(  );
+    private List<Size> sizeList = new ArrayList<>(  );
+    private List<Weight> weightList = new ArrayList<>(  );
 
     @SuppressLint("WrongConstant")
     @Override
@@ -493,29 +492,6 @@ public class DetailsActivity extends BaseActivity {
     }
 
     boolean isSearchBarHide = false;
-
-
-    private void showalertbox(String string) {
-        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder( DetailsActivity.this);
-        LayoutInflater inflater = this.getLayoutInflater();
-        View view = inflater.inflate(R.layout.show_alert_message,null);
-        TextView ask = view.findViewById( R.id.ask );
-        TextView textView = view.findViewById( R.id.text );
-        ask.setText( string );
-        textView.setText( "Alert !" );
-        AppCompatTextView cancelBtn = view.findViewById(R.id.exit_app_btn);
-        dialogBuilder.setView(view);
-        final android.app.AlertDialog dialog = dialogBuilder.create();
-        dialog.show();
-        cancelBtn.setOnClickListener( v -> {
-            try {
-                dialog.dismiss();
-            }
-            catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        } );
-    }
 
     private void getCart() {
         cartList = new ArrayList<>();

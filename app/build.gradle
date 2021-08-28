@@ -145,6 +145,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.0.1'
     implementation 'pub.devrel:easypermissions:0.2.0'
     implementation 'com.github.mancj:MaterialSearchBar:+'
+    //subscription
+    compile 'com.android.billingclient:billing:1.0'
     // paytm dependency
     implementation('com.paytm:pgplussdk:1.2.3') {
         transitive = true;

@@ -15,7 +15,7 @@
         android:textAllCaps="true"
         android:textColor="@color/style_color_primary"
         android:gravity="center"
-        android:textStyle="bold"/>
+        android:textStyle="normal"/>
 
     <TextView
         android:visibility="gone"

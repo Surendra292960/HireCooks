@@ -166,11 +166,11 @@ public class SubCategoryActivity extends BaseActivity {
                                 List<Subcategory> filteredList = new ArrayList<>();
                                 for (Subcategory subcategory : example.getSubcategory()) {
                                     for (Map map : Constants.NEARBY_VENDERS_LOCATION) {
-                                        if (map.getFirm_id().equalsIgnoreCase(subcategory.getFirmId())) {
+                                        //if (map.getFirm_id().equalsIgnoreCase(subcategory.getFirmId())) {
                                             list.add(subcategory);
                                             Set<Subcategory> newList = new LinkedHashSet<>(list);
                                             filteredList = new ArrayList<>(newList);
-                                        }
+                                      //  }
                                     }
                                 }
                                 if(filteredList!=null&&filteredList.size()!=0) {

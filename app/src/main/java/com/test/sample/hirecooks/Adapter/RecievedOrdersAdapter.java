@@ -65,9 +65,9 @@ public class RecievedOrdersAdapter extends RecyclerView.Adapter<RecievedOrdersAd
     public void onBindViewHolder(RecievedOrdersAdapter.OrdersViewHolder holder, int position) {
         final OrdersTable ordersTable = orderList.get(position);
         if(ordersTable!=null) {
-            holder.user_name.setText("Name  :  "+ user.getName());
+            holder.user_name.setText("Name  :  "+ ordersTable.getUser_name());
             holder.payment_method.setText("Payment  :  "+"COD");
-            holder.phone_number.setText("Phone  :  "+user.getPhone());
+            holder.phone_number.setText("Phone  :  "+ordersTable.getUser_phone());
             holder.itemTotalAmount.setText("Total Amount  :   \u20B9 " + ordersTable.getTotal_amount());
             holder.order_id.setText("# " + ordersTable.getOrder_id());
             holder.order_date_time.setText("Order On  :  "+ordersTable.getOrder_date_time());
@@ -114,7 +114,7 @@ public class RecievedOrdersAdapter extends RecyclerView.Adapter<RecievedOrdersAd
 
             holder.itemImage.setAnimation(AnimationUtils.loadAnimation(mCtx, R.anim.fade_transition_animation));
             holder.cardlist_item.setAnimation(AnimationUtils.loadAnimation(mCtx, R.anim.fade_scale_animation));
-           // Picasso.with(mCtx).load( R.drawable.ic_).into(holder.itemImage);
+            // Picasso.with(mCtx).load( R.drawable.ic_).into(holder.itemImage);
 
      /*       holder.cardlist_item.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -133,7 +133,7 @@ public class RecievedOrdersAdapter extends RecyclerView.Adapter<RecievedOrdersAd
                     updateOrderStatus(holder,ordersTable.getOrder_id(),ordersTable);
                 }
             });
-           holder.order_prepairing.setOnClickListener(new View.OnClickListener() {
+            holder.order_prepairing.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     status = "Prepairing";
@@ -176,13 +176,17 @@ public class RecievedOrdersAdapter extends RecyclerView.Adapter<RecievedOrdersAd
             }); holder.order_details.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (ordersTable.getOrders()!=null&&ordersTable.getOrders().size()!=0) {
-                        holder.order_product_layout.setVisibility( View.VISIBLE );
-                        RecievedorderDetailAdapter adapter = new RecievedorderDetailAdapter( mCtx,ordersTable.getOrders() );
-                        holder.order_product_recycler.setAdapter( adapter );
+                    if (ordersTable.getOrders().size()!=0&&ordersTable.getOrders()!=null) {
+                        if(holder.order_product_layout.getVisibility()==View.GONE){
+                            holder.order_product_layout.setVisibility( View.VISIBLE );
+                            RecievedorderDetailAdapter adapter = new RecievedorderDetailAdapter( mCtx,ordersTable.getOrders() );
+                            holder.order_product_recycler.setAdapter( adapter );
+                        }else if(holder.order_product_layout.getVisibility()==View.VISIBLE){
+                            holder.order_product_layout.setVisibility( View.GONE );
+                        }
 
                     }else{
-                       holder.order_product_layout.setVisibility( View.GONE );
+                        holder.order_product_layout.setVisibility( View.GONE );
                     }
                 }
             });
