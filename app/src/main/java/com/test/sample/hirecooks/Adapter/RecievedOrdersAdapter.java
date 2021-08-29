@@ -17,10 +17,12 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.gson.Gson;
 import com.test.sample.hirecooks.Activity.Orders.RecievedOrderDetails;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
@@ -56,13 +58,13 @@ public class RecievedOrdersAdapter extends RecyclerView.Adapter<RecievedOrdersAd
     }
 
     @Override
-    public RecievedOrdersAdapter.OrdersViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public OrdersViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mCtx).inflate(R.layout.recieved_orders_cardview, parent, false);
-        return new RecievedOrdersAdapter.OrdersViewHolder(view);
+        return new OrdersViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RecievedOrdersAdapter.OrdersViewHolder holder, int position) {
+    public void onBindViewHolder(OrdersViewHolder holder, int position) {
         final OrdersTable ordersTable = orderList.get(position);
         if(ordersTable!=null) {
             holder.user_name.setText("Name  :  "+ ordersTable.getUser_name());
@@ -72,17 +74,13 @@ public class RecievedOrdersAdapter extends RecyclerView.Adapter<RecievedOrdersAd
             holder.order_id.setText("# " + ordersTable.getOrder_id());
             holder.order_date_time.setText("Order On  :  "+ordersTable.getOrder_date_time());
             holder.order_address.setText("Address  :  "+ordersTable.getOrder_address());
+            holder.lottie_delivery.setVisibility( View.GONE );
+            holder.lottie_prepaire.setVisibility( View.GONE );
             Animation animation1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.blink);
             holder.image.startAnimation(animation1);
             if (ordersTable.getOrder_status().equalsIgnoreCase("Cancelled")) {
                 holder.item_status.setTextColor(Color.RED);
                 holder.item_status.setText(ordersTable.getOrder_status());
-                holder.cardlist_item.setCardBackgroundColor(Color.DKGRAY);
-                holder.itemName.setTextColor(Color.WHITE);
-                holder.itemTotalAmount.setTextColor(Color.WHITE);
-                holder.item_with_quantity.setTextColor(Color.WHITE);
-                holder.order_date_time.setTextColor(Color.WHITE);
-                holder.order_address.setTextColor(Color.WHITE);
                 holder.update_order_layout.setVisibility(View.GONE);
             }else {
                 holder.item_status.setText(ordersTable.getOrder_status());
@@ -130,7 +128,11 @@ public class RecievedOrdersAdapter extends RecyclerView.Adapter<RecievedOrdersAd
                 public void onClick(View v) {
                     status = "Pending";
                     ordersTable.setOrder_status( status );
-                    updateOrderStatus(holder,ordersTable.getOrder_id(),ordersTable);
+                    if (ordersTable.getConfirm_status().equalsIgnoreCase("Pending")) {
+                        updateOrderStatus(holder,ordersTable.getOrder_id(),ordersTable);
+                    }else{
+                        showalertbox(v,"Accept Order First");
+                    }
                 }
             });
             holder.order_prepairing.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +143,7 @@ public class RecievedOrdersAdapter extends RecyclerView.Adapter<RecievedOrdersAd
                     if (ordersTable.getConfirm_status().equalsIgnoreCase("Confirmed")) {
                         updateOrderStatus(holder,ordersTable.getOrder_id(),ordersTable);
                     }else{
-                        Toast.makeText(mCtx,"Accept Order First",Toast.LENGTH_LONG).show();
+                        showalertbox(v,"Accept Order First");
                     }
                 }
             });  holder.order_delivered.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +154,7 @@ public class RecievedOrdersAdapter extends RecyclerView.Adapter<RecievedOrdersAd
                     if (ordersTable.getConfirm_status().equalsIgnoreCase("Confirmed")) {
                         updateOrderStatus(holder,ordersTable.getOrder_id(),ordersTable);
                     }else{
-                        Toast.makeText(mCtx,"Accept Order First",Toast.LENGTH_LONG).show();
+                        showalertbox(v,"Accept Order First");
                     }
                 }
             });  holder.order_cancelled.setOnClickListener(new View.OnClickListener() {
@@ -170,13 +172,13 @@ public class RecievedOrdersAdapter extends RecyclerView.Adapter<RecievedOrdersAd
                     if (ordersTable.getConfirm_status().equalsIgnoreCase("Confirmed")) {
                         updateOrderStatus(holder,ordersTable.getOrder_id(), ordersTable);
                     }else{
-                        Toast.makeText(mCtx,"Accept Order First",Toast.LENGTH_LONG).show();
+                        showalertbox(v,"Accept Order First");
                     }
                 }
             }); holder.order_details.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (ordersTable.getOrders().size()!=0&&ordersTable.getOrders()!=null) {
+                    if (ordersTable.getOrders()!=null&&ordersTable.getOrders().size()!=0) {
                         if(holder.order_product_layout.getVisibility()==View.GONE){
                             holder.order_product_layout.setVisibility( View.VISIBLE );
                             RecievedorderDetailAdapter adapter = new RecievedorderDetailAdapter( mCtx,ordersTable.getOrders() );
@@ -192,6 +194,28 @@ public class RecievedOrdersAdapter extends RecyclerView.Adapter<RecievedOrdersAd
             });
         }
     }
+
+    public void showalertbox(View views, String string) {
+        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder( mCtx);
+        View view =  LayoutInflater.from(views.getRootView().getContext()).inflate(R.layout.show_alert_message, null);
+        TextView ask = view.findViewById( R.id.ask );
+        TextView textView = view.findViewById( R.id.text );
+        ask.setText( string );
+        textView.setText( "Alert !" );
+        AppCompatTextView cancelBtn = view.findViewById(R.id.exit_app_btn);
+        dialogBuilder.setView(view);
+        final android.app.AlertDialog dialog = dialogBuilder.create();
+        dialog.show();
+        cancelBtn.setOnClickListener( v -> {
+            try {
+                dialog.dismiss();
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } );
+    }
+
 
     public void showAlertDialog(Context context, User user, Order order) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -292,6 +316,7 @@ public class RecievedOrdersAdapter extends RecyclerView.Adapter<RecievedOrdersAd
         CardView cardlist_item;
         LinearLayout update_order_layout,order_product_layout;
         RecyclerView order_product_recycler;
+        LottieAnimationView lottie_delivery,lottie_prepaire;
         AppCompatButton accept_order,order_pending,order_prepairing,order_delivered,order_cancelled,order_ontheway,order_confirm;
 
         public OrdersViewHolder(View itemView) {
@@ -314,6 +339,8 @@ public class RecievedOrdersAdapter extends RecyclerView.Adapter<RecievedOrdersAd
             item_status = itemView.findViewById(R.id.item_status);
             order_confirm = itemView.findViewById(R.id.confim_order);
             item_with_quantity = itemView.findViewById(R.id.item_with_quantity);
+            lottie_delivery = itemView.findViewById(R.id.lottie_delivery);
+            lottie_prepaire = itemView.findViewById(R.id.lottie_prepaire);
             update_order_layout = itemView.findViewById(R.id.update_order_layout);
             order_product_layout = itemView.findViewById(R.id.order_product_layout);
             order_product_recycler = itemView.findViewById(R.id.order_product_recycler);

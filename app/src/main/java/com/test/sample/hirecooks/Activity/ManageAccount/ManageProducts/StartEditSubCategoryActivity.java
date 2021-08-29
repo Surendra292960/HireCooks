@@ -13,7 +13,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -22,6 +25,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -72,9 +76,10 @@ import static android.view.View.VISIBLE;
 public class StartEditSubCategoryActivity extends AppCompatActivity {
     private static final int CODE_MULTIPLE_IMAGE_GALLARY = 2;
     private TextInputEditText editTextSubCategoryName, editTextSellRate, editTextDisplayRate,editTextAddress,
-            editTextFirmId, editTextDiscription, editTextImagetUrl2, editTextImagetUrl3, editTextImagetUrl4,
-            editTextWeight, available_stock, editTextDetailDiscription, editTextShiledUrl, product_unique_key, age, brand, gender, search_key;
+            editTextFirmId, editTextImagetUrl2, editTextImagetUrl3, editTextImagetUrl4,
+            editTextWeight, available_stock, editTextShiledUrl, product_unique_key, age, brand, gender, search_key;
     private TextView Submit, add_weight, add_size, add_color, add_images,size_text,color_text,weight_text;
+    private EditText editTextDiscription, editTextDetailDiscription;
     private ProductApi mService;
     private String categoryName;
     private User user;
@@ -120,6 +125,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         Objects.requireNonNull( getSupportActionBar() ).setHomeButtonEnabled( true );
         Objects.requireNonNull( getSupportActionBar() ).setDisplayHomeAsUpEnabled( true );
         Objects.requireNonNull(getSupportActionBar()).setTitle("");
+        this.getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             categoryName = bundle.getString( "CategoryName" );
@@ -543,20 +549,32 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.add_weight,null);
         TextInputEditText weight_kg = view.findViewById( R.id.weight_kg );
+        TextInputEditText weight_lt = view.findViewById( R.id.weight_lt );
+        TextInputEditText weight_gm = view.findViewById( R.id.weight_gm );
         TextInputEditText weight_pound = view.findViewById( R.id.weight_pound );
         TextInputEditText weight_dozan = view.findViewById( R.id.weight_dozan );
-        AppCompatTextView okBtn = view.findViewById(R.id.ok_btn);
+        AppCompatButton okBtn = view.findViewById(R.id.ok_btn);
         dialogBuilder.setView(view);
         final android.app.AlertDialog dialog = dialogBuilder.create();
         dialog.show();
         okBtn.setOnClickListener( v -> {
             try {
                 final String kg = weight_kg.getText().toString().trim();
+                final String lt = weight_lt.getText().toString().trim();
+                final String gm = weight_gm.getText().toString().trim();
                 final String pound = weight_pound.getText().toString().trim();
                 final String dozan = weight_dozan.getText().toString().trim();
                 if(TextUtils.isEmpty( kg )){
                     weight_kg.setError("Please enter Wieght");
                     weight_kg.requestFocus();
+                    return;
+                }if(TextUtils.isEmpty( lt )){
+                    weight_lt.setError("Please enter Litre");
+                    weight_lt.requestFocus();
+                    return;
+                }if(TextUtils.isEmpty( gm )){
+                    weight_gm.setError("Please enter gram");
+                    weight_gm.requestFocus();
                     return;
                 }if(TextUtils.isEmpty( dozan )){
                     weight_dozan.setError("Please enter dozan");
@@ -609,7 +627,6 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                         }else{
                             Toast.makeText( StartEditSubCategoryActivity.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
                         }
-
                     }
                 } else {
                   //  Toast.makeText( StartEditSubCategoryActivity.this, R.string.failed_due_to + statusCode, Toast.LENGTH_LONG).show();
@@ -1098,9 +1115,9 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                                 image2.setImage( image2.getImage() );
                                 mImagesList.add( image2 );
                                 image = image2;
-                                holder.imageView.setBackgroundColor( android.graphics.Color.parseColor( "#567845" ) );
+                                holder.checkBox.setChecked( true );
                             } else {
-                                holder.imageView.setBackgroundColor( android.graphics.Color.parseColor( "#ffffff" ) );
+                                holder.checkBox.setChecked( false );
                             }
                         }
                     }
@@ -1116,10 +1133,12 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             private ImageView imageView;
+            private CheckBox checkBox;
 
             public ViewHolder(View itemLayoutView) {
                 super( itemLayoutView );
                 imageView = itemLayoutView.findViewById( R.id.imageView );
+                checkBox = itemLayoutView.findViewById( R.id.checkbox );
             }
         }
     }

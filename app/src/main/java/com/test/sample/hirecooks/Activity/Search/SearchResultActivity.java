@@ -57,8 +57,6 @@ import static android.view.View.GONE;
 public class SearchResultActivity extends BaseActivity {
     private EditText searchBar;
     private RecyclerView recyclerView;
-    private List<Subcategory> search;
-    private List<Subcategory> searchList;
     private Toolbar toolbar;
     private List<Subcategory> cartList;
     private List<Example> examples;
@@ -66,7 +64,7 @@ public class SearchResultActivity extends BaseActivity {
     private RelativeLayout bottom_anchor_layout;
     private View bottom_anchor;
     private TextView item_count,checkout_amount,checkout;
-    private View searchbar_interface_layout;
+    private View searchbar_interface_layout,no_result_found;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,11 +73,10 @@ public class SearchResultActivity extends BaseActivity {
         setContentView(R.layout.activity_search_result);
         initViews();
         getCart();
-//        searchAllProducts();
     }
 
     private void initViews() {
-        searchBar = findViewById(R.id.searchBar);
+        no_result_found = findViewById(R.id.no_result_found);
         recyclerView = findViewById(R.id.subcategory_recycler);
         toolbar = findViewById(R.id.toolbar);
         bottom_anchor_layout = findViewById(R.id.bottom_anchor_layout);
@@ -278,6 +275,7 @@ public class SearchResultActivity extends BaseActivity {
                                         recyclerView.setAdapter(mAdapter);
                                         mAdapter.notifyDataSetChanged();
                                     }else{
+                                        no_result_found.setVisibility(GONE);
                                         recyclerView.setVisibility( GONE);
                                     }
                                 }

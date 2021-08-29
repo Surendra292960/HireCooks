@@ -1,6 +1,9 @@
 package com.test.sample.hirecooks.Adapter.Orders;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,8 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.test.sample.hirecooks.Activity.ManageAddress.SecondryAddressActivity;
 import com.test.sample.hirecooks.Adapter.RecievedorderDetailAdapter;
 import com.test.sample.hirecooks.Models.NewOrder.OrdersTable;
 import com.test.sample.hirecooks.Models.users.User;
@@ -52,15 +57,41 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.Orders
             holder.order_date_time.setText("Order On  :  "+ordersTable.getOrder_date_time());
             holder.order_address.setText("Address  :  "+ordersTable.getOrder_address());
             Animation animation1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.blink);
-            holder.item_status.setText(ordersTable.getOrder_status());
             holder.itemImage.setAnimation(AnimationUtils.loadAnimation(mCtx, R.anim.fade_transition_animation));
             holder.cardlist_item.setAnimation(AnimationUtils.loadAnimation(mCtx, R.anim.fade_scale_animation));
             holder.update_order_layout.setVisibility( View.GONE );
-            holder.change_order_address.setVisibility( View.GONE );
-            if(ordersTable.getOrder_status().equalsIgnoreCase( "Pending" )){
+            if(ordersTable.getOrder_status().equalsIgnoreCase( "Cancelled" )){
+                holder.item_status.setTextColor( Color.RED );
+                holder.item_status.setText(ordersTable.getOrder_status());
+            }else if(ordersTable.getOrder_status().equalsIgnoreCase( "Pending" )){
                 holder.image.startAnimation(animation1);
+                holder.item_status.setText(ordersTable.getOrder_status());
             }else if(ordersTable.getOrder_status().equalsIgnoreCase( "Delivered" )){
                 holder.image.clearAnimation();
+                holder.item_status.setText(ordersTable.getOrder_status());
+            }else if(ordersTable.getOrder_status().equalsIgnoreCase( "Prepairing" )){
+                holder.lottie_prepaire.setVisibility( View.VISIBLE );
+                holder.item_status.setText(ordersTable.getOrder_status());
+            }else if(ordersTable.getOrder_status().equalsIgnoreCase( "On The Way" )){
+                holder.lottie_delivery.setVisibility( View.VISIBLE );
+                holder.item_status.setText(ordersTable.getOrder_status());
+            }else {
+                holder.item_status.setText(ordersTable.getOrder_status());
+            }
+            if(ordersTable.getOrder_status().equalsIgnoreCase( "Delivered" )||ordersTable.getOrder_status().equalsIgnoreCase( "Cancelled" )){
+                holder.change_order_address.setVisibility( View.GONE );
+            }else{
+                holder.change_order_address.setVisibility( View.VISIBLE );
+                holder.change_order_address.setOnClickListener( new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent( mCtx,SecondryAddressActivity.class );
+                        Bundle bundle = new Bundle(  );
+                        bundle.putSerializable( "OrdersTable",ordersTable );
+                        intent.putExtras( bundle );
+                        mCtx.startActivity( intent );
+                    }
+                } );
             }
 
             holder.order_details.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +126,7 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.Orders
         CardView cardlist_item;
         LinearLayout update_order_layout,order_product_layout;
         RecyclerView order_product_recycler;
+        LottieAnimationView lottie_prepaire,lottie_delivery;
         AppCompatButton accept_order,order_pending,order_prepairing,order_delivered,order_cancelled,order_ontheway,order_confirm,change_order_address;
 
         public OrdersViewHolder(View itemView) {
@@ -116,6 +148,8 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.Orders
             order_ontheway = itemView.findViewById(R.id.order_ontheway);
             item_status = itemView.findViewById(R.id.item_status);
             order_confirm = itemView.findViewById(R.id.confim_order);
+            lottie_prepaire = itemView.findViewById(R.id.lottie_prepaire);
+            lottie_delivery = itemView.findViewById(R.id.lottie_delivery);
             item_with_quantity = itemView.findViewById(R.id.item_with_quantity);
             update_order_layout = itemView.findViewById(R.id.update_order_layout);
             order_product_layout = itemView.findViewById(R.id.order_product_layout);

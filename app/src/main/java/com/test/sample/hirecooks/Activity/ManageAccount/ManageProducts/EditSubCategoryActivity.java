@@ -177,7 +177,7 @@ public class EditSubCategoryActivity extends AppCompatActivity {
         @Override
         public EditSubCategoryActivity.SubcategoryAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
             View itemView;
-            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_horizontal_layout, parent, false);
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.edit_subcategory_adadpter_layout, parent, false);
             return new EditSubCategoryActivity.SubcategoryAdapter.MyViewHolder(itemView);
         }
 
@@ -186,25 +186,9 @@ public class EditSubCategoryActivity extends AppCompatActivity {
             final Subcategory product = productList.get(position);
             if(product!=null){
                 if(product.getAcceptingOrder()==0){
+                    holder.order_not_accepting.setVisibility(View.VISIBLE);
+                }else{
                     holder.order_not_accepting.setVisibility( GONE);
-                    holder.add_item_layout.setVisibility(View.VISIBLE);
-                }else{
-                    holder.order_not_accepting.setVisibility(View.VISIBLE);
-                    holder.add_item_layout.setVisibility( GONE);
-                }
-                if(product.getStock()==1){
-                    holder.add_.setVisibility(View.VISIBLE);
-                    holder.item_not_in_stock.setVisibility(GONE);
-                }else{
-                    holder.add_.setVisibility(GONE);
-                    holder.item_not_in_stock.setVisibility(View.VISIBLE);
-                }
-                if(product.getAcceptingOrder()==1){
-                    holder.order_not_accepting.setVisibility(View.GONE);
-                    holder.add_item_layout.setVisibility(View.VISIBLE);
-                }else{
-                    holder.order_not_accepting.setVisibility(View.VISIBLE);
-                    holder.add_item_layout.setVisibility(View.GONE);
                 }
 
                 holder.name.setText(product.getName());
@@ -277,9 +261,9 @@ public class EditSubCategoryActivity extends AppCompatActivity {
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             ImageView imageView;
-            TextView discount, name, sellrate, quantity, displayRate,item_not_in_stock,discription,item_short_desc,add_;
+            TextView discount, name, sellrate,displayRate,discription,item_short_desc;
             TextView add_item, remove_item;
-            LinearLayout add_item_layout,quantity_ll,order_not_accepting;
+            LinearLayout add_item_layout,order_not_accepting;
             CardView cardview;
 
             public MyViewHolder(@NonNull View itemView) {
@@ -289,15 +273,9 @@ public class EditSubCategoryActivity extends AppCompatActivity {
                 discount = itemView.findViewById(R.id.item_discount);
                 sellrate = itemView.findViewById(R.id.item_sellrate);
                 displayRate = itemView.findViewById(R.id.item_displayrate);
-                quantity = itemView.findViewById(R.id.item_count);
                 add_item = itemView.findViewById(R.id.add_item);
                 remove_item = itemView.findViewById(R.id.remove_item);
-                add_item_layout = itemView.findViewById(R.id.add_item_layout);
-                add_ = itemView.findViewById(R.id.add_);
-                quantity_ll = itemView.findViewById(R.id.quantity_ll);
-                // available_stock = itemView.findViewById(R.id.available_stock);
                 cardview = itemView.findViewById(R.id.card_view);
-                item_not_in_stock = itemView.findViewById(R.id.item_not_in_stock);
                 discription = itemView.findViewById(R.id.item_description);
                 item_short_desc = itemView.findViewById(R.id.item_short_desc);
                 order_not_accepting = itemView.findViewById(R.id.order_not_accepting);

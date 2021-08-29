@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.test.sample.hirecooks.Adapter.Users.AddressAdapter;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Maps;
+import com.test.sample.hirecooks.Models.NewOrder.OrdersTable;
 import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
 import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
@@ -37,6 +38,7 @@ public class SecondryAddressActivity extends BaseActivity {
     private ProgressBarUtil progressBarUtil;
     private MapApi mService = Common.getAPI();;
     private User user;
+    private OrdersTable ordersTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class SecondryAddressActivity extends BaseActivity {
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
             userResponse = (UserResponse)bundle.getSerializable("User");
+            ordersTable = (OrdersTable)bundle.getSerializable("OrdersTable");
         }
     }
 
@@ -107,7 +110,7 @@ public class SecondryAddressActivity extends BaseActivity {
                 mapList.add( map );
             }
         }
-        AddressAdapter adapter = new AddressAdapter(SecondryAddressActivity.this, mapList);
+        AddressAdapter adapter = new AddressAdapter(SecondryAddressActivity.this, mapList,ordersTable);
         recyclerView.setAdapter(adapter);
     }
 

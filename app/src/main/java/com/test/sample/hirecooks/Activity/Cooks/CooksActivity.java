@@ -3,17 +3,20 @@ package com.test.sample.hirecooks.Activity.Cooks;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -157,31 +160,58 @@ public class CooksActivity extends AppCompatActivity {
         }
     }
 
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_menu, menu);
         MenuItem searchItem = menu.getItem(0);
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setFocusable(true);
         searchItem.expandActionView();
-        return true;
+
+        searchView.setOnQueryTextListener( new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(searchList.size()!=0){
+                    startSearch( query );
+                }else{
+                    showalertbox("No Match found");
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(searchList.size()!=0){
+                    startSearch( newText );
+                }
+                return false;
+            }
+        } );
+        return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        handleIntent(intent);
-    }
-
-    private void handleIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            //use the query to search your data somehow
-            startSearch(query);
-        }
+    public void showalertbox(String string) {
+        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder( this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.show_alert_message,null);
+        TextView ask = view.findViewById( R.id.ask );
+        TextView textView = view.findViewById( R.id.text );
+        ask.setText( string );
+        textView.setText( "Alert !" );
+        AppCompatTextView cancelBtn = view.findViewById(R.id.exit_app_btn);
+        dialogBuilder.setView(view);
+        final android.app.AlertDialog dialog = dialogBuilder.create();
+        dialog.show();
+        cancelBtn.setOnClickListener( v -> {
+            try {
+                dialog.dismiss();
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } );
     }
 
     private void startSearch(CharSequence text) {
@@ -205,6 +235,7 @@ public class CooksActivity extends AppCompatActivity {
                     profile_list_recycler_view.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 } else {
+                    //profile_list_recycler_view.setVisibility( View.GONE );
                     this.getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                 }
             }

@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
@@ -78,7 +79,7 @@ import static android.view.View.VISIBLE;
 
 public class DetailsActivity extends BaseActivity {
     private RelativeLayout bottom_anchor_layout;
-    private TextView item_not_in_stock, product_discount,itemAdd, itemRemove,item_count,checkout_amount,checkout,product_displayRate,item_sellrate,item_name,addToCart,quantity;
+    private TextView item_not_in_stock, item_details, product_discount,itemAdd, itemRemove,item_count,checkout_amount,checkout,product_displayRate,item_sellrate,item_name,addToCart,quantity;
     private List<Subcategory> cartList;
     private List<Subcategory> FavouriteList;
     private int Quantity = 0, FavQuantity = 0, sellRate = 0,displayRate = 0, SubTotal = 0;
@@ -96,7 +97,7 @@ public class DetailsActivity extends BaseActivity {
    // private SubCategoryHorizontalAdapter subCategoryHorizontalAdapter;
     private ImageView image1,image2,image3,image4,item_favourite;
     private View bottom_anchor;
-    private LinearLayout layout_action_share, layout_action_favourite,add_item_layout,add_quantity_layout,order_not_accepting;
+    private LinearLayout layout_action_share, layout_action_favourite,add_item_layout,add_quantity_layout,order_not_accepting,weight_lay,size_lay,color_lay;
     private LocalStorage localStorage;
     private Gson gson;
     private Search search;
@@ -112,7 +113,7 @@ public class DetailsActivity extends BaseActivity {
     private List<Size> sizeList = new ArrayList<>(  );
     private List<Weight> weightList = new ArrayList<>(  );
 
-    @SuppressLint("WrongConstant")
+    @SuppressLint({"WrongConstant", "NewApi", "ResourceAsColor"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,6 +146,25 @@ public class DetailsActivity extends BaseActivity {
                     product_displayRate.setText(spanString);
                     discount = (subCategory.getDisplayRate() - subCategory.getSellRate());
                     product_discount.setText("Save " + (discount * 100 / subCategory.getDisplayRate()) + " %");
+                    if(subCategory.getDetailDiscription()!=null){
+                        String str = subCategory.getDetailDiscription();
+                        String[] res = str.split("[.]", 0);
+                        for(int i=0; i<res.length; i++) {
+                            item_details.append(( Html.fromHtml("\u25A0 "+res[i]+" \u2022", Html.FROM_HTML_MODE_COMPACT)));
+                            item_details.append("\n");
+                            //item_details.setText( myStr );
+                        }
+                    }
+                    item_name.setText( subCategory.getName() );
+                }
+
+                if(subCategory.getAcceptingOrder()==0){
+                    order_not_accepting.setVisibility( View.VISIBLE);
+                    add_item_layout.setVisibility( GONE);
+
+                }else{
+                    order_not_accepting.setVisibility( GONE);
+                    add_item_layout.setVisibility( VISIBLE);
                 }
             }
         }
@@ -157,7 +177,7 @@ public class DetailsActivity extends BaseActivity {
         gson = new Gson();
 
         viewPager = findViewById(R.id.viewPager);
-        sliderDotspanel = findViewById(R.id.worm_dots_indicator);
+        sliderDotspanel = findViewById(R.id.dots_indicator);
         weight_recycler = findViewById(R.id.weight_recycler);
         sizes_recycler = findViewById(R.id.sizes_recycler);
         colors_recycler = findViewById(R.id.colors_recycler);
@@ -165,6 +185,9 @@ public class DetailsActivity extends BaseActivity {
         weight_progress= findViewById(R.id.weight_progress);
         color_progress= findViewById(R.id.color_progress);
         size_progress= findViewById(R.id.size_progress);
+        weight_lay= findViewById(R.id.weight_lay);
+        size_lay= findViewById(R.id.size_lay);
+        color_lay= findViewById(R.id.color_lay);
         subcategory_recycler = findViewById( R.id.subcategory_recycler );
         bottom_anchor_layout = findViewById( R.id.bottom_anchor_layout );
         layout_action_share = findViewById( R.id.layout_action_share );
@@ -182,6 +205,7 @@ public class DetailsActivity extends BaseActivity {
         product_displayRate = findViewById( R.id.product_displayRate );
         product_discount = findViewById( R.id.product_discount );
         item_name = findViewById( R.id.product_name );
+        item_details = (findViewById( R.id.item_details ));
 
         View view = findViewById( R.id.footerView );
         item_count = view.findViewById( R.id.item_count );
@@ -553,6 +577,7 @@ public class DetailsActivity extends BaseActivity {
                     for (WeightExample weightExample1 : response.body()) {
                         if (weightExample1.getError() == false) {
                             weight_progress.setVisibility( View.GONE );
+                            weight_lay.setVisibility( VISIBLE );
                             weight_recycler.setVisibility(View.VISIBLE);
                             DetailsActivity.WeightAdapter adapter = new DetailsActivity.WeightAdapter( DetailsActivity.this,weightExample1.getWeights() );
                             weight_recycler.setAdapter( adapter );
@@ -570,6 +595,7 @@ public class DetailsActivity extends BaseActivity {
                             weight_recycler.setItemAnimator(new DefaultItemAnimator());
                         } else {
                             Toast.makeText( DetailsActivity.this, weightExample1.getMessage(), Toast.LENGTH_SHORT ).show();
+                            weight_progress.setVisibility( View.GONE );
                         }
                     }
                 }
@@ -595,6 +621,7 @@ public class DetailsActivity extends BaseActivity {
                     for(SizeExample sizeExample1:response.body()){
                         if(sizeExample1.getError()==false){
                             size_progress.setVisibility( View.GONE );
+                            size_lay.setVisibility( VISIBLE );
                             sizes_recycler.setVisibility(View.VISIBLE);
                             DetailsActivity.SizeAdapter adapter = new DetailsActivity.SizeAdapter( DetailsActivity.this,sizeExample1.getSizes() );
                             sizes_recycler.setAdapter( adapter );
@@ -611,6 +638,7 @@ public class DetailsActivity extends BaseActivity {
                             sizes_recycler.setLayoutManager(linearLayoutManager);
                             sizes_recycler.setItemAnimator(new DefaultItemAnimator());
                         }else{
+                            size_progress.setVisibility( View.GONE );
                             Toast.makeText( DetailsActivity.this, sizeExample1.getMessage(), Toast.LENGTH_SHORT ).show();
                         }
                     }
@@ -638,6 +666,7 @@ public class DetailsActivity extends BaseActivity {
                         if(colorExample1.getError()==false){
                             color_progress.setVisibility( View.GONE );
                             colors_recycler.setVisibility(View.VISIBLE);
+                            color_lay.setVisibility(View.VISIBLE);
                             DetailsActivity.ColorsAdapter adapter = new DetailsActivity.ColorsAdapter( DetailsActivity.this,colorExample1.getColors() );
                             colors_recycler.setAdapter( adapter );
                             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(DetailsActivity.this);
@@ -654,6 +683,7 @@ public class DetailsActivity extends BaseActivity {
                             colors_recycler.setItemAnimator(new DefaultItemAnimator());
                         }else{
                             Toast.makeText( DetailsActivity.this, colorExample1.getMessage(), Toast.LENGTH_SHORT ).show();
+                            color_progress.setVisibility( View.GONE );
                         }
                     }
                 }
@@ -926,25 +956,12 @@ public class DetailsActivity extends BaseActivity {
 
             if(product!=null){
                 if(product.getAcceptingOrder()==0){
-                    holder.order_not_accepting.setVisibility( GONE);
-                    holder.add_item_layout.setVisibility(View.VISIBLE);
-                }else{
-                    holder.order_not_accepting.setVisibility(View.VISIBLE);
+                    holder.order_not_accepting.setVisibility( View.VISIBLE);
                     holder.add_item_layout.setVisibility( GONE);
-                }
-                if(product.getStock()==1){
-                    holder.add_.setVisibility(View.VISIBLE);
-                    holder.item_not_in_stock.setVisibility(GONE);
+
                 }else{
-                    holder.add_.setVisibility(GONE);
-                    holder.item_not_in_stock.setVisibility(View.VISIBLE);
-                }
-                if(product.getAcceptingOrder()==1){
-                    holder.order_not_accepting.setVisibility(View.GONE);
-                    holder.add_item_layout.setVisibility(View.VISIBLE);
-                }else{
-                    holder.order_not_accepting.setVisibility(View.VISIBLE);
-                    holder.add_item_layout.setVisibility(View.GONE);
+                    holder.order_not_accepting.setVisibility( GONE);
+                    holder.add_item_layout.setVisibility( GONE);
                 }
 
                 holder.name.setText(product.getName());

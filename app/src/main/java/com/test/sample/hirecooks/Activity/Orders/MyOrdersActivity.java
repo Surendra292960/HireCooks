@@ -89,6 +89,7 @@ public class MyOrdersActivity extends BaseActivity {
                                 no_orders.setVisibility(View.GONE);
                                 ordersAdapter = new MyOrdersAdapter(MyOrdersActivity.this,orders);
                                 recyclerView.setAdapter(ordersAdapter);
+                                ordersAdapter.notifyDataSetChanged();
                             }else{
                                 recyclerView.setVisibility(View.GONE);
                                 no_orders.setVisibility(View.VISIBLE);

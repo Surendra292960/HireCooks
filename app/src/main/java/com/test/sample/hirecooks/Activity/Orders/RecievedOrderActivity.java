@@ -1,10 +1,15 @@
 package com.test.sample.hirecooks.Activity.Orders;
 
 import android.annotation.SuppressLint;
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.transition.Explode;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -13,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -49,6 +56,7 @@ public class RecievedOrderActivity extends BaseActivity {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private static String status = null;
     private List<Root> newOrder;
+    ArrayList<OrdersTable> mOrdersTableList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +153,7 @@ public class RecievedOrderActivity extends BaseActivity {
                 if (response.code() == 200 ) {
 
                     response.body().forEach(root -> {if(root.getError()==false){
-                       ArrayList<OrdersTable> mOrdersTableList = new ArrayList<>(  );
+                       mOrdersTableList = new ArrayList<>(  );
                         if(root.getOrders_table()!=null&&root.getOrders_table().size()!=0){
                             for (OrdersTable ordersTable:root.getOrders_table()){
                                 OrdersTable mFilteredOrdersTable = new OrdersTable();
@@ -171,9 +179,13 @@ public class RecievedOrderActivity extends BaseActivity {
                                         if(order.getFirmId().equalsIgnoreCase( user.getFirmId() )) {
                                             mFilteredOrders.add( order );
                                             mFilteredOrdersTable.setOrders( mFilteredOrders );
-                                            mOrdersTableList.add( mFilteredOrdersTable );
                                         }
+                                    }else {
+                                        return;
                                     }
+                                }
+                                if(mFilteredOrdersTable.getOrders()!=null&&mFilteredOrdersTable.getOrders().size()!=0){
+                                    mOrdersTableList.add( mFilteredOrdersTable );
                                 }
                             }
 
@@ -181,6 +193,7 @@ public class RecievedOrderActivity extends BaseActivity {
                             no_orders.setVisibility(View.GONE);
                             ordersAdapter = new RecievedOrdersAdapter(RecievedOrderActivity.this,mOrdersTableList);
                             recyclerView.setAdapter(ordersAdapter);
+                            ordersAdapter.notifyDataSetChanged();
                         }else{
                             recyclerView.setVisibility(View.GONE);
                             no_orders.setVisibility(View.VISIBLE);
@@ -232,5 +245,94 @@ public class RecievedOrderActivity extends BaseActivity {
     protected void onRestart() {
         super.onRestart();
         getCurrentOrders("Pending");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+        MenuItem searchItem = menu.getItem(0);
+        SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setFocusable(true);
+        searchItem.expandActionView();
+
+        searchView.setOnQueryTextListener( new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(mOrdersTableList.size()!=0){
+                    startSearch( query );
+                }else{
+                    showalertbox("No Match found");
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(mOrdersTableList.size()!=0){
+                    startSearch( newText );
+                }
+                //adapter.getFilter().filter(newText);
+                return false;
+            }
+        } );
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public void showalertbox(String string) {
+        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder( this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.show_alert_message,null);
+        TextView ask = view.findViewById( R.id.ask );
+        TextView textView = view.findViewById( R.id.text );
+        ask.setText( string );
+        textView.setText( "Alert !" );
+        AppCompatTextView cancelBtn = view.findViewById(R.id.exit_app_btn);
+        dialogBuilder.setView(view);
+        final android.app.AlertDialog dialog = dialogBuilder.create();
+        dialog.show();
+        cancelBtn.setOnClickListener( v -> {
+            try {
+                dialog.dismiss();
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } );
+    }
+
+    private void startSearch(CharSequence text) {
+        List<OrdersTable>  ordersTablesFilteredList = new ArrayList<>();
+        try{
+            if(mOrdersTableList!=null&&mOrdersTableList.size()!=0){
+                for(int i=0;i<mOrdersTableList.size();i++) {
+                    String order_id = "";
+
+                    if(mOrdersTableList.get (i).getOrder_id()!=0){
+                        order_id= String.valueOf( mOrdersTableList.get (i).getOrder_id());
+                    }
+
+                    if(order_id.toLowerCase().contains(String.valueOf(text).toLowerCase())) {
+                        ordersTablesFilteredList.add(mOrdersTableList.get(i));
+                    }
+                }
+
+                if(ordersTablesFilteredList.size()!=0&&ordersTablesFilteredList!=null){
+                    recyclerView.setVisibility(View.VISIBLE);
+                    no_orders.setVisibility(View.GONE);
+                    ordersAdapter = new RecievedOrdersAdapter (RecievedOrderActivity.this, ordersTablesFilteredList);
+                    recyclerView.setAdapter (ordersAdapter);
+                    ordersAdapter.notifyDataSetChanged();
+                }else{
+                    recyclerView.setVisibility(View.GONE);
+                    no_orders.setVisibility(View.VISIBLE);
+                }
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

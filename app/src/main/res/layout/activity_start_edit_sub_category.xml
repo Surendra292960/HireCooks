@@ -14,8 +14,6 @@
         android:layout_height="0dp"
         android:layout_weight="9.5"
         android:scrollbars="none"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:ignore="MissingConstraints">
 
@@ -32,8 +30,11 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_weight="1"
+                    android:focusable="false"
+                    android:layout_margin="@dimen/margin_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:hint="Search Key">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -47,8 +48,10 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_weight="1"
+                    android:layout_margin="@dimen/margin_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:hint="@string/subcategory_name">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -71,8 +74,10 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_weight="1"
+                    android:layout_margin="@dimen/margin_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:hint="@string/sellrate">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -84,8 +89,11 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/margin_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:hint="@string/displayrate">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -106,8 +114,10 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_weight="1"
+                    android:layout_margin="@dimen/margin_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:hint="Product Unique Key">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -121,8 +131,10 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_weight="1"
+                    android:layout_margin="@dimen/margin_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:hint="Age">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -145,8 +157,10 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_weight="1"
+                    android:layout_margin="@dimen/margin_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:hint="Brand">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -159,8 +173,11 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/margin_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:hint="Gender">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -177,24 +194,28 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
+                android:layout_margin="@dimen/margin_5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:focusableInTouchMode="false"
                 android:hint="@string/address">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/address"
-                    android:inputType="text"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
+                    android:lines="5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:layout_margin="@dimen/margin_5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:focusableInTouchMode="false"
                 android:hint="@string/firmid">
 
@@ -211,29 +232,49 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_weight="1"
+                android:layout_margin="@dimen/margin_5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:gravity="top|right"
                 android:hint="@string/discription">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:inputType="text"
+                <EditText
                     android:id="@+id/editTextDiscription"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:minHeight="150dp"
+                    android:textAlignment="viewStart"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="start|top"
+                    android:imeOptions="actionDone"
+                    android:background="@null"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:textColorHint="@color/white"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_weight="1"
+                android:layout_margin="@dimen/margin_5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/detail_discription">
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:hint="@string/detail_discription"
+                android:gravity="top">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:inputType="text"
+                <EditText
                     android:id="@+id/editTextDetailDiscription"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:minHeight="250dp"
+                    android:textAlignment="viewStart"
+                    android:layout_centerHorizontal="true"
+                    android:background="@null"
+                    android:gravity="start|top"
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:textColorHint="@color/white"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -671,6 +712,7 @@
                 android:layout_height="180dp"/>
 
         </LinearLayout>
+
     </ScrollView>
 
     <LinearLayout

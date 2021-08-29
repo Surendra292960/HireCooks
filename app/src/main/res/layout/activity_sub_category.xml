@@ -29,11 +29,6 @@
                 android:descendantFocusability="blocksDescendants"
                 android:orientation="vertical">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_marginBottom="10dp" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -41,7 +36,6 @@
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:visibility="visible"
-                            android:layout_marginTop="@dimen/margin_10"
                             android:id="@+id/subcategory_recycler"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -68,23 +62,6 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 
-    <!-- search bar layout -->
-    <include
-        android:id="@+id/search_bar"
-        layout="@layout/search_layout" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/sort"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        app:srcCompat="@android:drawable/ic_menu_sort_by_size"
-        android:contentDescription="@string/submit"
-        android:layout_marginBottom="60dp"
-        android:layout_marginEnd="16dp"
-        app:backgroundTint="@color/black"/>
-
     <RelativeLayout
         android:id="@+id/bottom_anchor_layout"
         android:layout_width="match_parent"
@@ -99,7 +76,6 @@
     </RelativeLayout>
 
     <FrameLayout
-        android:layout_marginTop="@dimen/margin_80"
         android:layout_marginBottom="@dimen/margin_60"
         android:id="@+id/no_result_found"
         android:layout_width="match_parent"
@@ -138,7 +114,6 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_marginTop="@dimen/margin_80"
         android:layout_marginBottom="@dimen/margin_60"
         android:id="@+id/no_vender_found"
         android:layout_width="match_parent"
@@ -179,7 +154,6 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_marginTop="@dimen/margin_80"
         android:layout_marginBottom="@dimen/margin_60"
         android:visibility="gone"
         android:id="@+id/no_search_result_found"

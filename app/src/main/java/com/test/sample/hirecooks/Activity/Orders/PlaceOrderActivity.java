@@ -48,6 +48,7 @@ import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.RazorpayPayment;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
+import com.test.sample.hirecooks.Utils.SharedPrefToken;
 import com.test.sample.hirecooks.WebApis.MapApi;
 import com.test.sample.hirecooks.WebApis.NotificationApi;
 import com.test.sample.hirecooks.WebApis.OrderApi;
@@ -217,6 +218,10 @@ public class PlaceOrderActivity extends BaseActivity {
                         order.setDiscount( (subcategory.getDisplayRate() - subcategory.getSellRate())*subcategory.getItemQuantity() );
                         order.setQuantity( subcategory.getItemQuantity() );
                         order.setTotalAmount( subcategory.getTotalAmount() );
+                        if(order.getTotalAmount()<200){
+                            showalertbox("Can`t Place Order less then \u20B9  200");
+                            return;
+                        }
                         order.setLink2( String.valueOf( subcategory.getImages() ) );
                         order.setFirmId( subcategory.getFirmId() );
                         order.setOrderWeight( "Not Required" );
@@ -240,7 +245,7 @@ public class PlaceOrderActivity extends BaseActivity {
                     root = new Root();
                     root.setOrders_table( orderTableList );
                     if (SharedPrefManager.getInstance(PlaceOrderActivity.this).isLoggedIn()) {
-                        placeOrder( root );
+                        placeOrder( root);
                     }else{
                         showalertbox("Please Login First");
                         }
@@ -284,6 +289,10 @@ public class PlaceOrderActivity extends BaseActivity {
                             order.setDiscount( (subcategory.getDisplayRate() - subcategory.getSellRate())*subcategory.getItemQuantity() );
                             order.setQuantity( subcategory.getItemQuantity() );
                             order.setTotalAmount( subcategory.getTotalAmount() );
+                            if(order.getTotalAmount()<200){
+                                showalertbox("Can`t Place Order less then \u20B9  200");
+                                return;
+                            }
                             order.setLink2( String.valueOf( subcategory.getImages() ) );
                             order.setFirmId( subcategory.getFirmId() );
                             order.setOrderWeight( "Not Required" );
@@ -371,19 +380,8 @@ public class PlaceOrderActivity extends BaseActivity {
                 if(statusCode==200) {
                     progressBarUtil.hideProgress();
                     Token tokens = new Token();
-                    /*List<Token> filteredToken = new ArrayList<>();*/
-                    orderList.forEach(ordersTable -> {
-                        ordersTable.getOrders().forEach( order -> {
-                            response.body().getTokens().forEach( token -> {
-                                if(token.getFirm_id().equalsIgnoreCase( order.getFirmId() )){
-                                    tokens.setFirm_id(order.getFirmId());
-                                    tokens.setToken(token.getToken());
-                                    sendNotification(tokens);
-                                }
-                            });
-                        });});
-
-                 /*   for(OrdersTable orderTable:orderList){
+                    List<Token> filteredToken = new ArrayList<>();
+                    for(OrdersTable orderTable:orderList){
                        for(Order order:orderTable.getOrders()){
                            for(Token token: response.body().getTokens()){
                                if(token.getFirm_id().equalsIgnoreCase(order.getFirmId())){
@@ -393,10 +391,10 @@ public class PlaceOrderActivity extends BaseActivity {
                                }
                            }
                        }
-                    }*/
-                    /*filteredToken.add(tokens);
+                    }
+                    filteredToken.add(tokens);
                     System.out.println("Order Tokens: "+filteredToken);
-                    System.out.println("Suree Token  "+ SharedPrefToken.getInstance(getApplicationContext()).getTokens().getToken());*/
+                    System.out.println("Suree Token  "+ SharedPrefToken.getInstance(getApplicationContext()).getTokens().getToken());
                 }
                 else{
                     Toast.makeText(getApplicationContext(), R.string.failed_due_to+response.code(), Toast.LENGTH_LONG).show();
@@ -791,7 +789,9 @@ public class PlaceOrderActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        //super.onBackPressed();
+        this.finish();
+        startActivity( new Intent( PlaceOrderActivity.this,MainActivity.class ) );
     }
 
     @Override

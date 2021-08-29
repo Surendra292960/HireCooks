@@ -147,6 +147,9 @@ dependencies {
     implementation 'com.github.mancj:MaterialSearchBar:+'
     //subscription
     compile 'com.android.billingclient:billing:1.0'
+    implementation "com.airbnb.android:lottie:3.4.0"
+    implementation 'com.github.zhpanvip:viewpagerindicator:1.0.6'
+
     // paytm dependency
     implementation('com.paytm:pgplussdk:1.2.3') {
         transitive = true;

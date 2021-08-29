@@ -95,9 +95,9 @@ public interface OrderApi {
     Call<List<Root>> acceptOrders(
             @Path("order_id") Integer id,@Body List<OrdersTable> confirm_status);
 
-    @PATCH("/orders/{order_id}")
-    Call<List<OrdersTable>> updateOrderAddresss(
-            @Path("order_id") Integer id,@Body List<OrdersTable> ordersTables);
+    @PATCH("/RetrofitExample/public/orders/{order_id}")
+    Call<List<Root>> updateOrderAddresss(
+            @Path("order_id") Integer order_id,@Body List<Root> roots);
 }
 
 

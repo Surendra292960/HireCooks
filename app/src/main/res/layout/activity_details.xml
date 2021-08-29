@@ -20,6 +20,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/white"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -36,14 +37,15 @@
 
                 </LinearLayout>
 
+
                 <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
-                    android:id="@+id/worm_dots_indicator"
+                    android:id="@+id/dots_indicator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:dotsColor="@color/gray_btn_bg_color"
+                    app:dotsColor="@color/smoke_white"
                     android:foregroundGravity="bottom"
                     android:layout_gravity="center_horizontal"
-                    app:dotsStrokeColor="@color/gray_btn_bg_color"
+                    app:dotsStrokeColor="@color/smoke_white"
                     app:dotsCornerRadius="8dp"
                     app:dotsSize="16dp"
                     app:dotsSpacing="4dp"
@@ -78,6 +80,7 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/margin_5"
                                 android:orientation="horizontal">
                                 <TextView android:id="@+id/product_sellrate"
                                     android:layout_width="wrap_content"
@@ -397,6 +400,8 @@
                     android:orientation="vertical">
 
                     <LinearLayout
+                        android:id="@+id/weight_lay"
+                        android:visibility="gone"
                         android:layout_margin="@dimen/margin_5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -425,11 +430,12 @@
                             android:layout_height="wrap_content"
                             android:scrollbarAlwaysDrawHorizontalTrack="true"
                             android:scrollbars="none"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
                         <ProgressBar
+                            android:visibility="gone"
                             android:id="@+id/weight_progress"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
@@ -443,7 +449,9 @@
                     </FrameLayout>
 
                     <LinearLayout
+                        android:id="@+id/size_lay"
                         android:layout_margin="@dimen/margin_5"
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -466,7 +474,7 @@
                         android:layout_gravity="center">
 
                         <androidx.recyclerview.widget.RecyclerView
-                            android:visibility="visible"
+                            android:visibility="gone"
                             android:id="@+id/sizes_recycler"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -475,6 +483,7 @@
                             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
                         <ProgressBar
+                            android:visibility="gone"
                             android:id="@+id/size_progress"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
@@ -488,9 +497,11 @@
                     </FrameLayout>
 
                     <LinearLayout
+                        android:id="@+id/color_lay"
+                        android:visibility="gone"
                         android:layout_margin="@dimen/margin_5"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="horizontal">
 
                         <TextView
@@ -511,7 +522,7 @@
                         android:layout_gravity="center">
 
                         <androidx.recyclerview.widget.RecyclerView
-                            android:visibility="visible"
+                            android:visibility="gone"
                             android:id="@+id/colors_recycler"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -540,12 +551,12 @@
                         android:textColor="@color/dark_gray"/>
 
                     <TextView
-                        android:layout_marginTop="@dimen/margin_5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/message_txt"
+                        android:id="@+id/item_details"
+                        android:layout_margin="@dimen/margin_10"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:textColor="@color/dark_gray"
-                        android:textSize="@dimen/size_12"
+                        android:textSize="@dimen/size_14"
                         android:textStyle="normal"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 

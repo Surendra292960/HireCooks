@@ -30,8 +30,10 @@ import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.Category.Example;
 import com.test.sample.hirecooks.Models.Offer.Offer;
+import com.test.sample.hirecooks.Models.users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.Constants;
+import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.UserApi;
 
 import java.util.ArrayList;
@@ -50,7 +52,9 @@ public class EditCategoryActivity extends AppCompatActivity {
     private EditCategoryAdapter mAdapter;
     private List<Category> mCategory;
     private FloatingActionButton add_category;
+    private User user;
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -60,6 +64,7 @@ public class EditCategoryActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Products  Category");
+        user = SharedPrefManager.getInstance( this ).getUser();
         Bundle bundle = getIntent().getExtras();
         if (bundle != null&& Constants.NEARBY_VENDERS_LOCATION !=null) {
             categoryName= bundle.getString("CategoryName");
@@ -74,19 +79,22 @@ public class EditCategoryActivity extends AppCompatActivity {
             }
         }
 
-        add_category.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(category.getId()!=0&&category!=null){
-                   Intent intent = new Intent(EditCategoryActivity.this, StartEditCategory.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("CreateCategory", category.getId());
-                    intent.putExtras(bundle);
-                    startActivity(intent);
+        if(user.getUserType().equalsIgnoreCase( "Admin" )&&user.getUserType().equalsIgnoreCase( "SuperAdmin" )){
+            add_category.setVisibility( View.VISIBLE );
+            add_category.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(category.getId()!=0&&category!=null){
+                        Intent intent = new Intent(EditCategoryActivity.this, StartEditCategory.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("CreateCategory", category.getId());
+                        intent.putExtras(bundle);
+                        startActivity(intent);
 
+                    }
                 }
-            }
-        } );
+            } );
+        }
     }
 
     private void getCategory(int id) {
@@ -238,11 +246,6 @@ public class EditCategoryActivity extends AppCompatActivity {
                 categoryName = itemLayoutView.findViewById(R.id.category_name);
                 categoryImage = itemLayoutView.findViewById(R.id.category_image);
 
-       /*     itemLayoutView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                }
-            });*/
             }
         }
     }
@@ -250,7 +253,7 @@ public class EditCategoryActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(category.getId()!=0){
+        if(category!=null&&category.getId()!=0){
             getCategory(category.getId());
         }
     }

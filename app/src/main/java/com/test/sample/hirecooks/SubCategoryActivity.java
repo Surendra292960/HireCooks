@@ -1,12 +1,15 @@
 package com.test.sample.hirecooks;
 
 import android.annotation.SuppressLint;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,8 +35,6 @@ import com.test.sample.hirecooks.Activity.ProductDatails.DetailsActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
-import com.test.sample.hirecooks.Models.NewProductsCategory.NewProductCategory;
-import com.test.sample.hirecooks.Models.OfferCategory.OffersCategory;
 import com.test.sample.hirecooks.Models.SubCategory.Example;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
@@ -57,14 +59,11 @@ public class SubCategoryActivity extends BaseActivity {
     private List<Subcategory> cartList;
     private RelativeLayout bottom_anchor_layout;
     private TextView item_count,checkout_amount,checkout;
-    private View searchbar_interface_layout,bottom_anchor,appRoot;
-    private String CATEGORY_NAME;
-    private String categoryName;
+    private View bottom_anchor,appRoot;
     private Category category;
-    private NewProductCategory newProductCategory;
-    private OffersCategory offersCategory;
     private List<Example> examples;
     private FrameLayout no_vender_found,no_result_found;
+    private List<Subcategory> filteredList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +79,6 @@ public class SubCategoryActivity extends BaseActivity {
         no_vender_found = findViewById(R.id.no_vender_found);
         no_result_found = findViewById(R.id.no_result_found);
 
-        View search_view = findViewById(R.id.search_bar);
-        searchbar_interface_layout=search_view.findViewById(R.id.searchbar_interface_layout);
-        searchbar_interface_layout.setVisibility( GONE );
         View view = findViewById(R.id.footerView);
         item_count =  view.findViewById(R.id.item_count);
         bottom_anchor =  view.findViewById(R.id.bottom_anchor);
@@ -97,9 +93,7 @@ public class SubCategoryActivity extends BaseActivity {
         });
         Bundle bundle = getIntent().getExtras();
         if (bundle != null&&Constants.NEARBY_VENDERS_LOCATION !=null) {
-            categoryName= bundle.getString("CategoryName");
             category = (Category) bundle.getSerializable("Category");
-            CATEGORY_NAME = categoryName;
             if(category.getCategoryid()!=0){
                 getSubCategory(category.getId());
             }else {
@@ -116,16 +110,6 @@ public class SubCategoryActivity extends BaseActivity {
         int moveY = hide ? (2 * bottom_anchor.getHeight()) : 0;
         bottom_anchor.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
     }
-
-    boolean isSearchBarHide = false;
-
-    private void animateSearchBar(final boolean hide) {
-        if (isSearchBarHide && hide || !isSearchBarHide && !hide) return;
-        isSearchBarHide = hide;
-        int moveY = hide ? -(2 * searchbar_interface_layout.getHeight()) : 0;
-        searchbar_interface_layout.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
-    }
-
 
     private void getCart() {
         cartList = new ArrayList<>();
@@ -160,17 +144,16 @@ public class SubCategoryActivity extends BaseActivity {
                 if(examples!=null&&examples.size()!=0){
                     for(Example example:examples){
                         if(example.getError()==false){
-                          //  Toast.makeText( SubCategoryActivity.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
                             if(example.getSubcategory()!=null&&example.getSubcategory().size()!=0){
                                 List<Subcategory> list = new ArrayList<>();
-                                List<Subcategory> filteredList = new ArrayList<>();
+                                filteredList = new ArrayList<>();
                                 for (Subcategory subcategory : example.getSubcategory()) {
                                     for (Map map : Constants.NEARBY_VENDERS_LOCATION) {
-                                        //if (map.getFirm_id().equalsIgnoreCase(subcategory.getFirmId())) {
+                                        if (map.getFirm_id().equalsIgnoreCase(subcategory.getFirmId())) {
                                             list.add(subcategory);
                                             Set<Subcategory> newList = new LinkedHashSet<>(list);
                                             filteredList = new ArrayList<>(newList);
-                                      //  }
+                                        }
                                     }
                                 }
                                 if(filteredList!=null&&filteredList.size()!=0) {
@@ -179,7 +162,6 @@ public class SubCategoryActivity extends BaseActivity {
                                     no_vender_found.setVisibility(View.GONE);
                                     subcategory_recycler.setVisibility(View.VISIBLE);
                                     subcategory_recycler.setHasFixedSize(true);
-                                    // subcategory_recycler.setLayoutManager(new GridLayoutManager( SubCategoryActivity.this,2));
                                     SubcategoryAdapter mAdapter = new SubcategoryAdapter( SubCategoryActivity.this, filteredList);
                                     subcategory_recycler.setAdapter(mAdapter);
                                 }else{
@@ -205,6 +187,68 @@ public class SubCategoryActivity extends BaseActivity {
                 System.out.println("Suree : " + t.getMessage());
             }
         });
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+        MenuItem searchItem = menu.getItem(0);
+        SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setFocusable(true);
+        searchItem.expandActionView();
+
+        searchView.setOnQueryTextListener( new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(filteredList.size()!=0){
+                    startSearch( query );
+                }else{
+                    showalertbox("No Match found");
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(filteredList.size()!=0){
+                    startSearch( newText );
+                }
+                return false;
+            }
+        } );
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void startSearch(CharSequence text) {
+        List<Subcategory> subcategory = new ArrayList<>();
+        try {
+            if (filteredList != null && filteredList.size() != 0) {
+                for (int i = 0; i < filteredList.size(); i++) {
+                    String productName = "";
+
+                    if (filteredList.get(i).getName() != null) {
+                        productName = filteredList.get(i).getName();
+                    }
+
+                    if (productName.toLowerCase().contains(String.valueOf(text).toLowerCase())) {
+                        subcategory.add(filteredList.get(i));
+                    }
+                }
+
+                if (subcategory.size() != 0 && subcategory != null) {
+                    SubcategoryAdapter mAdapter = new SubcategoryAdapter( SubCategoryActivity.this, subcategory);
+                    subcategory_recycler.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+                }else{
+                    //subcategory_recycler.setVisibility( GONE);
+                    this.getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -246,25 +290,12 @@ public class SubCategoryActivity extends BaseActivity {
 
             if(product!=null){
                 if(product.getAcceptingOrder()==0){
-                    holder.order_not_accepting.setVisibility( GONE);
-                    holder.add_item_layout.setVisibility(View.VISIBLE);
-                }else{
-                    holder.order_not_accepting.setVisibility(View.VISIBLE);
+                    holder.order_not_accepting.setVisibility( View.VISIBLE);
                     holder.add_item_layout.setVisibility( GONE);
-                }
-                if(product.getStock()==1){
-                    holder.add_.setVisibility(View.VISIBLE);
-                    holder.item_not_in_stock.setVisibility(GONE);
+
                 }else{
-                    holder.add_.setVisibility(GONE);
-                    holder.item_not_in_stock.setVisibility(View.VISIBLE);
-                }
-                if(product.getAcceptingOrder()==1){
-                    holder.order_not_accepting.setVisibility(View.GONE);
-                    holder.add_item_layout.setVisibility(View.VISIBLE);
-                }else{
-                    holder.order_not_accepting.setVisibility(View.VISIBLE);
-                    holder.add_item_layout.setVisibility(View.GONE);
+                    holder.order_not_accepting.setVisibility( GONE);
+                    holder.add_item_layout.setVisibility( GONE);
                 }
 
                 holder.name.setText(product.getName());
