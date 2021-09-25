@@ -31,7 +31,7 @@ import static com.test.sample.hirecooks.Utils.Constants.base64EncodedPublicKey;
 public class SubscriptionActivity extends AppCompatActivity implements IabBroadcastReceiver.IabBroadcastListener,
         DialogInterface.OnClickListener {
     // Debug tag, for logging
-    static final String TAG = "MainActivity";
+    static final String TAG = "VideoChat";
 
     // Does the user have an active subscription to the delaroy plan?
     boolean mSubscribedToDelaroy = false;
@@ -393,6 +393,7 @@ public class SubscriptionActivity extends AppCompatActivity implements IabBroadc
         ImageView subscribeButton = (ImageView) findViewById(R.id.rasbita_subscribe);
         if (mSubscribedToDelaroy) {
             Intent intent = new Intent(this, DashboardActivity.class);
+            intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
         } else {

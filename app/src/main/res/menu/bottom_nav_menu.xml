@@ -10,11 +10,11 @@
      android:title="Home"/>
 
  <item
-     android:id="@+id/navigation_orders"
-     android:icon="@drawable/ic_shopping_cart"
+     android:id="@+id/navigation_message"
+     android:icon="@drawable/ic_message_black_24dp"
      android:enabled="true"
      app:showAsAction="ifRoom"
-     android:title="My Orders"/>
+     android:title="Message"/>
 
  <item
      android:id="@+id/navigation_profile"

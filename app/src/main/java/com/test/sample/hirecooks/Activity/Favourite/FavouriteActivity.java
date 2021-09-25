@@ -31,6 +31,7 @@ import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
 import com.test.sample.hirecooks.Utils.BaseActivity;
+import com.test.sample.hirecooks.Utils.NetworkUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +45,10 @@ public class FavouriteActivity extends BaseActivity {
     private RelativeLayout bottom_anchor_layout;
     private TextView item_count,checkout_amount,checkout;
     private View bottom_anchor,appRoot;
-    private FrameLayout no_vender_found,no_result_found;
+    private LinearLayout no_internet_connection_layout,favourite_layout;
+    private FrameLayout no_result_found;
     private List<Subcategory> FavouriteList;
+    private boolean checkNet = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +58,24 @@ public class FavouriteActivity extends BaseActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setTitle("My WishList");
         this.getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        initViews();
+        if(NetworkUtil.checkInternetConnection(this)) {
+            favourite_layout.setVisibility( View.VISIBLE );
+            no_internet_connection_layout.setVisibility(View.GONE );
+        }
+        else {
+            favourite_layout.setVisibility( View.GONE );
+            no_result_found.setVisibility( View.GONE );
+            no_internet_connection_layout.setVisibility( View.VISIBLE );
+        }
+    }
+
+    private void initViews() {
         subcategory_recycler = findViewById( R.id.subcategory_recycler );
         appRoot = findViewById(R.id.appRoot);
+        favourite_layout = findViewById(R.id.favourite_layout);
+        no_internet_connection_layout = findViewById(R.id.no_internet_connection_layout);
         bottom_anchor_layout = findViewById(R.id.bottom_anchor_layout);
-        no_vender_found = findViewById(R.id.no_vender_found);
         no_result_found = findViewById(R.id.no_result_found);
 
         View view = findViewById(R.id.footerView);
@@ -67,10 +84,11 @@ public class FavouriteActivity extends BaseActivity {
         checkout_amount = view.findViewById(R.id.checkout_amount);
         checkout = view.findViewById(R.id.checkout);
         getCart();
+        getFavourites();
         checkout.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity( new Intent( FavouriteActivity.this, PlaceOrderActivity.class ) );
+                startActivity( new Intent( FavouriteActivity.this, PlaceOrderActivity.class ) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK) );
             }
         });
     }
@@ -126,25 +144,9 @@ public class FavouriteActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getFavourites();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        getFavourites();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        getFavourites();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        getFavourites();
+        if(checkNet) {
+            getFavourites();
+        }
     }
 
     public class SubcategoryAdapter extends RecyclerView.Adapter<FavouriteActivity.SubcategoryAdapter.MyViewHolder> {
@@ -180,31 +182,20 @@ public class FavouriteActivity extends BaseActivity {
 
             if(product!=null){
                 if(product.getAcceptingOrder()==0){
-                    holder.order_not_accepting.setVisibility( GONE);
-                    holder.add_item_layout.setVisibility(View.VISIBLE);
-                }else{
-                    holder.order_not_accepting.setVisibility(View.VISIBLE);
+                    holder.order_not_accepting.setVisibility( View.VISIBLE);
                     holder.add_item_layout.setVisibility( GONE);
-                }
-                if(product.getStock()==1){
-                    holder.add_.setVisibility(View.VISIBLE);
-                    holder.item_not_in_stock.setVisibility(GONE);
+
                 }else{
-                    holder.add_.setVisibility(GONE);
-                    holder.item_not_in_stock.setVisibility(View.VISIBLE);
-                }
-                if(product.getAcceptingOrder()==1){
-                    holder.order_not_accepting.setVisibility(View.GONE);
-                    holder.add_item_layout.setVisibility(View.VISIBLE);
-                }else{
-                    holder.order_not_accepting.setVisibility(View.VISIBLE);
-                    holder.add_item_layout.setVisibility(View.GONE);
+                    holder.order_not_accepting.setVisibility( GONE);
+                    holder.add_item_layout.setVisibility( GONE);
                 }
 
                 holder.name.setText(product.getName());
                 holder.item_short_desc.setText(product.getDiscription());
                 holder.discription.setText(product.getDetailDiscription());
-                Picasso.with(context).load(product.getLink2()).into(holder.imageView);
+                if(product.getImages()!=null&&product.getImages().size()!=0){
+                    Picasso.with(context).load(product.getImages().get( 0 ).getImage()).into(holder.imageView);
+                }
 
                 if (product.getSellRate() != 0 && product.getDisplayRate()!= 0) {
                     holder.sellrate.setText("\u20B9 " + product.getSellRate());
@@ -245,7 +236,7 @@ public class FavouriteActivity extends BaseActivity {
                     if (product.getId() != 0 && product.getName() != null && product.getLink2() != null && product.getDiscription() != null && sellRate != 0 && displayrate != 0 && product.getFirmId() != null) {
                         SubTotal = (sellRate * Quantity);
                         if (context instanceof FavouriteActivity) {
-                            Subcategory cart = new Subcategory(product.getId(),product.getSubcategoryid(),product.getLastUpdate(),product.getSearchKey(), product.getName(), product.getProductUniquekey(), product.getLink2(),  product.getLink3(),  product.getLink4(),product.getShieldLink(), product.getDiscription(), product.getDetailDiscription(), sellRate, displayRate,product.getFirmId(),product.getFirmLat(),product.getFirmLng(),product.getFirmAddress(),product.getFrimPincode(),product.getColors(),product.getImages(),product.getSizes(),product.getWeights(), SubTotal, 1,product.getBrand(),product.getGender(),product.getAge());
+                            Subcategory cart = new Subcategory(product.getId(),product.getSubcategoryid(),product.getLastUpdate(),product.getSearchKey(), product.getName(), product.getProductUniquekey(), product.getLink2(),  product.getLink3(),  product.getLink4(),product.getShieldLink(), product.getDiscription(), product.getDetailDiscription(), sellRate, displayRate,product.getFirmId(),product.getFirmLat(),product.getFirmLng(),product.getFirmAddress(),product.getFrimPincode(),product.getColors(),product.getImages(),product.getSizes(),product.getWeights(), SubTotal, 1,product.getBrand(),product.getGender(),product.getAge(),product.getAcceptingOrder());
                             cartList = ((BaseActivity) context).getnewCartList();
                             cartList.add(cart);
                             String cartStr = gson.toJson(cartList);
@@ -293,7 +284,7 @@ public class FavouriteActivity extends BaseActivity {
                             Quantity = 1;
                             SubTotal = (sellRate * Quantity);
                             if (context instanceof FavouriteActivity) {
-                                Subcategory cart = new Subcategory(product.getId(),product.getSubcategoryid(),product.getLastUpdate(),product.getSearchKey(), product.getName(), product.getProductUniquekey(), product.getLink2(),  product.getLink3(),  product.getLink4(),product.getShieldLink(), product.getDiscription(), product.getDetailDiscription(), sellRate, displayRate,product.getFirmId(),product.getFirmLat(),product.getFirmLng(),product.getFirmAddress(),product.getFrimPincode(),product.getColors(),product.getImages(),product.getSizes(),product.getWeights(), SubTotal, 1,product.getBrand(),product.getGender(),product.getAge());
+                                Subcategory cart = new Subcategory(product.getId(),product.getSubcategoryid(),product.getLastUpdate(),product.getSearchKey(), product.getName(), product.getProductUniquekey(), product.getLink2(),  product.getLink3(),  product.getLink4(),product.getShieldLink(), product.getDiscription(), product.getDetailDiscription(), sellRate, displayRate,product.getFirmId(),product.getFirmLat(),product.getFirmLng(),product.getFirmAddress(),product.getFrimPincode(),product.getColors(),product.getImages(),product.getSizes(),product.getWeights(), SubTotal, 1,product.getBrand(),product.getGender(),product.getAge(),product.getAcceptingOrder());
                                 cartList = ((BaseActivity) context).getnewCartList();
                                 cartList.add(cart);
                                 String cartStr = gson.toJson(cartList);
@@ -342,6 +333,7 @@ public class FavouriteActivity extends BaseActivity {
                 Intent intent = new Intent(context, DetailsActivity.class);
                 bundle.putSerializable("SubCategory",productList.get(position));
                 intent.putExtras(bundle);
+                intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             } );
         }
@@ -360,7 +352,8 @@ public class FavouriteActivity extends BaseActivity {
             ImageView imageView;
             TextView discount, name, sellrate, quantity, displayRate,item_not_in_stock,discription,item_short_desc,add_;
             TextView add_item, remove_item;
-            LinearLayout add_item_layout,quantity_ll,order_not_accepting;
+            LinearLayout add_item_layout,quantity_ll;
+            FrameLayout order_not_accepting;
             CardView cardview;
 
             public MyViewHolder(@NonNull View itemView) {

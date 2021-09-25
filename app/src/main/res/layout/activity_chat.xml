@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/chat_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbar_interface"
+            layout="@layout/chat_menu_toolbar"/>
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/typing_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/size_12"
+            android:textColor="@color/green_light"/>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nested_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:scrollingCache="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:visibility="visible"
+                    android:id="@+id/recyclerViewMessages"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="90dp"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_gchat_chatbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_5"
+        android:padding="@dimen/margin_10"
+        android:background="@drawable/rect_whiteboder"
+        android:layout_alignParentBottom="true">
+
+        <RelativeLayout
+            android:elevation="@dimen/margin_10"
+            android:id="@+id/bottom_anchor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:id="@+id/item_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_weight="20">
+
+                <Button
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/ic_attach"
+                    android:scaleType="fitXY" />
+
+            </FrameLayout>
+
+
+            <EditText
+                android:layout_marginStart="45dp"
+                android:layout_marginEnd="45dp"
+                android:id="@+id/type_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="start"
+                android:textColor="@color/black"
+                android:hint="@string/type_message"
+                android:background="@null"/>
+
+            <FrameLayout
+                android:id="@+id/checkout_envelop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true">
+
+                <Button
+                    android:id="@+id/send_message"
+                    android:layout_width="30dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/ic_send"
+                    android:scaleType="fitXY" />
+
+            </FrameLayout>
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -28,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.test.sample.hirecooks.Activity.Cooks.CooksActivity;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
 import com.test.sample.hirecooks.Adapter.Category.CategoryAdapter;
@@ -36,7 +33,6 @@ import com.test.sample.hirecooks.Adapter.Category.CircularImageCategoryAdapter;
 import com.test.sample.hirecooks.Adapter.Category.NewProductCategoryAdapter;
 import com.test.sample.hirecooks.Adapter.Cooks.CooksPromotionAdapter;
 import com.test.sample.hirecooks.Adapter.CooksPromotion.ToolPromotionAdapter;
-import com.test.sample.hirecooks.Adapter.Home.FeedProperties;
 import com.test.sample.hirecooks.Adapter.Offer.OfferAdapter;
 import com.test.sample.hirecooks.Adapter.Venders.VendersAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
@@ -46,9 +42,7 @@ import com.test.sample.hirecooks.Models.CooksPromotion.CooksPromotion;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Example;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.Offer.Offer;
-import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
-import com.test.sample.hirecooks.Models.UsersResponse.UsersResponse;
-import com.test.sample.hirecooks.Models.users.User;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Constants;
@@ -67,30 +61,27 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//import com.facebook.drawee.backends.pipeline.Fresco;
+
 public class HomeFragment extends Fragment{
     private Context context;
     private SliderLayout mDemoSlider;
     private ScrollView scrollView;
     private RecyclerView offer_recycler_view,recyclerView,recyclerView2,my_recycler_view3,venders_recycler_view,cooks_promotion_recycler,tool_Pager;
-    private ArrayList<FeedProperties> os_versions;
-    private AutoCompleteTextView autoComplete;
     private CategoryAdapter mAdapter;
-    private LinearLayout searchResults;
     ArrayAdapter<String> stringAdapter;
     private UserApi mService;
     private List<Category> categories;
     MainActivity mainActivity;
     private TextView cook_seeall;
-    private float mToolbarBarHeight;
-    CoordinatorLayout.LayoutParams layoutParams;
-    private List<Map> maps;
     private User user = SharedPrefManager.getInstance(getContext()).getUser();
-    private List<UserResponse> vendersList;
+    private List<User> vendersList;
     private BaseActivity baseActivity;
     List<com.test.sample.hirecooks.Models.Category.Example> list;
     List<Category> mCategory ;
     List<Category> mOfferCategory ;
     List<Category> mNewProductsCat ;
+    private LinearLayout no_internet_connection_layout, home_layout;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -107,13 +98,16 @@ public class HomeFragment extends Fragment{
         context = container.getContext();
         initViews(view);
         if(NetworkUtil.checkInternetConnection(mainActivity)) {
+            home_layout.setVisibility( View.VISIBLE );
+            no_internet_connection_layout.setVisibility( View.GONE );
             getMapDetails();
             getCategory();
             getOffer();
             getCooks();
         }
         else {
-            baseActivity.showAlert(getResources().getString(R.string.no_internet));
+            home_layout.setVisibility( View.GONE );
+            no_internet_connection_layout.setVisibility( View.VISIBLE );
         }
 
         return view;
@@ -228,12 +222,14 @@ public class HomeFragment extends Fragment{
         call.enqueue(new Callback<Example>() {
             @Override
             public void onResponse(@NonNull Call<Example> call, @NonNull Response<Example> response) {
-                maps = new ArrayList<>();
                 if(response.code() == 200 && response.body() != null) {
                     try{
-                        maps = response.body().getMaps();
                         Constants.NEARBY_COOKS = response.body().getMaps();
-                        Constants.NEARBY_VENDERS_LOCATION = response.body().getMaps();
+                       for(Map maps:response.body().getMaps()){
+                           if(!maps.getFirm_id().equalsIgnoreCase( "Not_Available" )&&map.getFirm_id()!=null){
+                               Constants.NEARBY_VENDERS_LOCATION = response.body().getMaps();
+                           }
+                       }
                         getVenders();
                     }catch (Exception e){
                         e.printStackTrace();
@@ -252,29 +248,28 @@ public class HomeFragment extends Fragment{
 
     private void getVenders() {
         UserApi service = ApiClient.getClient().create(UserApi.class);
-        Call<UsersResponse> call = service.getUsers();
-        call.enqueue(new Callback<UsersResponse>() {
+        Call<List<com.test.sample.hirecooks.Models.Users.Example>> call = service.getUsers();
+        call.enqueue(new Callback<List<com.test.sample.hirecooks.Models.Users.Example>>() {
             @SuppressLint({"ShowToast", "WrongConstant"})
             @Override
-            public void onResponse(@NonNull Call<UsersResponse> call, @NonNull Response<UsersResponse> response) {
+            public void onResponse(@NonNull Call<List<com.test.sample.hirecooks.Models.Users.Example>> call, @NonNull Response<List<com.test.sample.hirecooks.Models.Users.Example>> response) {
                 int statusCode = response.code();
                 if (statusCode == 200) {
                     vendersList = new ArrayList<>();
-                    List<UserResponse> list = new ArrayList<>();
-                    List<UserResponse> filteredList = new ArrayList<>();
-                    if (response.body() != null) {
-                        list = response.body().getUsersResponses();
-                        for (UserResponse usersResponse : list) {
-                            if(usersResponse.getId()==user.getId()&&usersResponse.getEmail().equalsIgnoreCase(user.getEmail())){
-                                Constants.USER_PROFILE = usersResponse.getImage();
-                            }
-                            for (Map map : Constants.NEARBY_VENDERS_LOCATION) {
-                                if (map.getFirm_id().equalsIgnoreCase(usersResponse.getFirmId())) {
-                                    if (!usersResponse.getUserType().equalsIgnoreCase("User")&&!usersResponse.getFirmId().equalsIgnoreCase("Not_Available")) {
-                                        vendersList.add(usersResponse);
-                                        Set<UserResponse> newList = new LinkedHashSet<>(vendersList);
-                                        filteredList = new ArrayList<>(newList);
-                                        Constants.NEARBY_VENDERS = filteredList;
+                    List<User> filteredList = new ArrayList<>();
+                    for (com.test.sample.hirecooks.Models.Users.Example example: response.body()) {
+                        if(!example.getError()){
+                            for (User users : example.getUsers()) {
+                                for (Map map : Constants.NEARBY_VENDERS_LOCATION) {
+                                    if (map.getFirm_id().equalsIgnoreCase( users.getFirmId() )) {
+                                        if(users.getUserType().equalsIgnoreCase( "Admin" )||users.getUserType().equalsIgnoreCase( "Manager" )){
+                                            vendersList.add(users);
+                                            Constants.USER_PROFILE = users.getImage();
+                                            Set<User> newList = new LinkedHashSet<>(vendersList);
+                                            filteredList = new ArrayList<>(newList);
+                                            Constants.NEARBY_VENDERS = filteredList;
+                                            System.out.println("Suree : " +users.getName());
+                                        }
                                     }
                                 }
                             }
@@ -306,7 +301,7 @@ public class HomeFragment extends Fragment{
 
             @SuppressLint("ShowToast")
             @Override
-            public void onFailure(@NonNull Call<UsersResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<com.test.sample.hirecooks.Models.Users.Example>> call, @NonNull Throwable t) {
             }
         });
     }
@@ -384,10 +379,6 @@ public class HomeFragment extends Fragment{
                             Toast.makeText( mainActivity, example.getMessage(), Toast.LENGTH_SHORT ).show();
                         }
                     }
-
-                }
-                else{
-                    baseActivity.ShowToast(getResources().getString(R.string.failed_due_to)+statusCode);
                 }
             }
 
@@ -401,7 +392,8 @@ public class HomeFragment extends Fragment{
     @RequiresApi(api = Build.VERSION_CODES.M)
     @SuppressLint({"WrongConstant", "ClickableViewAccessibility"})
     private void initViews(View view) {
-        Fresco.initialize(mainActivity);
+        home_layout = view.findViewById(R.id.home_layout);
+        no_internet_connection_layout = view.findViewById(R.id.no_internet_connection_layout);
         scrollView = view.findViewById(R.id.scrollView);
         baseActivity = new BaseActivity();
         mDemoSlider = view.findViewById(R.id.slider);

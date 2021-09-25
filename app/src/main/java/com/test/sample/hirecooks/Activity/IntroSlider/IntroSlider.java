@@ -1,7 +1,4 @@
 package com.test.sample.hirecooks.Activity.IntroSlider;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,6 +13,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.test.sample.hirecooks.Activity.Home.LandingScreen;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
@@ -116,7 +118,7 @@ public class IntroSlider extends AppCompatActivity {
 
     private void launchHomeScreen() {
         prefManager.setFirstTimeLaunch(false);
-        startActivity(new Intent(IntroSlider.this, LandingScreen.class));
+        startActivity(new Intent(IntroSlider.this, LandingScreen.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
         finish();
     }
 

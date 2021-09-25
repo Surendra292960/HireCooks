@@ -151,14 +151,15 @@
                     </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:layout_margin="@dimen/margin_10"
                         android:id="@+id/cooks_images_recycler"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:nestedScrollingEnabled="true"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        android:paddingTop="15dp" />
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_marginTop="@dimen/margin_10"
@@ -344,6 +345,57 @@
 
                     </LinearLayout>
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_margin="@dimen/margin_5"
+                        android:text="Cook Videos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textStyle="normal"
+                        android:textAllCaps="true"
+                        android:padding="8dp"
+                        android:background="@drawable/rzp_border"
+                        android:textColor="@color/dark_gray"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+
+                    <TextView
+                        android:id="@+id/add_videos"
+                        android:visibility="gone"
+                        android:layout_margin="@dimen/margin_5"
+                        android:text="Add Videos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textStyle="normal"
+                        android:textAllCaps="true"
+                        android:padding="8dp"
+                        android:background="@drawable/rzp_border"
+                        android:textColor="@color/red"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="@dimen/margin_10"
+                    android:weightSum="2">
+
+                    <com.test.sample.hirecooks.Libraries.Autoplayvideo.AAH_CustomRecyclerView
+                        android:id="@+id/rv_home"
+                        android:layout_margin="@dimen/margin_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
                 </LinearLayout>
 
             </LinearLayout>

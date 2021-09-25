@@ -5,288 +5,321 @@
     android:layout_height="match_parent"
     android:id="@+id/home_fragment">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nested_scroll_view"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent">
+
+       <LinearLayout
+           android:id="@+id/home_layout"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:visibility="gone"
+           android:orientation="vertical">
+
+           <androidx.core.widget.NestedScrollView
+               android:id="@+id/nested_scroll_view"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+               <LinearLayout
+                   android:visibility="visible"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   xmlns:custom="http://schemas.android.com/apk/res-auto"
+                   android:orientation="vertical">
+
+                   <View
+                       android:layout_width="match_parent"
+                       android:layout_height="50dp"/>
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="vertical">
+
+                       <com.test.sample.hirecooks.Libraries.Slider.SliderLayout
+                           android:id="@+id/slider"
+                           android:layout_width="match_parent"
+                           custom:pager_animation_span="1100"
+                           android:layout_height="200dp" />
+
+                   </LinearLayout>
+
+                   <View
+                       android:layout_width="match_parent"
+                       android:layout_height="@dimen/margin_20"/>
+
+                   <androidx.recyclerview.widget.RecyclerView
+                       android:id="@+id/offer_recycler_view"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_margin="5dp"
+                       android:scrollbars="none"
+                       android:scrollbarAlwaysDrawHorizontalTrack="true"
+                       app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="20dp"
+                       android:gravity="center_vertical"
+                       android:orientation="horizontal"
+                       android:paddingLeft="10dp"
+                       android:paddingRight="10dp">
+
+                       <TextView
+                           android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:textAllCaps="true"
+                           android:text="Cooks Nearby by you"
+                           android:textSize="@dimen/size_12"
+                           android:textColor="@color/gray_btn_bg_pressed_color"
+                           android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+
+                       <TextView
+                           android:id="@+id/cook_seeall"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:gravity="center"
+                           android:minWidth="0dp"
+                           android:text="MORE"
+                           android:textSize="@dimen/size_12"
+                           android:textColor="@color/red" />
+
+                   </LinearLayout>
+
+                   <androidx.recyclerview.widget.RecyclerView
+                       android:id="@+id/cooks_promotion_recycler"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_below="@+id/slide_down"
+                       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="20dp"
+                       android:gravity="center_vertical"
+                       android:orientation="horizontal"
+                       android:paddingLeft="10dp"
+                       android:paddingRight="10dp">
+
+                       <TextView
+                           android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:textAllCaps="true"
+                           android:text="@string/popular_products"
+                           android:textSize="@dimen/size_12"
+                           android:textColor="@color/gray_btn_bg_pressed_color"
+                           android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:gravity="center"
+                           android:minWidth="0dp"
+                           android:text="MORE"
+                           android:textSize="@dimen/size_12"
+                           android:textColor="@color/red" />
+
+                   </LinearLayout>
+
+                   <androidx.recyclerview.widget.RecyclerView
+                       android:id="@+id/my_recycler_view"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_margin="5dp"
+                       android:scrollbars="none"
+                       android:scrollbarAlwaysDrawHorizontalTrack="true"
+                       app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="20dp"
+                       android:gravity="center_vertical"
+                       android:orientation="horizontal"
+                       android:paddingLeft="10dp"
+                       android:paddingRight="10dp">
+
+                       <TextView
+                           android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:textAllCaps="true"
+                           android:text="@string/our_new_product"
+                           android:textSize="@dimen/size_12"
+                           android:textColor="@color/gray_btn_bg_pressed_color"
+                           android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:gravity="center"
+                           android:minWidth="0dp"
+                           android:text="MORE"
+                           android:textSize="@dimen/size_12"
+                           android:textColor="@color/red" />
+
+                   </LinearLayout>
+
+                   <androidx.recyclerview.widget.RecyclerView
+                       android:id="@+id/my_recycler_view3"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:scrollbars="none"
+                       android:layout_margin="5dp"
+                       android:scrollbarAlwaysDrawHorizontalTrack="true"
+                       app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="20dp"
+                       android:gravity="center_vertical"
+                       android:orientation="horizontal"
+                       android:paddingLeft="10dp"
+                       android:paddingRight="10dp">
+
+                       <TextView
+                           android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:textAllCaps="true"
+                           android:text="Venders"
+                           android:textSize="@dimen/size_12"
+                           android:textColor="@color/gray_btn_bg_pressed_color"
+                           android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:gravity="center"
+                           android:minWidth="0dp"
+                           android:text="MORE"
+                           android:textSize="@dimen/size_12"
+                           android:textColor="@color/red" />
+
+                   </LinearLayout>
+
+                   <androidx.recyclerview.widget.RecyclerView
+                       android:visibility="gone"
+                       android:id="@+id/venders_recycler_view"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_margin="5dp"
+                       android:scrollbars="none"
+                       android:scrollbarAlwaysDrawHorizontalTrack="true"
+                       app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="20dp"
+                       android:gravity="center_vertical"
+                       android:orientation="horizontal"
+                       android:paddingLeft="10dp"
+                       android:paddingRight="10dp">
+
+                       <TextView
+                           android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:textAllCaps="true"
+                           android:text="New Deals for you"
+                           android:textSize="@dimen/size_12"
+                           android:textColor="@color/gray_btn_bg_pressed_color"
+                           android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:gravity="center"
+                           android:minWidth="0dp"
+                           android:text="MORE"
+                           android:textSize="@dimen/size_12"
+                           android:textColor="@color/red" />
+
+                   </LinearLayout>
+
+                   <androidx.recyclerview.widget.RecyclerView
+                       android:id="@+id/my_recycler_view2"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_margin="5dp"
+                       android:scrollbars="none"
+                       android:scrollbarAlwaysDrawHorizontalTrack="true"
+                       app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="20dp"
+                       android:gravity="center_vertical"
+                       android:orientation="horizontal"
+                       android:paddingLeft="10dp"
+                       android:paddingRight="10dp">
+
+                       <TextView
+                           android:layout_width="0dp"
+                           android:layout_height="wrap_content"
+                           android:layout_weight="1"
+                           android:textAllCaps="true"
+                           android:text="Deals for you"
+                           android:textSize="@dimen/size_12"
+                           android:textColor="@color/gray_btn_bg_pressed_color"
+                           android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+
+                       <TextView
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:gravity="center"
+                           android:minWidth="0dp"
+                           android:text="MORE"
+                           android:textSize="@dimen/size_12"
+                           android:textColor="@color/red" />
+
+                   </LinearLayout>
+
+                   <androidx.recyclerview.widget.RecyclerView
+                       android:id="@+id/tool_pager"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_below="@+id/slide_down"
+                       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:layout_marginBottom="70dp"
+                       android:orientation="vertical">
+
+                   </LinearLayout>
+
+               </LinearLayout>
+
+           </androidx.core.widget.NestedScrollView>
+
+       </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/no_internet_connection_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            xmlns:custom="http://schemas.android.com/apk/res-auto"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:visibility="gone"
             android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="50dp"/>
-
-            <LinearLayout
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <com.test.sample.hirecooks.Libraries.Slider.SliderLayout
-                    android:id="@+id/slider"
-                    android:layout_width="match_parent"
-                    custom:pager_animation_span="1100"
-                    android:layout_height="200dp" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/margin_20"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:visibility="visible"
-                android:id="@+id/offer_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:scrollbars="none"
-                android:scrollbarAlwaysDrawHorizontalTrack="true"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textAllCaps="true"
-                    android:text="Cooks Nearby by you"
-                    android:textSize="@dimen/size_12"
-                    android:textColor="@color/gray_btn_bg_pressed_color"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
-
-                <TextView
-                    android:id="@+id/cook_seeall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:minWidth="0dp"
-                    android:text="MORE"
-                    android:textSize="@dimen/size_12"
-                    android:textColor="@color/red" />
-
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/cooks_promotion_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/slide_down"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textAllCaps="true"
-                    android:text="@string/popular_products"
-                    android:textSize="@dimen/size_12"
-                    android:textColor="@color/gray_btn_bg_pressed_color"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:minWidth="0dp"
-                    android:text="MORE"
-                    android:textSize="@dimen/size_12"
-                    android:textColor="@color/red" />
-
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/my_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:scrollbars="none"
-                android:scrollbarAlwaysDrawHorizontalTrack="true"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textAllCaps="true"
-                    android:text="@string/our_new_product"
-                    android:textSize="@dimen/size_12"
-                    android:textColor="@color/gray_btn_bg_pressed_color"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:minWidth="0dp"
-                    android:text="MORE"
-                    android:textSize="@dimen/size_12"
-                    android:textColor="@color/red" />
-
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/my_recycler_view3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none"
-                android:layout_margin="5dp"
-                android:scrollbarAlwaysDrawHorizontalTrack="true"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textAllCaps="true"
-                    android:text="Venders"
-                    android:textSize="@dimen/size_12"
-                    android:textColor="@color/gray_btn_bg_pressed_color"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:minWidth="0dp"
-                    android:text="MORE"
-                    android:textSize="@dimen/size_12"
-                    android:textColor="@color/red" />
-
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:visibility="gone"
-                android:id="@+id/venders_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:scrollbars="none"
-                android:scrollbarAlwaysDrawHorizontalTrack="true"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textAllCaps="true"
-                    android:text="New Deals for you"
-                    android:textSize="@dimen/size_12"
-                    android:textColor="@color/gray_btn_bg_pressed_color"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:minWidth="0dp"
-                    android:text="MORE"
-                    android:textSize="@dimen/size_12"
-                    android:textColor="@color/red" />
-
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:visibility="visible"
-                android:id="@+id/my_recycler_view2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:scrollbars="none"
-                android:scrollbarAlwaysDrawHorizontalTrack="true"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textAllCaps="true"
-                    android:text="Deals for you"
-                    android:textSize="@dimen/size_12"
-                    android:textColor="@color/gray_btn_bg_pressed_color"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:minWidth="0dp"
-                    android:text="MORE"
-                    android:textSize="@dimen/size_12"
-                    android:textColor="@color/red" />
-
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/tool_pager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/slide_down"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="70dp"
-                android:orientation="vertical">
-
-            </LinearLayout>
+                app:lottie_fileName="no_internet.json"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"/>
 
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

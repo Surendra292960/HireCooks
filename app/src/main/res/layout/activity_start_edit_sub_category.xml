@@ -34,13 +34,15 @@
                     android:layout_margin="@dimen/margin_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:padding="@dimen/margin_10"
+                    android:background="@drawable/rect_whiteboder"
                     android:hint="Search Key">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:inputType="text"
                         android:maxLines="4"
                         android:id="@+id/search_key"
+                        android:background="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -48,15 +50,17 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_weight="1"
-                    android:layout_margin="@dimen/margin_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_margin="@dimen/margin_5"
+                    android:padding="@dimen/margin_10"
+                    android:background="@drawable/rect_whiteboder"
                     android:hint="@string/subcategory_name">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:inputType="text"
                         android:maxLines="4"
+                        android:background="@null"
                         android:id="@+id/editTextSubCategoryName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
@@ -77,13 +81,15 @@
                     android:layout_margin="@dimen/margin_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:padding="@dimen/margin_10"
+                    android:background="@drawable/rect_whiteboder"
                     android:hint="@string/sellrate">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:inputType="number"
                         android:id="@+id/editTextSellRate"
                         android:layout_width="match_parent"
+                        android:background="@null"
                         android:layout_height="wrap_content"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -93,12 +99,14 @@
                     android:layout_margin="@dimen/margin_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:padding="@dimen/margin_10"
+                    android:background="@drawable/rect_whiteboder"
                     android:hint="@string/displayrate">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:inputType="number"
                         android:id="@+id/editTextDisplayRate"
+                        android:background="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -117,12 +125,16 @@
                     android:layout_margin="@dimen/margin_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:padding="@dimen/margin_10"
+                    android:background="@drawable/rect_whiteboder"
                     android:hint="Product Unique Key">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:visibility="visible"
                         android:inputType="text"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:background="@null"
                         android:id="@+id/product_unique_key"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
@@ -134,13 +146,15 @@
                     android:layout_margin="@dimen/margin_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:padding="@dimen/margin_10"
+                    android:background="@drawable/rect_whiteboder"
                     android:hint="Age">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:inputType="number"
                         android:visibility="visible"
                         android:id="@+id/age"
+                        android:background="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -160,13 +174,15 @@
                     android:layout_margin="@dimen/margin_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:padding="@dimen/margin_10"
+                    android:background="@drawable/rect_whiteboder"
                     android:hint="Brand">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:inputType="text"
                         android:visibility="visible"
                         android:id="@+id/product_brand"
+                        android:background="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -177,13 +193,15 @@
                     android:layout_margin="@dimen/margin_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:padding="@dimen/margin_10"
+                    android:background="@drawable/rect_whiteboder"
                     android:hint="Gender">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:inputType="text"
                         android:maxLines="4"
                         android:id="@+id/gender"
+                        android:background="@null"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -197,7 +215,8 @@
                 android:layout_margin="@dimen/margin_5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:padding="@dimen/margin_10"
+                android:background="@drawable/rect_whiteboder"
                 android:focusableInTouchMode="false"
                 android:hint="@string/address">
 
@@ -206,6 +225,7 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:lines="5"
+                    android:background="@null"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
@@ -215,7 +235,8 @@
                 android:layout_margin="@dimen/margin_5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:padding="@dimen/margin_10"
+                android:background="@drawable/rect_whiteboder"
                 android:focusableInTouchMode="false"
                 android:hint="@string/firmid">
 
@@ -224,6 +245,7 @@
                     android:id="@+id/editTextFirmId"
                     android:maxLines="1"
                     android:focusable="false"
+                    android:background="@null"
                     android:focusableInTouchMode="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -235,7 +257,8 @@
                 android:layout_margin="@dimen/margin_5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:padding="@dimen/margin_10"
+                android:background="@drawable/rect_whiteboder"
                 android:gravity="top|right"
                 android:hint="@string/discription">
 
@@ -259,7 +282,8 @@
                 android:layout_margin="@dimen/margin_5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:padding="@dimen/margin_10"
+                android:background="@drawable/rect_whiteboder"
                 android:hint="@string/detail_discription"
                 android:gravity="top">
 
@@ -282,11 +306,15 @@
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_5"
+                android:padding="@dimen/margin_10"
+                android:background="@drawable/rect_whiteboder"
                 android:hint="@string/shield_url">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:visibility="gone"
                     android:inputType="text"
+                    android:background="@null"
                     android:id="@+id/editTextShiledUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -338,12 +366,16 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_5"
+                android:padding="@dimen/margin_10"
+                android:background="@drawable/rect_whiteboder"
                 android:hint="@string/available_stock">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:visibility="gone"
                     android:id="@+id/available_stock"
                     android:maxLines="1"
+                    android:background="@null"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
@@ -729,7 +761,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/style_color_primary"
-            android:text="Submit"
+            android:text="@string/submit"
             android:textAllCaps="true"
             android:textSize="14dp"
             android:textColor="#fff"

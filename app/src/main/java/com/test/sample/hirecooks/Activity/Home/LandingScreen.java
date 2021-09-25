@@ -14,23 +14,15 @@ import androidx.core.content.ContextCompat;
 
 import com.test.sample.hirecooks.Activity.Users.PhoneVerification;
 import com.test.sample.hirecooks.Activity.Users.UserSignInActivity;
-import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Models.users.Result;
-import com.test.sample.hirecooks.Models.users.User;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.BaseActivity;
-import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.EncryptPassword;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
-import com.test.sample.hirecooks.WebApis.UserApi;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class LandingScreen extends BaseActivity {
     private User user;
@@ -61,50 +53,11 @@ public class LandingScreen extends BaseActivity {
             String user_Id= "user_Id";
             SharedPrefManager.getInstance(this).savePrefValue("user_Id","123");
             System.out.println("Pref"+SharedPrefManager.getInstance(this).getPrefValue(user_Id));
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, MainActivity.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
             finish();
         }
     }
 
-
-    private void ResultSignIn(String email, String password) {
-        progressBarUtil.showProgress();
-        UserApi mService = ApiClient.getClient().create(UserApi.class);
-        Call<Result> call = mService.userLogin(email, password);
-        call.enqueue(new Callback<Result>() {
-            @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
-                int statusCode = response.code();
-                if(statusCode==200&&response.body().getError()==false){
-                    progressBarUtil.hideProgress();
-                    assert response.body() != null;
-                    if (!response.body().getError()) {
-                        Constants.CurrentUser = response.body();
-                        if(Constants.CurrentUser.getUser().getUserType().equalsIgnoreCase("User")||
-                                Constants.CurrentUser.getUser().getUserType().equalsIgnoreCase("Manager")||
-                                Constants.CurrentUser.getUser().getUserType().equalsIgnoreCase("SuperAdmin")){
-                            SharedPrefManager.getInstance(getApplicationContext()).userLogin(Constants.CurrentUser.getUser());
-                            finish();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        }else{
-                            ShowToast("You Cant Access");
-                        }
-                    } else {
-                        ShowToast(response.body().getMessage());
-                    }
-                }else{
-                    ShowToast(response.body().getMessage());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Result> call, Throwable t) {
-                progressBarUtil.hideProgress();
-                System.out.println("Suree :"+ t.getMessage());
-                ShowToast("Please Check Intenet Connection");
-            }
-        });
-    }
 
 /*    private void CheckPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -140,14 +93,15 @@ public class LandingScreen extends BaseActivity {
         buttonSignInUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LandingScreen.this, UserSignInActivity.class));
+                startActivity(new Intent(LandingScreen.this, UserSignInActivity.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
                 finish();
             }
         });
         buttonSignUpUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LandingScreen.this, PhoneVerification.class));
+                //startActivity(new Intent(LandingScreen.this, UserSignUpActivity.class));
+                startActivity(new Intent(LandingScreen.this, PhoneVerification.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
                 finish();
             }
         });

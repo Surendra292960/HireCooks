@@ -24,7 +24,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.Models.cooks.Request.CooksImages;
 import com.test.sample.hirecooks.Models.cooks.Request.CooksImagesResult;
 import com.test.sample.hirecooks.R;
@@ -55,7 +55,7 @@ public class UpdateCookImage extends BaseActivity {
     private StorageReference storageReference;
     private ProgressBarUtil progressBarUtil;
     private CookImages mService = Common.getCookImagesAPI();
-    private UserResponse user;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,7 @@ public class UpdateCookImage extends BaseActivity {
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
             cookImage = (CooksImages)bundle.getSerializable("CookImage");
-            user = (UserResponse)bundle.getSerializable("User");
+            user = (User)bundle.getSerializable("User");
             if(cookImage!=null&&user!=null){
 
             }

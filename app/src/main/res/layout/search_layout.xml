@@ -1,62 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:id="@+id/searchbar_interface_layout"
-        tools:ignore="MissingConstraints">
+        android:layout_height="wrap_content">
 
-        <ImageButton
-            android:visibility="gone"
-            android:id="@+id/back_button"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:elevation="@dimen/default_elevation"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+    <FrameLayout
+        android:id="@+id/search_fram_lay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/go_back"
+            android:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/searchBar"
-            android:paddingLeft="50dp"
-            android:paddingTop="10dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="10dp"
-            android:background="@android:color/transparent"
-            app:srcCompat="@drawable/ic_arrow_back_black_24dp"/>
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textAllCaps="true"
+            android:gravity="start"
+            android:background="@drawable/ic_arrow_back_white_24dp"
+            android:layout_gravity="center_vertical|start"
+            android:textSize="@dimen/size_12"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
-        <EditText
-            android:id="@+id/searchBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/search_layout"
-            android:ems="10"
-            android:layout_margin="@dimen/margin_20"
-            android:hint="@string/search_products"
-            android:inputType="textPersonName"
-            android:paddingLeft="70dp"
-            android:paddingTop="10dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="10dp"
-            android:textColor="#999999"
-            android:textSize="16sp"
-            android:imeOptions="actionSearch"
-            android:focusableInTouchMode="true" />
+       <LinearLayout
+           android:id="@+id/search_lay"
+           android:visibility="visible"
+           android:layout_width="match_parent"
+           android:layout_height="35dp"
+           android:layout_margin="@dimen/margin_40"
+           android:layout_gravity="center_vertical"
+           android:background="@drawable/rect_whiteboder"
+           android:orientation="vertical">
 
-        <ImageButton
-            android:visibility="gone"
-            android:id="@+id/clear_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/searchBar"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/searchBar"
-            android:layout_marginRight="40dp"
-            android:background="@android:color/transparent"
-            app:srcCompat="@drawable/quantum_ic_clear_grey600_24"/>
+         <FrameLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
 
-    </RelativeLayout>
+             <EditText
+                 android:id="@+id/editText_search"
+                 android:layout_width="match_parent"
+                 android:layout_height="@dimen/margin_40"
+                 android:layout_marginStart="@dimen/margin_10"
+                 android:textStyle="normal"
+                 android:textColor="@color/dark_gray"
+                 android:textAllCaps="true"
+                 android:layout_gravity="center"
+                 android:gravity="center_vertical"
+                 android:inputType="textPersonName"
+                 android:hint="@string/search_products"
+                 android:imeOptions="actionSearch"
+                 android:background="@null"
+                 android:autofillHints="@string/search_products" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+             <TextView
+                 android:visibility="visible"
+                 android:id="@+id/clear_text"
+                 android:layout_width="20dp"
+                 android:layout_height="20dp"
+                 android:textStyle="bold"
+                 android:textColor="@color/white"
+                 android:textAllCaps="true"
+                 android:background="@drawable/quantum_ic_clear_grey600_24"
+                 android:layout_gravity="center_vertical|end"
+                 android:gravity="center_vertical"/>
+
+         </FrameLayout>
+
+       </LinearLayout>
+
+        <TextView
+            android:visibility="visible"
+            android:id="@+id/search"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textAllCaps="true"
+            android:background="@drawable/ic_search"
+            android:layout_gravity="center_vertical|end"
+            android:gravity="center"/>
+
+    </FrameLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+</LinearLayout>
+
+

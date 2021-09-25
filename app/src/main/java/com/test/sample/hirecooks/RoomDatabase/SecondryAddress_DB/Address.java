@@ -18,7 +18,7 @@ public class Address implements Serializable {
     @ColumnInfo(name = "longitude")
     private String longitude;
 
-    @ColumnInfo(name = "address")
+    @ColumnInfo(name = "address_book")
     private String address;
 
     @ColumnInfo(name = "sub_address")

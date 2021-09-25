@@ -26,6 +26,7 @@
             android:layout_weight="20">
 
             <ImageView
+                android:clickable="false"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginLeft="5dp"
@@ -44,6 +45,7 @@
         </FrameLayout>
 
         <TextView
+            android:clickable="false"
             android:id="@+id/checkout_amount"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -65,6 +67,7 @@
 
         <FrameLayout
             android:id="@+id/checkout_envelop"
+            android:clickable="true"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/margin_10"

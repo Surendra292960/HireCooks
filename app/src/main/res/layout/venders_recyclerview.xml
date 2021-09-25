@@ -14,12 +14,27 @@
         android:elevation="2dp"
         android:orientation="vertical">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/venders_image"
+        <FrameLayout
             android:paddingTop="5dp"
             android:layout_width="@dimen/margin_100"
             android:layout_height="@dimen/margin_100"
-            android:padding="5dp"/>
+            android:padding="5dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/venders_image"
+                android:paddingTop="5dp"
+                android:layout_width="@dimen/margin_100"
+                android:layout_height="@dimen/margin_100"
+                android:padding="5dp"/>
+
+            <ProgressBar
+                android:id="@+id/progress_dialog"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_width="@dimen/margin_30"
+                android:layout_height="@dimen/margin_30"/>
+
+        </FrameLayout>
 
     </LinearLayout>
 

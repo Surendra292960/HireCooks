@@ -33,6 +33,8 @@
     <dimen name="margin_5">5dp</dimen>
 
     //TextSize
+    <dimen name="_1sdp">1dp</dimen>
+    <dimen name="_10sdp">10dp</dimen>
     <dimen name="size_10">10sp</dimen>
     <dimen name="size_12">12sp</dimen>
     <dimen name="size_14">14sp</dimen>

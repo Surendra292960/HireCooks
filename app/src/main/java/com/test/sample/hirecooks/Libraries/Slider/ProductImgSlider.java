@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.R;
@@ -36,8 +38,20 @@ public class ProductImgSlider extends PagerAdapter {
     public  Object instantiateItem(ViewGroup container, int position) {
         View view = LayoutInflater.from(mCtx).inflate(R.layout.product_imgslider, container, false);
         ImageView imageView =  view.findViewById(R.id.imageView);
+        ProgressBar progress_dialog =  view.findViewById(R.id.progress_dialog);
+        progress_dialog.setVisibility( View.VISIBLE );
         if(images.getImages().get( position ).getImage()!=null){
-            Picasso.with( mCtx ).load( images.getImages().get( position ).getImage() ).into( imageView );
+            Picasso.with( mCtx ).load( images.getImages().get( position ).getImage() ).into( imageView, new Callback() {
+                @Override
+                public void onSuccess() {
+                    progress_dialog.setVisibility( View.GONE );
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            } );
         }
         container.addView(view,0);
         return view;

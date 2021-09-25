@@ -11,11 +11,11 @@
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.REQUEST_COMPANION_RUN_IN_BACKGROUND" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -40,15 +40,33 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/web_hi_res_512"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/web_hi_res_512"
         android:supportsRtl="true"
-        android:hardwareAccelerated="false"
-        android:largeHeap="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activity.subscription.SubscriptionActivity"></activity>
+        <activity android:name=".Activity.Cooks.Video.PickVideoActivity"></activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.hirecook.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
+        <activity android:name=".Activity.Users.FirmUsers.FirmUserReportActivity" />
+        <activity android:name=".Activity.Users.FirmUsers.FirmUserTracking" />
+        <activity android:name=".Activity.Users.FirmUsers.FirmUserActivity" />
+        <activity android:name=".Activity.Cooks.Video.FullScreenVideo" />
+        <activity android:name=".Activity.Cooks.Video.VideoPlayer" />
+        <activity android:name=".Activity.TrackUser.RiderMapLocation" />
+        <activity android:name=".Activity.subscription.SubscriptionActivity" />
         <activity android:name=".Activity.subscription.DashboardActivity" />
         <activity android:name=".Activity.ManageAccount.ManageProducts.AddActivity" />
         <activity android:name=".Activity.ManageAccount.ManageProducts.StartEditSubCategoryActivity" />
@@ -56,12 +74,20 @@
         <activity android:name=".Activity.ManageAccount.ManageProducts.EditSubCategoryActivity" />
         <activity android:name=".Activity.ManageAccount.ManageProducts.EditCategoryActivity" />
         <activity android:name=".Activity.ManageAccount.ManageProducts.ProductCategoryList" />
-        <activity android:name=".Activity.ProductDatails.DetailsActivity" />
-        <activity android:name=".SubCategoryActivity"/>
+        <activity android:name=".EmailVerification" />
         <activity android:name=".Activity.Cooks.UpdateCookImage" />
         <activity android:name=".Activity.Cooks.AddCookImages" />
         <activity android:name=".Activity.Cooks.CookImagesList" />
+        <activity android:name=".Activity.Cooks.UpdateCookDetails" />
         <activity android:name=".Activity.Cooks.CooksDetailsActivity" />
+        <activity android:name=".Activity.Users.FirmUsers.FirmUserSignupActivity" />
+        <activity android:name=".Activity.Users.FirmUsers.FirmUserSignupAddressActivity" />
+        <activity android:name=".Activity.Users.FirmUsers.UpdateFirmUser" />
+        <activity android:name=".Activity.Users.FirmUsers.FirmUserReportScreen" />
+        <activity android:name=".Activity.Users.FirmUsers.FirmUserList" />
+        <activity android:name=".Activity.Users.FirmUsers.AllFirmUsersReportActivity" />
+        <activity android:name=".Activity.Users.FirmUsers.AdminChatActivity" />
+        <activity android:name=".Activity.Venders.VendersSubCategory.VendersSubCategoryActivity" />
         <activity
             android:name=".Activity.Orders.PlacedOrderSuccessfully"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -73,9 +99,7 @@
         <activity
             android:name=".Activity.Users.ForgotPasswordActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Activity.ProductDatails.ProductDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".Activity.ProductDatails.DetailsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -98,8 +122,6 @@
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.VenderSubCategory.VenderSubCategoryProducts" />
-        <activity android:name=".Activity.SubCategory.VendersSubCategory.VendersSubcategoryActivity" />
         <activity
             android:name=".Activity.Users.SignupAddressActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -112,9 +134,7 @@
             android:taskAffinity="" />
         <activity android:name=".Activity.Orders.MyOrdersActivity" />
         <activity android:name=".Activity.Home.CalenderViewActivity" />
-        <activity
-            android:name=".Activity.SubCategory.SubCategoryActivity.SubCategoryActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activity.SubCategory.SubCategoryActivity" />
         <activity android:name=".Tasks.Activity.TaskActivity" />
         <activity android:name=".Tasks.Activity.UpdateTaskActivity" />
         <activity android:name=".Tasks.Activity.AddTaskActivity" />
@@ -145,7 +165,9 @@
 
         <uses-library android:name="com.google.android.maps" />
 
-        <activity android:name=".Activity.Users.MessageActivity" />
+        <activity
+            android:name=".Activity.Chat.ChatActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activity.Users.UserDetailsActivity" />
         <activity
             android:name=".Activity.IntroSlider.IntroSlider"
@@ -153,11 +175,7 @@
         <activity
             android:name=".Activity.Users.PhoneVerification"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Activity.Users.UsersActivity"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTask"
-            android:taskAffinity="" />
+        <activity android:name=".Activity.Users.UsersActivity" />
         <activity
             android:name=".Activity.Users.UserSignUpActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -232,6 +250,14 @@
                 <action android:name="android.location.GPS_ENABLED_CHANGE" />
 
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".Services.BroadCastReciever.SmsBroadcastReceiver"
+            android:exported="true"
+            android:permission="com.google.android.gms.auth.api.phone.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
             </intent-filter>
         </receiver>
 

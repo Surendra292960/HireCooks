@@ -5,8 +5,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Maps;
 import com.test.sample.hirecooks.R;
@@ -23,7 +23,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class UpdateAddressActivity extends BaseActivity {
-    private EditText mAddress, mSubAddress, mPincode,mhouse_number,mfloor,mlandmark,mlocation_tag;
+    private TextInputEditText mAddress, mSubAddress, mPincode,mhouse_number,mfloor,mlandmark,mlocation_tag;
     private Map address;
     private ProgressBarUtil progressBarUtil;
     private MapApi mService = Common.getAPI();
@@ -38,7 +38,7 @@ public class UpdateAddressActivity extends BaseActivity {
         initViews();
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
-           address = (Map) getIntent().getSerializableExtra("address");
+           address = (Map) getIntent().getSerializableExtra("address_book");
            if(address!=null){
                loadAddress(address);
            }

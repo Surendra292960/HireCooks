@@ -1,8 +1,6 @@
 package com.test.sample.hirecooks.Adapter.Users;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -25,10 +23,10 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.kinda.alert.KAlertDialog;
 import com.squareup.picasso.Picasso;
-import com.test.sample.hirecooks.Activity.Users.UserDetailsActivity;
+import com.test.sample.hirecooks.Activity.Chat.ChatActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
-import com.test.sample.hirecooks.Models.users.MessageResponse;
+import com.test.sample.hirecooks.Models.Chat.MessageResponse;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Tasks.Activity.TaskActivity;
 import com.test.sample.hirecooks.Utils.APIUrl;
@@ -45,11 +43,11 @@ import retrofit2.Response;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
     private static final String TAG = "";
-    private List<UserResponse> users;
+    private List<User> users;
     private Context mCtx;
     private OnButtonClickListener listener;
 
-    public UsersAdapter( Context mCtx,List<UserResponse> users,OnButtonClickListener  listener) {
+    public UsersAdapter(Context mCtx, List<User> users, OnButtonClickListener  listener) {
         this.users = users;
         this.mCtx = mCtx;
         this.listener = listener;
@@ -65,7 +63,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        final UserResponse user = users.get(position);
+        final User user = users.get(position);
         if (!TextUtils.isEmpty(user.getImage())) {
             Picasso.with(mCtx).load(APIUrl.PROFILE_URL+user.getImage()).into(holder.textViewImage);
         }
@@ -83,11 +81,12 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             @SuppressLint("NewApi")
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mCtx, UserDetailsActivity.class);
+                Intent intent = new Intent(mCtx, ChatActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("User", user);
                 intent.putExtras(bundle);
-                mCtx.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) mCtx).toBundle());
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                mCtx.startActivity(intent);
 
             }
         });
@@ -169,6 +168,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("User", user);
                 intent.putExtras(bundle);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 mCtx.startActivity(intent);
             }
         });
@@ -203,7 +203,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         progressDialog.setMessage("Sending Message...");
         progressDialog.show();
         UserApi service = ApiClient.getClient().create(UserApi.class);
-        Call<MessageResponse> call = service.sendMessage(SharedPrefManager.getInstance(mCtx).getUser().getId(), id, title, message);
+        Call<MessageResponse> call = service.sendMessage(SharedPrefManager.getInstance(mCtx).getUser().getId(), id, title, message,1,0);
         call.enqueue(new Callback<MessageResponse>() {
             @Override
             public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {

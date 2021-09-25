@@ -98,8 +98,8 @@ public interface MapApi {
             @Field("landmark") String landmark,
             @Field("location_type") String location_type);
 
-    @GET("getAllAddress")
-    Observable<Maps> getAllAddress();
+    @GET("getAllAddress/{id}")
+    Observable<Maps> getAllAddress(@Path("id") int id);
 
     @DELETE("deleteAddress/{mapId}")
     Observable<Maps> deleteAddress(

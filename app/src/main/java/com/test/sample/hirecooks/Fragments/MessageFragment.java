@@ -1,59 +1,61 @@
 package com.test.sample.hirecooks.Fragments;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
-import com.test.sample.hirecooks.Adapter.MessageAdapter;
-import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Models.users.Messages;
-import com.test.sample.hirecooks.R;
-import com.test.sample.hirecooks.Utils.SharedPrefManager;
-import com.test.sample.hirecooks.WebApis.UserApi;
-
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
+import com.test.sample.hirecooks.Activity.Home.MainActivity;
+import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.Utils.NetworkUtil;
 
 public class MessageFragment extends Fragment {
+    private LinearLayout chat_layout, no_internet_connection_layout;
+    private MainActivity mainActivity;
 
-    private RecyclerView recyclerViewMessages;
-    private RecyclerView.Adapter adapter;
+    public static MessageFragment newInstance() {
+        Bundle args = new Bundle();
+        MessageFragment fragment = new MessageFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_messages, container, false);
+        View view =  inflater.inflate(R.layout.fragment_messages, container, false);
+        initViews( view );
+        if(NetworkUtil.checkInternetConnection(mainActivity)) {
+            chat_layout.setVisibility( View.VISIBLE );
+            no_internet_connection_layout.setVisibility( View.GONE );
+        }
+        else {
+            chat_layout.setVisibility( View.GONE );
+            no_internet_connection_layout.setVisibility( View.VISIBLE );
+        }
+        return view;
     }
 
+
+    private void initViews(View view) {
+        chat_layout = view.findViewById( R.id.chat_layout );
+        no_internet_connection_layout = view.findViewById( R.id.no_internet_connection_layout );
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mainActivity = (MainActivity)context;
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Messages");
 
-        recyclerViewMessages = (RecyclerView) view.findViewById(R.id.recyclerViewMessages);
-        recyclerViewMessages.setHasFixedSize(true);
-        recyclerViewMessages.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        UserApi service = ApiClient.getClient().create(UserApi.class);
-        Call<Messages> call = service.getMessages(SharedPrefManager.getInstance(getActivity()).getUser().getId());
-        call.enqueue(new Callback<Messages>() {
-            @Override
-            public void onResponse(Call<Messages> call, Response<Messages> response) {
-               // adapter = new MessageAdapter(response.body().getMessages(), getActivity());
-                //recyclerViewMessages.setAdapter(adapter);
-            }
-
-            @Override
-            public void onFailure(Call<Messages> call, Throwable t) {
-                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
     }
 }

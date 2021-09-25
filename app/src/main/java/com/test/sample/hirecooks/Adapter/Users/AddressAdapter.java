@@ -57,14 +57,14 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.TasksVie
         holder.sub_address.setText(mAddress.getSubAddress());
         holder.location_tag.setText(mAddress.getLocationType());
 
-        holder.edit_address.setOnClickListener( v -> {
+        holder.update_user.setOnClickListener( v -> {
             Bundle bundle = new Bundle(  );
             Intent intent = new Intent(mCtx, UpdateAddressActivity.class);
-            bundle.putSerializable("address", addressList.get( position ));
+            bundle.putSerializable("address_book", addressList.get( position ));
             intent.putExtras( bundle );
             mCtx.startActivity(intent);
         } );
-        holder.place_item_view.setOnClickListener( new View.OnClickListener() {
+        holder.add_address_layout.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(ordersTable!=null){
@@ -73,7 +73,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.TasksVie
                     Bundle bundle = new Bundle();
                     Map address = addressList.get(position);
                     Intent intent = new Intent(mCtx, PlaceOrderActivity.class);
-                    bundle.putSerializable("address", address);
+                    bundle.putSerializable("address_book", address);
                     intent.putExtras(bundle);
                     mCtx.startActivity(intent);
                     ((Activity)mCtx).finish();
@@ -88,13 +88,15 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.TasksVie
     }
 
     class TasksViewHolder extends RecyclerView.ViewHolder{
-        TextView address, edit_address,location_tag, sub_address;
+        TextView address,location_tag, sub_address,update_user;
+        LinearLayout add_address_layout;
         LinearLayout place_item_view;
 
         TasksViewHolder(View itemView) {
             super(itemView);
             address = itemView.findViewById(R.id.address);
-            edit_address = itemView.findViewById(R.id.edit_address);
+            add_address_layout = itemView.findViewById(R.id.add_address_layout);
+            update_user = itemView.findViewById(R.id.update_user);
             sub_address = itemView.findViewById(R.id.sub_address);
             location_tag = itemView.findViewById(R.id.location_tag);
             place_item_view = itemView.findViewById(R.id.place_item_view);
@@ -121,7 +123,8 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.TasksVie
             @Override
             public void onResponse(Call<List<Root>> call, Response<List<Root>> response) {
                 if(response.code()==200){
-                    Toast.makeText( mCtx, "Success", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText( mCtx, "Order Address Updated Successfully", Toast.LENGTH_SHORT ).show();
+                    ((Activity)mCtx).finish();
                 }else{
                     Toast.makeText( mCtx, "Failed "+response.code(), Toast.LENGTH_SHORT ).show();
                 }

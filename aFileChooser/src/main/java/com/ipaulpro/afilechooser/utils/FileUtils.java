@@ -296,7 +296,7 @@ public class FileUtils {
         // MediaStore (and general)
         else if ("content".equalsIgnoreCase(uri.getScheme())) {
 
-            // Return the remote address
+            // Return the remote address_book
             if (isGooglePhotosUri(uri))
                 return uri.getLastPathSegment();
 

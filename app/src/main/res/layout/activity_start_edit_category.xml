@@ -27,9 +27,10 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:focusable="false"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/AppTheme"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:hint="Category Id">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:visibility="gone"
@@ -42,8 +43,10 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:focusable="false"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:padding="@dimen/margin_10"
+                android:background="@drawable/rect_whiteboder"
                 android:visibility="visible"
+                android:hint="Category Name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -51,6 +54,7 @@
                     android:inputType="text"
                     android:id="@+id/editTextCategoryName"
                     android:maxLines="1"
+                    android:background="@null"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
@@ -58,10 +62,11 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:focusable="false"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/AppTheme"
                 android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:hint="Category Image">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:inputType="text"
@@ -111,8 +116,7 @@
         android:layout_weight="0.5"
         android:orientation="horizontal"
         android:weightSum="2"
-        android:elevation="30dp"
-        android:background="@color/colorAccent">
+        android:elevation="30dp">
 
         <TextView android:id="@+id/submit"
             android:layout_width="match_parent"

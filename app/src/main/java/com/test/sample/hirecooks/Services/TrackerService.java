@@ -1,4 +1,5 @@
 package com.test.sample.hirecooks.Services;
+
 import android.Manifest;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -28,7 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Result;
-import com.test.sample.hirecooks.Models.users.User;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
@@ -45,8 +46,8 @@ import retrofit2.Response;
 public class TrackerService extends Service {
 
     private static final String TAG = TrackerService.class.getSimpleName();
-    private static User user;
-    private static int pinCode;
+    private User user;
+    private int pinCode;
     private String subAddress;
 
     @Override
@@ -104,8 +105,12 @@ public class TrackerService extends Service {
                         Log.d(TAG, "location update " + location);
                         ref.setValue(String.valueOf(location));
                         LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
-                        if(user!=null){
-                            setMapDetails(latLng);
+                        try{
+                            if(user!=null){
+                                setMapDetails(latLng);
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
                         }
                         Constants.USER_CURRENT_LOCATION = latLng;
                     }
@@ -125,8 +130,8 @@ public class TrackerService extends Service {
         map.setFirm_id(user.getFirmId());
 
         if(user.getUserType()!=null){
-            if(user.getUserType().equalsIgnoreCase("User")){
-                //updateMapDetails(map);
+            if(user.getUserType().equalsIgnoreCase("Employee")||user.getUserType().equalsIgnoreCase("Rider")){
+                updateMapDetails(map);
             }
         }
     }
@@ -138,7 +143,11 @@ public class TrackerService extends Service {
             List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 10);
             if (addressList != null && addressList.size() > 0) {
                 Address address = addressList.get(0);
-                pinCode = Integer.parseInt(address.getPostalCode());
+                try {
+                    pinCode = Integer.parseInt(address.getPostalCode());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
                     sb.append(address.getAddressLine(i)).append(",");

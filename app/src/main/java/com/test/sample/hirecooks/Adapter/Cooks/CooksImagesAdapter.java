@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Activity.Cooks.UpdateCookImage;
-import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.Models.cooks.Request.CooksImages;
 import com.test.sample.hirecooks.Models.cooks.Request.CooksImagesResult;
 import com.test.sample.hirecooks.R;
@@ -31,12 +31,12 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class CooksImagesAdapter extends RecyclerView.Adapter<com.test.sample.hirecooks.Adapter.Cooks.CooksImagesAdapter.ViewHolder> {
-    private UserResponse users;
+    private User users;
     private Context mCtx;
     private List<CooksImages> cooksImages;
     AlertDialog.Builder builder;
     private CookImages mService = Common.getCookImagesAPI();
-    public CooksImagesAdapter(Context mCtx, List<CooksImages> cooksImages, UserResponse users) {
+    public CooksImagesAdapter(Context mCtx, List<CooksImages> cooksImages, User users) {
         this.mCtx = mCtx;
         this.cooksImages = cooksImages;
         this.users = users;
@@ -57,7 +57,7 @@ public class CooksImagesAdapter extends RecyclerView.Adapter<com.test.sample.hir
             holder.imageView.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(SharedPrefManager.getInstance( mCtx ).getUser().getId().equals( users.getId() )) {
+                    if(SharedPrefManager.getInstance( mCtx ).getUser().getId()==users.getId()) {
                         alertDialog(cooksImage);
                     }
                 }
@@ -86,6 +86,7 @@ public class CooksImagesAdapter extends RecyclerView.Adapter<com.test.sample.hir
                               bundle.putSerializable( "CookImage", cooksImage );
                               bundle.putSerializable( "User", users );
                               intent.putExtras( bundle );
+                              intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                               mCtx.startActivity( intent );
                           }else{
                               Toast.makeText( mCtx, "User Not Found", Toast.LENGTH_SHORT ).show();

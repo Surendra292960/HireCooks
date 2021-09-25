@@ -29,7 +29,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -47,7 +46,7 @@ import com.google.gson.Gson;
 import com.test.sample.hirecooks.Adapter.ManageAddress.PlacesAutoCompleteAdapter;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Maps;
-import com.test.sample.hirecooks.Models.users.User;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Common;
@@ -83,7 +82,7 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
     private String TAG = "MAPLOCATION";
     private ProgressBarUtil progressBarUtil;
     private User user;
-    private String address, latitude, longitude,placeId, subAddress, pinCode;
+    private String address,placeId, subAddress, pinCode;
     private RecyclerView recyclerView;
     RelativeLayout searchbar_interface_layout;
     private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
@@ -91,7 +90,6 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
     PlacesClient placesClient;
     private LinearLayout mBottomSheet;
     private BottomSheetDialog enterLocationbottomSheetDialog,searchLocationbottomSheetDialog;
-    protected PlaceDetectionClient placeDetectionClient;
     private BottomSheetBehavior mBehavior;
     private ImageButton cancel,cancel_search_location;
     private Map map;
@@ -113,7 +111,7 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
             Objects.requireNonNull(getSupportActionBar()).setTitle("Your Location");
             Bundle bundle = getIntent().getExtras();
             if(bundle!=null){
-                map = (Map) bundle.getSerializable("address");
+                map = (Map) bundle.getSerializable("address_book");
                 if(map!=null){
                     mapList = new ArrayList<>();
                     mapList.add(map);
@@ -310,34 +308,34 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
     }
 
     private void getLocationTag(String text) {
-       if(text.equalsIgnoreCase("Home")){
-           Home.setBackground(getResources().getDrawable(R.drawable.round_border_button));
-           location_tag.setText(text);
-       }else{
-           Home.setBackground(getResources().getDrawable(R.drawable.blue_button_background));
-           Home.setTextColor(getResources().getColor(R.color.dark_gray));
-       }
-       if(text.equalsIgnoreCase("Other")){
-           Other.setBackground(getResources().getDrawable(R.drawable.round_border_button));
-           location_tag.setText(text);
-       }else {
-           Other.setBackground(getResources().getDrawable(R.drawable.blue_button_background));
-           Other.setTextColor(getResources().getColor(R.color.dark_gray));
-       }
-       if(text.equalsIgnoreCase("Work")){
-           Work.setBackground(getResources().getDrawable(R.drawable.round_border_button));
-           location_tag.setText(text);
-       }else{
-           Work.setBackground(getResources().getDrawable(R.drawable.blue_button_background));
-           Work.setTextColor(getResources().getColor(R.color.dark_gray));
-       }
-       if(text.equalsIgnoreCase("Office")){
-           Office.setBackground(getResources().getDrawable(R.drawable.round_border_button));
-           location_tag.setText(text);
-       }else{
-           Office.setBackground(getResources().getDrawable(R.drawable.blue_button_background));
-           Office.setTextColor(getResources().getColor(R.color.dark_gray));
-       }
+        if(text.equalsIgnoreCase("Home")){
+            Home.setBackground(getResources().getDrawable(R.drawable.round_border_button));
+            location_tag.setText(text);
+        }else{
+            Home.setBackground(getResources().getDrawable(R.drawable.blue_button_background));
+            Home.setTextColor(getResources().getColor(R.color.dark_gray));
+        }
+        if(text.equalsIgnoreCase("Other")){
+            Other.setBackground(getResources().getDrawable(R.drawable.round_border_button));
+            location_tag.setText(text);
+        }else {
+            Other.setBackground(getResources().getDrawable(R.drawable.blue_button_background));
+            Other.setTextColor(getResources().getColor(R.color.dark_gray));
+        }
+        if(text.equalsIgnoreCase("Work")){
+            Work.setBackground(getResources().getDrawable(R.drawable.round_border_button));
+            location_tag.setText(text);
+        }else{
+            Work.setBackground(getResources().getDrawable(R.drawable.blue_button_background));
+            Work.setTextColor(getResources().getColor(R.color.dark_gray));
+        }
+        if(text.equalsIgnoreCase("Office")){
+            Office.setBackground(getResources().getDrawable(R.drawable.round_border_button));
+            location_tag.setText(text);
+        }else{
+            Office.setBackground(getResources().getDrawable(R.drawable.blue_button_background));
+            Office.setTextColor(getResources().getColor(R.color.dark_gray));
+        }
     }
 
     private TextWatcher filterTextWatcher = new TextWatcher() {
@@ -432,7 +430,7 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
             }
             return result;
         } catch (IOException e) {
-            Log.e("SignupAddressActivity", "Unable connect to Geocoder", e);
+            Log.e("FirmUserSignupAddressActivity", "Unable connect to Geocoder", e);
             return result;
         }
     }
@@ -455,33 +453,34 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
 
                 String latitude = lat.getText().toString().trim();
                 String longitude = lng.getText().toString().trim();
+                String address = enterAddress.getText().toString().trim();
                 String mplaceId = null;
                 if(placeId!=null){
                     mplaceId = placeId;
                 }else{
                     mplaceId = "Not_Available";
                 }
-                    Map map = new Map();
-                    map.setLatitude(latitude);
-                    map.setLongitude(longitude);
-                    map.setAddress(address);
-                    map.setSubAddress(subAddress);
-                    map.setPincode(Integer.parseInt(pinCode));
-                    map.setPlaceId(mplaceId);
-                    map.setUserId(user.getId());
-                    map.setHouseNumber(house_number.getText().toString());
-                    map.setFloor(floor.getText().toString());
-                    map.setLandmark(landmark.getText().toString());
-                    map.setLocationType(location_tag.getText().toString());
-                    if(!user.getFirmId().equalsIgnoreCase("Not_Available")){
-                        map.setFirm_id(user.getFirmId());
-                    }else{
-                        map.setFirm_id(user.getFirmId());
-                    }
+                Map map = new Map();
+                map.setLatitude(latitude);
+                map.setLongitude(longitude);
+                map.setAddress(address);
+                map.setSubAddress(subAddress);
+                map.setPincode(Integer.parseInt(pinCode));
+                map.setPlaceId(mplaceId);
+                map.setUserId(user.getId());
+                map.setHouseNumber(house_number.getText().toString());
+                map.setFloor(floor.getText().toString());
+                map.setLandmark(landmark.getText().toString());
+                map.setLocationType(location_tag.getText().toString());
+                if(!user.getFirmId().equalsIgnoreCase("Not_Available")){
+                    map.setFirm_id(user.getFirmId());
+                }else{
+                    map.setFirm_id(user.getFirmId());
+                }
 
-                    validateFields(map);
+                validateFields(map);
             }
-           // postMapDetails(map);
+            // postMapDetails(map);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -607,7 +606,7 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
         this.finish();
     }
 
-        @Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {

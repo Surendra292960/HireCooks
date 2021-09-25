@@ -1,4 +1,5 @@
 package com.test.sample.hirecooks.Activity.Users;
+
 import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,7 +22,7 @@ import com.test.sample.hirecooks.Adapter.Images.ImagesAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.ImagesResponse.Image;
 import com.test.sample.hirecooks.Models.ImagesResponse.Images;
-import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
@@ -37,7 +38,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UserDetailsActivity extends AppCompatActivity {
-    private UserResponse userResponse;
+    private User user;
     private TextView textViewName, textViewEmail, textViewGender, textViewUserType, textViewPhone, textViewAddress, text_action_bottom1, text_action_bottom2;
     private RecyclerView recyclerView;
     private List<Image> usersImagesList;
@@ -59,17 +60,17 @@ public class UserDetailsActivity extends AppCompatActivity {
         initializeViews();
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
-            userResponse = (UserResponse)bundle.getSerializable("User");
+            user = (User)bundle.getSerializable("User");
         }
-        getUserImages(userResponse.getId());
+        getUserImages(user.getId());
 
-        if(userResponse!=null){
-            textViewName.setText(userResponse.getName());
-            textViewEmail.setText("Email:  "+userResponse.getEmail());
-            textViewGender.setText("Gender:  "+userResponse.getGender());
-            textViewUserType.setText("UserTypeAdapter:  "+userResponse.getUserType());
-            textViewPhone.setText("phone:  "+userResponse.getPhone());
-            textViewAddress.setText("Address:  "+userResponse.getAddress());
+        if(user!=null){
+            textViewName.setText(user.getName());
+            textViewEmail.setText("Email:  "+user.getEmail());
+            textViewGender.setText("Gender:  "+user.getGender());
+            textViewUserType.setText("UserTypeAdapter:  "+user.getUserType());
+            textViewPhone.setText("phone:  "+user.getPhone());
+            textViewAddress.setText("Address:  "+user.getAddress());
         }
     }
 
@@ -104,7 +105,7 @@ public class UserDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                         txtDate.setText(dayOfMonth + "-" + (month + 1) + "-" + year);
-                        textViewAddress.setText("Address:  "+userResponse.getAddress()+"\n "+ dayOfMonth + "-" + (month + 1) + "-" + year);
+                        textViewAddress.setText("Address:  "+user.getAddress()+"\n "+ dayOfMonth + "-" + (month + 1) + "-" + year);
                     }
                 });
 

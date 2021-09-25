@@ -1,5 +1,5 @@
-/*
 package com.test.sample.hirecooks;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,30 +7,25 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Activity.Home.MainActivity;
-import com.test.sample.hirecooks.Models.users.Results;
-import com.test.sample.hirecooks.Utils.ProgressBarUtil;
-import com.test.sample.hirecooks.WebApis.UserApi;
+import com.test.sample.hirecooks.Activity.Users.PhoneVerification;
+
 import java.util.Objects;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class EmailVerification extends AppCompatActivity implements View.OnClickListener {
-    private TextInputEditText editTextEmail, editTextPassword;
+    private TextInputEditText editTextEmail;
     private AppCompatButton refreshBtn, verifyBtn,buttonSignIn;
     private TextView status, verifyEmail, userId;
-    private ProgressBarUtil progressBarUtil;
     private FirebaseAuth mAuth;
     private FirebaseUser firebaseUser;
 
@@ -38,13 +33,10 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_and_phone_varification);
-        progressBarUtil = new ProgressBarUtil(this);
         mAuth = FirebaseAuth.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         editTextEmail = findViewById(R.id.editTextEmail);
-        editTextPassword = findViewById(R.id.editTextPassword);
         editTextEmail = findViewById(R.id.editTextEmail);
-        editTextPassword = findViewById(R.id.editTextPassword);
         verifyEmail = findViewById(R.id.verifyEmail);
         userId = findViewById(R.id.userId);
         status = findViewById(R.id.status);
@@ -55,8 +47,7 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
         verifyBtn = findViewById(R.id.verifyBtn);
         verifyBtn.setOnClickListener(this);
 
-        editTextEmail.setText(firebaseUser.getEmail());
-
+        // editTextEmail.setText( firebaseUser.getEmail() );
         setInfo();
 
     }
@@ -73,23 +64,17 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
 
     private void SignInValidation() {
         String email = Objects.requireNonNull(editTextEmail.getText()).toString().trim();
-        String password = Objects.requireNonNull(editTextPassword.getText()).toString().trim();
 
         if (TextUtils.isEmpty(email)) {
             editTextEmail.setError("Please enter email");
             editTextEmail.requestFocus();
             return;
         }
-        if (TextUtils.isEmpty(password)) {
-            editTextPassword.setError("Please enter password");
-            editTextPassword.requestFocus();
-            return;
-        }
 
         if(firebaseUser!=null&&firebaseUser.isEmailVerified()){
-            ResultSignIn(email,password);
+         //   ResultSignIn(email,password);
         }else{
-            emailPasswordValidation(email,password);
+            emailPasswordValidation(email,"123");
         }
     }
 
@@ -144,7 +129,7 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
         }
     }
 
-    private void ResultSignIn(String email, String password) {
+  /*  private void ResultSignIn(String email, String password) {
         progressBarUtil.showProgress();
         UserApi service = ApiClient.getClient().create(UserApi.class);
         Call<Results> call = service.userLogin(email, password);
@@ -157,7 +142,7 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
                     assert response.body() != null;
                     if (!response.body().getError()) {
                       //  SharedPrefManager.getInstance(getApplicationContext()).userLogin(response.body().getUser());
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        startActivity(new Intent(getApplicationContext(), VideoChat.class));
                         finish();
                     } else {
                         Toast.makeText(getApplicationContext(), "Invalid email or password", Toast.LENGTH_LONG).show();
@@ -172,5 +157,183 @@ public class EmailVerification extends AppCompatActivity implements View.OnClick
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+    }*/
+}
+
+/*
+
+package com.test.sample.hirecooks.Activity.TrackUser;
+
+import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.test.sample.hirecooks.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class RiderMapLocation extends AppCompatActivity implements OnMapReadyCallback {
+
+    private GoogleMap mGoogleMap;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_rider_map_location);
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.mapNearBy);
+        mapFragment.getMapAsync(this);
     }
-}*/
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mGoogleMap = googleMap;
+
+        List<LatLng> sourcePoints = new ArrayList<>();
+        sourcePoints.add(new LatLng(-35.27801,149.12958));
+        sourcePoints.add(new LatLng(-35.28032,149.12907));
+        sourcePoints.add(new LatLng(-35.28099,149.12929));
+        sourcePoints.add(new LatLng(-35.28144,149.12984));
+        sourcePoints.add(new LatLng(-35.28194,149.13003));
+        sourcePoints.add(new LatLng(-35.28282,149.12956));
+        sourcePoints.add(new LatLng(-35.28302,149.12881));
+        sourcePoints.add(new LatLng(-35.28473,149.12836));
+
+        PolylineOptions polyLineOptions = new PolylineOptions();
+        polyLineOptions.addAll(sourcePoints);
+        polyLineOptions.width(5);
+        polyLineOptions.color(Color.BLUE);
+        mGoogleMap.addPolyline(polyLineOptions);
+
+        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sourcePoints.get(0), 15));
+
+        List<LatLng> snappedPoints = new ArrayList<>();
+        new GetSnappedPointsAsyncTask().execute(sourcePoints, null, snappedPoints);
+    }
+
+
+    private String buildRequestUrl(List<LatLng> trackPoints) {
+        StringBuilder url = new StringBuilder();
+        url.append("https://roads.googleapis.com/v1/snapToRoads?path=");
+
+        for (LatLng trackPoint : trackPoints) {
+            url.append(String.format("%8.5f", trackPoint.latitude));
+            url.append(",");
+            url.append(String.format("%8.5f", trackPoint.longitude));
+            url.append("|");
+        }
+        url.delete(url.length() - 1, url.length());
+        url.append("&interpolate=true");
+        url.append(String.format("&key=%s", "AIzaSyBm_OQWOR7nRG7uPjRgtkeXwHSjWIbjmz4"));
+
+        return url.toString();
+    }
+
+
+    private class GetSnappedPointsAsyncTask extends AsyncTask<List<LatLng>, Void, List<LatLng>> {
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        protected List<LatLng> doInBackground(List<LatLng>... params) {
+
+            List<LatLng> snappedPoints = new ArrayList<>();
+
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+
+            try {
+                URL url = new URL(buildRequestUrl(params[0]));
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.connect();
+
+                InputStream stream = connection.getInputStream();
+
+                reader = new BufferedReader(new InputStreamReader(stream));
+                StringBuilder jsonStringBuilder = new StringBuilder();
+
+                StringBuffer buffer = new StringBuffer();
+                String line = "";
+
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line+"\n");
+                    jsonStringBuilder.append(line);
+                    jsonStringBuilder.append("\n");
+                }
+
+                JSONObject jsonObject = new JSONObject(jsonStringBuilder.toString());
+                JSONArray snappedPointsArr = jsonObject.getJSONArray("snappedPoints");
+
+                for (int i = 0; i < snappedPointsArr.length(); i++) {
+                    JSONObject snappedPointLocation = ((JSONObject) (snappedPointsArr.get(i))).getJSONObject("location");
+                    double lattitude = snappedPointLocation.getDouble("latitude");
+                    double longitude = snappedPointLocation.getDouble("longitude");
+                    snappedPoints.add(new LatLng(lattitude, longitude));
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return snappedPoints;
+        }
+
+        @Override
+        protected void onPostExecute(List<LatLng> result) {
+            super.onPostExecute(result);
+
+            PolylineOptions polyLineOptions = new PolylineOptions();
+            polyLineOptions.addAll(result);
+            polyLineOptions.width(5);
+            polyLineOptions.color( Color.RED);
+            mGoogleMap.addPolyline(polyLineOptions);
+
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(result.get(0));
+            builder.include(result.get(result.size()-1));
+            LatLngBounds bounds = builder.build();
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
+
+        }
+    }
+*/

@@ -1,7 +1,5 @@
 package com.test.sample.hirecooks.Adapter.Category;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -10,15 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.test.sample.hirecooks.Activity.SubCategory.SubCategoryActivity;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.R;
-import com.test.sample.hirecooks.SubCategoryActivity;
 
 import java.util.List;
 
@@ -43,7 +43,18 @@ public class NewProductCategoryAdapter extends RecyclerView.Adapter<NewProductCa
         Category newProductCategory = categories.get(position);
         if(newProductCategory!=null){
             holder.new_product_category_name.setText(newProductCategory.getName());
-            Picasso.with(mCtx).load(newProductCategory.getLink()).into(holder.new_product_category_image);
+            holder.progress_dialog.setVisibility( View.VISIBLE );
+            Picasso.with(mCtx).load(newProductCategory.getLink()).into( holder.new_product_category_image, new Callback() {
+                @Override
+                public void onSuccess() {
+                    holder.progress_dialog.setVisibility( View.GONE );
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            } );
 
             holder.cardview.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -51,9 +62,10 @@ public class NewProductCategoryAdapter extends RecyclerView.Adapter<NewProductCa
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Intent intent = new Intent(mCtx, SubCategoryActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("Category", categories.get(position));
+                        bundle.putSerializable("Video", categories.get(position));
                         intent.putExtras(bundle);
-                        mCtx.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) mCtx).toBundle());
+                        intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mCtx.startActivity(intent);
                     }
                 }
             });
@@ -68,12 +80,14 @@ public class NewProductCategoryAdapter extends RecyclerView.Adapter<NewProductCa
         public TextView new_product_category_name;
         private ImageView new_product_category_image;
         private CardView cardview;
+        private ProgressBar progress_dialog;
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
             new_product_category_name = itemLayoutView.findViewById(R.id.new_product_category_name);
             new_product_category_image = itemLayoutView.findViewById(R.id.new_product_category_image);
             cardview = itemLayoutView.findViewById(R.id.cardview);
+            progress_dialog = itemLayoutView.findViewById(R.id.progress_dialog);
         }
     }
 }

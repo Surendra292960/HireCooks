@@ -34,7 +34,7 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Result;
-import com.test.sample.hirecooks.Models.users.User;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;

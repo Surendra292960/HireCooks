@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Models.Offer.Offer;
 import com.test.sample.hirecooks.R;
@@ -34,7 +36,18 @@ public class ToolPromotionAdapter extends RecyclerView.Adapter<ToolPromotionAdap
     public void onBindViewHolder(ToolPromotionAdapter.ViewHolder holder, int position) {
         Offer offer = offers.get(position);
         if(offer!=null){
-            Picasso.with(mCtx).load(offer.getLink()).into(holder.imageView);
+            holder.progress_dialog.setVisibility( View.VISIBLE );
+            Picasso.with(mCtx).load(offer.getLink()).into( holder.imageView, new Callback() {
+                @Override
+                public void onSuccess() {
+                    holder.progress_dialog.setVisibility( View.GONE );
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            } );
         }
     }
 
@@ -44,10 +57,12 @@ public class ToolPromotionAdapter extends RecyclerView.Adapter<ToolPromotionAdap
     }
     class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
+        private ProgressBar progress_dialog;
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
             imageView = itemLayoutView.findViewById(R.id.imageView);
+            progress_dialog = itemLayoutView.findViewById(R.id.progress_dialog);
         }
     }
 }

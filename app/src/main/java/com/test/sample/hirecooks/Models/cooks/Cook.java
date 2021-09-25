@@ -31,7 +31,7 @@ public class Cook implements Serializable {
     @SerializedName("image")
     @Expose
     private String image;
-    @SerializedName("address")
+    @SerializedName("address_book")
     @Expose
     private String address;
 

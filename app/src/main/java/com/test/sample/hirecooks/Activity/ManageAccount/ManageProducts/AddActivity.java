@@ -34,7 +34,7 @@ import com.test.sample.hirecooks.Models.SubCategory.Size;
 import com.test.sample.hirecooks.Models.SubCategory.SizeExample;
 import com.test.sample.hirecooks.Models.SubCategory.Weight;
 import com.test.sample.hirecooks.Models.SubCategory.WeightExample;
-import com.test.sample.hirecooks.Models.users.User;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
@@ -76,7 +76,7 @@ public class AddActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private Button btnUpload,btnChoose;
-   // private Category mCategory;
+   // private Video mCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +108,7 @@ public class AddActivity extends AppCompatActivity {
             mSize = (Size) bundle.getSerializable( "Size" );
             mWeight = (Weight) bundle.getSerializable( "Weight" );
             mImage = (Image) bundle.getSerializable( "Image" );
-           // mCategory = (Category) bundle.getSerializable( "Category" );
+           // mCategory = (Video) bundle.getSerializable( "Video" );
         }
         if (mColor != null) {
             colorName.setVisibility( View.VISIBLE );

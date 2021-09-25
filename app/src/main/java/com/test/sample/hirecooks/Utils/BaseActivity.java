@@ -30,14 +30,22 @@ import androidx.core.content.ContextCompat;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.test.sample.hirecooks.Activity.AddorRemoveCallbacks;
+import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Cart.Cart;
-import com.test.sample.hirecooks.Models.Order.Order;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
+import com.test.sample.hirecooks.WebApis.UserApi;
+
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BaseActivity extends AppCompatActivity implements AddorRemoveCallbacks {
     public static final String TAG = "BaseActivity===>";
@@ -47,11 +55,11 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
     List<Subcategory> newCartList = new ArrayList<Subcategory>();
     List<com.test.sample.hirecooks.Models.NewOrder.Order> newOrderList = new ArrayList<com.test.sample.hirecooks.Models.NewOrder.Order>();
     List<Subcategory> FavouriteList = new ArrayList<>();
-    List<Order> orderList = new ArrayList<Order>();
     Gson gson;
     LocalStorage localStorage;
     String userJson;
     ProgressDialog progressDialog;
+    private UserApi mService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +96,7 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
         return cartList;
     }
 
-    public int newCartCount() {
+/*    public int newCartCount() {
 
         gson = new Gson();
         if (localStorage.getCart() != null) {
@@ -100,7 +108,7 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
             return newCartList.size();
         }
         return 0;
-    }
+    }*/
 
     public List<Subcategory> getnewCartList() {
         if (localStorage.getCart() != null) {
@@ -113,18 +121,6 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
         return newCartList;
     }
 
-    public List<com.test.sample.hirecooks.Models.NewOrder.Order> getNewOrderList() {
-        if (localStorage.getOrder() != null) {
-            String jsonOrder = localStorage.getOrder();
-            //Log.d("CART : ", jsonCart);
-            Type type = new TypeToken<List<com.test.sample.hirecooks.Models.NewOrder.Order>>() {
-            }.getType();
-            orderList = gson.fromJson(jsonOrder, type);
-            return newOrderList;
-        }
-        return newOrderList;
-    }
-
 
     public List<Subcategory> getFavourite() {
         if (localStorage.getFavourite() != null) {
@@ -135,18 +131,6 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
             return FavouriteList;
         }
         return FavouriteList;
-    }
-
-    public List<Order> getOrderList() {
-        if (localStorage.getOrder() != null) {
-            String jsonOrder = localStorage.getOrder();
-            //Log.d("CART : ", jsonCart);
-            Type type = new TypeToken<List<Order>>() {
-            }.getType();
-            orderList = gson.fromJson(jsonOrder, type);
-            return orderList;
-        }
-        return orderList;
     }
 
     public Double getTotalPrice() {
@@ -247,6 +231,13 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
         }
     }
 
+    public String getDateAndTime() {
+        SimpleDateFormat timeStampFormat = new SimpleDateFormat("yyy-dd-MM HH:mm:ss");
+        Date GetDate = new Date();
+        String DateStr = timeStampFormat.format(GetDate);
+        return  DateStr;
+    }
+
     public void showalertbox(String string) {
         final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder( this);
         LayoutInflater inflater = this.getLayoutInflater();
@@ -290,6 +281,25 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
             printLog(BaseActivity.class,e.getMessage());
         }
 
+    }
+
+
+    public void updateUserStatus(Integer id, Integer status, String email) {
+        mService = ApiClient.getClient().create( UserApi.class );
+        Call<String> call = mService.updateUserStatus( id, status,email );
+        call.enqueue( new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.code() == 200) {
+                    System.out.println( "Suree :" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                System.out.println( "Suree :" + t.getMessage() );
+            }
+        } );
     }
 
     public void printLog(Class<?> pClassName, String pStrMsg){

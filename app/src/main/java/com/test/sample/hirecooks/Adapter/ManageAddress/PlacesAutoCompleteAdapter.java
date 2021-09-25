@@ -231,9 +231,9 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
                          ///////////////////////////////
                          Bundle bundle = new Bundle();
                          Intent intent = new Intent(mContext, SearchAddress.class);
-                         bundle.putSerializable("address", address);
+                         bundle.putSerializable("address_book", address);
                          intent.putExtras(bundle);
-                         mContext.startActivity(intent);
+                         mContext.startActivity(intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
                          ((Activity)mContext).finish();
                      }catch (Exception e){
                          e.printStackTrace();

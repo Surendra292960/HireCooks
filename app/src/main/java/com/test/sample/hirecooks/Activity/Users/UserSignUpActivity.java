@@ -15,29 +15,32 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.hbb20.CountryCodePicker;
-import com.test.sample.hirecooks.Adapter.SpinnerAdapter.UserTypeAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.TokenResponse.TokenResult;
-import com.test.sample.hirecooks.Models.users.Result;
-import com.test.sample.hirecooks.Models.users.User;
+import com.test.sample.hirecooks.Models.Users.Example;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Constants;
@@ -47,8 +50,10 @@ import com.test.sample.hirecooks.Utils.TrackGPS;
 import com.test.sample.hirecooks.WebApis.UserApi;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -58,10 +63,11 @@ import retrofit2.Response;
 
 public class UserSignUpActivity extends BaseActivity {
     private static final String TAG = "UserSignUpActivity" ;
+    SimpleDateFormat format = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
     private EditText editTextName, editTextEmail, editTextPassword,editTextConPassword,
             editTextPinCode,editTextFirmId,editTextAddress,editTextPhone;
     private RadioGroup radioGender;
-    private Spinner editTextUserType;
+   // private Spinner editTextUserType;
     private ProgressBarUtil progressBarUtil;
     private UserApi mService;
     private TextView location_picker, txtSignIn,verified;
@@ -75,7 +81,7 @@ public class UserSignUpActivity extends BaseActivity {
     GoogleMap mMap;
     private TrackGPS trackGPS;
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
-    private List<String> user_type_list;
+   // private List<String> user_type_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,18 +115,19 @@ public class UserSignUpActivity extends BaseActivity {
         location_picker = findViewById(R.id.location_picker);
         editTextPinCode = findViewById(R.id.editTextPinCode);
         editTextFirmId = findViewById(R.id.editTextFirmId);
-        editTextUserType = findViewById(R.id.editTextUserType);
+       // editTextUserType = findViewById(R.id.editTextUserType);
         radioGender = findViewById(R.id.radioGender);
         radioGender = findViewById(R.id.radioGender);
         buttonSignUp = findViewById(R.id.buttonSignUp);
+        editTextPhone.setFocusableInTouchMode( true );
 
-        String[] userType_array = this.getResources().getStringArray(R.array.user_type);
+     /*   String[] userType_array = this.getResources().getStringArray(R.array.user_type);
         user_type_list = new ArrayList<>();
         for(String text:userType_array) {
             user_type_list.add(text);
         }
         UserTypeAdapter spinnerArrayAdapter = new UserTypeAdapter(this, user_type_list);
-        editTextUserType.setAdapter( spinnerArrayAdapter );
+        editTextUserType.setAdapter( spinnerArrayAdapter );*/
 
         if(Constants.CurrentUserPhoneNumber!=null){
             verified.setVisibility(View.VISIBLE);
@@ -148,7 +155,7 @@ public class UserSignUpActivity extends BaseActivity {
         txtSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), UserSignInActivity.class));
+                startActivity(new Intent(getApplicationContext(), UserSignInActivity.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
                 finish();
             }
         });
@@ -179,10 +186,8 @@ public class UserSignUpActivity extends BaseActivity {
         String password = editTextPassword.getText().toString().trim();
         String cpassword = editTextConPassword.getText().toString().trim();
         String phone = editTextPhone.getText().toString().trim();
-        String firmId = "Not_Available";
-        String user_type = editTextUserType.getSelectedItem().toString();
-
-        String bikeNumber = "Null";
+        //String user_type = editTextUserType.getSelectedItem().toString();
+        String bikeNumber = "Not_Available";
 
         String gender = radioSex.getText().toString();
 
@@ -206,10 +211,10 @@ public class UserSignUpActivity extends BaseActivity {
             editTextConPassword.setError("Please enter confirm password");
             editTextConPassword.requestFocus();
             return;
-        }if (!user_type.isEmpty()&&user_type.equalsIgnoreCase( "Please Select" )) {
+        }/*if (!user_type.isEmpty()&&user_type.equalsIgnoreCase( "Please Select" )) {
             ShowToast( "Please Select User Type" );
             return;
-        }
+        }*/
         if (password.equals(cpassword)) {
 
         }else{
@@ -225,43 +230,77 @@ public class UserSignUpActivity extends BaseActivity {
 
         phone = ccp.getFullNumberWithPlus();
         phone = phone.replace(" " , "");
-        userSignUp(name, email, password, phone, gender, user_type, firmId, bikeNumber);
+
+        List<Example> exampleList = new ArrayList<>(  );
+        List<User> userList = new ArrayList<>(  );
+        Example example = new Example();
+        User user = new User(  );
+        user.setName( name );
+        user.setEmail( email );
+        user.setPassword( password );
+        user.setPhone( phone );
+        user.setGender( gender );
+        user.setUserType( "User" );
+        user.setSignupDate( format.format(new Date() ) );
+        user.setFirmId( "Not_Available" );
+        user.setBikeNumber( bikeNumber );
+        userList.add( user );
+        example.setUsers( userList );
+        exampleList.add( example );
+        userSignUp(exampleList);
     }
 
-    private void userSignUp( String name, String email, String password, String phone, String gender, String userType, String firmId, String bikeNumber) {
+    private void userSignUp( List<Example> exampleList) {
        progressBarUtil.showProgress();
         mService = ApiClient.getClient().create(UserApi.class);
-        final User user = new User(name, email, phone, password, gender, firmId, userType, bikeNumber);
-        Call<Result> call = mService.createUser(user.getName(), user.getEmail(), user.getPhone(),user.getPassword(), user.getGender(), user.getFirmId(), user.getUserType(), user.getBikeNumber());
-        call.enqueue(new Callback<Result>() {
+        Call<List<Example>> call = mService.createUser(exampleList);
+        call.enqueue(new Callback<List<Example>>() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response){
-                int statusCode = response.code();
-                assert response.body() != null;
-                if(statusCode==200&& !response.body().getError()) {
-                    System.out.println("Suree: "+response.message());
+            public void onResponse(Call<List<Example>> call, Response<List<Example>> response){
+                if(response.code()==200){
                     progressBarUtil.hideProgress();
-                    Constants.SIGNUP_USER = response.body().getUser();
-                    ShowToast(response.body().getMessage());
-                    if (!response.body().getError()&&response.body().getUser().getPhone()!=null) {
-                        getToken(response.body().getUser().getPhone(),response.body().getUser().getId());
+                    for(Example example:response.body()){
+                        ShowToast(example.getMessage());
+                        if(!example.getError()){
+                          for(User user: example.getUsers()){
+                              Constants.SIGNUP_USER = user;
+                              if (user.getPhone()!=null) {
+                                  getToken(user.getPhone(),user.getId());
+                                  // sigupWithFirebase(email,password);
+                              }
+                              finish();
+                              startActivity(new Intent(UserSignUpActivity.this,SignupAddressActivity.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+                              overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                          }
+                        }
                     }
-                    finish();
-                    startActivity(new Intent(UserSignUpActivity.this,SignupAddressActivity.class));
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                }
-                else{
-                    ShowToast(response.body().getMessage());
                 }
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<List<Example>> call, Throwable t) {
                 progressBarUtil.hideProgress();
                 System.out.println("Suree: "+t.getMessage());
                 ShowToast("Please Check Intenet Connection");
             }
         });
+    }
+
+    private void sigupWithFirebase(String email ,String password){
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(UserSignUpActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                                Log.d("Suree", "Signup with firebase");
+                        } else {
+                            String message = "Somthing is wrong, we will fix it soon...";
+                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                message = "Invalid code entered...";
+                            }
+                        }
+                    }
+                });
     }
 
     private void sendTokenToServer(String phone, String newToken, int isServerToken, String deviceId, int userId) {

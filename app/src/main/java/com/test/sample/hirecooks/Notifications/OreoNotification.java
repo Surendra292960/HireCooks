@@ -53,7 +53,7 @@ public class OreoNotification extends ContextWrapper {
     @SuppressLint("WrongConstant")
     @TargetApi(Build.VERSION_CODES.O)
     public Notification.Builder
-    getOreoNotification(String title, /*String body,*/ PendingIntent pendingIntent, Uri soundUri, String icon){
+    getOreoNotification(String title, String body, PendingIntent pendingIntent, Uri soundUri, String icon){
         return  new Notification.Builder(getApplicationContext(), CHANNEL_ID)
                 .setAutoCancel(true)
                 .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
@@ -64,7 +64,7 @@ public class OreoNotification extends ContextWrapper {
                 .setTicker("Fcm Test")
                 .setNumber(10)
                 .setContentTitle(title)
-               // .setContentText(body)
+                .setContentText(body)
                 .setContentIntent(pendingIntent)
                 .setSound(soundUri)
                 .setSmallIcon(R.drawable.ic_launcher)

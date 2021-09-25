@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/margin_10"
+    tools:context=".Activity.Cooks.Video.PickVideoActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <VideoView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/video_1" />
+
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/edit_text_design"
+                android:hint="@string/name"
+                android:paddingRight="30dp"
+                android:drawablePadding="30dp"
+                android:inputType="textPersonName"
+                android:paddingLeft="30dp"
+                android:textSize="@dimen/size_14"
+                android:textAlignment="viewStart"
+                android:elevation="2dp"/>
+
+            <EditText
+                android:id="@+id/tag"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/edit_text_design"
+                android:hint="Tag"
+                android:paddingRight="30dp"
+                android:drawablePadding="30dp"
+                android:inputType="textPersonName"
+                android:paddingLeft="30dp"
+                android:textSize="@dimen/size_14"
+                android:textAlignment="viewStart"
+                android:elevation="2dp"/>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:id="@+id/select_video"
+                    android:visibility="gone"
+                    android:background="@color/smoke_white"
+                    android:layout_margin="10dp"
+                    android:text="Select Videos"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:id="@+id/upload_video"
+                    android:visibility="gone"
+                    android:background="@color/smoke_white"
+                    android:layout_margin="10dp"
+                    android:text="Upload Videos"/>
+
+
+            </FrameLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:id="@+id/update_video"
+                android:visibility="gone"
+                android:background="@drawable/edit_text_design"
+                android:layout_margin="10dp"
+                android:text="Update Videos"/>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</LinearLayout>

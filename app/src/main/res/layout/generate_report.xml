@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:id="@+id/text"
+            android:text="Exit App"
+            android:textSize="18sp"
+            android:textColor="#000"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_margin="10dp"
+            android:background="#bfbebe"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:layout_margin="@dimen/margin_10"
+               android:background="@drawable/rect_whiteboder"
+               android:orientation="vertical">
+
+               <EditText
+                   android:focusableInTouchMode="false"
+                   android:id="@+id/from_date"
+                   android:layout_width="match_parent"
+                   android:layout_height="@dimen/margin_40"
+                   android:gravity="center"
+                   android:layout_gravity="center"
+                   android:hint="@string/from_date"
+                   android:textSize="@dimen/size_14"
+                   android:padding="@dimen/size_10"
+                   android:background="@null"
+                   android:drawableStart="@drawable/ic_date"/>
+
+           </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="@dimen/margin_10"
+                android:background="@drawable/rect_whiteboder"
+                android:orientation="vertical">
+
+                <EditText
+                    android:focusableInTouchMode="false"
+                    android:id="@+id/to_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_40"
+                    android:hint="@string/to_date"
+                    android:textSize="@dimen/size_14"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/size_10"
+                    android:background="@null"
+                    android:drawableStart="@drawable/ic_date" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal">
+        <View
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="#ffffff"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/submit"
+            android:text="@string/submit"
+            android:textAllCaps="true"
+            android:background="@color/style_color_primary"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:textColor="#ffffff"/>
+    </LinearLayout>
+
+</LinearLayout>

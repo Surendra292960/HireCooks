@@ -30,7 +30,7 @@ import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.Category.Example;
 import com.test.sample.hirecooks.Models.Offer.Offer;
-import com.test.sample.hirecooks.Models.users.User;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
@@ -63,19 +63,19 @@ public class EditCategoryActivity extends AppCompatActivity {
         add_category = findViewById( R.id.add_category );
         Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Products  Category");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Products  Video");
         user = SharedPrefManager.getInstance( this ).getUser();
         Bundle bundle = getIntent().getExtras();
         if (bundle != null&& Constants.NEARBY_VENDERS_LOCATION !=null) {
             categoryName= bundle.getString("CategoryName");
-            category = (Offer) bundle.getSerializable("Category");
+            category = (Offer) bundle.getSerializable("Video");
             if(category.getId()!=0){
                 getCategory(category.getId());
             }else {
                 Toast.makeText( this, "Comming soon", Toast.LENGTH_SHORT ).show();
             }
             if(mCategory!=null){
-                getSupportActionBar().setTitle(category.getName()+" Category");
+                getSupportActionBar().setTitle(category.getName()+" Video");
             }
         }
 
@@ -190,7 +190,7 @@ public class EditCategoryActivity extends AppCompatActivity {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Intent intent = new Intent(mCtx, EditSubCategoryActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("Category", category);
+                        bundle.putSerializable("Video", category);
                         intent.putExtras(bundle);
                         // Check if we're running on Android 5.0 or higher
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -213,7 +213,7 @@ public class EditCategoryActivity extends AppCompatActivity {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Intent intent = new Intent(mCtx, StartEditCategory.class);
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("Category", category);
+                        bundle.putSerializable("Video", category);
                         intent.putExtras(bundle);
                         // Check if we're running on Android 5.0 or higher
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

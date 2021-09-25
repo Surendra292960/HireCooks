@@ -1,9 +1,10 @@
 package com.test.sample.hirecooks.Utils;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.test.sample.hirecooks.Models.TokenResponse.Token;
-import com.test.sample.hirecooks.Models.users.User;
+import com.test.sample.hirecooks.Models.Users.User;
 
 public class SharedPrefManager {
     private static SharedPrefManager mInstance;
@@ -13,9 +14,6 @@ public class SharedPrefManager {
     private static int PRIVATE_MODE = 0;
     private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
     private static final String SHARED_PREF_NAME = "simplifiedcodingsharedprefretrofit";
-    //Cooks
-    private static final String KEY_COOK_EMAIL = "keycookemail";
-    private static final String KEY_COOK_PHONE = "keycookphone";
     //Users
     private static final String KEY_USER_ID = "keyuserid";
     private static final String KEY_USER_NAME = "keyusername";
@@ -33,6 +31,7 @@ public class SharedPrefManager {
     private static final String KEY_TOKEN = "keytoken";
     private static final String KEY_DEVICE_ID= "keydeviceid";
     private static final String KEY_BIKE_NUMBER = "bikeNumber";
+    private static final String KEY_STATUS = "key";
 
     public SharedPrefManager(Context context) {
         mCtx = context;
@@ -77,7 +76,7 @@ public class SharedPrefManager {
     public boolean userLogin(User user) {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(KEY_USER_ID, user.getId());
+        editor.putInt(KEY_USER_ID,  user.getId() );
         editor.putString(KEY_USER_NAME, user.getName());
         editor.putString(KEY_USER_EMAIL, user.getEmail());
         editor.putString(KEY_USER_PASSWORD, user.getPassword());
@@ -89,15 +88,15 @@ public class SharedPrefManager {
         editor.putString(KEY_USER_ADDRESS, user.getAddress());
         editor.putString(KEY_USER_PINCODE, user.getPincode());
         editor.putString(KEY_FIRM_ID, user.getFirmId());
+        editor.putString(KEY_STATUS, user.getStatus());
+        editor.putString(KEY_BIKE_NUMBER, user.getBikeNumber());
         editor.apply();
         return true;
     }
 
     public boolean isLoggedIn() {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        if (sharedPreferences.getString(KEY_USER_EMAIL, null) != null||
-            sharedPreferences.getString(KEY_COOK_EMAIL, null) != null ||
-                sharedPreferences.getString(KEY_COOK_PHONE, null) != null)
+        if (sharedPreferences.getString(KEY_USER_EMAIL, null) != null)
             return true;
         return false;
     }
@@ -108,14 +107,16 @@ public class SharedPrefManager {
                 sharedPreferences.getInt(KEY_USER_ID, 0),
                 sharedPreferences.getString(KEY_USER_NAME, null),
                 sharedPreferences.getString(KEY_USER_EMAIL, null),
-                sharedPreferences.getString(KEY_USER_PHONE, null),
                 sharedPreferences.getString(KEY_USER_PASSWORD, null),
+                sharedPreferences.getString(KEY_USER_PHONE, null),
                 sharedPreferences.getString(KEY_USER_GENDER, null),
                 sharedPreferences.getString(KEY_USER_TYPE, null),
                 sharedPreferences.getString(KEY_USER_IMAGE, null),
+                sharedPreferences.getString(KEY_USER_SIGNUPDATE, null),
                 sharedPreferences.getString(KEY_USER_ADDRESS, null),
                 sharedPreferences.getString(KEY_USER_PINCODE, null),
                 sharedPreferences.getString(KEY_FIRM_ID, null),
+                sharedPreferences.getString(KEY_STATUS, null),
                 sharedPreferences.getString(KEY_BIKE_NUMBER, null));
     }
 

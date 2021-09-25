@@ -100,11 +100,14 @@ public class Subcategory implements Serializable {
 
     int itemQuantity;
 
+    public Subcategory() {
+
+    }
 
     public Subcategory(int id, String subcategoryid, String lastUpdate, String searchKey, String name, String productUniquekey, String link2, String link3,
                        String link4, String shieldLink, String discription, String detailDiscription, int sellRate, int displayRate, String firmId,
                        double firmLat, double firmLng, String firmAddress, int frimPincode, List<Color> colors, List<Image> images, List<Size> sizes,
-                       List<Weight> weights, double totalAmount, String availableStock,int itemQuantity,String brand, String gender, int age) {
+                       List<Weight> weights, double totalAmount, String availableStock, int itemQuantity, String brand, String gender, int age) {
         this.id = id;
         this.subcategoryid = subcategoryid;
         this.lastUpdate = lastUpdate;
@@ -141,7 +144,7 @@ public class Subcategory implements Serializable {
     public Subcategory(int id, String subcategoryid, String lastUpdate, String searchKey, String name, String productUniquekey, String link2, String link3,
                        String link4, String shieldLink, String discription, String detailDiscription, int sellRate, int displayRate, String firmId,
                        double firmLat, double firmLng, String firmAddress, int frimPincode, List<Color> colors, List<Image> images, List<Size> sizes,
-                       List<Weight> weights, double totalAmount, int itemQuantity,String brand, String gender, int age) {
+                       List<Weight> weights, double totalAmount, int itemQuantity,String brand, String gender, int age,int acceptingOrder) {
         this.id = id;
         this.subcategoryid = subcategoryid;
         this.lastUpdate = lastUpdate;

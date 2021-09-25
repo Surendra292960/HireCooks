@@ -1,91 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/place_item_view"
-    android:orientation="vertical">
+    android:id="@+id/profile_layout"
+    android:layout_margin="@dimen/margin_5"
+    android:orientation="vertical"
+    card_view:cardCornerRadius="0dp"
+    card_view:cardElevation="@dimen/cardview_default_elevation">
 
     <LinearLayout
+        android:id="@+id/add_address_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="vertical">
-
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:orientation="horizontal"
-           android:layout_marginStart="@dimen/margin_10"
-           android:weightSum="2">
-
-           <TextView
-               android:id="@+id/location_tag"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:textColor="@color/text_color"
-               android:textStyle="bold"
-               android:textSize="14sp"
-               android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
-
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:textColor="@color/text_color"
-               android:textStyle="bold"
-               android:layout_marginStart="@dimen/margin_20"
-               android:textSize="14sp"
-               android:drawableEnd="@drawable/ic_location_on"
-               android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
-
-       </LinearLayout>
-        <TextView
-            android:id="@+id/sub_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/margin_10"
-            android:layout_marginStart="@dimen/margin_10"
-            android:layout_marginEnd="@dimen/margin_10"
-            android:textSize="12sp"
-            android:textColor="@color/gray_btn_bg_pressed_color"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/margin_10">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="5dp"
             android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:weightSum="2">
+            android:weightSum="5">
 
-            <TextView
-                android:id="@+id/address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_image"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
                 android:layout_weight="1"
-                android:layout_margin="@dimen/margin_10"
-                android:textSize="12sp"
-                android:textColor="@color/gray_btn_bg_pressed_color"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+                android:src="@drawable/ic_location_on"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="2dp" />
 
-            <TextView
-                android:layout_weight="1"
-                android:id="@+id/edit_address"
-                android:layout_width="@dimen/margin_50"
-                android:layout_height="@dimen/margin_50"
-                android:gravity="end"
-                android:layout_gravity="end"
-                android:drawableRight="@drawable/ic_more"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2.8"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingLeft="5dp">
+
+                <TextView
+                    android:id="@+id/location_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/style_color_primary"
+                    android:textSize="@dimen/size_14"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.2"
+                android:gravity="center">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_30"
+                    android:background="@drawable/rzp_border">
+
+                    <TextView
+                        android:id="@+id/update_user"
+                        android:visibility="visible"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:gravity="center"
+                        android:text="Update"
+                        android:textAllCaps="true"
+                        android:layout_gravity="center"
+                        android:textSize="12sp"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+                </FrameLayout>
+            </LinearLayout>
 
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_btn_bg_color"
+            android:layout_margin="@dimen/margin_5"/>
+
+        <TextView
+            android:id="@+id/sub_address"
+            android:layout_margin="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@android:color/darker_gray"/>
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_marginBottom="@dimen/margin_5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@android:color/darker_gray"/>
     </LinearLayout>
 
+</androidx.cardview.widget.CardView>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray_btn_bg_color"/>
-</LinearLayout>

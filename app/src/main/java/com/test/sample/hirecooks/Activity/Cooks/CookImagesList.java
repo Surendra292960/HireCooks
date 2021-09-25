@@ -11,7 +11,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.test.sample.hirecooks.Adapter.Cooks.CooksImagesAdapter;
-import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.Models.cooks.Request.CooksImages;
 import com.test.sample.hirecooks.Models.cooks.Request.CooksImagesResult;
 import com.test.sample.hirecooks.R;
@@ -32,7 +32,7 @@ import io.reactivex.schedulers.Schedulers;
 public class CookImagesList extends BaseActivity {
     private RecyclerView cooks_images_recycler_view;
     private FloatingActionButton add_cook_images;
-    private UserResponse users;
+    private User users;
     private CookImages mService = Common.getCookImagesAPI();
     private ProgressBarUtil progressBarUtil;
     private List<CooksImages> imageList = new ArrayList<>(  );
@@ -49,7 +49,7 @@ public class CookImagesList extends BaseActivity {
         initViews();
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
-            users = (UserResponse)bundle.getSerializable("Cooks");
+            users = (User)bundle.getSerializable("Cooks");
             if(users!=null){
                 ApiServiceCall(users);
             }
@@ -72,6 +72,7 @@ public class CookImagesList extends BaseActivity {
                     Intent intent = new Intent( CookImagesList.this, AddCookImages.class );
                     bundle.putSerializable( "Cooks", users );
                     intent.putExtras( bundle );
+                    intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity( intent );
                 }
             }
@@ -94,7 +95,7 @@ public class CookImagesList extends BaseActivity {
         });
     }
 
-    private void ApiServiceCall(UserResponse users) {
+    private void ApiServiceCall(User users) {
         progressBarUtil.showProgress();
         mService.getCookImagesByUserId(users.getId())
                 .subscribeOn( Schedulers.io())

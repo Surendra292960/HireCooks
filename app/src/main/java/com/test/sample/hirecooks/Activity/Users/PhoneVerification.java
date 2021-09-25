@@ -25,12 +25,13 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.hbb20.CountryCodePicker;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Libraries.PinView.PinView;
-import com.test.sample.hirecooks.Models.users.Result;
+import com.test.sample.hirecooks.Models.Users.Example;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.WebApis.UserApi;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -87,8 +88,8 @@ public class PhoneVerification extends AppCompatActivity {
                 Constants.CurrentUserPhoneNumber = phone;
                 phone = ccp.getFullNumberWithPlus();
                 user_phone_number.setText(phone);
-               // getUserByPhone(phone);
-                sendVerificationCode(phone);
+                 getUserByPhone(phone);
+                //sendVerificationCode(phone);
             }
         });
 
@@ -101,8 +102,8 @@ public class PhoneVerification extends AppCompatActivity {
                 phone = phone.replace(" " , "");
                 phone = ccp.getFullNumberWithPlus();
                 user_phone_number.setText(phone);
-               // getUserByPhone(phone);
-                sendVerificationCode(phone);
+                 getUserByPhone(phone);
+                //sendVerificationCode(phone);
             }
         });
 
@@ -178,7 +179,7 @@ public class PhoneVerification extends AppCompatActivity {
                         }
                     }
                 });
-            }
+    }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
@@ -215,29 +216,27 @@ public class PhoneVerification extends AppCompatActivity {
     }
 
     private void getUserByPhone(final String phone) {
+        System.out.println( "Suree : "+phone );
         progressBarUtil.showProgress();
         UserApi service = ApiClient.getClient().create(UserApi.class);
-        /*User user = new User();*/
-        Call<Result> call = service.getUserPhone(phone);
-        call.enqueue(new Callback<Result>() {
+        Call<List<Example>> call = service.checkUserPhone(phone);
+        call.enqueue(new Callback<List<Example>>() {
             @Override
-            public void onResponse(@NonNull Call<Result> call, @NonNull Response<Result> response) {
-                int statusCode = response.code();
-                if(statusCode==200) {
+            public void onResponse(@NonNull Call<List<Example>> call, @NonNull Response<List<Example>> response) {
+                if(response.code()==200) {
                     progressBarUtil.hideProgress();
-                    assert response.body() != null;
-                    if (!response.body().getError()) {
-                        sendVerificationCode(phone);
-                    } else {
-                        Toast.makeText(getApplicationContext(), R.string.phone_not_exist, Toast.LENGTH_LONG).show();
-                    }
-                }else{
-                    Toast.makeText(getApplicationContext(), R.string.failed_due_to+response.code(), Toast.LENGTH_LONG).show();
+                   for(Example example:response.body()){
+                       if(!example.getError()){
+                           sendVerificationCode(phone);
+                       }else{
+                           Toast.makeText( PhoneVerification.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
+                       }
+                   }
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<Example>> call, @NonNull Throwable t) {
                 progressBarUtil.hideProgress();
                 Toast.makeText(getApplicationContext(), R.string.error+t.getMessage(), Toast.LENGTH_LONG).show();
             }

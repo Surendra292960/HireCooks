@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_5"
+        android:layout_marginBottom="@dimen/margin_5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableRow>
+
+            <TextView
+                style="@style/table_header"
+                android:layout_width="@dimen/margin_80"
+                android:layout_height="@dimen/margin_30"
+                android:gravity="center"
+                android:textSize="@dimen/size_12"
+                android:textColor="@color/white_alpha"
+                android:text="@string/id"/>
+
+            <TextView
+                style="@style/table_header"
+                android:layout_width="@dimen/margin_80"
+                android:layout_height="@dimen/margin_30"
+                android:gravity="center"
+                android:textSize="@dimen/size_12"
+                android:textColor="@color/white_alpha"
+                android:text="@string/name"/>
+
+            <TextView
+                android:layout_height="@dimen/margin_30"
+                android:layout_width="@dimen/margin_80"
+                style="@style/table_header"
+                android:gravity="center"
+                android:textSize="@dimen/size_12"
+                android:id="@+id/user_type"
+                android:textColor="@color/white_alpha"
+                android:text="@string/user_type"/>
+
+            <TextView
+                android:layout_height="@dimen/margin_30"
+                android:layout_width="@dimen/margin_80"
+                android:text="@string/login_date"
+                style="@style/table_header"
+                android:textSize="@dimen/size_12"
+                android:gravity="center"
+                android:textColor="@color/white_alpha" />
+
+
+            <TextView
+                android:layout_height="@dimen/margin_30"
+                android:layout_width="@dimen/margin_80"
+                android:text="@string/logout_date"
+                style="@style/table_header"
+                android:gravity="center"
+                android:textSize="@dimen/size_12"
+                android:textColor="@color/white_alpha" />
+
+            <TextView
+                android:layout_height="@dimen/margin_30"
+                android:layout_width="@dimen/margin_80"
+                android:text="@string/login_address"
+                style="@style/table_header"
+                android:gravity="center"
+                android:textSize="@dimen/size_12"
+                android:textColor="@color/white_alpha" />
+
+            <TextView
+                android:layout_height="@dimen/margin_30"
+                android:layout_width="@dimen/margin_80"
+                android:text="@string/logout_address"
+                style="@style/table_header"
+                android:gravity="center"
+                android:textSize="@dimen/size_12" />
+
+            <TextView
+                android:layout_height="@dimen/margin_30"
+                android:layout_width="@dimen/margin_80"
+                android:text="@string/firm_id"
+                style="@style/table_header"
+                android:gravity="center"
+                android:textSize="@dimen/size_12"
+                android:textColor="@color/white_alpha" />
+
+
+            <TextView
+                android:layout_height="@dimen/margin_30"
+                android:layout_width="@dimen/margin_80"
+                android:text="@string/status"
+                style="@style/table_header"
+                android:gravity="center"
+                android:textSize="@dimen/size_12"
+                android:textColor="@color/white_alpha" />
+
+            <TextView
+                android:layout_height="@dimen/margin_30"
+                android:layout_width="@dimen/margin_80"
+                android:text="@string/userId"
+                style="@style/table_header"
+                android:gravity="center"
+                android:textSize="@dimen/size_12"
+                android:textColor="@color/white_alpha" />
+
+            <TextView
+                android:layout_height="@dimen/margin_30"
+                android:layout_width="@dimen/margin_80"
+                android:text="@string/created_at"
+                style="@style/table_header"
+                android:gravity="center"
+                android:textSize="@dimen/size_12"
+                android:textColor="@color/white_alpha" />
+
+        </TableRow>
+
+    </TableLayout>
+</LinearLayout>

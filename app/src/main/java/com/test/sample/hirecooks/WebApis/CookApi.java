@@ -1,7 +1,7 @@
 package com.test.sample.hirecooks.WebApis;
-import com.test.sample.hirecooks.Models.MenuResponse.Menus;
 import com.test.sample.hirecooks.Models.cooks.Cooks;
 import com.test.sample.hirecooks.Models.cooks.Result;
+
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -21,7 +21,7 @@ public interface CookApi {
             @Field("phone") String phone,
             @Field("cook_type") String cook_type,
             @Field("image") String image,
-            @Field("address") String address);
+            @Field("address_book") String address);
 
 
     @FormUrlEncoded
@@ -44,6 +44,6 @@ public interface CookApi {
             @Field("gender") String gender,
             @Field("phone") String phone,
             @Field("image") String image,
-            @Field("address") String address);
+            @Field("address_book") String address);
 
 }

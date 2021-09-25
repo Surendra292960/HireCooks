@@ -3,18 +3,26 @@ package com.test.sample.hirecooks.Activity.Users;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Models.users.Result;
+import com.test.sample.hirecooks.Models.Users.Example;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.WebApis.UserApi;
 
+import java.util.List;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -27,6 +35,9 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
     private View appRoot;
     private ProgressBarUtil progressBarUtil;
     private UserApi mService;
+    private FirebaseAuth mAuth;
+    private FirebaseUser user ;
+    String newPassword = "SOME-SECURE-PASSWORD";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +48,7 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
     }
 
     private void initViews() {
+        mAuth = FirebaseAuth.getInstance();
         progressBarUtil = new ProgressBarUtil(this);
         appRoot = findViewById(R.id.appRoot);
         editTextEmail = findViewById(R.id.editTextEmail);
@@ -88,32 +100,45 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
     private void forgotPassword(String email, String password) {
         progressBarUtil.showProgress();
         mService = ApiClient.getClient().create(UserApi.class);
-        Call<Result> call = mService.forgotPassword(email, password);
-        call.enqueue(new Callback<Result>() {
+        Call<List<Example>> call = mService.forgotPassword(email, password);
+        call.enqueue(new Callback<List<Example>>() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
-                int statusCode = response.code();
-                if(statusCode==200&&response.body().getError()==false){
+            public void onResponse(Call<List<Example>> call, Response<List<Example>> response) {
+                if(response.code()==200) {
                     progressBarUtil.hideProgress();
-                    assert response.body() != null;
-                    if (!response.body().getError()) {
-                        ShowToast(response.body().getMessage());
-                        finish();
-                        startActivity(new Intent(getApplicationContext(), UserSignInActivity.class));
-                    } else {
-                        ShowToast(response.body().getMessage());
+                    for(Example example:response.body()){
+                        if(!example.getError()){
+                            //updateFirebasePassword( password );
+                            ShowToast( example.getMessage());
+                            startActivity( new Intent( getApplicationContext(), UserSignInActivity.class ) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK) );
+                            finish();
+                        }else{
+                            ShowToast( example.getMessage());
+                        }
                     }
-                }else{
-                    ShowToast(response.body().getMessage());
                 }
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<List<Example>> call, Throwable t) {
                 progressBarUtil.hideProgress();
                 System.out.println("Suree :"+ t.getMessage());
                 ShowToast("Please Check Intenet Connection");
             }
         });
     }
+
+    private void updateFirebasePassword(String password) {
+        user = mAuth.getCurrentUser();
+        user.updatePassword(newPassword)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User password updated.");
+                        }
+                    }
+                });
+    }
+
 }

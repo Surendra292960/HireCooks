@@ -49,8 +49,9 @@ public class ProductsCategoryAdapter extends RecyclerView.Adapter<ProductsCatego
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     Intent intent = new Intent(mCtx, EditCategoryActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("Category", categories.get(position));
+                    bundle.putSerializable("Video", categories.get(position));
                     intent.putExtras(bundle);
+                    intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     mCtx.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) mCtx).toBundle());
                 }
             }

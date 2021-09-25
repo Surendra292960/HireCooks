@@ -15,18 +15,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Utils.BaseActivity;
-import com.test.sample.hirecooks.Models.users.Result;
+import com.test.sample.hirecooks.Models.Users.Example;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
-import com.test.sample.hirecooks.Utils.Constants;
+import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.UserApi;
 
 import java.security.MessageDigest;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,13 +46,14 @@ public class UserSignInActivity extends BaseActivity implements View.OnClickList
     private View appRoot;
     private ProgressBarUtil progressBarUtil;
     private UserApi mService;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
+        mAuth = FirebaseAuth.getInstance();
         progressBarUtil = new ProgressBarUtil(this);
         appRoot = findViewById(R.id.appRoot);
         txtSignUp = findViewById(R.id.txtSignUp);
@@ -58,14 +66,14 @@ public class UserSignInActivity extends BaseActivity implements View.OnClickList
         txtSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(UserSignInActivity.this, PhoneVerification.class));
+                startActivity(new Intent(UserSignInActivity.this, PhoneVerification.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
                 finish();
             }
         });
         txtForgotPasswrd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(UserSignInActivity.this,ForgotPasswordActivity.class));
+                startActivity(new Intent(UserSignInActivity.this,ForgotPasswordActivity.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
                 finish();
             }
         });
@@ -77,68 +85,90 @@ public class UserSignInActivity extends BaseActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         if (view == buttonSignIn) {
-            SignInValidation();
+          validation();
         }
     }
 
-    private void SignInValidation() {
-        String email = Objects.requireNonNull(editTextEmail.getText()).toString().trim();
-        String password = Objects.requireNonNull(editTextPassword.getText()).toString().trim();
-
-        if (TextUtils.isEmpty(email)) {
-            editTextEmail.setError("Please enter email");
+    private void validation() {
+        String email = editTextEmail.getText().toString();
+        String password = editTextPassword.getText().toString();
+        if(TextUtils.isEmpty(email)){
+            editTextEmail.setError( "Please Enter email" );
+            editTextEmail.requestFocus();
+            return;
+        } if(TextUtils.isEmpty(password )){
+            editTextPassword.setError( "Please Enter email" );
+            editTextPassword.requestFocus();
+            return;
+        } if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            editTextEmail.setError("Enter a valid email");
             editTextEmail.requestFocus();
             return;
         }
-        if (TextUtils.isEmpty(password)) {
-            editTextPassword.setError("Please enter password");
-            editTextPassword.requestFocus();
-            return;
-        }
-        ResultSignIn(email,password);
+        List<Example> exampleList = new ArrayList<>();
+        Example exampls = new Example();
+        List<User> userList = new ArrayList<>();
+        User user = new User();
+        user.setEmail( editTextEmail.getText().toString() );
+        user.setPassword( editTextPassword.getText().toString() );
+        userList.add( user );
+        exampls.setUsers( userList );
+        exampleList.add( exampls );
+        signIn(exampleList);
     }
 
-
-    private void ResultSignIn(String email, String password) {
+    private void signIn(List<Example> exampleList) {
         progressBarUtil.showProgress();
         mService = ApiClient.getClient().create(UserApi.class);
-        Call<Result> call = mService.userLogin(email, password);
-        call.enqueue(new Callback<Result>() {
+        Call<List<Example>> call = mService.userLogin(exampleList);
+        call.enqueue(new Callback<List<Example>>() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
+            public void onResponse(Call<List<Example>> call, Response<List<Example>> response) {
                 int statusCode = response.code();
-                if(statusCode==200&&response.body().getError()==false){
+                if(statusCode==200){
                     progressBarUtil.hideProgress();
-                    assert response.body() != null;
-                    if (!response.body().getError()) {
-                        Constants.CurrentUser = response.body();
-                        if(Constants.CurrentUser.getUser().getUserType().equalsIgnoreCase("User")||
-                                Constants.CurrentUser.getUser().getUserType().equalsIgnoreCase("Manager")||
-                                Constants.CurrentUser.getUser().getUserType().equalsIgnoreCase("SuperAdmin")||
-                                Constants.CurrentUser.getUser().getUserType().equalsIgnoreCase("Cook")){
-                            ShowToast("Login Successfull");
-                            SharedPrefManager.getInstance(getApplicationContext()).userLogin(Constants.CurrentUser.getUser());
-                            finish();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        }else{
-                            ShowToast("You Can`t Access");
+                    for(Example example:response.body()){
+                        ShowToast( example.getMessage() );
+                        if(!example.getError()) {
+                           for(User user:example.getUsers()){
+                               updateUserStatus(user.getId(),1,user.getEmail());
+                               SharedPrefManager.getInstance(getApplicationContext()).userLogin( user);
+                               startActivity(new Intent(getApplicationContext(), MainActivity.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+                               finish();
+                           }
                         }
-                    } else {
-                        ShowToast(response.body().getMessage());
                     }
-                }else{
-                    ShowToast(response.body().getMessage());
                 }
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<List<Example>> call, Throwable t) {
                 progressBarUtil.hideProgress();
                 System.out.println("Suree :"+ t.getMessage());
                 ShowToast("Please Check Intenet Connection");
             }
         });
     }
+
+    private void siginWithFirebase(String email ,String password){
+        mAuth.signInWithEmailAndPassword(email,password)
+                .addOnCompleteListener(UserSignInActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            //verification successful we will start the profile activity
+                            Log.d("Suree", "Signin with firebase");
+
+                        } else {
+                            String message = "Somthing is wrong, we will fix it soon...";
+                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                message = "Invalid code entered...";
+                            }
+                        }
+                    }
+                });
+    }
+
     // Provides Key Hash
     private void printKeyHash() {
         try{

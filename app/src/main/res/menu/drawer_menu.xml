@@ -5,44 +5,18 @@
             android:icon="@drawable/ic_home_black_24dp"
             android:title="@string/title_home" />
 
-     <!--   <item
-            android:id="@+id/menu_offers"
-            android:icon="@drawable/ic_local_offer_black_24dp"
-            android:title="@string/offer_banner" />-->
-
         <item
             android:id="@+id/menu_cooks"
             android:icon="@drawable/ic_profiles"
             android:title="@string/cook" />
-
-<!--        <item
-            android:id="@+id/menu_newproducts"
-            android:icon="@drawable/ic_fiber_new_black_24dp"
-            android:title="@string/our_new_product" />
-
-        <item
-            android:id="@+id/menu_popularproducts"
-            android:icon="@drawable/ic_grid"
-            android:title="@string/popular_products" />-->
-
 
         <item
             android:id="@+id/menu_favourite"
             android:icon="@drawable/ic_wishlist_icon"
             android:title="@string/my_wishlist"/>
 
-        <item
-            android:id="@+id/menu_message"
-            android:icon="@drawable/ic_message_black_24dp"
-            android:title="@string/messages" />
-
     </group>
     <group android:id="@+id/menu_group_2">
-
-        <item
-            android:id="@+id/menu_recieved_orders"
-            android:icon="@drawable/ic_format_list_bulleted_black_24dp"
-            android:title="@string/recived_order"/>
 
         <item
             android:id="@+id/menu_myorders"

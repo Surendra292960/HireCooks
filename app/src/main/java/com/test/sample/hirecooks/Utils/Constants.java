@@ -7,13 +7,9 @@ import android.view.View;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
-import com.test.sample.hirecooks.Models.OfferSubCategory.OffersSubcategory;
-import com.test.sample.hirecooks.Models.SubCategory.Response.SubCategory;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.Models.TokenResponse.TokenResult;
-import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
-import com.test.sample.hirecooks.Models.users.Result;
-import com.test.sample.hirecooks.Models.users.User;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.RoomDatabase.SecondryAddress_DB.Address;
 
 import java.util.List;
@@ -29,16 +25,15 @@ public class Constants {
     public static Address ADDRESS = null;
     public static String USER_PROFILE = null;
     public static String locationApiKey = "AIzaSyC-BYCFrpXUa4CI-H9fRqWEc0-I_ylk31k";
-    public static Result CurrentUser = null;
+    String s = "AIzaSyBm_OQWOR7nRG7uPjRgtkeXwHSjWIbjmz4";
+    public static User CurrentUser = null;
     public static String CurrentUserPhoneNumber = null;
+    public static String add_status_type = null;
     public static TokenResult CurrentToken = null;
-    public static List<SubCategory> SUBCATEGORY = null;
     public static List<Subcategory> SUBCATEGORYs = null;
-    public static List<OffersSubcategory> OFFER_SUBCATEGORY = null;
-    public static List<com.test.sample.hirecooks.Models.SearchSubCategory.Search> SEARCH = null;
     public static List<Map> NEARBY_VENDERS_LOCATION = null;
     public static User SIGNUP_USER = null;
-    public static List<UserResponse> NEARBY_VENDERS = null;
+    public static List<User> NEARBY_VENDERS = null;
 
     //make bg a little bit darker
     public static final View.OnTouchListener FOCUS_TOUCH_LISTENER = new View.OnTouchListener() {

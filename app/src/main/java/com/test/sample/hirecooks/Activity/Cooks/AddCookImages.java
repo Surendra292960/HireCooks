@@ -25,7 +25,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.Models.cooks.Request.CooksImagesResult;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.BaseActivity;
@@ -45,7 +45,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class AddCookImages extends BaseActivity {
-    private UserResponse users;
+    private User users;
     private ProgressBarUtil progressBarUtil;
     private CookImages mService = Common.getCookImagesAPI();
     private final int PICK_IMAGE_REQUEST = 71;
@@ -73,7 +73,7 @@ public class AddCookImages extends BaseActivity {
 
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
-            users = (UserResponse)bundle.getSerializable("Cooks");
+            users = (User)bundle.getSerializable("Cooks");
             if(users!=null){
               //  ApiServiceCall(users);
             }
@@ -296,7 +296,7 @@ public class AddCookImages extends BaseActivity {
         }
     }
 
-    private void ApiServiceCall(UserResponse users, Uri imageUrl) {
+    private void ApiServiceCall(User users, Uri imageUrl) {
         String url = imageUrl.toString();
         progressBarUtil.showProgress();
         mService.addCookImages(users.getId(),url)

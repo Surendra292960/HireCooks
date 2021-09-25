@@ -7,63 +7,86 @@
     android:id="@+id/appRoot"
     tools:context=".Activity.Orders.RecievedOrderActivity">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/activity_main"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeToRefresh"
+        <LinearLayout
+            android:id="@+id/orders_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/nested_scroll_view"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeToRefresh"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                android:layout_height="wrap_content">
 
-                <ScrollView
+                <androidx.core.widget.NestedScrollView
+                    android:id="@+id/nested_scroll_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fillViewport="true">
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                    <LinearLayout
+                    <ScrollView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:visibility="gone"
-                            android:id="@+id/recieved_orders_recycler"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scrollbars="none"
-                            android:layoutAnimation="@anim/layout_animation_fall_down"
-                            android:scrollbarAlwaysDrawHorizontalTrack="true"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
+                        android:fillViewport="true">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="70dp"
+                            android:layout_height="match_parent"
                             android:orientation="vertical">
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:visibility="visible"
+                                android:id="@+id/recieved_orders_recycler"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scrollbars="none"
+                                android:layoutAnimation="@anim/layout_animation_fall_down"
+                                android:scrollbarAlwaysDrawHorizontalTrack="true"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="70dp"
+                                android:orientation="vertical">
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
-                    </LinearLayout>
+                    </ScrollView>
 
-                </ScrollView>
+                </androidx.core.widget.NestedScrollView>
 
-            </androidx.core.widget.NestedScrollView>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/no_internet_connection_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:lottie_fileName="no_internet.json"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/no_orders"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -92,6 +115,7 @@
                 android:textColor="#848484"
                 android:textSize="15sp" />
         </LinearLayout>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </FrameLayout>
 
 </LinearLayout>

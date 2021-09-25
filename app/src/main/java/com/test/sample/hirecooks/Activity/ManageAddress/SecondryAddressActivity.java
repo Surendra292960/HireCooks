@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Button;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,8 +13,7 @@ import com.test.sample.hirecooks.Adapter.Users.AddressAdapter;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Maps;
 import com.test.sample.hirecooks.Models.NewOrder.OrdersTable;
-import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
-import com.test.sample.hirecooks.Models.users.User;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Common;
@@ -32,9 +31,9 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class SecondryAddressActivity extends BaseActivity {
-    private TextView buttonAddAddress;
+    private Button buttonAddAddress;
     private RecyclerView recyclerView;
-    private UserResponse userResponse;
+    private User userResponse;
     private ProgressBarUtil progressBarUtil;
     private MapApi mService = Common.getAPI();;
     private User user;
@@ -51,7 +50,7 @@ public class SecondryAddressActivity extends BaseActivity {
         ApiServiceCall();
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
-            userResponse = (UserResponse)bundle.getSerializable("User");
+            userResponse = (User)bundle.getSerializable("User");
             ordersTable = (OrdersTable)bundle.getSerializable("OrdersTable");
         }
     }
@@ -76,7 +75,7 @@ public class SecondryAddressActivity extends BaseActivity {
 
     private void ApiServiceCall() {
         progressBarUtil.showProgress();
-        mService.getAllAddress()
+        mService.getAllAddress(user.getId())
                 .subscribeOn( Schedulers.io())
                 .observeOn( AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Maps>() {

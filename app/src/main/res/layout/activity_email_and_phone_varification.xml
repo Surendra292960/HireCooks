@@ -15,12 +15,11 @@
         tools:ignore="MissingConstraints">
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Theme.AccountKit.Outline"
             android:id="@+id/editTextEmail_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="16dp"
+            android:hint="@string/email"
             app:boxStrokeColor="@color/style_color_primary">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -28,31 +27,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:hint="@string/email"
                 android:textSize="@dimen/size_14"
                 android:inputType="textEmailAddress"
                 android:textAlignment="viewStart" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editTextPassword_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="16dp"
-            app:boxStrokeColor="@color/style_color_primary">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:hint="@string/password"
-                android:textSize="@dimen/size_14"
-                android:inputType="textPassword"
-                android:textAlignment="viewStart" />
-        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/verifyEmail"

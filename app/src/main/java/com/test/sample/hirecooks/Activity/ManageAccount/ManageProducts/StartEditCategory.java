@@ -29,7 +29,7 @@ import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.Category.Example;
-import com.test.sample.hirecooks.Models.users.User;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.ProductApi;
@@ -71,13 +71,13 @@ public class StartEditCategory extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
             categoryName= bundle.getString("CategoryName");
-            mCategory = (Category) bundle.getSerializable("Category");
+            mCategory = (Category) bundle.getSerializable("Video");
             subcategoryId = bundle.getInt( "CreateCategory" );
         }
         if(mCategory!=null){
-            getSupportActionBar().setTitle("Update "+mCategory.getName()+" Category");
+            getSupportActionBar().setTitle("Update "+mCategory.getName());
         }else{
-            getSupportActionBar().setTitle("Create Category");
+            getSupportActionBar().setTitle("Create Video");
         }
         initViews();
     }

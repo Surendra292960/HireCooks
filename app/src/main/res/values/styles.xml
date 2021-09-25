@@ -11,6 +11,7 @@
         <item name="android:windowAllowReturnTransitionOverlap" tools:ignore="NewApi">true</item>
     </style>
 
+
     <!--search-view-->
     <style name="SearchAutoCompleteTextView" parent="Widget.AppCompat.Light.AutoCompleteTextView">
         <item name="android:textColor">@color/dark_gray</item>
@@ -54,4 +55,30 @@
         <item name="android:maxLines">1</item>
     </style>
 
+
+    <style name="table_row_item" parent="@android:style/TextAppearance.Small">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">@dimen/size_10</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:layout_marginRight">@dimen/_1sdp</item>
+        <item name="android:layout_marginEnd">@dimen/_1sdp</item>
+        <item name="android:paddingStart">@dimen/_10sdp</item>
+        <item name="android:paddingLeft">@dimen/_10sdp</item>
+        <item name="android:layout_height">@dimen/margin_30</item>
+    </style>
+
+    <style name="table_header" parent="@android:style/TextAppearance.Small">
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">@dimen/size_12</item>
+        <item name="android:background">@color/style_color_primary</item>
+        <item name="android:layout_marginRight">@dimen/_1sdp</item>
+        <item name="android:layout_marginEnd">@dimen/_1sdp</item>
+        <item name="android:paddingStart">@dimen/_10sdp</item>
+        <item name="android:paddingLeft">@dimen/_10sdp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/margin_40</item>
+    </style>
 </resources>

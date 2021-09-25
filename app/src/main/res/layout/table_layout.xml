@@ -1,0 +1,112 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TableLayout
+        android:id="@+id/table_heading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="@dimen/margin_80"
+                android:layout_height="@dimen/margin_80"
+                android:gravity="center"
+                android:textSize="@dimen/size_12"
+                android:background="@drawable/rzp_border"
+                android:id="@+id/id"/>
+
+
+            <TextView
+                android:layout_width="@dimen/margin_80"
+                android:layout_height="@dimen/margin_80"
+                android:gravity="center"
+                android:background="@drawable/rzp_border"
+                android:textSize="@dimen/size_12"
+                android:id="@+id/name" />
+
+            <TextView
+                android:layout_height="@dimen/margin_80"
+                android:layout_width="@dimen/margin_80"
+                android:gravity="center"
+                android:background="@drawable/rzp_border"
+                android:textSize="@dimen/size_12"
+                android:id="@+id/user_type" />
+
+            <TextView
+                android:layout_height="@dimen/margin_80"
+                android:layout_width="@dimen/margin_80"
+                android:gravity="center"
+                android:background="@drawable/rzp_border"
+                android:textSize="@dimen/size_12"
+                android:id="@+id/login_date"/>
+
+
+            <TextView
+                android:layout_height="@dimen/margin_80"
+                android:layout_width="@dimen/margin_80"
+                android:gravity="center"
+                android:background="@drawable/rzp_border"
+                android:textSize="@dimen/size_12"
+                android:id="@+id/logout_date"/>
+
+            <TextView
+                android:layout_height="@dimen/margin_80"
+                android:layout_width="@dimen/margin_80"
+                android:gravity="center"
+                android:background="@drawable/rzp_border"
+                android:textSize="@dimen/size_12"
+                android:id="@+id/login_address" />
+
+            <TextView
+                android:layout_height="@dimen/margin_80"
+                android:layout_width="@dimen/margin_80"
+                android:gravity="center"
+                android:background="@drawable/rzp_border"
+                android:textSize="@dimen/size_12"
+                android:id="@+id/logout_address"/>
+
+            <TextView
+                android:layout_height="@dimen/margin_80"
+                android:layout_width="@dimen/margin_80"
+                android:gravity="center"
+                android:background="@drawable/rzp_border"
+                android:textSize="@dimen/size_12"
+                android:id="@+id/firm_id"/>
+
+
+            <TextView
+                android:layout_height="@dimen/margin_80"
+                android:layout_width="@dimen/margin_80"
+                android:gravity="center"
+                android:background="@drawable/rzp_border"
+                android:textSize="@dimen/size_12"
+                android:id="@+id/status"/>
+
+            <TextView
+                android:layout_height="@dimen/margin_80"
+                android:layout_width="@dimen/margin_80"
+                android:gravity="center"
+                android:background="@drawable/rzp_border"
+                android:textSize="@dimen/size_12"
+                android:id="@+id/user_id"/>
+
+            <TextView
+
+                android:layout_height="@dimen/margin_80"
+                android:layout_width="@dimen/margin_80"
+                android:gravity="center"
+                android:background="@drawable/rzp_border"
+                android:textSize="@dimen/size_12"
+                android:id="@+id/created_at"/>
+
+        </TableRow>
+
+    </TableLayout>
+
+</LinearLayout>

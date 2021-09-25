@@ -1,6 +1,7 @@
 package com.test.sample.hirecooks.Activity.ManageAccount.ManageProducts;
 
 import android.annotation.SuppressLint;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -9,10 +10,13 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -22,6 +26,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.SearchView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,7 +38,7 @@ import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.SubCategory.Example;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
-import com.test.sample.hirecooks.Models.users.User;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.ProductApi;
@@ -60,6 +65,7 @@ public class EditSubCategoryActivity extends AppCompatActivity {
     private FloatingActionButton add_subcategory;
     private LinearLayout no_result_found;
     private User user;
+    private List<Subcategory> filteredList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +84,7 @@ public class EditSubCategoryActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             categoryName= bundle.getString("CategoryName");
-            category = (Category) bundle.getSerializable("Category");
+            category = (Category) bundle.getSerializable("Video");
             if(category.getCategoryid()!=0){
                 getSubCategory(category.getId());
             }else {
@@ -93,11 +99,13 @@ public class EditSubCategoryActivity extends AppCompatActivity {
                 if(category!=null) {
                     bundle.putSerializable( "mCategory", category );
                     intent.putExtras( bundle );
+                    intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity( intent );
                 }
             }
         } );
     }
+
 
     private void getSubCategory(int id) {
         ProductApi mService = ApiClient.getClient().create(ProductApi.class);
@@ -110,7 +118,7 @@ public class EditSubCategoryActivity extends AppCompatActivity {
                 if (statusCode == 200) {
                     if(response.body()!=null&&response.body().size()!=0){
                         List<Subcategory> subcategoryList = new ArrayList<>(  );
-                        List<Subcategory> filteredList = new ArrayList<>(  );
+                        filteredList = new ArrayList<>(  );
                         for(Example example:response.body()){
                             if(example.getError()==false){
                                 for(Subcategory subcategory:example.getSubcategory()){
@@ -162,6 +170,61 @@ public class EditSubCategoryActivity extends AppCompatActivity {
         });
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+        MenuItem searchItem = menu.getItem(0);
+        SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setFocusable(true);
+        searchItem.expandActionView();
+
+        searchView.setOnQueryTextListener( new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(filteredList.size()!=0){
+                    startSearch( query );
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(filteredList.size()!=0){
+                    startSearch( newText );
+                }
+                return false;
+            }
+        } );
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void startSearch(CharSequence text) {
+        List<Subcategory> subcategory = new ArrayList<>();
+        try {
+            if (filteredList != null && filteredList.size() != 0) {
+                for (int i = 0; i < filteredList.size(); i++) {
+                    String productName = "";
+
+                    if (filteredList.get(i).getName() != null) {
+                        productName = filteredList.get(i).getName();
+                    }
+
+                    if (productName.toLowerCase().contains(String.valueOf(text).toLowerCase())) {
+                        subcategory.add(filteredList.get(i));
+                    }
+                }
+
+                SubcategoryAdapter mAdapter = new SubcategoryAdapter( EditSubCategoryActivity.this, subcategory);
+                subcategory_recycler.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public class SubcategoryAdapter extends RecyclerView.Adapter<EditSubCategoryActivity.SubcategoryAdapter.MyViewHolder> {
         List<Subcategory> productList;
         Context context;
@@ -177,7 +240,7 @@ public class EditSubCategoryActivity extends AppCompatActivity {
         @Override
         public EditSubCategoryActivity.SubcategoryAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
             View itemView;
-            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.edit_subcategory_adadpter_layout, parent, false);
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_horizontal_layout, parent, false);
             return new EditSubCategoryActivity.SubcategoryAdapter.MyViewHolder(itemView);
         }
 
@@ -187,8 +250,10 @@ public class EditSubCategoryActivity extends AppCompatActivity {
             if(product!=null){
                 if(product.getAcceptingOrder()==0){
                     holder.order_not_accepting.setVisibility(View.VISIBLE);
+                    holder.add_item_layout.setVisibility( GONE );
                 }else{
                     holder.order_not_accepting.setVisibility( GONE);
+                    holder.add_item_layout.setVisibility( GONE );
                 }
 
                 holder.name.setText(product.getName());
@@ -219,14 +284,16 @@ public class EditSubCategoryActivity extends AppCompatActivity {
             final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder( EditSubCategoryActivity.this);
             LayoutInflater inflater = EditSubCategoryActivity.this.getLayoutInflater();
             View view = inflater.inflate(R.layout.edit_subcategory_alert,null);
-            AppCompatTextView CancelBtn = view.findViewById(R.id.no_btn);
+            AppCompatTextView deleteBtn = view.findViewById(R.id.no_btn);
+            deleteBtn.setText( "Delete" );
             AppCompatTextView editBtn = view.findViewById(R.id.edit_btn);
             dialogBuilder.setView(view);
             final android.app.AlertDialog dialog = dialogBuilder.create();
             dialog.show();
-            CancelBtn.setOnClickListener( v -> {
+            deleteBtn.setOnClickListener( v -> {
                 try {
                     dialog.dismiss();
+                    deleteSubCategory(subcategory.getProductUniquekey());
                 }
                 catch (Exception ex) {
                     ex.printStackTrace();
@@ -240,6 +307,7 @@ public class EditSubCategoryActivity extends AppCompatActivity {
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("SubCategory", subcategory);
                         intent.putExtras(bundle);
+                        intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                     }
                 }
@@ -247,6 +315,34 @@ public class EditSubCategoryActivity extends AppCompatActivity {
                     ex.printStackTrace();
                 }
             } );
+        }
+
+        private void deleteSubCategory(String product_uniquekey) {
+            ProductApi mService = ApiClient.getClient().create(ProductApi.class);
+            Call<ArrayList<Example>> call = mService.deleteSubCategory(product_uniquekey);
+            call.enqueue(new Callback<ArrayList<Example>>() {
+                @SuppressLint("WrongConstant")
+                @Override
+                public void onResponse(Call<ArrayList<Example>> call, Response<ArrayList<Example>> response) {
+                    int statusCode = response.code();
+                    if (statusCode == 200) {
+                        for(Example example:response.body()){
+                            Toast.makeText( EditSubCategoryActivity.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
+                            if(!example.getError()){
+                                getSubCategory(category.getId());
+                                Toast.makeText( EditSubCategoryActivity.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
+                            }
+                        }
+                    } else {
+                        Toast.makeText( EditSubCategoryActivity.this, R.string.failed_due_to + statusCode, Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<Example>> call, Throwable t) {
+                    System.out.println("Suree : " + t.getMessage());
+                }
+            });
         }
 
         @Override
@@ -263,7 +359,8 @@ public class EditSubCategoryActivity extends AppCompatActivity {
             ImageView imageView;
             TextView discount, name, sellrate,displayRate,discription,item_short_desc;
             TextView add_item, remove_item;
-            LinearLayout add_item_layout,order_not_accepting;
+            LinearLayout add_item_layout;
+            FrameLayout order_not_accepting;
             CardView cardview;
 
             public MyViewHolder(@NonNull View itemView) {
@@ -279,6 +376,7 @@ public class EditSubCategoryActivity extends AppCompatActivity {
                 discription = itemView.findViewById(R.id.item_description);
                 item_short_desc = itemView.findViewById(R.id.item_short_desc);
                 order_not_accepting = itemView.findViewById(R.id.order_not_accepting);
+                add_item_layout = itemView.findViewById(R.id.add_item_layout);
             }
         }
     }

@@ -1,17 +1,20 @@
 package com.test.sample.hirecooks.Tasks.Activity;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
 import androidx.appcompat.app.AppCompatActivity;
-import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
+
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.TaskDB.DatabaseClient;
 import com.test.sample.hirecooks.RoomDatabase.TaskDB.Task;
 
 public class AddTaskActivity extends AppCompatActivity {
     private EditText editTextTask, editTextDesc, editTextFinishBy;
-    private UserResponse userResponse;
+    private User userResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +23,7 @@ public class AddTaskActivity extends AppCompatActivity {
         initViews();
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
-            userResponse = (UserResponse)bundle.getSerializable("User");
+            userResponse = (User)bundle.getSerializable("User");
         }
     }
 

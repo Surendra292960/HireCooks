@@ -21,6 +21,9 @@ public class Offer implements Serializable {
     @SerializedName("Color")
     @Expose
     public String Color ;
+    @SerializedName("Image")
+    @Expose
+    public int Image ;
 
     public Offer(int id, String name, String link, String roundIcon, String color) {
         Id = id;
@@ -28,6 +31,12 @@ public class Offer implements Serializable {
         Link = link;
         RoundIcon = roundIcon;
         Color = color;
+    }
+    public Offer(int id, String name, String link, int Image) {
+        Id = id;
+        Name = name;
+        Link = link;
+        Image = Image;
     }
 
     public int getId() {
@@ -68,5 +77,13 @@ public class Offer implements Serializable {
 
     public void setColor(String color) {
         Color = color;
+    }
+
+    public int getImage() {
+        return Image;
+    }
+
+    public void setImage(int image) {
+        Image = image;
     }
 }

@@ -1,79 +1,93 @@
 package com.test.sample.hirecooks.Activity.Users;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.transition.Explode;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.test.sample.hirecooks.Adapter.Users.UsersAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
+import com.test.sample.hirecooks.Activity.Users.FirmUsers.FirmUserSignupActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
-import com.test.sample.hirecooks.Models.UsersResponse.UsersResponse;
+import com.test.sample.hirecooks.Models.Users.Example;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.Utils.APIUrl;
 import com.test.sample.hirecooks.Utils.OnButtonClickListener;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
+import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.UserApi;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//import com.facebook.drawee.backends.pipeline.Fresco;
+
 public class UsersActivity extends AppCompatActivity {
     private RecyclerView usersRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private UsersAdapter adapter;
+    private UserAdapter adapter;
     private ProgressBarUtil progressBarUtil;
-    private List<UserResponse> usersList;
+    private List<User> usersList;
     private View appRoot;
+    private FloatingActionButton add_user;
     private OnButtonClickListener listener;
+    private User user;
+    private ArrayList<User> filterusersList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      //  getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        int flags = WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-                | WindowManager.LayoutParams.FLAG_FULLSCREEN;
-
-        getWindow().addFlags(flags);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setExitTransition(new Explode());
-        }
         setContentView(R.layout.activity_users);
         Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setTitle("");
         progressBarUtil = new ProgressBarUtil(this);
-        appRoot = findViewById(R.id.appRoot);
-        Fresco.initialize(this);
+        //Fresco.initialize(this);
+        initViews();
         getUsers();
+
+    }
+
+    private void initViews() {
+        user = SharedPrefManager.getInstance( this ).getUser();
+        appRoot = findViewById(R.id.appRoot);
+        add_user = findViewById(R.id.add_user);
+        add_user.setVisibility( View.VISIBLE );
         usersRecyclerView = findViewById(R.id.users_list_recycler_view);
         mSwipeRefreshLayout = findViewById(R.id.swipeToRefresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.style_color_accent);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
+                new Handler().postDelayed( new Runnable() {
                     @Override
                     public void run() {
                         mSwipeRefreshLayout.setRefreshing(false);
@@ -85,7 +99,7 @@ public class UsersActivity extends AppCompatActivity {
 
         final LinearLayoutManager layoutParams = new LinearLayoutManager(this);
         usersRecyclerView.setLayoutManager(layoutParams);
-        UsersAdapter adapter = new UsersAdapter(this,usersList,listener);
+        adapter = new UserAdapter(this,usersList);
         usersRecyclerView.setAdapter(adapter);
         usersRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
             @Override
@@ -100,34 +114,49 @@ public class UsersActivity extends AppCompatActivity {
                 super.onScrollStateChanged(recyclerView, newState);
             }
         });
+
+        add_user.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity( new Intent( UsersActivity.this, FirmUserSignupActivity.class ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        } );
     }
 
     private void getUsers() {
         progressBarUtil.showProgress();
         UserApi service = ApiClient.getClient().create(UserApi.class);
-        Call<UsersResponse> call = service.getUsers();
-        call.enqueue(new Callback<UsersResponse>() {
+        Call<List<Example>> call = service.getUsers();
+        call.enqueue(new Callback<List<Example>>() {
             @SuppressLint("ShowToast")
             @Override
-            public void onResponse(@NonNull Call<UsersResponse> call, @NonNull Response<UsersResponse> response) {
-                int statusCode = response.code();
-                if (statusCode == 200) {
+            public void onResponse(@NonNull Call<List<Example>> call, @NonNull Response<List<Example>> response) {
+                if (response.code() == 200) {
                     progressBarUtil.hideProgress();
                     mSwipeRefreshLayout.onFinishTemporaryDetach();
-                    if (response.body() != null) {
-                        usersList = response.body().getUsersResponses();
-                        adapter = new UsersAdapter(UsersActivity.this, response.body().getUsersResponses(),listener);
-                        usersRecyclerView.setAdapter(adapter);
-                        Toast.makeText(getApplicationContext(), "Suree: " + response.code(), Toast.LENGTH_LONG);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Suree: " + response.code() + response.errorBody() + response.message(), Toast.LENGTH_LONG).show();
-                    }
+                    usersList = new ArrayList<>(  );
+                   filterusersList = new ArrayList<>(  );
+                  for(Example example:response.body()){
+                   if(!example.getError()){
+                      for(User users:example.getUsers()){
+                          if(users.getUserType().equalsIgnoreCase( "Admin" )||users.getUserType().equalsIgnoreCase( "Manager" )){
+                              usersList.add( users );
+                              Set<User> set = new HashSet<>( usersList );
+                              filterusersList = new ArrayList<>(set);
+                          }
+                      }
+                       if(filterusersList!=null&&filterusersList.size()!=0){
+                           adapter = new UserAdapter(UsersActivity.this, filterusersList);
+                           usersRecyclerView.setAdapter(adapter);
+                       }
+                   }
+                  }
                 }
             }
 
             @SuppressLint("ShowToast")
             @Override
-            public void onFailure(@NonNull Call<UsersResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<Example>> call, @NonNull Throwable t) {
                 progressBarUtil.hideProgress();
                 Toast.makeText(getApplicationContext(), R.string.error + t.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -158,21 +187,21 @@ public class UsersActivity extends AppCompatActivity {
         }
 
         private void searchUserByName(String s) {
-            List<UserResponse>  filteredList = new ArrayList<>();
+            List<User>  filteredList = new ArrayList<>();
             try{
                 for(int i=0;i<usersList.size();i++) {
-                    String cityName = "";
+                    String userName = "";
 
                     if(usersList.get (i).getName()!=null){
-                        cityName= usersList.get (i).getName();
+                        userName= usersList.get (i).getName();
                     }
 
-                    if(cityName.toLowerCase().contains(s.toLowerCase())) {
+                    if(userName.toLowerCase().contains(s.toLowerCase())) {
                         filteredList.add(usersList.get(i));
                     }
                 }
 
-                adapter = new UsersAdapter (UsersActivity.this, filteredList,listener);
+                adapter = new UserAdapter (UsersActivity.this, filteredList);
                 usersRecyclerView.setAdapter (adapter);
                 adapter.notifyDataSetChanged();
 
@@ -193,5 +222,127 @@ public class UsersActivity extends AppCompatActivity {
             this.finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+    public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
+        private List<User> users;
+        private Context mCtx;
+
+        public UserAdapter(Context mCtx, List<User> users) {
+            this.users = users;
+            this.mCtx = mCtx;
+        }
+
+        @NonNull
+        @Override
+        public UserAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_profiles, parent, false);
+            return new UserAdapter.ViewHolder(v);
+        }
+
+        @SuppressLint("SetTextI18n")
+        @Override
+        public void onBindViewHolder(@NonNull final UserAdapter.ViewHolder holder, final int position) {
+            final User user = users.get(position);
+            if(user.getId()== SharedPrefManager.getInstance( mCtx ).getUser().getId()){
+                holder.profile_layout.removeAllViews();
+                return;
+            }
+            if(user.getImage()!=null) {
+                if (user.getImage().contains("https://")) {
+                    Picasso.with(mCtx).load(user.getImage()).into(holder.profile_image);
+                } else if (user.getImage().contains(" ")) {
+
+                } else {
+                    Picasso.with(mCtx).load( APIUrl.PROFILE_URL + user.getImage()).into(holder.profile_image);
+                }
+            }
+            holder.textViewName.setText(user.getName());
+            holder.textViewEmail.setVisibility( View.GONE );
+            if(user.getStatus().equalsIgnoreCase( "1" )){
+                holder.status.setVisibility( View.VISIBLE );
+                holder.status.setText( "Active" );
+                holder.status.setBackgroundColor( android.graphics.Color.parseColor("#567845"));
+                holder.status.setTextColor( android.graphics.Color.parseColor("#ffffff"));
+            }else{
+                holder.status.setVisibility( View.VISIBLE );
+                holder.status.setText( "SignOut" );
+                holder.status.setBackgroundColor( android.graphics.Color.parseColor( "#ff0000" ));
+                holder.status.setTextColor( android.graphics.Color.parseColor("#ffffff"));
+            }
+            holder.profile_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showalertbox(user);
+                }
+            });
+        }
+
+        private void showalertbox(User user) {
+            final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder( UsersActivity.this);
+            LayoutInflater inflater = UsersActivity.this.getLayoutInflater();
+            View view = inflater.inflate(R.layout.edit_subcategory_alert,null);
+            AppCompatTextView noBtn = view.findViewById(R.id.no_btn);
+            AppCompatTextView editBtn = view.findViewById(R.id.edit_btn);
+            editBtn.setText( "Delete" );
+            dialogBuilder.setView(view);
+            final android.app.AlertDialog dialog = dialogBuilder.create();
+            dialog.show();
+            noBtn.setOnClickListener( v -> {
+                try {
+                    dialog.dismiss();
+                
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } );
+            editBtn.setOnClickListener( v -> {
+                dialog.dismiss();
+                deleteUser(user);
+            } );
+        }
+
+        @Override
+        public int getItemCount() {
+            return users == null ? 0 : users.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            private TextView textViewName,textViewEmail,status;
+            private ImageView profile_image;
+            private CardView profile_layout;
+
+            ViewHolder(View itemView) {
+                super(itemView);
+                textViewName = itemView.findViewById(R.id.textViewName);
+                textViewEmail = itemView.findViewById(R.id.textViewEmail);
+                status = itemView.findViewById(R.id.status);
+                profile_image = itemView.findViewById(R.id.profile_image);
+                profile_layout = itemView.findViewById(R.id.profile_layout);
+            }
+        }
+    }
+
+    private void deleteUser(User user) {
+        UserApi mService = ApiClient.getClient().create( UserApi.class );
+        Call<List<Example>> call = mService.deleteUser( user.getId() );
+        call.enqueue( new Callback<List<Example>>() {
+            @Override
+            public void onResponse(Call<List<Example>> call, Response<List<Example>> response) {
+                if(response.code()==200){
+                    for(Example example:response.body()){
+                        Toast.makeText( UsersActivity.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
+                        if(!example.getError()){
+                           getUsers();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Example>> call, Throwable t) {
+            System.out.println( "Suree : "+t.getMessage() );
+            }
+        } );
     }
 }

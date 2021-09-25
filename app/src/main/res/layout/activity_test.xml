@@ -88,7 +88,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/inputDestination"
             app:srcCompat="@drawable/ic_location"
-            app:tint="@color/colorPrimaryDark" />
+            app:tint="@color/style_color_primary" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputDestination"

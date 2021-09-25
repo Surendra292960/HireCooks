@@ -110,7 +110,6 @@
     <string name="delivery_charge" translatable="false">Delivery Charge</string>
     <string name="grand_total" translatable="false">Grand Total</string>
     <string name="hirecook_mony" translatable="false">HireCook Money</string>
-    <string name="submit" translatable="false">Submit</string>
     <string name="promo" translatable="false">Promo</string>
     <string name="promo_code" translatable="false">Promo Code</string>
     <string name="pay_now" translatable="false">Pay Now</string>
@@ -196,6 +195,25 @@
     <string name="content_description_title_image" translatable="false">80\'s Video Game Style Car Logo</string>
     <string name="content_desc_gas_gauge_indicator" translatable="false">Gas gauge indicator</string>
     <string name="content_desc_free_vs_premium_indicator" translatable="false">Free or Premium Image Indicator</string>
+    <string name="type_message" translatable="false">Type message</string>
+    <string name="submit" translatable="false">Submit</string>
+    <string name="search" translatable="false">Search...</string>
+    <string name="bike_number" translatable="false">Bike Number</string>
+    <string name="to_date" translatable="false">To Date</string>
+    <string name="from_date" translatable="false">From Date</string>
+    <string name="generate_report" translatable="false">Generate Report</string>
+    <string name="select_date" translatable="false">Select Date</string>
+    <string name="name" translatable="false">Name</string>
+    <string name="age" translatable="false">Age</string>
+    <string name="login_date" translatable="false">Login Date</string>
+    <string name="login_address" translatable="false">Login Address</string>
+    <string name="logout_address" translatable="false">Logout Address</string>
+    <string name="created_at" translatable="false">Created At</string>
+    <string name="firm_id" translatable="false">Firm Id</string>
+    <string name="logout_date" translatable="false">Logout Date</string>
+    <string name="id" translatable="false">ID</string>
+
+
     <string-array name="uploadImages">
         <item>Pick from gallery</item>
         <item>Click from camera</item>
@@ -230,9 +248,10 @@
     </string-array>
 
     <string-array name="user_type">
-        <item>Please Select </item>
-        <item>User</item>
-        <item>Cook</item>
+        <item>Select </item>
+        <item>Employee</item>
+        <item>Rider</item>
     </string-array>
+
 
 </resources>

@@ -16,17 +16,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Activity.Cooks.CooksDetailsActivity;
-import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.APIUrl;
 
 import java.util.List;
 
 public class CooksAdapter extends RecyclerView.Adapter<CooksAdapter.ViewHolder> {
-    private List<UserResponse> users;
+    private List<User> users;
     private Context mCtx;
 
-    public CooksAdapter(Context mCtx, List<UserResponse> users) {
+    public CooksAdapter(Context mCtx, List<User> users) {
         this.users = users;
         this.mCtx = mCtx;
     }
@@ -41,7 +41,7 @@ public class CooksAdapter extends RecyclerView.Adapter<CooksAdapter.ViewHolder> 
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        final UserResponse user = users.get(position);
+        final User user = users.get(position);
         if(user.getImage()!=null) {
             if (user.getImage().contains("https://")) {
                 Picasso.with(mCtx).load(user.getImage()).into(holder.profile_image);

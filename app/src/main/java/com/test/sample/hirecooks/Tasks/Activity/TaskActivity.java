@@ -1,24 +1,28 @@
 package com.test.sample.hirecooks.Tasks.Activity;
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.test.sample.hirecooks.Models.UsersResponse.UserResponse;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
-import com.test.sample.hirecooks.Tasks.Adapter.TasksAdapter;
 import com.test.sample.hirecooks.RoomDatabase.TaskDB.DatabaseClient;
 import com.test.sample.hirecooks.RoomDatabase.TaskDB.Task;
+import com.test.sample.hirecooks.Tasks.Adapter.TasksAdapter;
+
 import java.util.List;
 
 public class TaskActivity extends AppCompatActivity {
 
     private FloatingActionButton buttonAddTask;
     private RecyclerView recyclerView;
-    private UserResponse userResponse;
+    private User userResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +32,7 @@ public class TaskActivity extends AppCompatActivity {
         getTasks();
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
-            userResponse = (UserResponse)bundle.getSerializable("User");
+            userResponse = (User)bundle.getSerializable("User");
         }
     }
 

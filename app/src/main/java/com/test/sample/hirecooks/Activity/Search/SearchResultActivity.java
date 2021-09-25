@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -41,6 +41,7 @@ import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
 import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Constants;
+import com.test.sample.hirecooks.Utils.NetworkUtil;
 import com.test.sample.hirecooks.WebApis.ProductApi;
 
 import java.util.ArrayList;
@@ -56,14 +57,15 @@ import static android.view.View.GONE;
 
 public class SearchResultActivity extends BaseActivity {
     private EditText searchBar;
+    private LinearLayout search_lay;
     private RecyclerView recyclerView;
     private Toolbar toolbar;
     private List<Subcategory> cartList;
     private List<Example> examples;
-    private ImageButton clear_text,back_button;
     private RelativeLayout bottom_anchor_layout;
     private View bottom_anchor;
-    private TextView item_count,checkout_amount,checkout;
+    private LinearLayout all_search_layout,no_internet_connection_layout;
+    private TextView item_count,checkout_amount,checkout,back_button,clear_text,search;
     private View searchbar_interface_layout,no_result_found;
 
     @Override
@@ -72,15 +74,24 @@ public class SearchResultActivity extends BaseActivity {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_search_result);
         initViews();
-        getCart();
+        if(NetworkUtil.checkInternetConnection(this)) {
+            all_search_layout.setVisibility( View.VISIBLE );
+            no_internet_connection_layout.setVisibility( View.GONE );
+            getCart();
+        }
+        else {
+            all_search_layout.setVisibility( View.GONE );
+            no_internet_connection_layout.setVisibility( View.VISIBLE );
+        }
     }
 
     private void initViews() {
-        no_result_found = findViewById(R.id.no_result_found);
+        all_search_layout = findViewById(R.id.all_search_layout);
+        no_internet_connection_layout = findViewById(R.id.no_internet_connection_layout);
         recyclerView = findViewById(R.id.subcategory_recycler);
         toolbar = findViewById(R.id.toolbar);
         bottom_anchor_layout = findViewById(R.id.bottom_anchor_layout);
-
+        searchbar_interface_layout = findViewById(R.id.searchbar_interface_layout);
         View views = findViewById(R.id.footerView);
         item_count =  views.findViewById(R.id.item_count);
         bottom_anchor =  views.findViewById(R.id.bottom_anchor);
@@ -88,29 +99,33 @@ public class SearchResultActivity extends BaseActivity {
         checkout = views.findViewById(R.id.checkout);
 
         View search_view = findViewById(R.id.search_bar);
-        searchBar=search_view.findViewById(R.id.searchBar);
+        search=search_view.findViewById(R.id.search);
         clear_text=search_view.findViewById(R.id.clear_text);
-        back_button=search_view.findViewById(R.id.back_button);
-        searchbar_interface_layout=search_view.findViewById(R.id.searchbar_interface_layout);
+        back_button=search_view.findViewById(R.id.go_back);
+        search_lay=search_view.findViewById(R.id.search_lay);
+        searchBar=search_lay.findViewById(R.id.editText_search);
+        search_lay.setVisibility(View.VISIBLE);
 
         checkout.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity( new Intent( SearchResultActivity.this, PlaceOrderActivity.class ) );
+                startActivity( new Intent( SearchResultActivity.this, PlaceOrderActivity.class )  .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
 
-        searchBar.setOnClickListener(new View.OnClickListener() {
+        search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clear_text.setVisibility(View.VISIBLE);
-                back_button.setVisibility(View.VISIBLE);
+            /*    search.setVisibility( GONE);
+                clear_text.setVisibility(View.VISIBLE);*/
             }
         });
+
         clear_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 searchBar.setText("");
+                clear_text.setVisibility( View.GONE);
             }
         });
         back_button.setOnClickListener(new View.OnClickListener() {
@@ -127,8 +142,9 @@ public class SearchResultActivity extends BaseActivity {
                 startSearch(charSequence);
                 if(charSequence.length() > 0){
                     clear_text.setVisibility(View.VISIBLE);
+                    search.setVisibility( View.VISIBLE);
                 }else{
-                    clear_text.setVisibility(View.GONE);
+                    clear_text.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -137,8 +153,9 @@ public class SearchResultActivity extends BaseActivity {
                 startSearch(charSequence);
                 if(charSequence.length() > 0){
                     clear_text.setVisibility(View.VISIBLE);
+                    search.setVisibility( View.VISIBLE);
                 }else{
-                    clear_text.setVisibility(View.GONE);
+                    clear_text.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -149,7 +166,7 @@ public class SearchResultActivity extends BaseActivity {
                 if(editable.toString().length() > 0){
                     clear_text.setVisibility(View.VISIBLE);
                 }else{
-                    clear_text.setVisibility(View.GONE);
+                    clear_text.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -226,9 +243,8 @@ public class SearchResultActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        startActivity(new Intent(SearchResultActivity.this, MainActivity.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
         this.finish();
-        startActivity(new Intent(SearchResultActivity.this, MainActivity.class)
-                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     @Override
@@ -275,7 +291,7 @@ public class SearchResultActivity extends BaseActivity {
                                         recyclerView.setAdapter(mAdapter);
                                         mAdapter.notifyDataSetChanged();
                                     }else{
-                                        no_result_found.setVisibility(GONE);
+                                      //  no_result_found.setVisibility(GONE);
                                         recyclerView.setVisibility( GONE);
                                     }
                                 }
@@ -325,31 +341,19 @@ public class SearchResultActivity extends BaseActivity {
 
             if(product!=null){
                 if(product.getAcceptingOrder()==0){
-                    holder.order_not_accepting.setVisibility( GONE);
-                    holder.add_item_layout.setVisibility(View.VISIBLE);
-                }else{
-                    holder.order_not_accepting.setVisibility(View.VISIBLE);
+                    holder.order_not_accepting.setVisibility( View.VISIBLE);
                     holder.add_item_layout.setVisibility( GONE);
-                }
-                if(product.getStock()==1){
-                    holder.add_.setVisibility(View.VISIBLE);
-                    holder.item_not_in_stock.setVisibility(GONE);
+
                 }else{
-                    holder.add_.setVisibility(GONE);
-                    holder.item_not_in_stock.setVisibility(View.VISIBLE);
-                }
-                if(product.getAcceptingOrder()==1){
-                    holder.order_not_accepting.setVisibility(View.GONE);
-                    holder.add_item_layout.setVisibility(View.VISIBLE);
-                }else{
-                    holder.order_not_accepting.setVisibility(View.VISIBLE);
-                    holder.add_item_layout.setVisibility(View.GONE);
+                    holder.order_not_accepting.setVisibility( GONE);
+                    holder.add_item_layout.setVisibility( View.GONE);
                 }
 
                 holder.name.setText(product.getName());
                 holder.item_short_desc.setText(product.getDiscription());
-                holder.discription.setText(product.getDetailDiscription());
-                if(product.getImages().size()!=0&&product.getImages()!=null){
+                //holder.discription.setText(product.getDetailDiscription());
+
+                if(product.getImages()!=null&&product.getImages().size()!=0){
                     Picasso.with(context).load(product.getImages().get( 0 ).getImage()).into(holder.imageView);
                 }
 
@@ -392,7 +396,7 @@ public class SearchResultActivity extends BaseActivity {
                     if (product.getId() != 0 && product.getName() != null && product.getLink2() != null && product.getDiscription() != null && sellRate != 0 && displayrate != 0 && product.getFirmId() != null) {
                         SubTotal = (sellRate * Quantity);
                         if (context instanceof SearchResultActivity) {
-                            Subcategory cart = new Subcategory(product.getId(),product.getSubcategoryid(),product.getLastUpdate(),product.getSearchKey(), product.getName(), product.getProductUniquekey(), product.getLink2(),  product.getLink3(),  product.getLink4(),product.getShieldLink(), product.getDiscription(), product.getDetailDiscription(), sellRate, displayRate,product.getFirmId(),product.getFirmLat(),product.getFirmLng(),product.getFirmAddress(),product.getFrimPincode(),product.getColors(),product.getImages(),product.getSizes(),product.getWeights(), SubTotal, 1,product.getBrand(),product.getGender(),product.getAge());
+                            Subcategory cart = new Subcategory(product.getId(),product.getSubcategoryid(),product.getLastUpdate(),product.getSearchKey(), product.getName(), product.getProductUniquekey(), product.getLink2(),  product.getLink3(),  product.getLink4(),product.getShieldLink(), product.getDiscription(), product.getDetailDiscription(), sellRate, displayRate,product.getFirmId(),product.getFirmLat(),product.getFirmLng(),product.getFirmAddress(),product.getFrimPincode(),product.getColors(),product.getImages(),product.getSizes(),product.getWeights(), SubTotal, 1,product.getBrand(),product.getGender(),product.getAge(),product.getAcceptingOrder());
                             cartList = ((BaseActivity) context).getnewCartList();
                             cartList.add(cart);
                             String cartStr = gson.toJson(cartList);
@@ -440,7 +444,7 @@ public class SearchResultActivity extends BaseActivity {
                             Quantity = 1;
                             SubTotal = (sellRate * Quantity);
                             if (context instanceof SearchResultActivity) {
-                                Subcategory cart = new Subcategory(product.getId(),product.getSubcategoryid(),product.getLastUpdate(),product.getSearchKey(), product.getName(), product.getProductUniquekey(), product.getLink2(),  product.getLink3(),  product.getLink4(),product.getShieldLink(), product.getDiscription(), product.getDetailDiscription(), sellRate, displayRate,product.getFirmId(),product.getFirmLat(),product.getFirmLng(),product.getFirmAddress(),product.getFrimPincode(),product.getColors(),product.getImages(),product.getSizes(),product.getWeights(), SubTotal, 1,product.getBrand(),product.getGender(),product.getAge());
+                                Subcategory cart = new Subcategory(product.getId(),product.getSubcategoryid(),product.getLastUpdate(),product.getSearchKey(), product.getName(), product.getProductUniquekey(), product.getLink2(),  product.getLink3(),  product.getLink4(),product.getShieldLink(), product.getDiscription(), product.getDetailDiscription(), sellRate, displayRate,product.getFirmId(),product.getFirmLat(),product.getFirmLng(),product.getFirmAddress(),product.getFrimPincode(),product.getColors(),product.getImages(),product.getSizes(),product.getWeights(), SubTotal, 1,product.getBrand(),product.getGender(),product.getAge(),product.getAcceptingOrder());
                                 cartList = ((BaseActivity) context).getnewCartList();
                                 cartList.add(cart);
                                 String cartStr = gson.toJson(cartList);
@@ -489,6 +493,7 @@ public class SearchResultActivity extends BaseActivity {
                 Intent intent = new Intent(context, DetailsActivity.class);
                 bundle.putSerializable("SubCategory",productList.get(position));
                 intent.putExtras(bundle);
+                intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             } );
         }
@@ -507,7 +512,8 @@ public class SearchResultActivity extends BaseActivity {
             ImageView imageView;
             TextView discount, name, sellrate, quantity, displayRate,item_not_in_stock,discription,item_short_desc,add_;
             TextView add_item, remove_item;
-            LinearLayout add_item_layout,quantity_ll,order_not_accepting;
+            LinearLayout add_item_layout,quantity_ll;
+            FrameLayout order_not_accepting;
             CardView cardview;
 
             public MyViewHolder(@NonNull View itemView) {

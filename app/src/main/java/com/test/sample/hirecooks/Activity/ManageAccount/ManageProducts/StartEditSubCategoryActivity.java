@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -54,7 +56,7 @@ import com.test.sample.hirecooks.Models.SubCategory.SizeExample;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.Models.SubCategory.Weight;
 import com.test.sample.hirecooks.Models.SubCategory.WeightExample;
-import com.test.sample.hirecooks.Models.users.User;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
@@ -118,6 +120,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
     private Size sizeNumber;
     private LinearLayout image_upload_btn;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -140,6 +143,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         initViews();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("WrongConstant")
     private void initViews() {
         user = SharedPrefManager.getInstance( this ).getUser();
@@ -189,7 +193,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         editTextAddress = findViewById( R.id.address );
         Submit = findViewById( R.id.submit );
 
-        getMapDetails(user.getId());
+        getMapDetails();
 
         if (mSubCategory!= null) {
             add_color.setVisibility( VISIBLE );
@@ -260,6 +264,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                     if (color != null) {
                         bundle.putSerializable( "Color", color );
                         intent.putExtras( bundle );
+                        intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity( intent );
                         color = null;
                     } else {
@@ -277,11 +282,13 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                     if (sizeText != null) {
                         bundle.putSerializable( "Size", sizeText );
                         intent.putExtras( bundle );
+                        intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity( intent );
                         sizeText = null;
                     }else if (sizeNumber != null) {
                         bundle.putSerializable( "Size", sizeNumber );
                         intent.putExtras( bundle );
+                        intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity( intent );
                         sizeNumber = null;
                     } else {
@@ -298,6 +305,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                     if (weight != null&&add_weight.getText().toString().equalsIgnoreCase( "Update" )) {
                         bundle.putSerializable( "Weight", weight );
                         intent.putExtras( bundle );
+                        intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity( intent );
                         weight = null;
                     } else {
@@ -314,6 +322,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                     if (image != null) {
                         bundle.putSerializable( "Image", image );
                         intent.putExtras( bundle );
+                        intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity( intent );
                         image = null;
                     } else {
@@ -333,6 +342,9 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                 weight_text.setText( "Select Weight :" );
                 image_upload_btn.setVisibility( VISIBLE );
                 editTextFirmId.setText( user.getFirmId() );
+                String uniqueID = UUID.randomUUID().toString();
+                String salt = uniqueID.replaceAll( "-" ,"");
+                product_unique_key.setText(salt);
                 getSelectSize( );
                 getSelectColor( );
                 add_weight.setOnClickListener( new View.OnClickListener() {
@@ -345,6 +357,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         }
 
         Submit.setOnClickListener( new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
                 validation();
@@ -366,6 +379,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         } );
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void validation() {
         final String search_key_ = search_key.getText().toString().trim();
         final int pincode = maps.getPincode();
@@ -496,7 +510,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
             subcategoryList.add( subcategory );
             Example example = new Example();
             example.setSubcategory( subcategoryList );
-            exampleList.add( example );
+            exampleList.add( example);
             Gson gson = new Gson();
             String json = gson.toJson( exampleList );
             System.out.println("Suree Json: "+ json );
@@ -670,27 +684,26 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         });
     }
 
-    private void getMapDetails(final Integer id) {
-        MapApi mapApi = ApiClient.getClient().create(MapApi.class);
-        Call<Result> postMapDetailsResponse = mapApi.getMapDetails(id);
-        postMapDetailsResponse.enqueue(new Callback<Result>() {
+    public void getMapDetails() {
+        MapApi mService = ApiClient.getClient().create(MapApi.class);
+        Call<Result> call = mService.getMapDetails(user.getId());
+        call.enqueue(new Callback<Result>() {
             @Override
-            public void onResponse(@NonNull Call<Result> call, @NonNull Response<Result> response) {
-                if(response.code() == 200 && response.body() != null) {
-                    try{
-                        if(response.body().getError()==false){
-                            maps = response.body().getMaps();
-                            editTextAddress.setText( maps.getAddress() );
-                        }
-                    }catch (Exception e){
+            public void onResponse(Call<Result> call, Response<Result> response) {
+                if (response.code() == 200 && response.body() != null && response.body().getMaps() != null) {
+                    try {
+                        maps = response.body().getMaps();
+                        editTextAddress.setText( maps.getAddress() );
+
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
-                System.out.println("suree: "+t.getMessage());
+            public void onFailure(Call<Result> call, Throwable t) {
+                progressBarUtil.hideProgress();
             }
         });
     }
@@ -1024,6 +1037,24 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
             getProductWeight( mSubCategory.getProductUniquekey() );
         }
     }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(mSubCategory!=null&&mSubCategory.getProductUniquekey()!=null){
+            getProductColor( mSubCategory.getProductUniquekey() );
+            getProductSize( mSubCategory.getProductUniquekey() );
+            getProductWeight( mSubCategory.getProductUniquekey() );
+        }
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mSubCategory!=null&&mSubCategory.getProductUniquekey()!=null){
+            getProductColor( mSubCategory.getProductUniquekey() );
+            getProductSize( mSubCategory.getProductUniquekey() );
+            getProductWeight( mSubCategory.getProductUniquekey() );
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -1102,6 +1133,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
             Image image1 = images.get( position );
             if (image1.getImage() != null) {
                 Picasso.with( mCtx ).load( image1.getImage() ).into( holder.imageView );
+                holder.checkBox.setVisibility( VISIBLE );
                 holder.imageView.setOnClickListener( new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

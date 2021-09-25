@@ -11,4 +11,11 @@ public interface NotificationApi {
     Call<String> sendNotification(
             @Field("device_token") String device_token,
             @Field("firm_id") String firm_id);
+
+    @FormUrlEncoded
+    @POST("chatNotification")
+    Call<String> chatNotification(
+            @Field("device_token") String device_token,
+            @Field("firm_id") String firm_id,
+            @Field("message") String message);
 }

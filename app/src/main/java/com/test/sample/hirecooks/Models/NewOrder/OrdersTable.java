@@ -24,7 +24,7 @@ public class OrdersTable implements Serializable {
     public Double total_amount;
     @SerializedName("shipping_price")
     @Expose
-    public int shipping_price;
+    public Double shipping_price;
     @SerializedName("payment_type")
     @Expose
     public String payment_type;
@@ -105,11 +105,11 @@ public class OrdersTable implements Serializable {
         this.total_amount = total_amount;
     }
 
-    public int getShipping_price() {
+    public Double getShipping_price() {
         return shipping_price;
     }
 
-    public void setShipping_price(int shipping_price) {
+    public void setShipping_price(Double shipping_price) {
         this.shipping_price = shipping_price;
     }
 

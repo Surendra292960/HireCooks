@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -393,8 +394,6 @@
 
                 <LinearLayout
                     android:layout_marginTop="@dimen/margin_10"
-                    android:layout_marginStart="@dimen/margin_10"
-                    android:layout_marginEnd="@dimen/margin_10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -425,26 +424,15 @@
                         android:layout_gravity="center">
 
                         <androidx.recyclerview.widget.RecyclerView
+                            android:visibility="visible"
                             android:id="@+id/weight_recycler"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:scrollbarAlwaysDrawHorizontalTrack="true"
                             android:scrollbars="none"
-                            android:visibility="gone"
-                            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                            android:scrollbarAlwaysDrawHorizontalTrack="true"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-                        <ProgressBar
-                            android:visibility="gone"
-                            android:id="@+id/weight_progress"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:minHeight="50dp"
-                            android:minWidth="250dp"
-                            android:max="100"
-                            android:layout_gravity="center"
-                            android:indeterminate="true"
-                            android:progress="1" />
 
                     </FrameLayout>
 
@@ -482,17 +470,6 @@
                             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-                        <ProgressBar
-                            android:visibility="gone"
-                            android:id="@+id/size_progress"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:minHeight="50dp"
-                            android:minWidth="250dp"
-                            android:max="100"
-                            android:layout_gravity="center"
-                            android:indeterminate="true"
-                            android:progress="1" />
 
                     </FrameLayout>
 
@@ -530,17 +507,6 @@
                             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-                        <ProgressBar
-                            android:id="@+id/color_progress"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:minHeight="50dp"
-                            android:minWidth="250dp"
-                            android:max="100"
-                            android:layout_gravity="center"
-                            android:indeterminate="true"
-                            android:progress="1" />
-
                     </FrameLayout>
 
                     <TextView
@@ -550,15 +516,17 @@
                         android:textSize="16sp"
                         android:textColor="@color/dark_gray"/>
 
-                    <TextView
-                        android:id="@+id/item_details"
-                        android:layout_margin="@dimen/margin_10"
+                    <WebView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:id="@+id/item_details"
+                        android:layout_marginTop="@dimen/margin_5"
+                        android:layout_marginBottom="@dimen/margin_5"
                         android:textColor="@color/dark_gray"
-                        android:textSize="@dimen/size_14"
-                        android:textStyle="normal"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+                        android:textSize="@dimen/size_20"
+                        android:textStyle="bold"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                        tools:ignore="WebViewLayout" />
 
                 </LinearLayout>
 
@@ -596,7 +564,7 @@
             android:id="@+id/bottom_anchor_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_alignParentBottom="true">
 
             <include

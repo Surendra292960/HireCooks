@@ -19,9 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.test.sample.hirecooks.Activity.ManageAddress.SecondryAddressActivity;
-import com.test.sample.hirecooks.Adapter.RecievedorderDetailAdapter;
 import com.test.sample.hirecooks.Models.NewOrder.OrdersTable;
-import com.test.sample.hirecooks.Models.users.User;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 
@@ -51,6 +50,7 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.Orders
         if(ordersTable!=null) {
             holder.user_name.setText("Name  :  "+ user.getName());
             holder.payment_method.setText("Payment  :  "+ordersTable.getPayment_type());
+            holder.shipping_charge.setText("Shipping Charge  :  \u20B9 "+ordersTable.getShipping_price());
             holder.phone_number.setText("Phone  :  "+user.getPhone());
             holder.itemTotalAmount.setText("Total Amount  :   \u20B9 " + ordersTable.getTotal_amount());
             holder.order_id.setText("# " + ordersTable.getOrder_id());
@@ -89,6 +89,7 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.Orders
                         Bundle bundle = new Bundle(  );
                         bundle.putSerializable( "OrdersTable",ordersTable );
                         intent.putExtras( bundle );
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         mCtx.startActivity( intent );
                     }
                 } );
@@ -120,7 +121,7 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.Orders
     }
 
     class OrdersViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView itemName,user_name,payment_method,phone_number, itemTotalAmount, item_count, order_id, order_date_time,order_address,item_status,image,item_with_quantity;
+        TextView shipping_charge,itemName,user_name,payment_method,phone_number, itemTotalAmount, item_count, order_id, order_date_time,order_address,item_status,image,item_with_quantity;
         ImageView itemImage;
         AppCompatButton order_details;
         CardView cardlist_item;
@@ -158,6 +159,7 @@ public class MyOrdersAdapter extends RecyclerView.Adapter<MyOrdersAdapter.Orders
             payment_method = itemView.findViewById(R.id.payment_method);
             user_name = itemView.findViewById(R.id.user_name);
             phone_number = itemView.findViewById(R.id.user_phone_number);
+            shipping_charge = itemView.findViewById(R.id.shipping_charge);
             change_order_address = itemView.findViewById(R.id.change_order_address);
             itemView.setOnClickListener(this);
         }

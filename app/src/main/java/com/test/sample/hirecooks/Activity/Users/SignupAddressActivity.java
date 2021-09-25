@@ -207,7 +207,7 @@ public class SignupAddressActivity extends BaseActivity {
                     try{
                         ShowToast("Location Saved Successfully");
                         finish();
-                        startActivity(new Intent(SignupAddressActivity.this,UserSignInActivity.class));
+                        startActivity(new Intent(SignupAddressActivity.this,UserSignInActivity.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
                     }catch (Exception e){
                         e.printStackTrace();
                     }

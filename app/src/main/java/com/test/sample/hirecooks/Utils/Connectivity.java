@@ -206,10 +206,10 @@ public class Connectivity {
     }
 
     /**
-     * Returns MAC address of the given interface name.
+     * Returns MAC address_book of the given interface name.
      *
      * @param interfaceName eth0, wlan0 or NULL=use first interface
-     * @return mac address or empty string
+     * @return mac address_book or empty string
      */
     public static String getMACAddress(String interfaceName) {
         try {
@@ -236,16 +236,16 @@ public class Connectivity {
 		/*
 		 * try { // this is so Linux hack return
 		 * loadFileAsString("/sys/class/net/" +interfaceName +
-		 * "/address").toUpperCase().trim(); } catch (IOException ex) { return
+		 * "/address_book").toUpperCase().trim(); } catch (IOException ex) { return
 		 * null; }
 		 */
     }
 
     /**
-     * Get IP address from first non-localhost interface
+     * Get IP address_book from first non-localhost interface
      *
      * @param ipv4 true=return ipv4, false=return ipv6
-     * @return address or empty string
+     * @return address_book or empty string
      */
     public static String getIPAddress(boolean useIPv4) {
         try {

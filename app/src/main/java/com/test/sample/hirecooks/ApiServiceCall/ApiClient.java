@@ -19,17 +19,18 @@ import com.google.gson.GsonBuilder;
 
 import java.io.ByteArrayOutputStream;
 import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+
 import static com.test.sample.hirecooks.Utils.APIUrl.BASE_URL;
 
 public class ApiClient {
     private static final int PERMISSION_RESULT = 1;
-
     private static Retrofit retrofit = null;
     public static Retrofit getClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();

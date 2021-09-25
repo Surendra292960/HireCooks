@@ -1,25 +1,24 @@
 package com.test.sample.hirecooks.Adapter.Category;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Scene;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.test.sample.hirecooks.Activity.SubCategory.SubCategoryActivity;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.R;
-import com.test.sample.hirecooks.SubCategoryActivity;
 
 import java.util.List;
 
@@ -45,25 +44,27 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public void onBindViewHolder(CategoryAdapter.ViewHolder holder, int position) {
         Category category = categories.get(position);
         holder.categoryName.setText(category.getName());
-        Picasso.with(mCtx).load(category.getLink()).into(holder.categoryImage);
+        holder.progress_dialog.setVisibility( View.VISIBLE );
+        Picasso.with(mCtx).load(category.getLink()).into( holder.categoryImage, new Callback() {
+            @Override
+            public void onSuccess() {
+                holder.progress_dialog.setVisibility( View.GONE );
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        } );
         holder.categoryLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    Intent intent = new Intent(mCtx, SubCategoryActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("Category", categories.get(position));
-                    intent.putExtras(bundle);
-                    // Check if we're running on Android 5.0 or higher
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        mCtx.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) mCtx).toBundle());
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    } else {
-                        // Swap without transition
-                        mCtx.startActivity(intent);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    }
-                }
+                Intent intent = new Intent(mCtx, SubCategoryActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Video", categories.get(position));
+                intent.putExtras(bundle);
+                intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                mCtx.startActivity(intent);
             }
         });
     }
@@ -75,6 +76,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     class ViewHolder extends RecyclerView.ViewHolder {
         public TextView categoryName;
         public ImageView categoryImage;
+        private ProgressBar progress_dialog;
         public LinearLayout categoryLayout;
 
         public ViewHolder(View itemLayoutView) {
@@ -82,6 +84,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             categoryLayout = itemLayoutView.findViewById(R.id.category);
             categoryName = itemLayoutView.findViewById(R.id.category_name);
             categoryImage = itemLayoutView.findViewById(R.id.category_image);
+            progress_dialog = itemLayoutView.findViewById(R.id.progress_dialog);
 
        /*     itemLayoutView.setOnClickListener(new View.OnClickListener() {
                 @Override

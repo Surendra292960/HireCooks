@@ -1,18 +1,18 @@
 package com.test.sample.hirecooks.Adapter.Images;
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.R;
 
-import java.util.ArrayList;
-
 import static com.test.sample.hirecooks.Utils.APIUrl.BASE_URL;
+
 
 public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder> {
     private String[] userImages;

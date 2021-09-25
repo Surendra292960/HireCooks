@@ -3,8 +3,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Models.Offer.Offer;
 import com.test.sample.hirecooks.R;
@@ -33,7 +36,18 @@ public class CircularImageCategoryAdapter extends RecyclerView.Adapter<CircularI
         Offer offer = offers.get(position);
         if(offer!=null){
             holder.circular_image_category_name.setText(offer.getName());
-            Picasso.with(mCtx).load(offer.getLink()).into(holder.circular_category_image);
+            holder.progress_dialog.setVisibility( View.VISIBLE );
+            Picasso.with(mCtx).load(offer.getLink()).into( holder.circular_category_image, new Callback() {
+                @Override
+                public void onSuccess() {
+                    holder.progress_dialog.setVisibility( View.GONE );
+                }
+
+                @Override
+                public void onError() {
+
+                }
+            } );
         }
     }
 
@@ -44,11 +58,13 @@ public class CircularImageCategoryAdapter extends RecyclerView.Adapter<CircularI
     class ViewHolder extends RecyclerView.ViewHolder {
         public TextView circular_image_category_name;
         private CircleImageView circular_category_image;
+        private ProgressBar progress_dialog;
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
             circular_image_category_name = itemLayoutView.findViewById(R.id.circular_image_category_name);
             circular_category_image = itemLayoutView.findViewById(R.id.circular_category_image);
+            progress_dialog = itemLayoutView.findViewById(R.id.progress_dialog);
         }
     }
 }
