@@ -140,43 +140,43 @@ public class SubCategoryActivity extends BaseActivity {
             public void onResponse(Call<ArrayList<Example>> call, Response<ArrayList<Example>> response) {
                 int statusCode = response.code();
                 if (statusCode == 200) {
-                examples = new ArrayList<>(  );
-                examples = response.body();
-                if(examples!=null&&examples.size()!=0){
-                    for(Example example:examples){
-                        if(example.getError()==false){
-                            if(example.getSubcategory()!=null&&example.getSubcategory().size()!=0){
-                                List<Subcategory> list = new ArrayList<>();
-                                filteredList = new ArrayList<>();
-                                for (Subcategory subcategory : example.getSubcategory()) {
-                                    for (Map map : Constants.NEARBY_VENDERS_LOCATION) {
-                                        if (map.getFirm_id().equalsIgnoreCase(subcategory.getFirmId())) {
-                                            list.add(subcategory);
-                                            Set<Subcategory> newList = new LinkedHashSet<>(list);
-                                            filteredList = new ArrayList<>(newList);
+                    examples = new ArrayList<>(  );
+                    examples = response.body();
+                    if(examples!=null&&examples.size()!=0){
+                        for(Example example:examples){
+                            if(example.getError()==false){
+                                if(example.getSubcategory()!=null&&example.getSubcategory().size()!=0){
+                                    List<Subcategory> list = new ArrayList<>();
+                                    filteredList = new ArrayList<>();
+                                    for (Subcategory subcategory : example.getSubcategory()) {
+                                        for (Map map : Constants.NEARBY_VENDERS_LOCATION) {
+                                            if (map.getFirm_id().equalsIgnoreCase(subcategory.getFirmId())) {
+                                                list.add(subcategory);
+                                                Set<Subcategory> newList = new LinkedHashSet<>(list);
+                                                filteredList = new ArrayList<>(newList);
+                                            }
                                         }
                                     }
-                                }
-                                if(filteredList!=null&&filteredList.size()!=0) {
-                                    Constants.SUBCATEGORYs = filteredList;
-                                    subcategory_recycler.setVisibility( GONE);
-                                    no_vender_found.setVisibility(View.GONE);
-                                    subcategory_recycler.setVisibility(View.VISIBLE);
-                                    subcategory_recycler.setHasFixedSize(true);
-                                    SubcategoryAdapter mAdapter = new SubcategoryAdapter( SubCategoryActivity.this, filteredList);
-                                    subcategory_recycler.setAdapter(mAdapter);
+                                    if(filteredList!=null&&filteredList.size()!=0) {
+                                        Constants.SUBCATEGORYs = filteredList;
+                                        subcategory_recycler.setVisibility( GONE);
+                                        no_vender_found.setVisibility(View.GONE);
+                                        subcategory_recycler.setVisibility(View.VISIBLE);
+                                        subcategory_recycler.setHasFixedSize(true);
+                                        SubcategoryAdapter mAdapter = new SubcategoryAdapter( SubCategoryActivity.this, filteredList);
+                                        subcategory_recycler.setAdapter(mAdapter);
+                                    }else{
+                                        no_vender_found.setVisibility(View.VISIBLE);
+                                        subcategory_recycler.setVisibility( GONE);
+                                    }
                                 }else{
-                                    no_vender_found.setVisibility(View.VISIBLE);
-                                    subcategory_recycler.setVisibility( GONE);
+                                    no_result_found.setVisibility(View.VISIBLE);
                                 }
                             }else{
-                                 no_result_found.setVisibility(View.VISIBLE);
+                                Toast.makeText( SubCategoryActivity.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
+                                no_result_found.setVisibility(View.VISIBLE);
                             }
-                        }else{
-                            Toast.makeText( SubCategoryActivity.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
-                            no_result_found.setVisibility(View.VISIBLE);
                         }
-                    }
                     }
                 } else {
                     Toast.makeText( SubCategoryActivity.this, R.string.failed_due_to + statusCode, Toast.LENGTH_LONG).show();
@@ -298,19 +298,19 @@ public class SubCategoryActivity extends BaseActivity {
                 holder.item_short_desc.setText(product.getDiscription());
                 //holder.item_short_desc.setText(product.getDetailDiscription());
                 holder.progress_dialog.setVisibility( View.VISIBLE );
-               if(product.getImages()!=null&&product.getImages().size()!=0){
-                   Picasso.with(context).load(product.getImages().get( 0 ).getImage()).into( holder.imageView, new com.squareup.picasso.Callback() {
-                       @Override
-                       public void onSuccess() {
-                           holder.progress_dialog.setVisibility( View.GONE );
-                       }
+                if(product.getImages()!=null&&product.getImages().size()!=0){
+                    Picasso.with(context).load(product.getImages().get( 0 ).getImage()).into( holder.imageView, new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onSuccess() {
+                            holder.progress_dialog.setVisibility( View.GONE );
+                        }
 
-                       @Override
-                       public void onError() {
+                        @Override
+                        public void onError() {
 
-                       }
-                   } );
-               }
+                        }
+                    } );
+                }
 
                 if (product.getSellRate() != 0 && product.getDisplayRate()!= 0) {
                     holder.sellrate.setText("\u20B9 " + product.getSellRate());
@@ -485,7 +485,7 @@ public class SubCategoryActivity extends BaseActivity {
                 add_item_layout = itemView.findViewById(R.id.add_item_layout);
                 add_ = itemView.findViewById(R.id.add_);
                 quantity_ll = itemView.findViewById(R.id.quantity_ll);
-               // available_stock = itemView.findViewById(R.id.available_stock);
+                // available_stock = itemView.findViewById(R.id.available_stock);
                 cardview = itemView.findViewById(R.id.card_view);
                 item_not_in_stock = itemView.findViewById(R.id.item_not_in_stock);
                 discription = itemView.findViewById(R.id.item_description);

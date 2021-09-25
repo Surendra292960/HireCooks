@@ -124,6 +124,7 @@ public class DetailsActivity extends BaseActivity {
                     ProductImgSlider pagerAdapter = new ProductImgSlider( DetailsActivity.this, subCategory );
                     viewPager.setAdapter( pagerAdapter );
                     sliderDotspanel.setViewPager( viewPager );
+                    /*Weights*/
                     if (subCategory.getWeights() != null && subCategory.getWeights().size() != 0) {
                         weight_lay.setVisibility( VISIBLE );
                         weight_recycler.setVisibility(View.VISIBLE);
@@ -141,7 +142,9 @@ public class DetailsActivity extends BaseActivity {
 
                         weight_recycler.setLayoutManager(linearLayoutManager);
                         weight_recycler.setItemAnimator(new DefaultItemAnimator());
-                    } else if (subCategory.getSizes() != null && subCategory.getSizes().size() != 0) {
+                    }
+                    /*Sizes*/
+                    if (subCategory.getSizes() != null && subCategory.getSizes().size() != 0) {
                         size_lay.setVisibility( VISIBLE );
                         sizes_recycler.setVisibility(View.VISIBLE);
                         DetailsActivity.SizeAdapter adapter = new DetailsActivity.SizeAdapter( DetailsActivity.this,subCategory.getSizes() );
@@ -158,7 +161,9 @@ public class DetailsActivity extends BaseActivity {
 
                         sizes_recycler.setLayoutManager(linearLayoutManager);
                         sizes_recycler.setItemAnimator(new DefaultItemAnimator());
-                    } else if (subCategory.getColors() != null && subCategory.getColors().size() != 0) {
+                    }
+                    /*Colors*/
+                    if (subCategory.getColors() != null && subCategory.getColors().size() != 0) {
                         colors_recycler.setVisibility(View.VISIBLE);
                         color_lay.setVisibility(View.VISIBLE);
                         DetailsActivity.ColorsAdapter adapter = new DetailsActivity.ColorsAdapter( DetailsActivity.this,subCategory.getColors() );

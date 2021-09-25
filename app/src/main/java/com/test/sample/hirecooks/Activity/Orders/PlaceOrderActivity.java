@@ -207,7 +207,7 @@ public class PlaceOrderActivity extends BaseActivity {
         editTextCashOnDelivery.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(checkNet==false) {
+                if(checkNet) {
                     if (maps != null) {
                         orderList = new ArrayList<>();
                         if (cartList != null && cartList.size() != 0) {
@@ -283,7 +283,7 @@ public class PlaceOrderActivity extends BaseActivity {
         editTextPayOnline.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkNet == false) {
+                if (checkNet) {
                     if (maps != null) {
                         orderList = new ArrayList<>();
                         if (cartList != null && cartList.size() != 0) {

@@ -283,8 +283,8 @@ public class AllFirmUsersReportActivity extends AppCompatActivity {
                 holder.id.setText(""+firmuser.getId());
                 holder.name.setText(firmuser.getName());
                 holder.user_type.setText(firmuser.getUserType());
-                holder.login_date.setText(date.format( getDateTime( firmuser.getSigninDate() ) ));
-                holder.logout_date.setText(date.format( getDateTime( firmuser.getSignoutDate() ) ));
+                holder.login_date.setText(firmuser.getSigninDate() );
+                holder.logout_date.setText(firmuser.getSignoutDate() );
                 holder.login_address.setText(firmuser.getSigninAddress());
                 holder.logout_address.setText(firmuser.getSignoutAddress());
                 holder.firm_id.setText(firmuser.getFirmId());
