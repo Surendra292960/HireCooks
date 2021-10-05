@@ -8,9 +8,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Models.Offer.Offer;
 import com.test.sample.hirecooks.R;
 
@@ -37,17 +35,7 @@ public class ToolPromotionAdapter extends RecyclerView.Adapter<ToolPromotionAdap
         Offer offer = offers.get(position);
         if(offer!=null){
             holder.progress_dialog.setVisibility( View.VISIBLE );
-            Picasso.with(mCtx).load(offer.getLink()).into( holder.imageView, new Callback() {
-                @Override
-                public void onSuccess() {
-                    holder.progress_dialog.setVisibility( View.GONE );
-                }
-
-                @Override
-                public void onError() {
-
-                }
-            } );
+            Glide.with(mCtx).load(offer.getLink()).into( holder.imageView);
         }
     }
 

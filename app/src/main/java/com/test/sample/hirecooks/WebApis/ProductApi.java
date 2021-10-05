@@ -34,14 +34,14 @@ public interface ProductApi {
     @POST("subCategory/{serach_key}")
     Call<ArrayList<Example>> searchAllProducts(@Path("serach_key") String search_key);
 
-    @PUT("Video/{id}")
+    @PUT("Category/{id}")
     Call<ArrayList<com.test.sample.hirecooks.Models.Category.Example>> updateCategory(
             @Path( "id" ) int id, @Body ArrayList<Category> category);
 
-    @POST("Video")
+    @POST("Category")
     Call<ArrayList<com.test.sample.hirecooks.Models.Category.Example>> addCategory(@Body ArrayList<Category> category);
 
-    @POST("Video")
+    @POST("Category")
     Call<List<Example>> addSubCategory(@Body List<Example> subcategory);
 
     @PUT("colors/{id}")

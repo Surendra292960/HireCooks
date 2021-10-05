@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Models.MenuResponse.Menu;
 import com.test.sample.hirecooks.Models.cooks.Cook;
 import com.test.sample.hirecooks.R;
@@ -39,7 +39,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder>  {
         final Menu menu = menus.get(position);
         holder.menu_name.setText(menu.getName());
         holder.menu_descount.setText(menu.getDiscount());
-        Picasso.with(mCtx).load(menu.getLink()).into(holder.ivFeedCenter);
+        Glide.with(mCtx).load(menu.getLink()).into(holder.ivFeedCenter);
     }
 
     @Override

@@ -159,12 +159,12 @@ public class MenuListFragment extends Fragment implements UploadCallBack {
             } else if (id == R.id.menu_myorders) {
                 startActivity(new Intent(getActivity(), MyOrdersActivity.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
             } else if (id == R.id.menu_share) {
-                Intent sendIntent = new Intent();
+             /*   Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT,
                         "HireCook app at: https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID);
                 sendIntent.setType("text/plain");
-                startActivity(sendIntent);
+                startActivity(sendIntent);*/
             }
             return false;
         });

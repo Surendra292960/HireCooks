@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Models.Cart.Cart;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
@@ -57,7 +57,7 @@ public class CheckoutCartAdapter extends RecyclerView.Adapter<CheckoutCartAdapte
             holder.total_amount.setText("\u20B9 "+SubTotal);
            // holder.product_sellRate.setText("\u20B9: "+sellRate);
             holder.imageView.setAnimation(AnimationUtils.loadAnimation(mCtx, R.anim.fade_transition_animation));
-            Picasso.with(mCtx).load(cart.getLink()).into(holder.imageView);
+            Glide.with(mCtx).load(cart.getLink()).into(holder.imageView);
         }
     }
 

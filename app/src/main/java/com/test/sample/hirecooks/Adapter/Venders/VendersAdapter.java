@@ -1,5 +1,6 @@
 package com.test.sample.hirecooks.Adapter.Venders;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +10,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.Venders.VendersSubCategory.VendersSubCategoryActivity;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
@@ -40,22 +38,12 @@ public class VendersAdapter extends RecyclerView.Adapter<VendersAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(VendersAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(VendersAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         User venders = vender.get(position);
         if(venders!=null){
             if(!venders.getImage().isEmpty()){
-                holder.progress_dialog.setVisibility( View.VISIBLE );
-                Picasso.with(mCtx).load( APIUrl.PROFILE_URL+venders.getImage()).into( holder.venders_image, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        holder.progress_dialog.setVisibility( View.GONE );
-                    }
-
-                    @Override
-                    public void onError() {
-
-                    }
-                } );
+                holder.progress_dialog.setVisibility( View.GONE );
+                Glide.with(mCtx).load( APIUrl.PROFILE_URL+venders.getImage()).into( holder.venders_image );
             }
            // holder.text.setText(venders.getName());
             holder.vender_layout.setOnClickListener(new View.OnClickListener() {

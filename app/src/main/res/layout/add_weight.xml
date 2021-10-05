@@ -20,7 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:id="@+id/text"
-                android:text="Add Product Weight"
+                android:text="@string/add_product_weight"
                 android:textSize="18sp"
                 android:textColor="@color/dark_gray"
                 android:textAllCaps="true"
@@ -37,7 +37,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="add only one size which you wants ? \n  rest keep zero"
+                android:text="@string/add_only_one_size_which_you_wants_n_rest_keep_zero"
                 android:textSize="14sp"
                 android:textColor="@color/red"
                 android:textAllCaps="true"
@@ -54,10 +54,9 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_margin="@dimen/margin_5"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Kg">
+                    android:hint="@string/kg">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:inputType="number"
@@ -69,10 +68,9 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_margin="@dimen/margin_5"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Litre">
+                    android:hint="@string/litre">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:inputType="number"
@@ -85,10 +83,9 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_margin="@dimen/margin_5"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="gm">
+                    android:hint="@string/gm">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:inputType="number"
@@ -100,10 +97,9 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_margin="@dimen/margin_5"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Dozan">
+                    android:hint="@string/dozan">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:inputType="number"
@@ -115,10 +111,9 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_margin="@dimen/margin_5"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Pound">
+                    android:hint="@string/pound">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:inputType="number"
@@ -140,12 +135,12 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:id="@+id/ok_btn"
-                android:text="OK"
+                android:text="@string/ok"
                 android:background="@color/style_color_primary"
                 android:layout_weight="1"
                 android:textSize="16sp"

@@ -13,7 +13,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.Cooks.UpdateCookImage;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.Models.cooks.Request.CooksImages;
@@ -53,7 +53,7 @@ public class CooksImagesAdapter extends RecyclerView.Adapter<com.test.sample.hir
     public void onBindViewHolder(com.test.sample.hirecooks.Adapter.Cooks.CooksImagesAdapter.ViewHolder holder, int position) {
         CooksImages cooksImage = cooksImages.get(position);
         if(cooksImage!=null){
-            Picasso.with(mCtx).load(cooksImage.getLink()).into(holder.imageView);
+            Glide.with(mCtx).load(cooksImage.getLink()).into(holder.imageView);
             holder.imageView.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

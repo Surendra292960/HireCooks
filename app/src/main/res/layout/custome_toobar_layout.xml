@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:visibility="visible"
+    android:layout_gravity="center_horizontal|top"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/m_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="2dp"
+        android:background="@drawable/boottom_navigation">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/go_back"
+                android:visibility="visible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textAllCaps="true"
+                android:gravity="start"
+                android:background="@drawable/ic_arrow_back_black_24dp"
+                android:layout_gravity="center_vertical|start"
+                android:textSize="@dimen/size_12"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+            <LinearLayout
+                android:id="@+id/search_lay"
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/margin_40"
+                android:layout_marginEnd="@dimen/margin_40"
+                android:orientation="vertical">
+
+                <TextView
+                    android:visibility="visible"
+                    android:id="@+id/text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/dark_gray"
+                    android:textAllCaps="true"
+                    android:background="@drawable/ic_search"
+                    android:layout_gravity="center_vertical|end"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+            <!--
+                                                <TextView
+                                                    android:visibility="visible"
+                                                    android:id="@+id/search"
+                                                    android:layout_width="30dp"
+                                                    android:layout_height="30dp"
+                                                    android:textStyle="bold"
+                                                    android:textColor="@color/white"
+                                                    android:textAllCaps="true"
+                                                    android:background="@drawable/ic_search"
+                                                    android:layout_gravity="center_vertical|end"
+                                                    android:gravity="center"/>-->
+
+        </FrameLayout>
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+
+</LinearLayout>

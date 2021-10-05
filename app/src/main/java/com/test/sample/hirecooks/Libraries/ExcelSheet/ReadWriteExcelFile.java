@@ -1,8 +1,6 @@
 package com.test.sample.hirecooks.Libraries.ExcelSheet;
 import android.os.Environment;
-
 import com.test.sample.hirecooks.Models.FirmUsers.Firmuser;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -52,6 +50,7 @@ public class ReadWriteExcelFile {
 			sheet.setColumnView(12, 20);
 			sheet.setColumnView(13, 20);
 			sheet.setColumnView(14, 20);
+			sheet.setColumnView(15, 20);
 
 			WritableCellFormat cellFormats = new WritableCellFormat();
 			cellFormats.setAlignment(Alignment.CENTRE);
@@ -73,16 +72,17 @@ public class ReadWriteExcelFile {
 			sheet.addCell(new Label(2, 1, "Name",titleformat));
 			sheet.addCell(new Label(3, 1, "User Type",titleformat));
 			sheet.addCell(new Label(4, 1, "Login Date",titleformat));
-			sheet.addCell(new Label(5, 1, "Login Lattitude",titleformat));
-			sheet.addCell(new Label(6, 1, "Login Longintude",titleformat));
-			sheet.addCell(new Label(7, 1, "Login Address",titleformat));
-			sheet.addCell(new Label(8, 1, "Logout Lattitude",titleformat));
+			sheet.addCell(new Label(5, 1, "Logout Date",titleformat));
+			sheet.addCell(new Label(6, 1, "Login Lattitude",titleformat));
+			sheet.addCell(new Label(7, 1, "Login Longintude",titleformat));
+			sheet.addCell(new Label(8, 1, "Login Lattitude",titleformat));
 			sheet.addCell(new Label(9, 1, "Logout Longintude",titleformat));
-			sheet.addCell(new Label(10, 1, "Logout Address",titleformat));
-			sheet.addCell(new Label(11, 1, "Firm Id",titleformat));
-			sheet.addCell(new Label(12, 1, "Status",titleformat));
-			sheet.addCell(new Label(13, 1, "User Id",titleformat));
-			sheet.addCell(new Label(14, 1, "Created At",titleformat));
+			sheet.addCell(new Label(10, 1, "Login Address",titleformat));
+			sheet.addCell(new Label(11, 1, "Logout Address",titleformat));
+			sheet.addCell(new Label(12, 1, "Firm Id",titleformat));
+			sheet.addCell(new Label(13, 1, "Status",titleformat));
+			sheet.addCell(new Label(14, 1, "User Id",titleformat));
+			sheet.addCell(new Label(15, 1, "Created At",titleformat));
 
 			for (int i=0;i<firmuserList.size(); i++) {
 				sheet.setRowView(i+2, heightInPoints );
@@ -91,16 +91,17 @@ public class ReadWriteExcelFile {
 				sheet.addCell(new Label(2, i+2, firmuserList.get( i ).getName(),cellFormats));
 				sheet.addCell(new Label(3, i+2, firmuserList.get( i ).getUserType(),cellFormats));
 				sheet.addCell(new Label(4, i+2, firmuserList.get( i ).getSigninDate(),cellFormats));
-				sheet.addCell(new Label(5, i+2, firmuserList.get( i ).getSigninLat(),cellFormats));
-				sheet.addCell(new Label(6, i+2, firmuserList.get( i ).getSigninLng(),cellFormats));
-				sheet.addCell(new Label(7, i+2, firmuserList.get( i ).getSigninAddress(),cellFormats));
+				sheet.addCell(new Label(5, i+2, firmuserList.get( i ).getSignoutDate(),cellFormats));
+				sheet.addCell(new Label(6, i+2, firmuserList.get( i ).getSigninLat(),cellFormats));
+				sheet.addCell(new Label(7, i+2, firmuserList.get( i ).getSigninLng(),cellFormats));
 				sheet.addCell(new Label(8, i+2, firmuserList.get( i ).getSignoutLat(),cellFormats));
 				sheet.addCell(new Label(9, i+2, firmuserList.get( i ).getSignoutLng(),cellFormats));
-				sheet.addCell(new Label(10, i+2, firmuserList.get( i ).getSignoutAddress(),cellFormats));
-				sheet.addCell(new Label(11, i+2, firmuserList.get( i ).getFirmId(),cellFormats));
-				sheet.addCell(new Label(12, i+2, firmuserList.get( i ).getStatus(),cellFormats));
-				sheet.addCell(new Label(13, i+2, String.valueOf( firmuserList.get( i ).getUserId() ),cellFormats));
-				sheet.addCell(new Label(14, i+2, firmuserList.get( i ).getCreatedAt(),cellFormats));
+				sheet.addCell(new Label(10, i+2, firmuserList.get( i ).getSigninAddress(),cellFormats));
+				sheet.addCell(new Label(11, i+2, firmuserList.get( i ).getSignoutAddress(),cellFormats));
+				sheet.addCell(new Label(12, i+2, firmuserList.get( i ).getFirmId(),cellFormats));
+				sheet.addCell(new Label(13, i+2, firmuserList.get( i ).getStatus(),cellFormats));
+				sheet.addCell(new Label(14, i+2, String.valueOf( firmuserList.get( i ).getUserId() ),cellFormats));
+				sheet.addCell(new Label(15, i+2, firmuserList.get( i ).getCreatedAt(),cellFormats));
 			}
 
 			workbook.write();

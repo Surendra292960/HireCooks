@@ -1,5 +1,6 @@
 package com.test.sample.hirecooks.Activity.Users;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -124,7 +125,7 @@ public class PhoneVerification extends AppCompatActivity {
     private void sendVerificationCode(String mobile) {
         verify_phone_layout.setVisibility(View.GONE);
         enter_otp_layout.setVisibility(View.VISIBLE);
-        PhoneAuthProvider.getInstance().verifyPhoneNumber( mobile, 60, TimeUnit.SECONDS, TaskExecutors.MAIN_THREAD, mCallbacks);
+        PhoneAuthProvider.getInstance().verifyPhoneNumber( mobile, 60, TimeUnit.SECONDS, (Activity) TaskExecutors.MAIN_THREAD, mCallbacks);
         mVerificationInProgress = true;
     }
 

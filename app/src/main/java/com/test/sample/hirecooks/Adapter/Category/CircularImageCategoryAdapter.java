@@ -7,8 +7,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Models.Offer.Offer;
 import com.test.sample.hirecooks.R;
 import java.util.List;
@@ -36,18 +35,8 @@ public class CircularImageCategoryAdapter extends RecyclerView.Adapter<CircularI
         Offer offer = offers.get(position);
         if(offer!=null){
             holder.circular_image_category_name.setText(offer.getName());
-            holder.progress_dialog.setVisibility( View.VISIBLE );
-            Picasso.with(mCtx).load(offer.getLink()).into( holder.circular_category_image, new Callback() {
-                @Override
-                public void onSuccess() {
-                    holder.progress_dialog.setVisibility( View.GONE );
-                }
-
-                @Override
-                public void onError() {
-
-                }
-            } );
+            holder.progress_dialog.setVisibility( View.GONE );
+            Glide.with(mCtx).load(offer.getLink()).into( holder.circular_category_image);
         }
     }
 

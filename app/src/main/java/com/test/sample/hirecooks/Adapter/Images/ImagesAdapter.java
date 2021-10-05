@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.R;
 
 import static com.test.sample.hirecooks.Utils.APIUrl.BASE_URL;
@@ -33,7 +33,7 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         String image = userImages[position];
-        Picasso.with(mCtx).load(BASE_URL+image).into(holder.imageView);
+        Glide.with(mCtx).load(BASE_URL+image).into(holder.imageView);
     }
 
     @Override

@@ -7,37 +7,6 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission
-        android:name="android.permission.WRITE_SETTINGS"
-        tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.REQUEST_COMPANION_RUN_IN_BACKGROUND" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="com.example.permission.MAPS_RECEIVE" />
-    <uses-permission android:name="com.example.permission.USE_FULL_SCREEN_INTENT" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission
-        android:name="android.permission.REAL_GET_TASKS"
-        tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
@@ -48,19 +17,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activity.Cooks.Video.PickVideoActivity"></activity>
-
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.hirecook.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
-        </provider>
+        <activity
+            android:name=".Activity.ProductDatails.FullImageActivity"
+            android:exported="true" />
+        <activity android:name=".Activity.Cooks.Video.PickVideoActivity" />
 
         <activity android:name=".Activity.Users.FirmUsers.FirmUserReportActivity" />
+
         <activity android:name=".Activity.Users.FirmUsers.FirmUserTracking" />
         <activity android:name=".Activity.Users.FirmUsers.FirmUserActivity" />
         <activity android:name=".Activity.Cooks.Video.FullScreenVideo" />
@@ -132,12 +95,9 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:taskAffinity="" />
-        <activity android:name=".Activity.Orders.MyOrdersActivity" />
+        <activity android:name=".Activity.Orders.MyOrdersActivity"/>
         <activity android:name=".Activity.Home.CalenderViewActivity" />
         <activity android:name=".Activity.SubCategory.SubCategoryActivity" />
-        <activity android:name=".Tasks.Activity.TaskActivity" />
-        <activity android:name=".Tasks.Activity.UpdateTaskActivity" />
-        <activity android:name=".Tasks.Activity.AddTaskActivity" />
         <activity android:name=".Activity.Cooks.CooksActivity" />
         <activity
             android:name=".Activity.Search.SearchResultActivity"
@@ -146,6 +106,9 @@
         <activity android:name=".Activity.Users.UploadImagesActivity" />
         <activity android:name=".Activity.Menus.MenuActivity" />
         <activity android:name=".Utils.BaseActivity" />
+        <activity
+            android:name=".MapLocation"
+            android:label="@string/title_activity_map_location" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -160,15 +123,11 @@
             android:value="@string/google_maps_key" />
         -->
         <activity
-            android:name=".MapLocation"
-            android:label="@string/title_activity_map_location" />
-
-        <uses-library android:name="com.google.android.maps" />
-
-        <activity
             android:name=".Activity.Chat.ChatActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".Activity.Users.UserDetailsActivity" />
+
         <activity
             android:name=".Activity.IntroSlider.IntroSlider"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -194,54 +153,57 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Facebook -->
+        </activity>
         <activity android:name="com.facebook.accountkit.ui.AccountKitActivity" />
-
         <meta-data
             android:name="com.facebook.accountkit.ApplicationName"
-            android:value="@string/app_name" />
+            android:value="@string/app_name" /> <!-- Facebook -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/FACEBOOK_APP_ID" />
+
         <meta-data
             android:name="com.facebook.accountkit.ClientToken"
-            android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" /> <!-- Map -->
+            android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC-BYCFrpXUa4CI-H9fRqWEc0-I_ylk31k" /> <!-- Map -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_launcher_background" />
         <!--
    <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAKSJQtFoY32Tdl45AK3FneoS_0wIdJ_ng" />
         -->
         <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyC-BYCFrpXUa4CI-H9fRqWEc0-I_ylk31k" /> <!-- Firebase Notification -->
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_launcher_background" />
-        <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/style_color_accent" />
+            android:resource="@color/style_color_accent" /> <!-- Firebase Notification -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy" />
+        <meta-data
+            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
+            android:value="true" />
 
-        <service
-            android:name=".Notifications.MyFirebaseMessagingService"
-            android:enabled="true"
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="rzp_live_KZF11BKNnNOOcy" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.hirecook.fileprovider"
             android:exported="false"
-            android:permission="com.google.android.c2dm.permission.SEND"
-            android:stopWithTask="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-                <action android:name="com.google.android.c2dm.permission.RECEIVE" />
-            </intent-filter>
-        </service>
-        <service
-            android:name=".Services.ForegroundService"
-            android:enabled="true"
-            android:exported="true" /> <!-- AlarmService -->
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider> <!-- AlarmService -->
         <receiver android:name=".Services.AlarmSoundService.GPSReciever">
             <intent-filter>
                 <action android:name="android.location.PROVIDERS_CHANGED" />
@@ -262,18 +224,57 @@
         </receiver>
 
         <service
+            android:name=".Notifications.MyFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="com.google.android.c2dm.permission.SEND"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2dm.permission.RECEIVE" />
+            </intent-filter>
+        </service> <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
+        <service
+            android:name=".Services.ForegroundService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
             android:name=".Services.TrackerService"
             android:enabled="true"
-            android:exported="true" /> <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy" />
-        <meta-data
-            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
-            android:value="true" />
-        <meta-data
-            android:name="com.razorpay.ApiKey"
-            android:value="rzp_live_KZF11BKNnNOOcy" />
+            android:exported="true" />
+        <uses-library android:name="com.google.android.maps" />
     </application>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.REQUEST_COMPANION_RUN_IN_BACKGROUND" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="com.example.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="com.example.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission
+        android:name="android.permission.REAL_GET_TASKS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
 </manifest>

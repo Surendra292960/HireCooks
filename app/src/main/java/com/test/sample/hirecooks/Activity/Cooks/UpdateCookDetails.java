@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.Cooks.Video.PickVideoActivity;
 import com.test.sample.hirecooks.Activity.Model.MyModel;
 import com.test.sample.hirecooks.Adapter.Cooks.CooksImagesAdapter;
@@ -210,9 +210,9 @@ public class UpdateCookDetails extends BaseActivity {
         }
         if(user.getImage()!=null){
             if(user.getImage().equalsIgnoreCase("https://")){
-                Picasso.with(this).load(user.getImage()).into(cook_image);
+                Glide.with(this).load(user.getImage()).into(cook_image);
             }else{
-                Picasso.with(this).load(APIUrl.PROFILE_URL+user.getImage()).into(cook_image);
+                Glide.with(this).load(APIUrl.PROFILE_URL+user.getImage()).into(cook_image);
             }
         }
         phone_number.setText(user.getPhone());
@@ -405,7 +405,7 @@ public class UpdateCookDetails extends BaseActivity {
         holder.setVideoUrl(list.get(position).getVideo_url());
         //load image into imageview
         if (list.get(position).getImage_url() != null && !list.get(position).getImage_url().isEmpty()) {
-            picasso.load(holder.getImageUrl()).config(Bitmap.Config.RGB_565).into(holder.getAAH_ImageView());
+            Glide.load(holder.getImageUrl()).config(Bitmap.Config.RGB_565).into(holder.getAAH_ImageView());
         }*/
             holder.setLooping(true); //optional - true by default
             //to play pause videos manually (optional)

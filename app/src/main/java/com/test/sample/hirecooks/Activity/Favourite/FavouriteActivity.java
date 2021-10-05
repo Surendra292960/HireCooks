@@ -1,5 +1,6 @@
 package com.test.sample.hirecooks.Activity.Favourite;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +24,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.AddorRemoveCallbacks;
 import com.test.sample.hirecooks.Activity.Orders.PlaceOrderActivity;
 import com.test.sample.hirecooks.Activity.ProductDatails.DetailsActivity;
@@ -173,7 +174,7 @@ public class FavouriteActivity extends BaseActivity {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull final FavouriteActivity.SubcategoryAdapter.MyViewHolder holder, final int position) {
+        public void onBindViewHolder(@NonNull final FavouriteActivity.SubcategoryAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
             final Subcategory product = productList.get(position);
             localStorage = new LocalStorage(context);
@@ -194,7 +195,7 @@ public class FavouriteActivity extends BaseActivity {
                 holder.item_short_desc.setText(product.getDiscription());
                 holder.discription.setText(product.getDetailDiscription());
                 if(product.getImages()!=null&&product.getImages().size()!=0){
-                    Picasso.with(context).load(product.getImages().get( 0 ).getImage()).into(holder.imageView);
+                    Glide.with(FavouriteActivity.this).load(product.getImages().get( 0 ).getImage()).into(holder.imageView);
                 }
 
                 if (product.getSellRate() != 0 && product.getDisplayRate()!= 0) {

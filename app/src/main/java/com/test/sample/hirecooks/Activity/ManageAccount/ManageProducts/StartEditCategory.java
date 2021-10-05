@@ -25,7 +25,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.Category.Example;
@@ -71,7 +71,7 @@ public class StartEditCategory extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
             categoryName= bundle.getString("CategoryName");
-            mCategory = (Category) bundle.getSerializable("Video");
+            mCategory = (Category) bundle.getSerializable("Category");
             subcategoryId = bundle.getInt( "CreateCategory" );
         }
         if(mCategory!=null){
@@ -98,7 +98,7 @@ public class StartEditCategory extends AppCompatActivity {
         if(mCategory!=null){
             editTextCategoryName.setText( mCategory.getName() );
             editTextCategoryImageUrl.setText( mCategory.getLink() );
-            Picasso.with( StartEditCategory.this ).load( mCategory.getLink() ).into( editTextUploadCategoryImage );
+            Glide.with(this).load( mCategory.getLink() ).into( editTextUploadCategoryImage );
         }
 
         Submit.setOnClickListener(new View.OnClickListener() {
@@ -147,7 +147,7 @@ public class StartEditCategory extends AppCompatActivity {
                             Toast.makeText(StartEditCategory.this, "Uploaded successfully", Toast.LENGTH_SHORT).show();
                             final Uri downloadUrl = uri;
                             sUrl = downloadUrl.toString();
-                            Picasso.with( StartEditCategory.this ).load( sUrl ).into( editTextUploadCategoryImage );
+                            Glide.with(StartEditCategory.this).load( sUrl ).into( editTextUploadCategoryImage );
                             editTextCategoryImageUrl.setText(sUrl);
                         }
                     }).addOnFailureListener(new OnFailureListener() {

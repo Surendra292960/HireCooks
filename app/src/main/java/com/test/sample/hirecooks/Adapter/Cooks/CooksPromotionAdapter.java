@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.Cooks.CooksActivity;
 import com.test.sample.hirecooks.Models.CooksPromotion.CooksPromotion;
 import com.test.sample.hirecooks.R;
@@ -42,10 +42,10 @@ public class CooksPromotionAdapter extends RecyclerView.Adapter<CooksPromotionAd
         CooksPromotion cooksPromotions = cooksPromotion.get(position);
         if(cooksPromotions!=null){
             holder.tag_name.setVisibility(View.VISIBLE);
-            Picasso.with(mCtx).load(cooksPromotions.getLink()).into(holder.imageView);
+            Glide.with(mCtx).load(cooksPromotions.getLink()).into(holder.imageView);
             holder.tag_name.setText(cooksPromotions.getTagName());
             holder.cook_name.setText(cooksPromotions.getCookName());
-            Picasso.with(mCtx).load(cooksPromotions.getRoundIcon()).placeholder(R.drawable.ic_profile_user).into(holder.round_icon);
+            Glide.with(mCtx).load(cooksPromotions.getRoundIcon()).placeholder(R.drawable.ic_profile_user).into(holder.round_icon);
             holder.cooks_promotion_lay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

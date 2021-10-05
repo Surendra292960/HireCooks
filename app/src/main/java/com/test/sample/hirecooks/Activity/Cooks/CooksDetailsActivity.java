@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.Model.MyModel;
 import com.test.sample.hirecooks.Adapter.Cooks.CooksImagesAdapter;
 import com.test.sample.hirecooks.Adapter.Videos.VideosAdapter;
@@ -202,9 +202,9 @@ public class CooksDetailsActivity extends BaseActivity {
        }
        if(users.getImage()!=null){
            if(users.getImage().equalsIgnoreCase("https://")){
-               Picasso.with(this).load(users.getImage()).into(cook_image);
+               Glide.with(this).load(users.getImage()).into(cook_image);
            }else{
-               Picasso.with(this).load(APIUrl.PROFILE_URL+users.getImage()).into(cook_image);
+               Glide.with(this).load(APIUrl.PROFILE_URL+users.getImage()).into(cook_image);
            }
        }
         phone_number.setText(users.getPhone());

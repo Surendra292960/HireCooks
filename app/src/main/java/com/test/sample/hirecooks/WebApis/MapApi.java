@@ -3,8 +3,12 @@ import com.test.sample.hirecooks.Models.MapLocationResponse.Example;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Maps;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Result;
 
+import java.util.List;
+
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -14,6 +18,23 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface MapApi {
+
+    @POST("address")
+    Observable<List<Maps>> addAddress(@Body List<Maps> address);
+
+    @PUT("address/{mapId}")
+    Observable<List<Maps>> updateAddress(@Path("mapId") int mapId, @Body List<Maps> address);
+
+    @GET("address/{userId}")
+    Observable<List<Maps>> getAddressByUserId(@Path("userId") int id);
+
+    @GET("address")
+    Observable<List<Maps>> getAddress();
+
+    @DELETE("address/{mapId}")
+    Observable<List<Maps>> deleteAddress(
+            @Path("mapId") int mapId);
+
     @FormUrlEncoded
     @POST("createMap")
     Call<Result> addMapDetails(
@@ -61,48 +82,5 @@ public interface MapApi {
     Call<Example> getNearByUsers(
             @Field("latitude") String latitude,
             @Field("longitude") String longitude);
-
-
-    //ManageAddress
-
-    @FormUrlEncoded
-    @POST("createAddress")
-    Observable<Maps> createAddress(
-            @Field("latitude") String latitude,
-            @Field("longitude") String longitude,
-            @Field("address") String address,
-            @Field("sub_address") String subAddress,
-            @Field("pincode") String pincode,
-            @Field("placeId") String placeId,
-            @Field("userId") int userId,
-            @Field("firm_id") String firmId,
-            @Field("houseNumber") String houseNumber,
-            @Field("floor") String floor,
-            @Field("landmark") String landmark,
-            @Field("location_type") String location_type);
-
-    @FormUrlEncoded
-    @PUT("updateAddress/{mapId}")
-    Observable<Maps> updateAddress(
-            @Path("mapId") int mapId,
-            @Field("latitude") String latitude,
-            @Field("longitude") String longitude,
-            @Field("address") String address,
-            @Field("sub_address") String subAddress,
-            @Field("pincode") String pincode,
-            @Field("placeId") String placeId,
-            @Field("userId") int userId,
-            @Field("firm_id") String firmId,
-            @Field("houseNumber") String houseNumber,
-            @Field("floor") String floor,
-            @Field("landmark") String landmark,
-            @Field("location_type") String location_type);
-
-    @GET("getAllAddress/{id}")
-    Observable<Maps> getAllAddress(@Path("id") int id);
-
-    @DELETE("deleteAddress/{mapId}")
-    Observable<Maps> deleteAddress(
-            @Path("mapId") int mapId);
 
 }

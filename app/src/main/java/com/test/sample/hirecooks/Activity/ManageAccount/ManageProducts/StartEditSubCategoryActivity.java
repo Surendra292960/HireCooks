@@ -37,12 +37,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
@@ -80,6 +81,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
     private TextInputEditText editTextSubCategoryName, editTextSellRate, editTextDisplayRate,editTextAddress,
             editTextFirmId, editTextImagetUrl2, editTextImagetUrl3, editTextImagetUrl4,
             editTextWeight, available_stock, editTextShiledUrl, product_unique_key, age, brand, gender, search_key;
+    private TextInputLayout editTextShiledUrl_lay,available_stock_lay;
     private TextView Submit, add_weight, add_size, add_color, add_images,size_text,color_text,weight_text;
     private EditText editTextDiscription, editTextDetailDiscription;
     private ProductApi mService;
@@ -177,7 +179,9 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         editTextDiscription = findViewById( R.id.editTextDiscription );
         editTextDetailDiscription = findViewById( R.id.editTextDetailDiscription );
         editTextWeight = findViewById( R.id.editTextWeight );
-        available_stock = findViewById( R.id.available_stock );
+        available_stock = findViewById( R.id.available_stock);
+        available_stock_lay = findViewById( R.id.available_stock_lay );
+        editTextShiledUrl_lay = findViewById( R.id.editTextShiledUrl_lay );
         btnChoose = findViewById( R.id.btnChoose );
         btnUpload = findViewById( R.id.btnUpload );
         image_upload_btn = findViewById( R.id.image_upload_btn );
@@ -196,15 +200,18 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         getMapDetails();
 
         if (mSubCategory!= null) {
-            add_color.setVisibility( VISIBLE );
+            //add_color.setVisibility( VISIBLE );
             add_size.setVisibility( VISIBLE );
             add_weight.setVisibility( VISIBLE );
             add_images.setVisibility( VISIBLE );
             add_weight.setText( "Update" );
             add_size.setText( "Update" );
-            add_color.setText( "Update" );
+           // add_color.setText( "Update" );
             add_images.setText( "Update" );
             image_upload_btn.setVisibility( GONE );
+            editTextWeight.setVisibility( View.GONE );
+            available_stock_lay.setVisibility( View.VISIBLE );
+            editTextShiledUrl_lay.setVisibility( View.VISIBLE );
             editTextSubCategoryName.setText( mSubCategory.getName() );
             age.setText( "" + mSubCategory.getAge() );
             brand.setText( mSubCategory.getBrand() );
@@ -222,9 +229,6 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
             editTextImagetUrl4.setText( mSubCategory.getLink4() );
             editTextShiledUrl.setText( mSubCategory.getShieldLink() );
             available_stock.setText( "" + mSubCategory.getAvailableStock() );
-            editTextWeight.setVisibility( View.GONE );
-            available_stock.setVisibility( View.VISIBLE );
-            editTextShiledUrl.setVisibility( View.VISIBLE );
 
             if (mSubCategory.getWeights().size() != 0 && mSubCategory.getWeights() != null) {
                 getProductWeight( mSubCategory.getProductUniquekey() );
@@ -337,6 +341,8 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                 add_size.setVisibility( GONE );
                 add_weight.setVisibility( VISIBLE );
                 add_images.setVisibility( GONE );
+                available_stock_lay.setVisibility( View.GONE );
+                editTextShiledUrl_lay.setVisibility( View.GONE );
                 color_text.setText( "Select Color :" );
                 size_text.setText( "Select Size :" );
                 weight_text.setText( "Select Weight :" );
@@ -346,7 +352,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                 String salt = uniqueID.replaceAll( "-" ,"");
                 product_unique_key.setText(salt);
                 getSelectSize( );
-                getSelectColor( );
+                //getSelectColor( );
                 add_weight.setOnClickListener( new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -494,7 +500,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
             final int subcategoryId = mCategory.getCategoryid();
             Subcategory subcategory = new Subcategory(
                     mCategory.getId(),
-                    String.valueOf(subcategoryId), "",
+                    String.valueOf(mCategory.getId()),/*String.valueOf(subcategoryId),*/ "",
                     search_key_,
                     subcategoryname,
                     product_unique_key_, "",  "",  "",
@@ -1090,7 +1096,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                 image.setImage( image1.toString() );
                 image.setColorName( "Green");
                 mImagesList.add( image );
-                Picasso.with( mCtx ).load( image1.toString() ).into( holder.imageView );
+                Glide.with(mCtx).load( image1.toString() ).into( holder.imageView );
             }
         }
 
@@ -1132,7 +1138,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         public void onBindViewHolder(ImagesAdapter.ViewHolder holder, int position) {
             Image image1 = images.get( position );
             if (image1.getImage() != null) {
-                Picasso.with( mCtx ).load( image1.getImage() ).into( holder.imageView );
+                Glide.with(mCtx).load( image1.getImage() ).into( holder.imageView );
                 holder.checkBox.setVisibility( VISIBLE );
                 holder.imageView.setOnClickListener( new View.OnClickListener() {
                     @Override
@@ -1227,10 +1233,10 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                             weight2.setPond( weight2.getPond() );
                             mWeightList.add( weight2 );
                             weight = weight2;
-                            holder.item_weight.setBackgroundColor( android.graphics.Color.parseColor( "#567845" ) );
+                            holder.item_weight.setBackgroundResource( R.drawable.selected_border );
                             holder.item_weight.setTextColor( android.graphics.Color.parseColor( "#ffffff" ) );
                         } else {
-                            holder.item_weight.setBackgroundColor( android.graphics.Color.parseColor( "#ffffff" ) );
+                            holder.item_weight.setBackgroundResource( R.drawable.select_border );
                             holder.item_weight.setTextColor( android.graphics.Color.parseColor( "#000000" ) );
                         }
                     }
@@ -1251,10 +1257,10 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                             weight2.setPond( weight2.getPond() );
                             mWeightList.add( weight2 );
                             weight = weight2;
-                            holder.item_weight_dozan.setBackgroundColor( android.graphics.Color.parseColor( "#567845" ) );
+                            holder.item_weight_dozan.setBackgroundResource( R.drawable.selected_border );
                             holder.item_weight_dozan.setTextColor( android.graphics.Color.parseColor( "#ffffff" ) );
                         } else {
-                            holder.item_weight_dozan.setBackgroundColor( android.graphics.Color.parseColor( "#ffffff" ) );
+                            holder.item_weight_dozan.setBackgroundResource( R.drawable.select_border );
                             holder.item_weight_dozan.setTextColor( android.graphics.Color.parseColor( "#000000" ) );
                         }
                     }
@@ -1275,10 +1281,10 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                             weight2.setPond( weight2.getPond() );
                             mWeightList.add( weight2 );
                             weight = weight2;
-                            holder.item_weight_pond.setBackgroundColor( android.graphics.Color.parseColor( "#567845" ) );
+                            holder.item_weight_pond.setBackgroundResource( R.drawable.selected_border );
                             holder.item_weight_pond.setTextColor( android.graphics.Color.parseColor( "#ffffff" ) );
                         } else {
-                            holder.item_weight_pond.setBackgroundColor( android.graphics.Color.parseColor( "#ffffff" ) );
+                            holder.item_weight_pond.setBackgroundResource( R.drawable.select_border );
                             holder.item_weight_pond.setTextColor( android.graphics.Color.parseColor( "#000000" ) );
                         }
                     }
@@ -1292,8 +1298,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public Button item_weight;
-            public TextView item_weight_dozan, item_weight_pond;
+            public TextView item_weight, item_weight_dozan, item_weight_pond;
 
             public ViewHolder(View itemLayoutView) {
                 super( itemLayoutView );
@@ -1344,10 +1349,10 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                         if (size.isSelected()) {
                             sizeText = size;
                             mSizesTextList.add( size );
-                            holder.item_size_text.setBackgroundColor( android.graphics.Color.parseColor( "#567845" ) );
+                            holder.item_size_text.setBackgroundResource( R.drawable.selected_border);
                             holder.item_size_text.setTextColor( android.graphics.Color.parseColor( "#ffffff" ) );
                         } else {
-                            holder.item_size_text.setBackgroundColor( android.graphics.Color.parseColor( "#ffffff" ) );
+                            holder.item_size_text.setBackgroundResource( R.drawable.select_border);
                             holder.item_size_text.setTextColor( android.graphics.Color.parseColor( "#000000" ) );
                         }
                     }
@@ -1361,8 +1366,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView item_size_text;
-            public Button item_size;
+            public TextView item_size_text,item_size;
             private View view;
 
             public ViewHolder(View itemLayoutView) {
@@ -1413,10 +1417,10 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                         if (size.isSelected()) {
                             sizeNumber = size;
                             mSizeNumberList.add( size );
-                            holder.item_size.setBackgroundColor( android.graphics.Color.parseColor( "#567845" ) );
+                            holder.item_size.setBackgroundResource( R.drawable.selected_border);
                             holder.item_size.setTextColor( android.graphics.Color.parseColor( "#ffffff" ) );
                         } else {
-                            holder.item_size.setBackgroundColor( android.graphics.Color.parseColor( "#ffffff" ) );
+                            holder.item_size.setBackgroundResource( R.drawable.select_border);
                             holder.item_size.setTextColor( android.graphics.Color.parseColor( "#000000" ) );
                         }
                     }
@@ -1430,8 +1434,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public Button item_size;
-            private TextView item_size_text;
+            private TextView item_size_text,item_size;
 
             public ViewHolder(View itemLayoutView) {
                 super( itemLayoutView );
@@ -1479,10 +1482,10 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                             color1.setColor( color1.getColor() );
                             mColoList.add( color1 );
                             color = color1;
-                            holder.item_color.setBackgroundColor( android.graphics.Color.parseColor( "#567845" ) );
+                            holder.item_color.setBackgroundResource( R.drawable.selected_border);
                             holder.item_color.setTextColor( android.graphics.Color.parseColor( "#ffffff" ) );
                         } else {
-                            holder.item_color.setBackgroundColor( android.graphics.Color.parseColor( "#ffffff" ) );
+                            holder.item_color.setBackgroundResource(R.drawable.select_border);
                             holder.item_color.setTextColor( android.graphics.Color.parseColor( "#000000" ) );
                         }
                     }
@@ -1496,7 +1499,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public Button item_color;
+            public TextView item_color;
 
             public ViewHolder(View itemLayoutView) {
                 super( itemLayoutView );

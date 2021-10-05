@@ -1,121 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/appRoot"
-    tools:context=".Activity.Orders.RecievedOrderActivity">
+    android:orientation="vertical">
 
-    <FrameLayout
+    <LinearLayout
+        android:id="@+id/orders_layout"
+        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/orders_layout"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeToRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_gravity="center_vertical">
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swipeToRefresh"
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/nested_scroll_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                android:scrollingCache="true">
 
-                <androidx.core.widget.NestedScrollView
-                    android:id="@+id/nested_scroll_view"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                    android:layout_height="wrap_content"
+                    android:descendantFocusability="blocksDescendants"
+                    android:orientation="vertical">
 
-                    <ScrollView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:fillViewport="true">
+                        android:orientation="vertical">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:visibility="visible"
+                            android:id="@+id/recieved_orders_recycler"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scrollbars="none"
+                            android:layoutAnimation="@anim/layout_animation_fall_down"
+                            android:scrollbarAlwaysDrawHorizontalTrack="true"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="90dp"
                             android:orientation="vertical">
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:visibility="visible"
-                                android:id="@+id/recieved_orders_recycler"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:scrollbars="none"
-                                android:layoutAnimation="@anim/layout_animation_fall_down"
-                                android:scrollbarAlwaysDrawHorizontalTrack="true"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="70dp"
-                                android:orientation="vertical">
-
-                            </LinearLayout>
 
                         </LinearLayout>
 
-                    </ScrollView>
+                    </LinearLayout>
 
-                </androidx.core.widget.NestedScrollView>
+                </LinearLayout>
 
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            </androidx.core.widget.NestedScrollView>
 
-        </LinearLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <LinearLayout
-            android:id="@+id/no_internet_connection_layout"
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/no_internet_connection_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            app:lottie_fileName="no_internet.json"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/no_orders"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivEmptyStates"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="10sp"
+            app:srcCompat="@drawable/ic_launcher" />
+
+
+        <TextView
+            android:id="@+id/order_status_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="100dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:gravity="center"
-            android:visibility="gone"
-            android:orientation="vertical">
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/animationView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:lottie_fileName="no_internet.json"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/no_orders"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="20dp"
-            android:gravity="center"
-            android:visibility="gone"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/ivEmptyStates"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginBottom="10sp"
-                app:srcCompat="@drawable/ic_launcher" />
-
-
-            <TextView
-                android:id="@+id/order_status_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="100dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:gravity="center"
-                android:textStyle="normal"
-                android:textColor="#848484"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-    </FrameLayout>
+            android:textStyle="normal"
+            android:textColor="#848484"
+            android:textSize="15sp" />
+    </LinearLayout>
 
 </LinearLayout>

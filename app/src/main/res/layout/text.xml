@@ -1,59 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardlist_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:cardElevation="4dp">
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/item_size_text"
+        android:layout_width="@dimen/margin_50"
+        android:layout_height="@dimen/margin_30"
+        android:layout_margin="@dimen/margin_5"
+        android:textSize="@dimen/size_14"
+        android:background="@drawable/select_border"
+        android:textColor="@color/style_color_primary"
+        android:gravity="center"
+        android:textStyle="bold"/>
 
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/item_size_text"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:text="@string/email"
-            android:layout_margin="@dimen/margin_5"
-            android:textSize="@dimen/size_14"
-            android:textAllCaps="true"
-            android:background="@drawable/rzp_border"
-            android:textColor="@color/style_color_primary"
-            android:gravity="center"
-            android:textStyle="normal"/>
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/item_weight_pond"
+        android:layout_width="@dimen/margin_50"
+        android:layout_height="@dimen/margin_30"
+        android:layout_margin="@dimen/margin_5"
+        android:textSize="@dimen/size_14"
+        android:background="@drawable/select_border"
+        android:textColor="@color/style_color_primary"
+        android:gravity="center"
+        android:textStyle="bold"/>
 
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/item_weight_pond"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:background="@drawable/rzp_border"
-            android:layout_margin="@dimen/margin_5"
-            android:textSize="@dimen/size_14"
-            android:textAllCaps="true"
-            android:textColor="@color/style_color_primary"
-            android:gravity="center"
-            android:textStyle="bold"/>
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/item_weight"
+        android:layout_width="@dimen/margin_50"
+        android:layout_height="@dimen/margin_30"
+        android:layout_margin="@dimen/margin_5"
+        android:textSize="@dimen/size_14"
+        android:background="@drawable/select_border"
+        android:textColor="@color/style_color_primary"
+        android:gravity="center"
+        android:textStyle="bold"/>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:visibility="gone"
-            android:id="@+id/item_weight"
-            android:layout_width="70dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="@dimen/margin_10"
-            android:layout_marginEnd="@dimen/margin_10"
-            android:background="@drawable/rzp_border"
-            android:layout_margin="@dimen/margin_5"
-            android:textSize="@dimen/text_size_medium"
-            android:textAllCaps="false"
-            android:textColor="@color/style_color_primary"
-            android:textStyle="normal"
-            android:gravity="center"/>
-
-    </androidx.cardview.widget.CardView>
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/color_show"
+        android:layout_width="@dimen/margin_50"
+        android:layout_height="@dimen/margin_30"
+        android:layout_margin="@dimen/margin_5"
+        android:textSize="@dimen/size_14"
+        android:background="@drawable/select_border"
+        android:textColor="@color/style_color_primary"
+        android:gravity="center"
+        android:textStyle="bold"/>
 
 </LinearLayout>

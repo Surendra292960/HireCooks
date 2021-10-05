@@ -71,7 +71,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         Bitmap largeIcon = getBitmapfromUrl(largeIconUri);
                         final Uri NOTIFICATION_SOUND_URI = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + BuildConfig.APPLICATION_ID + "/" + R.raw.message);
                         Intent resultIntent = new Intent(getApplicationContext(), ChatActivity.class);
-                        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                       // resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0 /* Request code */, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID);
@@ -96,7 +96,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         Bitmap largeIcon = getBitmapfromUrl(largeIconUri);
                         final Uri NOTIFICATION_SOUND_URI = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + BuildConfig.APPLICATION_ID + "/" + R.raw.message);
                         Intent resultIntent = new Intent(getApplicationContext(), ChatActivity.class);
-                        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                       // resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0 /* Request code */, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID);
@@ -127,7 +127,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         Bitmap largeIcon = getBitmapfromUrl( largeIconUri );
                         final Uri NOTIFICATION_SOUND_URI = Uri.parse( ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + BuildConfig.APPLICATION_ID + "/" + R.raw.cheerful );
                         Intent resultIntent = new Intent( getApplicationContext(), RecievedOrderActivity.class );
-                        resultIntent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
+                        //resultIntent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
                         PendingIntent pendingIntent = PendingIntent.getActivity( getApplicationContext(), 0 /* Request code */, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT );
                         NotificationManager notificationManager = (NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE );
                         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder( getApplicationContext(), CHANNEL_ID );
@@ -152,7 +152,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         Bitmap largeIcon = getBitmapfromUrl( largeIconUri );
                         final Uri NOTIFICATION_SOUND_URI = Uri.parse( ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + BuildConfig.APPLICATION_ID + "/" + R.raw.cheerful );
                         Intent resultIntent = new Intent( getApplicationContext(), RecievedOrderActivity.class );
-                        resultIntent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
+                       // resultIntent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK );
                         PendingIntent pendingIntent = PendingIntent.getActivity( getApplicationContext(), 0 /* Request code */, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT );
                         NotificationManager notificationManager = (NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE );
                         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder( getApplicationContext(), CHANNEL_ID );
@@ -213,7 +213,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         Log.e("remoteMessage", remoteMessage.getData().toString());
                         Bitmap image = getBitmapfromUrl(imageUri);
                         Intent resultIntent = new Intent(getApplicationContext(), ChatActivity.class);
-                        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        //resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0 /* Request code */, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         //Uri defaultsound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                         Uri defaultsound = (Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.message));
@@ -225,7 +225,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         Log.e("remoteMessage", remoteMessage.getData().toString());
                         Bitmap image = getBitmapfromUrl(imageUri);
                         Intent resultIntent = new Intent(getApplicationContext(), ChatActivity.class);
-                        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                       // resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0 /* Request code */, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         //Uri defaultsound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                         Uri defaultsound = (Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.message));
@@ -244,7 +244,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         Log.e("remoteMessage", remoteMessage.getData().toString());
                         Bitmap image = getBitmapfromUrl(imageUri);
                         Intent resultIntent = new Intent(getApplicationContext(), RecievedOrderActivity.class);
-                        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                       // resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0 /* Request code */, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         //Uri defaultsound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                         Uri defaultsound = (Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.cheerful));
@@ -256,7 +256,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         Log.e("remoteMessage", remoteMessage.getData().toString());
                         Bitmap image = getBitmapfromUrl(imageUri);
                         Intent resultIntent = new Intent(getApplicationContext(), RecievedOrderActivity.class);
-                        resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                       // resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0 /* Request code */, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         //Uri defaultsound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                         Uri defaultsound = (Uri.parse("android.resource://" + this.getPackageName() + "/" + R.raw.cheerful));

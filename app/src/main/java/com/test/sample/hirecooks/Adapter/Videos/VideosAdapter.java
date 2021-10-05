@@ -1,5 +1,6 @@
 package com.test.sample.hirecooks.Adapter.Videos;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -73,14 +74,14 @@ public class VideosAdapter extends AAH_VideosAdapter {
     }
 
     @Override
-    public void onBindViewHolder(final AAH_CustomViewHolder holder, int position) {
+    public void onBindViewHolder(final AAH_CustomViewHolder holder, @SuppressLint("RecyclerView") int position) {
         //((MyViewHolder) holder).tv.setText(list.get(position).getName());
         //todo
       /*  holder.setImageUrl(list.get(position).getImage_url());
         holder.setVideoUrl(list.get(position).getVideo_url());
         //load image into imageview
         if (list.get(position).getImage_url() != null && !list.get(position).getImage_url().isEmpty()) {
-            picasso.load(holder.getImageUrl()).config(Bitmap.Config.RGB_565).into(holder.getAAH_ImageView());
+            Glide.load(holder.getImageUrl()).config(Bitmap.Config.RGB_565).into(holder.getAAH_ImageView());
         }*/
         holder.setLooping(true); //optional - true by default
         //to play pause videos manually (optional)

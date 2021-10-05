@@ -1,83 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-    <LinearLayout
-        android:id="@+id/searchbar_interface_layout"
+    <com.mancj.materialsearchbar.MaterialSearchBar
+        android:id="@+id/searchBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <include
-            android:id="@+id/search_bar"
-            layout="@layout/search_layout"/>
-
-    </LinearLayout>
-
+        app:mt_navIconEnabled="false"
+        android:elevation="5dp"
+        android:fadeScrollbars="false"
+        app:mt_speechMode="true"
+        app:mt_suggestionsAnimationSpeed="@integer/icon_animation_duration"
+        app:mt_placeholder="" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:visibility="visible">
 
         <LinearLayout
             android:id="@+id/all_search_layout"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/nested_scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:scrollbars="none"
+                android:scrollingCache="false">
 
-                <androidx.core.widget.NestedScrollView
-                    android:id="@+id/nested_scroll_view"
+                <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scrollbars="none"
-                    android:scrollingCache="false">
+                    android:layout_height="match_parent">
 
-                    <ScrollView
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="0dp"
+                        android:orientation="vertical">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:layout_marginTop="@dimen/margin_60"
+                            android:visibility="visible"
+                            android:id="@+id/subcategory_recycler"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scrollbars="none"
+                            android:layoutAnimation="@anim/layout_animation_fall_down"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="90dp"
                             android:orientation="vertical">
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:visibility="visible"
-                                android:id="@+id/subcategory_recycler"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:scrollbars="none"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="90dp"
-                                android:orientation="vertical">
-
-                            </LinearLayout>
 
                         </LinearLayout>
 
-                    </ScrollView>
+                    </LinearLayout>
 
-                </androidx.core.widget.NestedScrollView>
+                </ScrollView>
 
-            </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
 
         </LinearLayout>
 
@@ -115,4 +106,4 @@
 
     </FrameLayout>
 
-</LinearLayout>
+</RelativeLayout>

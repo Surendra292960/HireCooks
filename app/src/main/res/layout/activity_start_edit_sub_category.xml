@@ -303,7 +303,8 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_weight="1"
+                android:id="@+id/editTextShiledUrl_lay"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_5"
@@ -312,7 +313,6 @@
                 android:hint="@string/shield_url">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:visibility="gone"
                     android:inputType="text"
                     android:background="@null"
                     android:id="@+id/editTextShiledUrl"
@@ -364,6 +364,8 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/available_stock_lay"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_5"
@@ -372,7 +374,6 @@
                 android:hint="@string/available_stock">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:visibility="gone"
                     android:id="@+id/available_stock"
                     android:maxLines="1"
                     android:background="@null"
@@ -557,6 +558,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/color_text"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
@@ -583,6 +585,7 @@
             </LinearLayout>
 
             <FrameLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center">
@@ -590,7 +593,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_marginTop="@dimen/margin_10"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:id="@+id/colors_recycler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -600,6 +603,7 @@
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
                 <ProgressBar
+                    android:visibility="gone"
                     android:id="@+id/color_progress"
                     android:layout_width="30dp"
                     android:layout_height="30dp"

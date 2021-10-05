@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -24,7 +25,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.Models.cooks.Request.CooksImagesResult;
 import com.test.sample.hirecooks.R;
@@ -212,22 +212,22 @@ public class AddCookImages extends BaseActivity {
                 if(i==0){
                     sUrl = newImageList.get(i).toString();
                     editTextImagetUrl1.setVisibility( View.VISIBLE );
-                    Picasso.with( AddCookImages.this ).load(sUrl).into(editTextUploadImage1);
+                    Glide.with(this).load(sUrl).into(editTextUploadImage1);
                     editTextImagetUrl1.setText(sUrl);
                 }else if(i==1){
                     editTextImagetUrl2.setVisibility( View.VISIBLE );
                     sUrl = newImageList.get(i).toString();
-                    Picasso.with( AddCookImages.this ).load(sUrl).into(editTextUploadImage2);
+                    Glide.with(this).load(sUrl).into(editTextUploadImage2);
                     editTextImagetUrl2.setText(sUrl);
                 }else if(i==2){
                     editTextImagetUrl3.setVisibility( View.VISIBLE );
                     sUrl = newImageList.get(i).toString();
-                    Picasso.with( AddCookImages.this ).load(sUrl).into(editTextUploadImage3);
+                    Glide.with(this).load(sUrl).into(editTextUploadImage3);
                     editTextImagetUrl3.setText(sUrl);
                 }else if(i==3){
                     editTextImagetUrl4.setVisibility( View.VISIBLE );
                     sUrl = newImageList.get(i).toString();
-                    Picasso.with( AddCookImages.this ).load(sUrl).into(editTextUploadImage4);
+                    Glide.with(this).load(sUrl).into(editTextUploadImage4);
                     editTextImagetUrl4.setText(sUrl);
                 }
             }

@@ -95,4 +95,8 @@ public class Message implements Serializable {
         this.recieve = recieve;
     }
 
+    public int compare(Message o1, Message o2) {
+        return Integer.parseInt( o1.getSentat() ) < Integer.parseInt( o2.getSentat() ) ? 1 :
+                (o1.getSentat().equals( o2.getSentat() ) ? 0 : -1);
+    }
 }

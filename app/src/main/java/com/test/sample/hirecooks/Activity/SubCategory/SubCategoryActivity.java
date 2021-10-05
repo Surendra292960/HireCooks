@@ -4,7 +4,9 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,13 +28,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
+import com.mancj.materialsearchbar.MaterialSearchBar;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.AddorRemoveCallbacks;
+import com.test.sample.hirecooks.Activity.Home.MainActivity;
 import com.test.sample.hirecooks.Activity.Orders.PlaceOrderActivity;
 import com.test.sample.hirecooks.Activity.ProductDatails.DetailsActivity;
+import com.test.sample.hirecooks.Activity.Search.SearchResultActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
@@ -65,6 +73,8 @@ public class SubCategoryActivity extends BaseActivity {
     private List<Example> examples;
     private FrameLayout no_vender_found,no_result_found;
     private List<Subcategory> filteredList;
+    private SubcategoryAdapter mAdapter;
+    private List<String> suggestList=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +82,9 @@ public class SubCategoryActivity extends BaseActivity {
         setContentView( R.layout.activity_sub_category );
         Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(" ");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("");
         this.getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         subcategory_recycler = findViewById( R.id.subcategory_recycler );
         appRoot = findViewById(R.id.appRoot);
         bottom_anchor_layout = findViewById(R.id.bottom_anchor_layout);
@@ -85,6 +96,7 @@ public class SubCategoryActivity extends BaseActivity {
         bottom_anchor =  view.findViewById(R.id.bottom_anchor);
         checkout_amount = view.findViewById(R.id.checkout_amount);
         checkout = view.findViewById(R.id.checkout);
+
         getCart();
         checkout.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -101,6 +113,19 @@ public class SubCategoryActivity extends BaseActivity {
                 Toast.makeText( this, "Comming soon", Toast.LENGTH_SHORT ).show();
             }
         }
+
+        NestedScrollView nested_content = (NestedScrollView) findViewById(R.id.nested_scroll_view);
+        nested_content.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY < oldScrollY) { // up
+                    animateBottomAnchor(false);
+                }
+                if (scrollY > oldScrollY) { // down
+                    animateBottomAnchor(true);
+                }
+            }
+        });
     }
 
     boolean isBottomAnchorNavigationHide = false;
@@ -110,6 +135,38 @@ public class SubCategoryActivity extends BaseActivity {
         isBottomAnchorNavigationHide = hide;
         int moveY = hide ? (2 * bottom_anchor.getHeight()) : 0;
         bottom_anchor.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+        MenuItem searchItem = menu.getItem(0);
+        SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setFocusable(true);
+        searchItem.expandActionView();
+
+        searchView.setOnQueryTextListener( new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if(filteredList.size()!=0){
+                    startSearch( query );
+                }else{
+                    showalertbox("No Match found");
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(filteredList.size()!=0){
+                    startSearch( newText );
+                }
+                return false;
+            }
+        } );
+        return super.onCreateOptionsMenu(menu);
     }
 
     private void getCart() {
@@ -163,7 +220,7 @@ public class SubCategoryActivity extends BaseActivity {
                                         no_vender_found.setVisibility(View.GONE);
                                         subcategory_recycler.setVisibility(View.VISIBLE);
                                         subcategory_recycler.setHasFixedSize(true);
-                                        SubcategoryAdapter mAdapter = new SubcategoryAdapter( SubCategoryActivity.this, filteredList);
+                                         mAdapter = new SubcategoryAdapter( SubCategoryActivity.this, filteredList);
                                         subcategory_recycler.setAdapter(mAdapter);
                                     }else{
                                         no_vender_found.setVisibility(View.VISIBLE);
@@ -188,38 +245,6 @@ public class SubCategoryActivity extends BaseActivity {
                 System.out.println("Suree : " + t.getMessage());
             }
         });
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.search_menu, menu);
-        MenuItem searchItem = menu.getItem(0);
-        SearchManager searchManager = (SearchManager) getSystemService( Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setFocusable(true);
-        searchItem.expandActionView();
-
-        searchView.setOnQueryTextListener( new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                if(filteredList.size()!=0){
-                    startSearch( query );
-                }else{
-                    showalertbox("No Match found");
-                }
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if(filteredList.size()!=0){
-                    startSearch( newText );
-                }
-                return false;
-            }
-        } );
-        return super.onCreateOptionsMenu(menu);
     }
 
     private void startSearch(CharSequence text) {
@@ -277,7 +302,7 @@ public class SubCategoryActivity extends BaseActivity {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull final SubCategoryActivity.SubcategoryAdapter.MyViewHolder holder, final int position) {
+        public void onBindViewHolder(@NonNull final SubCategoryActivity.SubcategoryAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
             final Subcategory product = productList.get(position);
             localStorage = new LocalStorage(context);
@@ -297,19 +322,9 @@ public class SubCategoryActivity extends BaseActivity {
                 holder.name.setText(product.getName());
                 holder.item_short_desc.setText(product.getDiscription());
                 //holder.item_short_desc.setText(product.getDetailDiscription());
-                holder.progress_dialog.setVisibility( View.VISIBLE );
+                holder.progress_dialog.setVisibility( View.GONE );
                 if(product.getImages()!=null&&product.getImages().size()!=0){
-                    Picasso.with(context).load(product.getImages().get( 0 ).getImage()).into( holder.imageView, new com.squareup.picasso.Callback() {
-                        @Override
-                        public void onSuccess() {
-                            holder.progress_dialog.setVisibility( View.GONE );
-                        }
-
-                        @Override
-                        public void onError() {
-
-                        }
-                    } );
+                    Glide.with(context).load(product.getImages().get( 0 ).getImage()).into( holder.imageView);
                 }
 
                 if (product.getSellRate() != 0 && product.getDisplayRate()!= 0) {

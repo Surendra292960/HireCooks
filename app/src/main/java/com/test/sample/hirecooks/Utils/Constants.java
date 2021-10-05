@@ -10,7 +10,6 @@ import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.Models.TokenResponse.TokenResult;
 import com.test.sample.hirecooks.Models.Users.User;
-import com.test.sample.hirecooks.RoomDatabase.SecondryAddress_DB.Address;
 
 import java.util.List;
 
@@ -22,7 +21,6 @@ public class Constants {
     public static final String base64EncodedPublicKey = "";
     public static List<Map> NEARBY_COOKS = null;
     public static LatLng USER_CURRENT_LOCATION = null;
-    public static Address ADDRESS = null;
     public static String USER_PROFILE = null;
     public static String locationApiKey = "AIzaSyC-BYCFrpXUa4CI-H9fRqWEc0-I_ylk31k";
     String s = "AIzaSyBm_OQWOR7nRG7uPjRgtkeXwHSjWIbjmz4";

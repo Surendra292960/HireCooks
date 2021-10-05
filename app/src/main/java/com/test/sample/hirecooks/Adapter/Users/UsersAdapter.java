@@ -22,13 +22,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.kinda.alert.KAlertDialog;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.Chat.ChatActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Chat.MessageResponse;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
-import com.test.sample.hirecooks.Tasks.Activity.TaskActivity;
 import com.test.sample.hirecooks.Utils.APIUrl;
 import com.test.sample.hirecooks.Utils.OnButtonClickListener;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
@@ -65,7 +64,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final User user = users.get(position);
         if (!TextUtils.isEmpty(user.getImage())) {
-            Picasso.with(mCtx).load(APIUrl.PROFILE_URL+user.getImage()).into(holder.textViewImage);
+            Glide.with(mCtx).load(APIUrl.PROFILE_URL+user.getImage()).into(holder.textViewImage);
         }
 
         holder.textViewId.setText("ID:  "+user.getId());
@@ -164,12 +163,12 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 //alertDialog();
-                Intent intent = new Intent(mCtx, TaskActivity.class);
+           /*     Intent intent = new Intent(mCtx, TaskActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("User", user);
                 intent.putExtras(bundle);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                mCtx.startActivity(intent);
+                mCtx.startActivity(intent);*/
             }
         });
     }

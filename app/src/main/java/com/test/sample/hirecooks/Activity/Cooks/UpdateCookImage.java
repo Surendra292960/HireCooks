@@ -23,7 +23,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.Models.cooks.Request.CooksImages;
 import com.test.sample.hirecooks.Models.cooks.Request.CooksImagesResult;
@@ -151,7 +151,7 @@ public class UpdateCookImage extends BaseActivity {
                             Toast.makeText(UpdateCookImage.this, "Uploaded successfully", Toast.LENGTH_SHORT).show();
                             final Uri downloadUrl = uri;
                             sUrl = downloadUrl.toString();
-                            Picasso.with(UpdateCookImage.this ).load(sUrl).into(editTextUploadImage);
+                            Glide.with(UpdateCookImage.this).load(sUrl).into(editTextUploadImage);
                             editTextImageUrl.setText(sUrl);
                         }
                     }).addOnFailureListener(new OnFailureListener() {

@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.Cooks.CooksDetailsActivity;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
@@ -44,11 +44,11 @@ public class CooksAdapter extends RecyclerView.Adapter<CooksAdapter.ViewHolder> 
         final User user = users.get(position);
         if(user.getImage()!=null) {
             if (user.getImage().contains("https://")) {
-                Picasso.with(mCtx).load(user.getImage()).into(holder.profile_image);
+                Glide.with(mCtx).load(user.getImage()).into(holder.profile_image);
             } else if (user.getImage().contains(" ")) {
 
             } else {
-                Picasso.with(mCtx).load(APIUrl.PROFILE_URL + user.getImage()).into(holder.profile_image);
+                Glide.with(mCtx).load(APIUrl.PROFILE_URL + user.getImage()).into(holder.profile_image);
             }
         }
         holder.textViewName.setText(user.getName());

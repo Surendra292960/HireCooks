@@ -1,5 +1,6 @@
 package com.test.sample.hirecooks.Adapter.ManageAccount;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -40,7 +41,7 @@ public class ProductsCategoryAdapter extends RecyclerView.Adapter<ProductsCatego
     }
 
     @Override
-    public void onBindViewHolder(ProductsCategoryAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ProductsCategoryAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Offer category = categories.get(position);
         holder.categoryName.setText(category.getName());
         holder.categoryName.setOnClickListener(new View.OnClickListener() {
@@ -49,7 +50,7 @@ public class ProductsCategoryAdapter extends RecyclerView.Adapter<ProductsCatego
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     Intent intent = new Intent(mCtx, EditCategoryActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("Video", categories.get(position));
+                    bundle.putSerializable("ProductCategory", categories.get(position));
                     intent.putExtras(bundle);
                     intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     mCtx.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) mCtx).toBundle());

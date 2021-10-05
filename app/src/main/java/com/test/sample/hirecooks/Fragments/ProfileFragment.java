@@ -32,10 +32,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.ipaulpro.afilechooser.utils.FileUtils;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.Chat.ChatActivity;
 import com.test.sample.hirecooks.Activity.Cooks.UpdateCookDetails;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
+import com.test.sample.hirecooks.Activity.ManageAccount.ManageProducts.EditCategoryActivity;
+import com.test.sample.hirecooks.Activity.ManageAccount.ManageProducts.ProductCategoryList;
 import com.test.sample.hirecooks.Activity.ManageAddress.SecondryAddressActivity;
 import com.test.sample.hirecooks.Activity.Users.UpdateProfile;
 import com.test.sample.hirecooks.Activity.Users.UsersActivity;
@@ -83,7 +85,7 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
     private ImageButton profile_image_layout,edit_profile,sendBtn;
     private SwitchCompat order_not_accepting;
     private LinearLayout admin_dash_lay,user_layout,all_profile_layout,no_internet_connection_layout;
-    private Button  change_address,chat,logout,manage_cook,start;
+    private Button  manage_category, change_address,chat,logout,manage_cook,start;
     private CardView manage_account,manage_employee,manage_employee_report,manage_all_employee, manage_address,manage_recieved_orders;
     private BaseActivity baseActivity;
     private RecyclerView admin_dash_recycler;
@@ -119,6 +121,7 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
         baseActivity = new BaseActivity();
         appRoot = view.findViewById(R.id.appRoot);
         start = view.findViewById(R.id.start);
+        manage_category = view.findViewById(R.id.manage_category);
         all_profile_layout = view.findViewById(R.id.all_profile_layout);
         profile_image_layout = view.findViewById(R.id.profile_image_layout);
         profile_image = view.findViewById(R.id.profile_image);
@@ -147,7 +150,7 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
 
         user_name.setText(user.getName());
         if (USER_PROFILE!=null) {
-            Picasso.with(mainActivity).load( APIUrl.PROFILE_URL+USER_PROFILE).into(profile_image);
+            Glide.with(mainActivity).load( APIUrl.PROFILE_URL+USER_PROFILE).into(profile_image);
         }
         if(user.getUserType().equalsIgnoreCase( "Admin" )||user.getUserType().equalsIgnoreCase( "Manager" )) {
             admin_dash_lay.setVisibility( View.VISIBLE );
@@ -249,10 +252,17 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
         }else if(user.getUserType().equalsIgnoreCase( "SuperAdmin" )){
             user_layout.setVisibility( View.GONE );
             admin_dash_lay.setVisibility( View.GONE );
+            manage_category.setVisibility( View.VISIBLE );
             start.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startActivity( new Intent( mainActivity, UsersActivity.class ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK) );
+                }
+            });
+            manage_category.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity( new Intent( mainActivity, ProductCategoryList.class ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK) );
                 }
             });
         }

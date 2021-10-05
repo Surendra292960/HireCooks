@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.Chat.ChatActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Users.Example;
@@ -242,11 +242,11 @@ public class AdminChatActivity extends AppCompatActivity {
             }
             if(firm_user.getImage()!=null) {
                 if (firm_user.getImage().contains("https://")) {
-                    Picasso.with(mCtx).load(firm_user.getImage()).into(holder.profile_image);
+                    Glide.with(mCtx).load(firm_user.getImage()).into(holder.profile_image);
                 } else if (firm_user.getImage().contains(" ")) {
 
                 } else {
-                    Picasso.with(mCtx).load( APIUrl.PROFILE_URL + firm_user.getImage()).into(holder.profile_image);
+                    Glide.with(mCtx).load( APIUrl.PROFILE_URL + firm_user.getImage()).into(holder.profile_image);
                 }
             }
             holder.textViewName.setText(firm_user.getName());

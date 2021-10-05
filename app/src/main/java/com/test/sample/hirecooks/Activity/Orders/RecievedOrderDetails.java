@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Models.NewOrder.Order;
 import com.test.sample.hirecooks.Models.SubCategory.Color;
 import com.test.sample.hirecooks.Models.SubCategory.Size;
@@ -53,11 +53,11 @@ public class RecievedOrderDetails extends AppCompatActivity {
            if(orders.getWeights().size()!=0&&orders.getWeights()!=null){
                for(Weight weight:orders.getWeights()){
                    if(weight.getKg()!=0){
-                       order_weight.setText("Weight         :  "+weight.getKg());
+                       order_weight.setText("Weight         :  "+weight.getKg()+"Kg");
                    }else if(weight.getPond()!=0){
-                       order_weight.setText("Weight         :  "+weight.getPond());
+                       order_weight.setText("Weight         :  "+weight.getPond()+"Pond");
                    }else if(weight.getDozan()!=0){
-                       order_weight.setText("Weight         :  "+weight.getDozan());
+                       order_weight.setText("Weight         :  "+weight.getDozan()+"Dozan");
                    }
                }
            }if(orders.getSizes().size()!=0&&orders.getSizes()!=null){
@@ -74,7 +74,7 @@ public class RecievedOrderDetails extends AppCompatActivity {
                }
            }  if(orders.getImages().size()!=0&&orders.getImages()!=null){
                for(int i=0; i<orders.getImages().size(); i++){
-                   Picasso.with( this ).load( orders.getImages().get( 0 ).getImage() ).into( order_image );
+                   Glide.with(this).load( orders.getImages().get( 0 ).getImage() ).into( order_image );
                }
            }
        }

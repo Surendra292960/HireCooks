@@ -23,7 +23,9 @@ import android.widget.Toast;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
@@ -31,8 +33,7 @@ import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.hbb20.CountryCodePicker;
 import com.test.sample.hirecooks.Adapter.SpinnerAdapter.UserTypeAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
@@ -57,6 +58,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -183,20 +185,24 @@ public class FirmUserSignupActivity extends BaseActivity {
 
     private void getToken(final String phone, int userId) {
         deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        Toast.makeText(this, deviceId, Toast.LENGTH_SHORT).show();
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
 
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this,  new OnSuccessListener<InstanceIdResult>() {
-            @Override
-            public void onSuccess(InstanceIdResult instanceIdResult) {
-                String newToken = instanceIdResult.getToken();
-                Log.e("get token",newToken);
-                if(!newToken.isEmpty()){
-                    sendTokenToServer(phone,newToken,0,deviceId,userId);
-                }else{
-                    ShowToast("Token Not Generated");
-                }
-            }
-        });
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        if(!token.isEmpty()){
+                            sendTokenToServer(phone,token,0,deviceId,userId);
+                        }else{
+                            ShowToast("Token Not Generated");
+                        }
+                    }
+                });
     }
 
     private void SignUpValidation() {

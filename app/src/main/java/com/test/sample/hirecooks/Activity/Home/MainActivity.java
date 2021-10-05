@@ -45,8 +45,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
@@ -55,8 +57,7 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.test.sample.flowingdrawer_core.ElasticDrawer;
 import com.test.sample.flowingdrawer_core.FlowingDrawer;
@@ -215,14 +216,21 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
                     }
                 });
 
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this,  new OnSuccessListener<InstanceIdResult>() {
-            @Override
-            public void onSuccess(InstanceIdResult instanceIdResult) {
-                String newToken = instanceIdResult.getToken();
-                Log.e("get token",newToken);
-                System.out.println("get Token : "+newToken);
-            }
-        });
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        Log.e("get token",token);
+                        System.out.println("get Token : "+token);
+                    }
+                });
 
         // Check GPS is enabled
         LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -257,23 +265,25 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
 
     private void getToken(final String phone, int userId, String firm_id) {
         deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this,  new OnSuccessListener<InstanceIdResult>() {
-            @Override
-            public void onSuccess(InstanceIdResult instanceIdResult) {
-                String newToken = instanceIdResult.getToken();
-                Log.e("get token",newToken);
-                if(!newToken.isEmpty()&&userId!=0){
-                    if(token!=null){
-                        updateTokenToServer(phone,newToken,0,deviceId,userId,firm_id);
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+                        if(token!=null){
+                            updateTokenToServer(phone,token,0,deviceId,userId,firm_id);
+                        }
+                        else {
+                            sendTokenToServer(phone,token,0,deviceId,userId);
+                        }
                     }
-                    else {
-                        sendTokenToServer(phone,newToken,0,deviceId,userId);
-                    }
-                }else{
-                    // ShowToast("Token Not Generated");
-                }
-            }
-        });
+                });
     }
 
     private void updateTokenToServer(String phone, String newToken, int isServerToken, String deviceId, int userId, String firm_id) {
@@ -317,8 +327,8 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
                     }
                 }
                 else{
-                    //  ShowToast("Failed due to :"+response.body().getMessage());
-                    getToken(user.getPhone(),user.getId(),user.getFirmId());
+                      ShowToast("Failed due to :"+response.body().getMessage());
+                     getToken(user.getPhone(),user.getId(),user.getFirmId());
                 }
             }
 
@@ -751,6 +761,7 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
         }
     }
 
+    @SuppressLint("MissingPermission")
     public void getCurrentLocation() {
         if ( ActivityCompat.checkSelfPermission ( MainActivity.this , android.Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission ( MainActivity.this , android.Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED ) {
@@ -776,6 +787,7 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_LOCATION:
                 // If request is cancelled, the result arrays are empty.

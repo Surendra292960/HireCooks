@@ -212,7 +212,26 @@
     <string name="firm_id" translatable="false">Firm Id</string>
     <string name="logout_date" translatable="false">Logout Date</string>
     <string name="id" translatable="false">ID</string>
-
+    <string name="colors" translatable="false">Select Colors </string>
+    <string name="sizes" translatable="false">Select Sizes </string>
+    <string name="weights" translatable="false">Select Weights </string>
+    <string name="ad_" translatable="false">+</string>
+    <string name="remove_" translatable="false">-</string>
+    <string name="_1" translatable="false">1</string>
+    <string name="product_rating_reviews"><![CDATA[Product Rating & Reviews]]></string>
+    <string name="dozan">Dozan</string>
+    <string name="gm">gm</string>
+    <string name="litre">Litre</string>
+    <string name="kg">Kg</string>
+    <string name="add_only_one_size_which_you_wants_n_rest_keep_zero">add only one size which you wants ? \n rest keep zero</string>
+    <string name="add_product_weight">Add Product Weight</string>
+    <string name="pound">Pound</string>
+    <string name="enter_delivery_pincode">Enter Delivery Pincode</string>
+    <string name="check">CHECK</string>
+    <string name="estimate_delivery_date">Estimate Delivery Date</string>
+    <string name="track">Track</string>
+    <string name="enter_action_id">Enter Action ID</string>
+    <string name="retry">Retry</string>
 
     <string-array name="uploadImages">
         <item>Pick from gallery</item>

@@ -32,8 +32,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.SubCategory.Example;
@@ -84,7 +85,7 @@ public class EditSubCategoryActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             categoryName= bundle.getString("CategoryName");
-            category = (Category) bundle.getSerializable("Video");
+            category = (Category) bundle.getSerializable("Category");
             if(category.getCategoryid()!=0){
                 getSubCategory(category.getId());
             }else {
@@ -260,7 +261,7 @@ public class EditSubCategoryActivity extends AppCompatActivity {
                 holder.item_short_desc.setText(product.getDiscription());
                 holder.discription.setText(product.getDetailDiscription());
                 if(product.getImages()!=null&&product.getImages().size()!=0){
-                    Picasso.with(context).load(product.getImages().get( 0 ).getImage()).into(holder.imageView);
+                    Glide.with(EditSubCategoryActivity.this).load(product.getImages().get( 0 ).getImage()).into(holder.imageView);
                 }
 
                 if (product.getSellRate() != 0 && product.getDisplayRate()!= 0) {

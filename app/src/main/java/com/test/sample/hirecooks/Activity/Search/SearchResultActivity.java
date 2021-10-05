@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.StrikethroughSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,8 +28,10 @@ import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
+import com.mancj.materialsearchbar.MaterialSearchBar;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.AddorRemoveCallbacks;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
 import com.test.sample.hirecooks.Activity.Orders.PlaceOrderActivity;
@@ -39,6 +42,7 @@ import com.test.sample.hirecooks.Models.SubCategory.Example;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
+import com.test.sample.hirecooks.Utils.Action;
 import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.NetworkUtil;
@@ -56,7 +60,7 @@ import retrofit2.Response;
 import static android.view.View.GONE;
 
 public class SearchResultActivity extends BaseActivity {
-    private EditText searchBar;
+    //private EditText searchBar;
     private LinearLayout search_lay;
     private RecyclerView recyclerView;
     private Toolbar toolbar;
@@ -67,6 +71,10 @@ public class SearchResultActivity extends BaseActivity {
     private LinearLayout all_search_layout,no_internet_connection_layout;
     private TextView item_count,checkout_amount,checkout,back_button,clear_text,search;
     private View searchbar_interface_layout,no_result_found;
+    private MaterialSearchBar searchBar;
+    private List<String> suggestList=new ArrayList<>();
+    private List<Subcategory> localDataSource=new ArrayList<>();
+    private SubcategoryAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,14 +105,7 @@ public class SearchResultActivity extends BaseActivity {
         bottom_anchor =  views.findViewById(R.id.bottom_anchor);
         checkout_amount = views.findViewById(R.id.checkout_amount);
         checkout = views.findViewById(R.id.checkout);
-
-        View search_view = findViewById(R.id.search_bar);
-        search=search_view.findViewById(R.id.search);
-        clear_text=search_view.findViewById(R.id.clear_text);
-        back_button=search_view.findViewById(R.id.go_back);
-        search_lay=search_view.findViewById(R.id.search_lay);
-        searchBar=search_lay.findViewById(R.id.editText_search);
-        search_lay.setVisibility(View.VISIBLE);
+        searchBar = findViewById(R.id.searchBar);
 
         checkout.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -113,63 +114,59 @@ public class SearchResultActivity extends BaseActivity {
             }
         });
 
-        search.setOnClickListener(new View.OnClickListener() {
+        searchBar.openSearch();
+        searchBar.addTextChangeListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-            /*    search.setVisibility( GONE);
-                clear_text.setVisibility(View.VISIBLE);*/
-            }
-        });
-
-        clear_text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchBar.setText("");
-                clear_text.setVisibility( View.GONE);
-            }
-        });
-        back_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                back_button.setVisibility(View.GONE);
-                startActivity(new Intent(SearchResultActivity.this, MainActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
-            }
-        });
-        searchBar.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                startSearch(charSequence);
-                if(charSequence.length() > 0){
-                    clear_text.setVisibility(View.VISIBLE);
-                    search.setVisibility( View.VISIBLE);
-                }else{
-                    clear_text.setVisibility(View.VISIBLE);
-                }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                startSearch(s);
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                startSearch(charSequence);
-                if(charSequence.length() > 0){
-                    clear_text.setVisibility(View.VISIBLE);
-                    search.setVisibility( View.VISIBLE);
-                }else{
-                    clear_text.setVisibility(View.VISIBLE);
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                List<String> suggest=new ArrayList<>();
+                for(String search:suggestList)
+                {
+                    if(search.toLowerCase().contains(searchBar.getText().toLowerCase()))
+                        suggest.add(search);
                 }
+                searchBar.setLastSuggestions(suggest);
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
-                //after the change calling the method and passing the search input
-                startSearch(editable.toString());
-                if(editable.toString().length() > 0){
-                    clear_text.setVisibility(View.VISIBLE);
-                }else{
-                    clear_text.setVisibility(View.VISIBLE);
+            public void afterTextChanged(Editable s) {
+                startSearch(s);
+            }
+        });
+        searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+            @Override
+            public void onSearchStateChanged(boolean enabled) {
+                if(!enabled)
+                    recyclerView.setAdapter(mAdapter); // restores full list of drinks
+            }
+
+            @Override
+            public void onSearchConfirmed(CharSequence text) {
+
+                startSearch(text);
+
+            }
+
+            @Override
+            public void onButtonClicked(int buttonCode) {
+                switch (buttonCode) {
+                    case MaterialSearchBar.BUTTON_NAVIGATION:
+                        //drawer.openDrawer(GravityCompat.START);
+                        break;
+                    case MaterialSearchBar.BUTTON_SPEECH:
+                        break;
+                    case MaterialSearchBar.BUTTON_BACK:
+                        searchBar.closeSearch();
+                        finish();
+                        break;
                 }
             }
         });
+
 
         NestedScrollView nested_content = (NestedScrollView) findViewById(R.id.nested_scroll_view);
         nested_content.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
@@ -201,14 +198,24 @@ public class SearchResultActivity extends BaseActivity {
     private void animateSearchBar(final boolean hide) {
         if (isSearchBarHide && hide || !isSearchBarHide && !hide) return;
         isSearchBarHide = hide;
-        int moveY = hide ? -(2 * searchbar_interface_layout.getHeight()) : 0;
-        searchbar_interface_layout.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+        int moveY = hide ? -(2 * searchBar.getHeight()) : 0;
+        searchBar.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
     }
 
+
+    private void buildSuggestList(List<Subcategory> subcategoryList) {
+        for(Subcategory subcategory:subcategoryList)
+            suggestList.add(subcategory.getName());
+        searchBar.setLastSuggestions(suggestList);
+    }
 
     private void startSearch(CharSequence text) {
         try {
             if (text.toString().toLowerCase().contains(String.valueOf(text).toLowerCase())) {
+                List<Subcategory> result=new ArrayList<>();
+                for(Subcategory subcategory:localDataSource)
+                    if(subcategory.getName().contains(text))
+                        result.add(subcategory);
                 searchAllProducts( text.toString() );
             }
         } catch (Exception e) {
@@ -261,16 +268,16 @@ public class SearchResultActivity extends BaseActivity {
         ProductApi mService = ApiClient.getClient().create(ProductApi.class);
         Call<ArrayList<Example>> call = mService.searchAllProducts(search_key);
         call.enqueue(new Callback<ArrayList<Example>>() {
-            @SuppressLint("WrongConstant")
+            @SuppressLint({"WrongConstant"})
             @Override
-            public void onResponse(Call<ArrayList<Example>> call, Response<ArrayList<Example>> response) {
+            public void onResponse(@NonNull Call<ArrayList<Example>> call, @NonNull Response<ArrayList<Example>> response) {
                 int statusCode = response.code();
                 if (statusCode == 200) {
                     examples = new ArrayList<>(  );
                     examples = response.body();
                     if(examples!=null&&examples.size()!=0){
                         for(Example example:examples){
-                            if(example.getError()==false){
+                            if(!example.getError()){
                                 if(example.getSubcategory()!=null&&example.getSubcategory().size()!=0){
                                     List<Subcategory> list = new ArrayList<>();
                                     List<Subcategory> filteredList = new ArrayList<>();
@@ -283,13 +290,10 @@ public class SearchResultActivity extends BaseActivity {
                                             }
                                         }
                                     }
-                                    if(filteredList!=null&&filteredList.size()!=0) {
+                                    if(filteredList.size() != 0) {
                                         Constants.SUBCATEGORYs = filteredList;
-                                        recyclerView.setVisibility(View.VISIBLE);
-                                        recyclerView.setHasFixedSize(true);
-                                        SubcategoryAdapter mAdapter = new SubcategoryAdapter( SearchResultActivity.this, filteredList);
-                                        recyclerView.setAdapter(mAdapter);
-                                        mAdapter.notifyDataSetChanged();
+                                       // buildSuggestList(filteredList);
+                                        setDisplay(filteredList);
                                     }else{
                                       //  no_result_found.setVisibility(GONE);
                                         recyclerView.setVisibility( GONE);
@@ -307,6 +311,17 @@ public class SearchResultActivity extends BaseActivity {
             }
         });
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void setDisplay(List<Subcategory> filteredList) {
+       // localDataSource=filteredList;
+        recyclerView.setVisibility(View.VISIBLE);
+        recyclerView.setHasFixedSize(true);
+        mAdapter = new SubcategoryAdapter( SearchResultActivity.this, filteredList);
+        recyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
+    }
+
 
     public class SubcategoryAdapter extends RecyclerView.Adapter<SearchResultActivity.SubcategoryAdapter.MyViewHolder> {
         List<Subcategory> productList;
@@ -332,7 +347,7 @@ public class SearchResultActivity extends BaseActivity {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull final SearchResultActivity.SubcategoryAdapter.MyViewHolder holder, final int position) {
+        public void onBindViewHolder(@NonNull final SearchResultActivity.SubcategoryAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
             final Subcategory product = productList.get(position);
             localStorage = new LocalStorage(context);
@@ -354,7 +369,7 @@ public class SearchResultActivity extends BaseActivity {
                 //holder.discription.setText(product.getDetailDiscription());
 
                 if(product.getImages()!=null&&product.getImages().size()!=0){
-                    Picasso.with(context).load(product.getImages().get( 0 ).getImage()).into(holder.imageView);
+                    Glide.with(context).load(product.getImages().get( 0 ).getImage()).into(holder.imageView);
                 }
 
                 if (product.getSellRate() != 0 && product.getDisplayRate()!= 0) {

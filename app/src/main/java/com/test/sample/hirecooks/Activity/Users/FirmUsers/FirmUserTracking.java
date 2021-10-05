@@ -32,7 +32,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Libraries.RiderMapLocation.FetchURL;
 import com.test.sample.hirecooks.Libraries.RiderMapLocation.TaskLoadedCallback;
@@ -89,11 +89,11 @@ public class FirmUserTracking extends AppCompatActivity implements OnMapReadyCal
                 user_name.setText( user.getName() );
                 if (user.getImage() != null) {
                     if (user.getImage().contains( "https://" )) {
-                        Picasso.with( FirmUserTracking.this ).load( APIUrl.PROFILE_URL + user.getImage() ).into( profile_image );
+                        Glide.with(this).load( APIUrl.PROFILE_URL + user.getImage() ).into( profile_image );
                     } else if (user.getImage().contains( " " )) {
 
                     } else {
-                        Picasso.with( FirmUserTracking.this ).load( APIUrl.PROFILE_URL + user.getImage() ).into( profile_image );
+                        Glide.with(this).load( APIUrl.PROFILE_URL + user.getImage() ).into( profile_image );
                     }
                 }
             }

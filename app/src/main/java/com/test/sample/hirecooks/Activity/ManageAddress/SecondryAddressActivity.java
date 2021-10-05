@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -75,22 +76,29 @@ public class SecondryAddressActivity extends BaseActivity {
 
     private void ApiServiceCall() {
         progressBarUtil.showProgress();
-        mService.getAllAddress(user.getId())
+        mService.getAddressByUserId(user.getId())
                 .subscribeOn( Schedulers.io())
                 .observeOn( AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Maps>() {
+                .subscribe(new Observer<List<Maps>>() {
                     @Override
-                    public void onSubscribe(Disposable d) {
+                    public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(Maps result) {
-                        callAdapter(result);
+                    public void onNext(@NonNull List<Maps> result) {
+                        for(Maps maps:result){
+                            ShowToast( maps.getMessage() );
+                            if(!maps.getError()){
+                                callAdapter(maps.getMaps());
+                            }else{
+                                callAdapter(maps.getMaps());
+                            }
+                        }
                     }
 
                     @Override
-                    public void onError(Throwable e) {
+                    public void onError(@NonNull Throwable e) {
                         ShowToast(e.getMessage());
                     }
 
@@ -102,14 +110,8 @@ public class SecondryAddressActivity extends BaseActivity {
 
     }
 
-    private void callAdapter(Maps result) {
-        List<Map> mapList = new ArrayList<>(  );
-        for(Map map:result.getMaps()){
-            if(Objects.equals( map.getUserId(), user.getId() )) {
-                mapList.add( map );
-            }
-        }
-        AddressAdapter adapter = new AddressAdapter(SecondryAddressActivity.this, mapList,ordersTable);
+    private void callAdapter(List<Map> result) {
+        AddressAdapter adapter = new AddressAdapter(SecondryAddressActivity.this, result,ordersTable);
         recyclerView.setAdapter(adapter);
     }
 

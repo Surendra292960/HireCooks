@@ -26,11 +26,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Adapter.Chat.ChatAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Chat.Example;
@@ -113,11 +113,11 @@ public class ChatActivity extends AppCompatActivity {
                 user_name.setText( users.getName() );
                 if (users.getImage() != null) {
                     if (users.getImage().contains( "https://" )) {
-                        Picasso.with( this ).load( users.getImage() ).into( user_profile );
+                        Glide.with(this).load( users.getImage() ).into( user_profile );
                     } else if (users.getImage().contains( " " )) {
 
                     } else {
-                        Picasso.with( this ).load( APIUrl.PROFILE_URL + users.getImage() ).into( user_profile );
+                        Glide.with(this).load( APIUrl.PROFILE_URL + users.getImage() ).into( user_profile );
                     }
                 }
             }
@@ -290,7 +290,7 @@ public class ChatActivity extends AppCompatActivity {
                           if(filterMessageList!=null&&filterMessageList.size()!=0){
                               adapter = new ChatAdapter( ChatActivity.this, filterMessageList);
                               recyclerView.setAdapter(adapter);
-                              adapter.notifyDataSetChanged();
+                              //adapter.notifyDataSetChanged();
                           }
                         }
                     }

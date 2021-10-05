@@ -9,8 +9,7 @@ import android.widget.ProgressBar;
 
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.R;
 
@@ -39,19 +38,9 @@ public class ProductImgSlider extends PagerAdapter {
         View view = LayoutInflater.from(mCtx).inflate(R.layout.product_imgslider, container, false);
         ImageView imageView =  view.findViewById(R.id.imageView);
         ProgressBar progress_dialog =  view.findViewById(R.id.progress_dialog);
-        progress_dialog.setVisibility( View.VISIBLE );
+        progress_dialog.setVisibility( View.GONE );
         if(images.getImages().get( position ).getImage()!=null){
-            Picasso.with( mCtx ).load( images.getImages().get( position ).getImage() ).into( imageView, new Callback() {
-                @Override
-                public void onSuccess() {
-                    progress_dialog.setVisibility( View.GONE );
-                }
-
-                @Override
-                public void onError() {
-
-                }
-            } );
+            Glide.with(mCtx).load( images.getImages().get( position ).getImage() ).into( imageView);
         }
         container.addView(view,0);
         return view;

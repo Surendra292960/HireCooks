@@ -15,8 +15,11 @@ import com.test.sample.hirecooks.Utils.Common;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.WebApis.MapApi;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -154,35 +157,40 @@ public class UpdateAddressActivity extends BaseActivity {
         map.setLandmark( mlandmark.getText().toString() );
         map.setLocationType( mlocation_tag.getText().toString() );
 
-        updateAddress(map);
+        List<Maps> mapsList = new ArrayList<>();
+        List<Map> mapList = new ArrayList<>();
+        Maps maps = new Maps();
+        mapList.add(map);
+        maps.setMaps(mapList);
+        mapsList.add(maps);
+        updateAddress(map.getMapId(),mapsList);
     }
 
-    private void updateAddress(Map address) {
+    private void updateAddress(Integer mapId, List<Maps> mapsList) {
         progressBarUtil.showProgress();
-        mService.updateAddress(address.getMapId(),address.getLatitude(),address.getLongitude(),address.getAddress(),address.getSubAddress(), String.valueOf( address.getPincode() ),
-                address.getPlaceId(),address.getUserId(),address.getFirm_id(),address.getHouseNumber(),address.getFloor(),address.getLandmark(),address.getLocationType())
+        mService.updateAddress(mapId, mapsList)
                 .subscribeOn( Schedulers.io())
                 .observeOn( AndroidSchedulers.mainThread())
                 .unsubscribeOn(Schedulers.io())
-                .subscribe(new Observer<Maps>() {
+                .subscribe(new Observer<List<Maps>>() {
 
                     @Override
-                    public void onSubscribe(Disposable d) {
+                    public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(Maps result) {
-                        if(!result.getError()){
-                            ShowToast(result.getMessage());
-                            UpdateAddressActivity.this.finish();
-                        }else {
-                            ShowToast( result.getMessage() );
+                    public void onNext(@NonNull List<Maps> result) {
+                        for(Maps maps:result){
+                            ShowToast( maps.getMessage() );
+                            if(!maps.getError()){
+                                UpdateAddressActivity.this.finish();
+                            }
                         }
                     }
 
                     @Override
-                    public void onError(Throwable t) {
+                    public void onError(@NonNull Throwable t) {
                         progressBarUtil.hideProgress();
                         ShowToast(t.getMessage());
                         System.out.println("New data received: " + t.getMessage());
@@ -201,7 +209,7 @@ public class UpdateAddressActivity extends BaseActivity {
                 .subscribeOn( Schedulers.io())
                 .observeOn( AndroidSchedulers.mainThread())
                 .unsubscribeOn(Schedulers.io())
-                .subscribe(new Observer<Maps>() {
+                .subscribe(new Observer<List<Maps>>() {
 
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -209,13 +217,13 @@ public class UpdateAddressActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onNext(Maps result) {
-                        if(!result.getError()){
-                            progressBarUtil.hideProgress();
-                            ShowToast(result.getMessage());
-                            UpdateAddressActivity.this.finish();
-                        }else {
-                            ShowToast( result.getMessage() );
+                    public void onNext(List<Maps> result) {
+                        progressBarUtil.hideProgress();
+                        for(Maps maps:result){
+                            ShowToast( maps.getMessage() );
+                            if(!maps.getError()){
+                                UpdateAddressActivity.this.finish();
+                            }
                         }
                     }
 

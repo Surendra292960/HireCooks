@@ -2,10 +2,13 @@ package com.test.sample.hirecooks.Activity.ManageAddress;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -14,27 +17,37 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -42,7 +55,10 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
+import com.test.sample.hirecooks.Activity.ProductDatails.DetailsActivity;
 import com.test.sample.hirecooks.Adapter.ManageAddress.PlacesAutoCompleteAdapter;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Maps;
@@ -412,6 +428,7 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
         }
     }
 
+    @SuppressLint("LongLogTag")
     private String getAddress(LatLng latLng) {
         Geocoder geocoder = new Geocoder(SearchAddress.this, Locale.getDefault());
         String result = null;
@@ -548,34 +565,39 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
             Toast.makeText( this, "fill LocationTag", Toast.LENGTH_SHORT ).show();
             return;
         }
-        ApiServiceCall(map);
+       List<Maps> mapsList = new ArrayList<>();
+       List<Map> mapList = new ArrayList<>();
+        Maps maps = new Maps();
+        mapList.add(map);
+        maps.setMaps(mapList);
+        mapsList.add(maps);
+        ApiServiceCall(mapsList);
 
     }
 
-    private void ApiServiceCall(Map map) {
+    private void ApiServiceCall(List<Maps> map) {
         Gson gson = new Gson();
         String json = gson.toJson( map );
         System.out.println( "Suree: "+json );
         progressBarUtil.showProgress();
-        mService.createAddress(map.getLatitude(),map.getLongitude(),map.getAddress(),map.getSubAddress(), String.valueOf( map.getPincode() ),
-                map.getPlaceId(),map.getUserId(),map.getFirm_id(),map.getHouseNumber(),map.getFloor(),map.getLandmark(),map.getLocationType())
+        mService.addAddress(map)
                 .subscribeOn( Schedulers.io())
                 .observeOn( AndroidSchedulers.mainThread())
                 .unsubscribeOn(Schedulers.io())
-                .subscribe(new Observer<Maps>() {
+                .subscribe(new Observer<List<Maps>>() {
 
                     @Override
-                    public void onSubscribe(Disposable d) {
+                    public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(Maps result) {
-                        if(!result.getError()){
-                            ShowToast( result.getMessage() );
-                            SearchAddress.this.finish();
-                        }else{
-                            ShowToast( result.getMessage() );
+                    public void onNext(@NonNull List<Maps> result) {
+                        for(Maps maps:result){
+                            ShowToast( maps.getMessage() );
+                            if(!maps.getError()){
+                                SearchAddress.this.finish();
+                            }
                         }
                     }
 
@@ -630,5 +652,4 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
     public void enterLocationbottomSheetDialogClose(View view) {
         enterLocationbottomSheetDialog.hide();
     }
-
 }

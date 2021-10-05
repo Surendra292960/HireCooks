@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.test.sample.hirecooks"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -23,6 +23,41 @@ android {
         }
     }
 
+    /*applicationVariants.all { variant ->
+        // Return compile configuration objects of a variant.
+        variant.getCompileConfiguration().resolutionStrategy {
+            // Use Gradle's ResolutionStrategy API
+            // to customize how this variant resolves dependencies.
+        }
+        // Return runtime configuration objects of a variant.
+        variant.getRuntimeConfiguration().resolutionStrategy {
+        }
+        // Return annotation processor configuration of a variant.
+        variant.getAnnotationProcessorConfiguration().resolutionStrategy {
+        }
+    }
+
+   *//* android.testVariants.all { variant ->
+        variant.getCompileConfiguration().exclude group: 'com.jakewharton.threetenabp', module: 'threetenabp'
+        variant.getRuntimeConfiguration().exclude group: 'com.jakewharton.threetenabp', module: 'threetenabp'
+    }*//*
+   *//* buildFeatures {
+        prefab true
+    }*//*
+    buildFeatures {
+        prefabPublishing true
+    }
+
+    prefab {
+        mylibrary {
+            headers "src/main/cpp/mylibrary/include"
+        }
+
+        myotherlibrary {
+            headers "src/main/cpp/myotherlibrary/include"
+        }
+    }
+*/
     sourceSets {
         main {
             assets.srcDirs = ['src/main/assets', 'src/main/assets/']
@@ -37,77 +72,80 @@ android {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
     }
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support:support-annotations:28.0.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0-alpha1'
-    implementation 'com.android.support:design:28.0.0-alpha1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'com.android.support:appcompat-v7:29.0.0'
+    implementation 'com.android.support:design:29.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.firebase:firebase-messaging:17.3.4'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.vectordrawable:vectordrawable:1.0.1'
-    implementation 'androidx.navigation:navigation-fragment:2.0.0'
-    implementation 'androidx.navigation:navigation-ui:2.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.google.firebase:firebase-messaging:22.0.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+    implementation 'androidx.navigation:navigation-fragment:2.3.5'
+    implementation 'androidx.navigation:navigation-ui:2.3.5'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation 'com.android.support:appcompat-v7:29.0.0'
+    implementation 'com.android.support:recyclerview-v7:29.0.0'
     //implementation 'com.android.support:design:28.0.0'
-    implementation 'com.squareup.picasso:picasso:2.5.0'
-    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.android.support:cardview-v7:29.0.0'
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation project(':flowingdrawer-core')
     implementation project(':aFileChooser')
     implementation 'de.hdodenhof:circleimageview:3.0.0'
-    implementation 'com.asksira.android:loopingviewpager:1.1.2'
+    implementation 'com.asksira.android:loopingviewpager:1.4.1'
     implementation 'com.github.cdflynn:checkview:v1.1'
-    implementation 'com.google.android.play:core:1.8.0'
+    implementation 'com.google.android.play:core:1.10.2'
     implementation 'org.jsoup:jsoup:1.10.1'
 
     //Retrofit2
     implementation 'com.squareup.retrofit2:retrofit:2.6.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:29.0.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     implementation 'com.henryblue.ijkplayerlibrary:ijkplayer-java:1.0.1'
-    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.12'
     implementation 'com.squareup.okio:okio:1.17.4'
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'pub.devrel:easypermissions:0.2.0'
 
     //Maps
     implementation 'org.slf4j:slf4j-nop:1.7.25'
     implementation 'com.github.bkhezry:MapDrawingTools:1.1.3'
-    implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    implementation 'com.google.android.gms:play-services-auth:17.0.0'
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.1'
+    implementation 'com.google.android.gms:play-services-auth:19.2.0'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.google.android.gms:play-services-places:17.0.0'
-    implementation 'com.google.android.libraries.places:places:2.3.0'
+    implementation 'com.google.android.libraries.places:places:2.4.0'
     //Firebase
-    implementation 'com.google.firebase:firebase-auth:19.3.2'
-    implementation 'com.google.firebase:firebase-messaging:20.2.4'
-    implementation "com.google.firebase:firebase-core:17.5.0"
+    implementation 'com.google.firebase:firebase-auth:21.0.1'
+    implementation 'com.google.firebase:firebase-messaging:22.0.0'
+    implementation "com.google.firebase:firebase-core:19.0.1"
     implementation "com.google.android.gms:play-services-gcm:17.0.0"
-    implementation 'com.google.firebase:firebase-storage:19.1.1'
-    implementation 'com.google.firebase:firebase-database:19.4.0'
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
-    implementation 'com.google.firebase:firebase-messaging-directboot:20.2.4'
+    implementation 'com.google.firebase:firebase-storage:20.0.0'
+    implementation 'com.google.firebase:firebase-database:20.0.2'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+    implementation 'com.google.firebase:firebase-messaging-directboot:22.0.0'
+    implementation platform('com.google.firebase:firebase-bom:28.4.1')
+    implementation 'com.google.firebase:firebase-inappmessaging-display'
+    implementation 'com.google.firebase:firebase-analytics'
     //Facebook
     implementation 'com.facebook.android:account-kit-sdk:5.4.0'
-    implementation 'com.facebook.fresco:fresco:0.14.1'
+    implementation 'com.facebook.fresco:fresco:2.0.0'
     implementation 'com.jjoe64:graphview:4.2.2'
     //Razorpay
     implementation 'com.razorpay:checkout:1.5.16'
@@ -115,10 +153,10 @@ dependencies {
     implementation 'com.daimajia.slider:library:1.1.5@aar'
     implementation 'com.tbuonomo:dotsindicator:4.2'
     // Rx JAVA
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.7'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.14'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    implementation 'android.arch.persistence.room:rxjava2:1.1.1'
+    //implementation 'android.arch.persistence.room:rxjava2:1.1.1'
     implementation 'com.jakewharton.rxbinding:rxbinding:0.4.0'
     // Material Dialog Library
     implementation 'com.github.TutorialsAndroid:KAlertDialog:v4.1'
@@ -131,8 +169,8 @@ dependencies {
     implementation 'com.sdsmdg.harjot:vectormaster:1.1.3'
     //Expendable List
     implementation 'com.mindorks:placeholderview:0.7.1'
-    implementation 'com.android.support:cardview-v7:28.0.0'
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.android.support:cardview-v7:29.0.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
     //PinView
     /*implementation 'com.chaos.view:pinview:1.3.2'*/
     //Country code picker
@@ -167,7 +205,7 @@ dependencies {
     // implementation 'com.facebook.fresco:fresco:2.0.0'
     //implementation 'com.github.evrencoskun:TableView:v0.8.9.4'
     implementation files('libs/jxl-2.6.12.jar')
-
+    implementation 'com.github.simonebortolin:materialsearchbar:1.2.2'
     //google phone verification
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:17.5.1'

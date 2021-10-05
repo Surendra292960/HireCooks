@@ -30,7 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.libraries.places.api.Places;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
 import com.test.sample.hirecooks.Activity.ManageAddress.SecondryAddressActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
@@ -102,8 +102,8 @@ public class PlaceOrderActivity extends BaseActivity {
     private List<com.test.sample.hirecooks.Models.NewOrder.Order> orderList;
     private List<com.test.sample.hirecooks.Models.NewOrder.Order> filteredList = new ArrayList<>(  );
     private List<OrdersTable> orderTableList = new ArrayList<>(  );
-    private LinearLayout all_order_place_layout;
     private List<Root> rootList = new ArrayList<>(  );
+    private LinearLayout all_order_place_layout;
     private Date location;
     ArrayList<Order> mOrdersTable = new ArrayList<>(  );
     ArrayList<Token> mTokenList = new ArrayList<>(  );
@@ -147,8 +147,13 @@ public class PlaceOrderActivity extends BaseActivity {
         if(cartList.size()!=0){
             no_result_found.setVisibility(View.GONE);
             place_order_layout.setVisibility( View.VISIBLE );
-            excludedDeliveryCharges = 50.0;
+
             mTotal = getTotalPrice();
+            if(mTotal>200){
+                excludedDeliveryCharges = 0.0;
+            }else{
+                excludedDeliveryCharges = 50.0;
+            }
             mTotalAmount = mTotal + excludedDeliveryCharges;
             editTextSubTotal.setText("\u20B9 "+mTotal + "");
             editTextPromo.setText("- \u20B9 "+00 + "");
@@ -265,8 +270,10 @@ public class PlaceOrderActivity extends BaseActivity {
                             orderTableList.add( orderTable );
                             root = new Root();
                             root.setOrders_table( orderTableList );
+                            rootList = new ArrayList<>();
+                            rootList.add(root);
                             if (SharedPrefManager.getInstance( PlaceOrderActivity.this ).isLoggedIn()) {
-                                placeOrder( root );
+                                placeOrder( rootList );
                             } else {
                                 showalertbox( "Please Login First" );
                             }
@@ -341,7 +348,8 @@ public class PlaceOrderActivity extends BaseActivity {
                             orderTableList.add( orderTable );
                             root = new Root();
                             root.setOrders_table( orderTableList );
-
+                            rootList = new ArrayList<>();
+                            rootList.add(root);
                             if (SharedPrefManager.getInstance( PlaceOrderActivity.this ).isLoggedIn()) {
                                 if (mTotalAmount != 0) {
                                     razorpayPayment.startPayment( String.valueOf( mTotalAmount ) );
@@ -366,9 +374,12 @@ public class PlaceOrderActivity extends BaseActivity {
         getMapDetails();
     }
 
-    private void placeOrder(final Root root){
+    private void placeOrder(final List<Root> roots){
+        Gson gson = new Gson();
+        String json = gson.toJson(roots);
+        System.out.println("Suree Orders : "+json);
         mService  = ApiClient.getClient().create(OrderApi.class);
-        Call<List<Root>> call = mService.addOrder(root.getOrders_table());
+        Call<List<Root>> call = mService.addOrder(roots);
         call.enqueue( new Callback<List<Root>>() {
             @Override
             public void onResponse(Call<List<Root>> call, Response<List<Root>> response) {
@@ -377,6 +388,13 @@ public class PlaceOrderActivity extends BaseActivity {
                         if(root1.getError()==false){
                             Toast.makeText(PlaceOrderActivity.this,root1.getMessage(), Toast.LENGTH_SHORT).show();
                             localStorage.deleteCart();
+                            Intent intent = new Intent( PlaceOrderActivity.this,PlacedOrderSuccessfully.class );
+                            Bundle bundle = new Bundle(  );
+                            bundle.putSerializable( "OrdersTable", (Serializable) root1.getOrders_table() );
+                            intent.putExtras( bundle );
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity( intent );
+                            finish();
                             getCart();
                             for (OrdersTable ordersTable:root.getOrders_table()) {
                                 for(Order order:ordersTable.getOrders() ){
@@ -414,14 +432,14 @@ public class PlaceOrderActivity extends BaseActivity {
                         @Override
                         public void onResponse(Call<String> call, Response<String> response) {
                             if (response.code() == 200 ) {
-                                localStorage.deleteCart();
+                             /*   localStorage.deleteCart();
                                 Intent intent = new Intent( PlaceOrderActivity.this,PlacedOrderSuccessfully.class );
                                 Bundle bundle = new Bundle(  );
                                 bundle.putSerializable( "OrdersTable", (Serializable) orders_table );
                                 intent.putExtras( bundle );
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity( intent );
-                                finish();
+                                finish();*/
                             }
                         }
 
@@ -640,7 +658,7 @@ public class PlaceOrderActivity extends BaseActivity {
 
         @SuppressLint("SetTextI18n")
         @Override
-        public void onBindViewHolder(PlaceOrderActivity.CheckoutCartAdapter.CartViewHolder holder, int position) {
+        public void onBindViewHolder(PlaceOrderActivity.CheckoutCartAdapter.CartViewHolder holder, @SuppressLint("RecyclerView") int position) {
             if(cartList!=null){
                 localStorage = new LocalStorage(mCtx);
                 gson = new Gson();
@@ -668,18 +686,8 @@ public class PlaceOrderActivity extends BaseActivity {
                 }*/
                 holder.itemImage.setAnimation(AnimationUtils.loadAnimation(mCtx,R.anim.fade_transition_animation));
                 if(cart.getImages().size()!=0&&cart.getImages()!=null){
-                    holder.progress_dialog.setVisibility( View.VISIBLE );
-                    Picasso.with(mCtx).load(cart.getImages().get( 0 ).getImage()).into( holder.itemImage, new com.squareup.picasso.Callback() {
-                        @Override
-                        public void onSuccess() {
-                            holder.progress_dialog.setVisibility( View.GONE );
-                        }
-
-                        @Override
-                        public void onError() {
-
-                        }
-                    } );
+                    holder.progress_dialog.setVisibility( View.GONE );
+                    Glide.with(mCtx).load(cart.getImages().get( 0 ).getImage()).into( holder.itemImage);
                 }
 
                 holder.itemAdd.setOnClickListener(new View.OnClickListener() {

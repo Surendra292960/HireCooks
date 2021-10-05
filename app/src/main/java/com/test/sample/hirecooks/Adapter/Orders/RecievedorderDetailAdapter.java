@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.Orders.RecievedOrderDetails;
 import com.test.sample.hirecooks.Models.NewOrder.Order;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
@@ -57,7 +57,7 @@ public class RecievedorderDetailAdapter extends RecyclerView.Adapter<Recievedord
             holder.name.setText(order.getName());
             holder.item_qty.setText("Quantity : "+order.getQuantity());
             if(order.getImages().size()!=0&&order.getImages()!=null){
-                Picasso.with(context).load(order.getImages().get( 0 ).getImage()).into(holder.imageView);
+                Glide.with(context).load(order.getImages().get( 0 ).getImage()).into(holder.imageView);
             }
 
             if (order.getSellRate() != 0 && order.getDisplayRate()!= 0) {

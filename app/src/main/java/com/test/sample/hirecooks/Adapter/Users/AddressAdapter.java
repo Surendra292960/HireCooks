@@ -1,5 +1,6 @@
 package com.test.sample.hirecooks.Adapter.Users;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -51,8 +52,8 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.TasksVie
     }
 
     @Override
-    public void onBindViewHolder(TasksViewHolder holder, int position) {
-        final Map mAddress = addressList.get(position);
+    public void onBindViewHolder(TasksViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        final Map mAddress = addressList.get(holder.getAdapterPosition());
         holder.address.setText(mAddress.getAddress());
         holder.sub_address.setText(mAddress.getSubAddress());
         holder.location_tag.setText(mAddress.getLocationType());

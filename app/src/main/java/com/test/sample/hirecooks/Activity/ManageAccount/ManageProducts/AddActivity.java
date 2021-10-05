@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -24,7 +25,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.SubCategory.Color;
 import com.test.sample.hirecooks.Models.SubCategory.ColorExample;
@@ -129,7 +130,7 @@ public class AddActivity extends AppCompatActivity {
             pond.setText(""+ mWeight.getPond() );
         }else if (mImage != null) {
             image_lay.setVisibility( View.VISIBLE );
-            Picasso.with( this ).load( mImage.getImage() ).into( imageView );
+            Glide.with(this).load( mImage.getImage() ).into( imageView );
         }
 
         btnChoose.setOnClickListener(new View.OnClickListener() {
@@ -187,7 +188,7 @@ public class AddActivity extends AppCompatActivity {
                             Toast.makeText(AddActivity.this, "Uploaded successfully", Toast.LENGTH_SHORT).show();
                             final Uri downloadUrl = uri;
                             sUrl = downloadUrl.toString();
-                            Picasso.with( AddActivity.this ).load( sUrl ).into( imageView );
+                            Glide.with(AddActivity.this).load( sUrl ).into( imageView );
                            // image_Link = sUrl;
                         }
                     }).addOnFailureListener(new OnFailureListener() {

@@ -24,8 +24,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Scene;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.Category.Example;
@@ -63,23 +64,23 @@ public class EditCategoryActivity extends AppCompatActivity {
         add_category = findViewById( R.id.add_category );
         Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Products  Video");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Products");
         user = SharedPrefManager.getInstance( this ).getUser();
         Bundle bundle = getIntent().getExtras();
         if (bundle != null&& Constants.NEARBY_VENDERS_LOCATION !=null) {
             categoryName= bundle.getString("CategoryName");
-            category = (Offer) bundle.getSerializable("Video");
+            category = (Offer) bundle.getSerializable("ProductCategory");
             if(category.getId()!=0){
                 getCategory(category.getId());
             }else {
                 Toast.makeText( this, "Comming soon", Toast.LENGTH_SHORT ).show();
             }
             if(mCategory!=null){
-                getSupportActionBar().setTitle(category.getName()+" Video");
+                getSupportActionBar().setTitle(category.getName());
             }
         }
 
-        if(user.getUserType().equalsIgnoreCase( "Admin" )&&user.getUserType().equalsIgnoreCase( "SuperAdmin" )){
+        if(/*user.getUserType().equalsIgnoreCase( "Admin" )||*/user.getUserType().equalsIgnoreCase( "SuperAdmin" )){
             add_category.setVisibility( View.VISIBLE );
             add_category.setOnClickListener( new View.OnClickListener() {
                 @Override
@@ -112,21 +113,7 @@ public class EditCategoryActivity extends AppCompatActivity {
                           if(response.body().size()!=0){
                               for(Category category:example.getCategory()){
                                   if(category!=null){
-                                      mCategory.add( category );
-                                      mAdapter = new EditCategoryAdapter( EditCategoryActivity.this,mCategory);
-                                      recyclerView.setAdapter(mAdapter);
-                                      GridLayoutManager linearLayoutManager = new GridLayoutManager(EditCategoryActivity.this,2);
-                                      if (EditCategoryActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                                          linearLayoutManager.setOrientation(LinearLayout.VERTICAL);
-                                      }else{
-                                          linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
-                                      }
-                                      RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
-                                      params.setMargins(20, 20, 20, 20);
-                                      linearLayoutManager.canScrollHorizontally();
-
-                                      recyclerView.setLayoutManager(linearLayoutManager);
-                                      recyclerView.setItemAnimator(new DefaultItemAnimator());
+                                      setCategoryData(category);
                                   }
                               }
                           }
@@ -140,6 +127,25 @@ public class EditCategoryActivity extends AppCompatActivity {
                 Toast.makeText( EditCategoryActivity.this, t.getMessage(), Toast.LENGTH_SHORT ).show();
             }
         });
+    }
+
+    @SuppressLint("WrongConstant")
+    private void setCategoryData(Category category) {
+        mCategory.add( category );
+        mAdapter = new EditCategoryAdapter( EditCategoryActivity.this,mCategory);
+        recyclerView.setAdapter(mAdapter);
+        GridLayoutManager linearLayoutManager = new GridLayoutManager(EditCategoryActivity.this,2);
+        if (EditCategoryActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            linearLayoutManager.setOrientation(LinearLayout.VERTICAL);
+        }else{
+            linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
+        }
+        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
+        params.setMargins(20, 20, 20, 20);
+        linearLayoutManager.canScrollHorizontally();
+
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
 
@@ -162,10 +168,10 @@ public class EditCategoryActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(EditCategoryAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(EditCategoryAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
             Category category = categories.get(position);
             holder.categoryName.setText(category.getName());
-            Picasso.with(mCtx).load(category.getLink()).into(holder.categoryImage);
+            Glide.with(mCtx).load(category.getLink()).into(holder.categoryImage);
             holder.categoryLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -190,7 +196,7 @@ public class EditCategoryActivity extends AppCompatActivity {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Intent intent = new Intent(mCtx, EditSubCategoryActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("Video", category);
+                        bundle.putSerializable("Category", category);
                         intent.putExtras(bundle);
                         // Check if we're running on Android 5.0 or higher
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -210,20 +216,24 @@ public class EditCategoryActivity extends AppCompatActivity {
             editBtn.setOnClickListener( v -> {
                 try {
                     dialog.dismiss();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        Intent intent = new Intent(mCtx, StartEditCategory.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("Video", category);
-                        intent.putExtras(bundle);
-                        // Check if we're running on Android 5.0 or higher
+                    if(user.getUserType().equalsIgnoreCase("SuperAdmin")){
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            mCtx.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) mCtx).toBundle());
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        } else {
-                            // Swap without transition
-                            mCtx.startActivity(intent);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            Intent intent = new Intent(mCtx, StartEditCategory.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("Category", category);
+                            intent.putExtras(bundle);
+                            // Check if we're running on Android 5.0 or higher
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                mCtx.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) mCtx).toBundle());
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            } else {
+                                // Swap without transition
+                                mCtx.startActivity(intent);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            }
                         }
+                    }else {
+                        Toast.makeText(EditCategoryActivity.this, "Can't Edit", Toast.LENGTH_SHORT).show();
                     }
                 }
                 catch (Exception ex) {
@@ -253,9 +263,6 @@ public class EditCategoryActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(category!=null&&category.getId()!=0){
-            getCategory(category.getId());
-        }
     }
 
 

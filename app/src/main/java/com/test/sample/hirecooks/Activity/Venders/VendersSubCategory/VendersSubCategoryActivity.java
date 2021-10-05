@@ -29,7 +29,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.AddorRemoveCallbacks;
 import com.test.sample.hirecooks.Activity.Orders.PlaceOrderActivity;
 import com.test.sample.hirecooks.Activity.ProductDatails.DetailsActivity;
@@ -280,7 +280,7 @@ public class VendersSubCategoryActivity extends BaseActivity {
         }
 
         @Override
-        public void onBindViewHolder(@NonNull final VendersSubCategoryActivity.SubcategoryAdapter.MyViewHolder holder, final int position) {
+        public void onBindViewHolder(@NonNull final VendersSubCategoryActivity.SubcategoryAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
             final Subcategory product = productList.get(position);
             localStorage = new LocalStorage(context);
@@ -301,18 +301,8 @@ public class VendersSubCategoryActivity extends BaseActivity {
                 holder.item_short_desc.setText(product.getDiscription());
                 //holder.discription.setText(product.getDetailDiscription());
                if(product.getImages()!=null&&product.getImages().size()!=0){
-                   holder.progress_dialog.setVisibility( View.VISIBLE );
-                   Picasso.with(context).load(product.getImages().get( 0 ).getImage()).into( holder.imageView, new com.squareup.picasso.Callback() {
-                       @Override
-                       public void onSuccess() {
-                           holder.progress_dialog.setVisibility( GONE );
-                       }
-
-                       @Override
-                       public void onError() {
-
-                       }
-                   } );
+                   holder.progress_dialog.setVisibility( View.GONE );
+                   Glide.with(VendersSubCategoryActivity.this).load(product.getImages().get( 0 ).getImage()).into( holder.imageView);
                }
 
                 if (product.getSellRate() != 0 && product.getDisplayRate()!= 0) {

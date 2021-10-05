@@ -1,5 +1,6 @@
 package com.test.sample.hirecooks.Adapter.Offer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -10,11 +11,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.SubCategory.SubCategoryActivity;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.R;
@@ -40,22 +39,13 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(OfferAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(OfferAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Category offer = offers.get(position);
         if(offer!=null){
             holder.circular_image_name.setText(offer.getName());
-            holder.progress_dialog.setVisibility( View.VISIBLE );
-            Picasso.with(mCtx).load(offer.getLink()).into( holder.circular_image, new Callback() {
-                @Override
-                public void onSuccess() {
-                    holder.progress_dialog.setVisibility( View.GONE );
-                }
+            holder.progress_dialog.setVisibility( View.GONE );
+            Glide.with(mCtx).load(offer.getLink()).into(holder.circular_image);
 
-                @Override
-                public void onError() {
-
-                }
-            } );
             holder.offers_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

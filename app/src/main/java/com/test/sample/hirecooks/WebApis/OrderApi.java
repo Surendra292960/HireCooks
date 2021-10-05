@@ -14,7 +14,7 @@ import retrofit2.http.Path;
 
 public interface OrderApi {
     @POST("orders")
-    Call<List<Root>> addOrder(@Body List<OrdersTable> root);
+    Call<List<Root>> addOrder(@Body List<Root> root);
 
     @POST("orders/{status}")
     Call<List<Root>> getCurrentOrders(@Path("status") String status);

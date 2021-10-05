@@ -1,43 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="NullableNotNullManager">
-    <option name="myDefaultNullable" value="org.jetbrains.annotations.Nullable" />
-    <option name="myDefaultNotNull" value="androidx.annotation.NonNull" />
-    <option name="myNullables">
-      <value>
-        <list size="12">
-          <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.Nullable" />
-          <item index="1" class="java.lang.String" itemvalue="javax.annotation.Nullable" />
-          <item index="2" class="java.lang.String" itemvalue="javax.annotation.CheckForNull" />
-          <item index="3" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.Nullable" />
-          <item index="4" class="java.lang.String" itemvalue="android.support.annotation.Nullable" />
-          <item index="5" class="java.lang.String" itemvalue="androidx.annotation.Nullable" />
-          <item index="6" class="java.lang.String" itemvalue="android.annotation.Nullable" />
-          <item index="7" class="java.lang.String" itemvalue="androidx.annotation.RecentlyNullable" />
-          <item index="8" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.qual.Nullable" />
-          <item index="9" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NullableDecl" />
-          <item index="10" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NullableType" />
-          <item index="11" class="java.lang.String" itemvalue="com.android.annotations.Nullable" />
-        </list>
-      </value>
-    </option>
-    <option name="myNotNulls">
-      <value>
-        <list size="11">
-          <item index="0" class="java.lang.String" itemvalue="org.jetbrains.annotations.NotNull" />
-          <item index="1" class="java.lang.String" itemvalue="javax.annotation.Nonnull" />
-          <item index="2" class="java.lang.String" itemvalue="edu.umd.cs.findbugs.annotations.NonNull" />
-          <item index="3" class="java.lang.String" itemvalue="android.support.annotation.NonNull" />
-          <item index="4" class="java.lang.String" itemvalue="androidx.annotation.NonNull" />
-          <item index="5" class="java.lang.String" itemvalue="android.annotation.NonNull" />
-          <item index="6" class="java.lang.String" itemvalue="androidx.annotation.RecentlyNonNull" />
-          <item index="7" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.qual.NonNull" />
-          <item index="8" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NonNullDecl" />
-          <item index="9" class="java.lang.String" itemvalue="org.checkerframework.checker.nullness.compatqual.NonNullType" />
-          <item index="10" class="java.lang.String" itemvalue="com.android.annotations.NonNull" />
-        </list>
-      </value>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/boottom_navigation.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/drawable/ic_menu.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/gray_circle.xml" value="0.1125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/ic_arrow_back_white_24dp.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/ic_search_interface.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/outline_local_offer.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/outline_local_shipping.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/outline_shopping_bag.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/rect_whiteboder.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/round_border_button.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/rounded_buble.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/sample_background.xml" value="0.1" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/search_background.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/select_border.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/select_mage.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/selected_border.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/selected_image.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_add_task.xml" value="0.20990873533246415" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_details.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_edit_category.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_full_image.xml" value="0.2033514492753623" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_main.xml" value="0.2033514492753623" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_myorders_layout.xml" value="0.1716485507246377" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_search_result.xml" value="0.16" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_start_edit_category.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_start_edit_sub_category.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_sub_category.xml" value="0.1716485507246377" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_task.xml" value="0.2033514492753623" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_test.xml" value="0.1716485507246377" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_track.xml" value="0.2033514492753623" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_tv.xml" value="0.20427305888483585" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_update_task.xml" value="0.1" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/add_weight.xml" value="0.1" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/bottom_sheet.xml" value="0.2033514492753623" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/category_cardview.xml" value="0.1431159420289855" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/content_track.xml" value="0.20427305888483585" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/custome_toobar.xml" value="0.2033514492753623" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/custome_toobar_layout.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/enter_pincode_layout.xml" value="0.2033514492753623" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/fragment_profile.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/item_horizontal_layout.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/layout_loading.xml" value="0.2033514492753623" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/new_product_subcategory.xml" value="0.2033514492753623" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/search_layout.xml" value="0.2033514492753623" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/searchlocation_sliding_layout.xml" value="0.2033514492753623" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/select_images.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/text.xml" value="0.5" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/view_bottom_anchor.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/view_feed_toolbar.xml" value="0.2033514492753623" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/menu/bottom_nav_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/menu/cart_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/menu/drawer_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/menu/search_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/menu/show_order_bottom_menu.xml" value="0.20416666666666666" />
+      </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="JDK" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
 </project>

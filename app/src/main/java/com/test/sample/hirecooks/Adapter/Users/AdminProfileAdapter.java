@@ -9,12 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.ManageAccount.ManageProducts.ProductCategoryList;
 import com.test.sample.hirecooks.Activity.ManageAddress.SecondryAddressActivity;
 import com.test.sample.hirecooks.Activity.Orders.RecievedOrderActivity;
@@ -49,18 +46,8 @@ public class AdminProfileAdapter extends RecyclerView.Adapter<AdminProfileAdapte
         if(offer!=null){
             holder.card_name.setText(offer.getName());
             holder.card_detail.setText(offer.getLink());
-            holder.progress_dialog.setVisibility( View.VISIBLE );
-            Picasso.with(mCtx).load(offer.getRoundIcon()).into( holder.card_image, new Callback() {
-                @Override
-                public void onSuccess() {
-                    holder.progress_dialog.setVisibility( View.GONE );
-                }
-
-                @Override
-                public void onError() {
-
-                }
-            } );
+            holder.progress_dialog.setVisibility( View.GONE );
+            Glide.with(mCtx).load(offer.getRoundIcon()).into( holder.card_image);
             holder.card_view.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

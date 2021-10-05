@@ -35,7 +35,7 @@ public class ProductCategoryList extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setTitle("");
-        if(user.getUserType().equalsIgnoreCase( "Admin" )||user.getUserType().equalsIgnoreCase( "Manager" )) {
+        if(user.getUserType().equalsIgnoreCase( "Admin" )||user.getUserType().equalsIgnoreCase( "SuperAdmin" )||user.getUserType().equalsIgnoreCase( "Manager" )) {
             appRoot.setVisibility( View.VISIBLE );
         }else{
             appRoot.setVisibility( View.GONE );
