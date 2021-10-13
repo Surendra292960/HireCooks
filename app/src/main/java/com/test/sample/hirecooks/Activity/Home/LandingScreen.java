@@ -114,8 +114,16 @@ public class LandingScreen extends BaseActivity {
         int permissionProcessReadContacts = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
         int permissionProcessReadCallLog = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CALL_LOG);
         int permissionWriteStorage = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permissionSendSMS = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
+        int permissionReadSMS = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS);
 
         List<String> listPermissionsNeeded = new ArrayList<>();
+        if (permissionSendSMS != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.SEND_SMS);
+        }
+        if (permissionReadSMS != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_SMS);
+        }
         if (permissionReadPhoneState != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.READ_PHONE_STATE);
         }

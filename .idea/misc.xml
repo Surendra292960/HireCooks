@@ -8,6 +8,11 @@
         <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/drawable/ic_menu.xml" value="0.2203125" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/gray_circle.xml" value="0.1125" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/ic_arrow_back_white_24dp.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/ic_baseline_filter_list.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/ic_baseline_radio_button_unchecked_24.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/ic_baseline_sort_24.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/ic_cancel_black_24dp.xml" value="0.1" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/ic_keyboard_arrow_down.xml" value="0.2203125" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/ic_search_interface.xml" value="0.2203125" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/outline_local_offer.xml" value="0.2203125" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/outline_local_shipping.xml" value="0.2203125" />
@@ -21,13 +26,17 @@
         <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/select_mage.xml" value="0.2203125" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/selected_border.xml" value="0.2203125" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/drawable/selected_image.xml" value="0.2203125" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_add.xml" value="0.19972826086956522" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_add_task.xml" value="0.20990873533246415" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_details.xml" value="0.20416666666666666" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_edit_category.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_favourite.xml" value="0.19972826086956522" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_full_image.xml" value="0.2033514492753623" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_main.xml" value="0.2033514492753623" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_myorders_layout.xml" value="0.1716485507246377" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_search_result.xml" value="0.16" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_sign_up.xml" value="0.16802536231884058" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_signup_address.xml" value="0.20416666666666666" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_start_edit_category.xml" value="0.20416666666666666" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_start_edit_sub_category.xml" value="0.20416666666666666" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_sub_category.xml" value="0.1716485507246377" />
@@ -36,6 +45,7 @@
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_track.xml" value="0.2033514492753623" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_tv.xml" value="0.20427305888483585" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_update_task.xml" value="0.1" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/activity_view_pager.xml" value="0.19972826086956522" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/add_weight.xml" value="0.1" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/bottom_sheet.xml" value="0.2033514492753623" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/category_cardview.xml" value="0.1431159420289855" />
@@ -43,16 +53,33 @@
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/custome_toobar.xml" value="0.2033514492753623" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/custome_toobar_layout.xml" value="0.20416666666666666" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/enter_pincode_layout.xml" value="0.2033514492753623" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/filter_dialog.xml" value="0.1956521739130435" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/filter_search_text.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/filter_text.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/filter_value_item.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/fragment_home.xml" value="0.19972826086956522" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/fragment_profile.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/gender_recycler.xml" value="0.19972826086956522" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/gender_sheet_dialog.xml" value="0.16" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/item_horizontal_layout.xml" value="0.20416666666666666" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/layout_loading.xml" value="0.2033514492753623" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/new_product_subcategory.xml" value="0.2033514492753623" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/product_imgslider.xml" value="0.19972826086956522" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/search_layout.xml" value="0.2033514492753623" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/searchlocation_sliding_layout.xml" value="0.2033514492753623" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/select_images.xml" value="0.20416666666666666" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/single_card.xml" value="0.19972826086956522" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/sort.xml" value="0.19972826086956522" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/sort_dialog.xml" value="0.19972826086956522" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/sort_search_text.xml" value="0.19972826086956522" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/sort_text.xml" value="0.19972826086956522" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/sorting_dialog.xml" value="0.19972826086956522" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/text.xml" value="0.5" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/venders_recyclerview.xml" value="0.19972826086956522" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/view_bottom_anchor.xml" value="0.20416666666666666" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/view_feed_toolbar.xml" value="0.2033514492753623" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/view_header.xml" value="0.19972826086956522" />
+        <entry key="..\:/Suree/HireCooks/app/src/main/res/layout/view_item.xml" value="0.19972826086956522" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/menu/bottom_nav_menu.xml" value="0.20416666666666666" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/menu/cart_menu.xml" value="0.20416666666666666" />
         <entry key="..\:/Suree/HireCooks/app/src/main/res/menu/drawer_menu.xml" value="0.20416666666666666" />

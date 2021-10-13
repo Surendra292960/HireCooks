@@ -11,6 +11,106 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:id="@+id/header_lay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white_alpha"
+            android:orientation="vertical">
+
+            <View android:layout_width="match_parent"
+                android:layout_height="@dimen/view_width_small"
+                android:background="@color/grey_light"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_40"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <LinearLayout android:id="@+id/sort_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+                    <ImageView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_baseline_sort_24"/>
+                    <TextView android:id="@+id/sort"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Sort"
+                        android:textSize="@dimen/size_14"
+                        android:textColor="@color/gen_black"
+                        android:gravity="start"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+                </LinearLayout>
+
+                <View android:layout_width="@dimen/view_width_small"
+                    android:layout_height="match_parent"
+                    android:background="@color/grey_light"/>
+
+                <LinearLayout android:id="@+id/gender_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+                    <TextView android:id="@+id/gender"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/gender"
+                        android:textSize="12sp"
+                        android:textColor="@color/gen_black"
+                        android:gravity="start"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+                    <ImageView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_keyboard_arrow_down"/>
+                </LinearLayout>
+
+                <View android:layout_width="@dimen/view_width_small"
+                    android:layout_height="match_parent"
+                    android:background="@color/grey_light"/>
+
+                <LinearLayout android:id="@+id/filter_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+                    <ImageView
+                        android:id="@+id/filter_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_baseline_filter_list"/>
+                    <TextView android:id="@+id/filter"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="Filter"
+                        android:textSize="12sp"
+                        android:textColor="@color/gen_black"
+                        android:gravity="start"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View android:layout_width="match_parent"
+                android:layout_height="@dimen/view_width_small"
+                android:background="@color/grey_light" />
+
+        </LinearLayout>
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeToRefresh"
             android:layout_width="match_parent"

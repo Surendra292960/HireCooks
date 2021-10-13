@@ -69,7 +69,7 @@ public class HomeFragment extends Fragment{
     private ScrollView scrollView;
     private RecyclerView offer_recycler_view,recyclerView,recyclerView2,my_recycler_view3,venders_recycler_view,cooks_promotion_recycler,tool_Pager;
     private CategoryAdapter mAdapter;
-    ArrayAdapter<String> stringAdapter;
+    //ArrayAdapter<String> stringAdapter;
     private UserApi mService;
     private List<Category> categories;
     MainActivity mainActivity;
@@ -406,8 +406,8 @@ public class HomeFragment extends Fragment{
         my_recycler_view3 = view.findViewById(R.id.my_recycler_view3);
         venders_recycler_view = view.findViewById(R.id.venders_recycler_view);
 
-        String[] colors = getResources().getStringArray(R.array.colorList);
-        stringAdapter = new ArrayAdapter<>(mainActivity, R.layout.row, colors);
+       /* String[] colors = getResources().getStringArray(R.array.colorList);
+        stringAdapter = new ArrayAdapter<>(mainActivity, R.layout.row, colors);*/
 
         HashMap<String, Integer> file_maps = new HashMap<String, Integer>();
         file_maps.put("Groceroies",R.drawable.slide1);

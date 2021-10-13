@@ -1,9 +1,15 @@
 package com.test.sample.hirecooks.Models.SubCategory;
 
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.View;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+
+import androidx.annotation.Nullable;
 
 public class Image implements Serializable {
 

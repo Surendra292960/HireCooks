@@ -203,13 +203,13 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
             user_layout.setVisibility( View.GONE );
             admin_dash_lay.setVisibility( View.VISIBLE );
             List<Offer> offerList = new ArrayList<>();
-            offerList.add( new Offer( 0, "Account", "Manage Your Account", "https://www.linkpicture.com/q/settings_6.png", "RED" ) );
-            offerList.add( new Offer( 1, "Employee", "Manage Your Employee", "https://www.linkpicture.com/q/user_7.png", "RED" ) );
-            offerList.add( new Offer( 2, "Report", "Generate Your Employes Report", "https://www.linkpicture.com/q/report_1.png", "RED" ) );
-            offerList.add( new Offer( 3, "All Employees", "Generate Your All Employes Report", "https://www.linkpicture.com/q/report_1.png", "RED" ) );
-            offerList.add( new Offer( 4, "Recieved Order", "Manage Your Recieved Orders", "https://www.linkpicture.com/q/checkout.png", "RED" ) );
-            offerList.add( new Offer( 5, "Manage Your Address", "Manage Your Address", "https://www.linkpicture.com/q/map_6.png", "RED" ) );
-            offerList.add( new Offer( 6, "Collaboration", "Collaborate with your Employee", "https://www.linkpicture.com/q/map_6.png", "RED" ) );
+            offerList.add( new Offer( 0, "Account", "Manage Your Account", "https://i.ibb.co/S5tq9C9/management-1.png", "RED" ) );
+            offerList.add( new Offer( 1, "Employee", "Manage Your Employee", "https://i.ibb.co/tBLnHGq/employee.png", "RED" ) );
+            offerList.add( new Offer( 2, "Report", "Generate Your Employes Report", "https://i.ibb.co/vmqVpSR/report-1.png", "RED" ) );
+            offerList.add( new Offer( 3, "All Employees", "Generate Your All Employes Report", "https://i.ibb.co/vmqVpSR/report-1.png", "RED" ) );
+            offerList.add( new Offer( 4, "Recieved Order", "Manage Your Recieved Orders", "https://i.ibb.co/vXT6qG0/courier.png", "RED" ) );
+            offerList.add( new Offer( 5, "Manage Your Address", "Manage Your Address", "https://i.ibb.co/XFBH6DZ/address.png", "RED" ) );
+            offerList.add( new Offer( 6, "Collaboration", "Collaborate with your Employee", "https://i.ibb.co/8732tsP/deal.png", "RED" ) );
             offerList.add( new Offer( 7, "Ad", "Manage Your Add", "https://www.linkpicture.com/q/button_5.png", "RED" ) );
 
             AdminProfileAdapter adapter = new AdminProfileAdapter( mainActivity, offerList );

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 import com.test.sample.hirecooks.Activity.Model.MyModel;
 import com.test.sample.hirecooks.Adapter.Cooks.CooksImagesAdapter;
 import com.test.sample.hirecooks.Adapter.Videos.VideosAdapter;
@@ -155,6 +156,7 @@ public class CooksDetailsActivity extends BaseActivity {
 
     @SuppressLint("WrongConstant")
     private void setVideoData(List<Video> videoList){
+        Picasso p = Picasso.with(this);
         VideosAdapter mAdapter = new VideosAdapter(this,videoList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {

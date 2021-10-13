@@ -4,7 +4,14 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
+import java.util.function.ToIntFunction;
+import java.util.function.ToLongFunction;
+
+import androidx.annotation.NonNull;
 
 public class Subcategory implements Serializable {
 
@@ -426,4 +433,17 @@ public class Subcategory implements Serializable {
     public void setItemQuantity(int itemQuantity) {
         this.itemQuantity = itemQuantity;
     }
+
+    public static Comparator<Subcategory> priceComparator = new Comparator<Subcategory>() {
+        @Override
+        public int compare(Subcategory o1, Subcategory o2) {
+            return (int) (o1.getSellRate() - o2.getSellRate());
+        }
+    };
+    public static Comparator<Subcategory> genderComparator = new Comparator<Subcategory>() {
+        @Override
+        public int compare(Subcategory o1, Subcategory o2) {
+            return o1.getGender().compareTo(o2.getGender());
+        }
+    };
 }

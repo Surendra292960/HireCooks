@@ -15,16 +15,6 @@ public class MyModel {
         this.name = name;
     }
 
-    public MyModel(String image_url, String name) {
-        this.image_url = image_url;
-        this.name = name;
-    }
-
-    public MyModel(String name) {
-        this.image_url=null;
-        this.name = name;
-    }
-
     public String getImage_url() {
         return image_url;
     }

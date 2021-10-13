@@ -21,6 +21,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +46,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.bumptech.glide.Glide;
+import com.test.sample.hirecooks.Adapter.SpinnerAdapter.UserTypeAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
@@ -80,7 +83,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
     private static final int CODE_MULTIPLE_IMAGE_GALLARY = 2;
     private TextInputEditText editTextSubCategoryName, editTextSellRate, editTextDisplayRate,editTextAddress,
             editTextFirmId, editTextImagetUrl2, editTextImagetUrl3, editTextImagetUrl4,
-            editTextWeight, available_stock, editTextShiledUrl, product_unique_key, age, brand, gender, search_key;
+            editTextWeight, available_stock, editTextShiledUrl, product_unique_key, age, brand, search_key;
     private TextInputLayout editTextShiledUrl_lay,available_stock_lay;
     private TextView Submit, add_weight, add_size, add_color, add_images,size_text,color_text,weight_text;
     private EditText editTextDiscription, editTextDetailDiscription;
@@ -121,6 +124,8 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
     private Size sizeText;
     private Size sizeNumber;
     private LinearLayout image_upload_btn;
+    private ArrayList<String> genders_list;
+    private Spinner genderSpinner;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -172,7 +177,6 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         editTextDisplayRate = findViewById( R.id.editTextDisplayRate );
         editTextFirmId = findViewById( R.id.editTextFirmId );
         age = findViewById( R.id.age );
-        gender = findViewById( R.id.gender );
         brand = findViewById( R.id.product_brand );
         search_key = findViewById( R.id.search_key );
         product_unique_key = findViewById( R.id.product_unique_key );
@@ -196,6 +200,15 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         editTextUploadShieldImage = findViewById( R.id.editTextUploadShieldImage );
         editTextAddress = findViewById( R.id.address );
         Submit = findViewById( R.id.submit );
+        genderSpinner = findViewById(R.id.gender_array);
+
+        String[] gender_array = this.getResources().getStringArray(R.array.genders);
+        genders_list = new ArrayList<>();
+        for(String text:gender_array) {
+            genders_list.add(text);
+        }
+        UserTypeAdapter spinnerArrayAdapter = new UserTypeAdapter(this, genders_list);
+        genderSpinner.setAdapter( spinnerArrayAdapter );
 
         getMapDetails();
 
@@ -215,9 +228,9 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
             editTextSubCategoryName.setText( mSubCategory.getName() );
             age.setText( "" + mSubCategory.getAge() );
             brand.setText( mSubCategory.getBrand() );
-            gender.setText( mSubCategory.getGender() );
+            genderSpinner.setPrompt(mSubCategory.getGender());
             search_key.setText( mSubCategory.getSearchKey() );
-            product_unique_key.setText( mSubCategory.getProductUniquekey() );
+            product_unique_key.setText( mSubCategory.getProductUniquekey());
             editTextSellRate.setText( "" + mSubCategory.getSellRate() );
             editTextDisplayRate.setText( "" + mSubCategory.getDisplayRate() );
             editTextDiscription.setText( mSubCategory.getDiscription() );
@@ -273,7 +286,6 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                         color = null;
                     } else {
                         showalertbox("Please Select Color");
-                        return;
                     }
                 }
             } );
@@ -297,7 +309,6 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                         sizeNumber = null;
                     } else {
                         showalertbox("Please Select Size");
-                        return;
                     }
                 }
             } );
@@ -314,7 +325,6 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                         weight = null;
                     } else {
                         showalertbox("Please Select Weight");
-                        return;
                     }
                 }
             } );
@@ -401,7 +411,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         String available_stock_ = available_stock.getText().toString().trim();
         String shiledUrl = editTextShiledUrl.getText().toString().trim();
         final String age_ = age.getText().toString().trim();
-        final String gender_ = gender.getText().toString().trim();
+        final String gender_ = genderSpinner.getSelectedItem().toString().trim();
         final String brand_ = brand.getText().toString().trim();
         final String product_unique_key_ = product_unique_key.getText().toString().trim();
 
@@ -437,9 +447,8 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
             brand.setError( "Please enter Brand" );
             brand.requestFocus();
             return;
-        } if (TextUtils.isEmpty( gender_ )) {
-            gender.setError( "Please enter Gender" );
-            gender.requestFocus();
+        } if (!gender_.isEmpty()&&gender_.equalsIgnoreCase( "Select" )) {
+            Toast.makeText(this, "Please Select Gender", Toast.LENGTH_SHORT).show();
             return;
         } if (TextUtils.isEmpty( address )) {
             editTextAddress.setError( "Please enter Address" );

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/boottom_navigation"
+    android:layout_marginTop="@dimen/margin_5"
+    app:cardCornerRadius="@dimen/margin_10"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="@dimen/margin_20"
+            android:layout_gravity="center_vertical"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="356dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="Sort"
+                android:textAllCaps="true"
+                android:textColor="@color/dark_gray"
+                android:textSize="@dimen/size_16"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:src="@drawable/ic_clear_black_24dp"
+                android:contentDescription="@string/to_date" />
+
+        </LinearLayout>
+
+        <View android:layout_width="match_parent"
+            android:layout_height="@dimen/view_width_small"
+            android:background="@color/grey_light"/>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_margin="@dimen/margin_10"
+            android:id="@+id/sort_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@color/white"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        <View android:layout_width="match_parent"
+            android:layout_height="@dimen/view_width_small"
+            android:background="@color/grey_light"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="@dimen/margin_10"
+            android:layout_gravity="center_vertical"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="1000+ Products"
+                android:textColor="@color/dark_gray"
+                android:textSize="@dimen/size_16"
+                android:textStyle="normal" />
+
+            <Button
+                android:id="@+id/done"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/margin_40"
+                android:text="Done"
+                android:textColor="@color/white_alpha"
+                android:shadowRadius="4"
+                android:background="@color/style_color_accent" />
+
+        </LinearLayout>
+
+        <View android:layout_width="match_parent"
+            android:layout_height="@dimen/view_width_small"
+            android:background="@color/grey_light"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -105,7 +105,7 @@ public class DetailsActivity extends BaseActivity {
     private List<Weight> weightList = new ArrayList<>(  );
     private List<Image> imageList = new ArrayList<>(  );
     List<String> detailList;
-    private ImageView selected_image;
+    //private ImageView selected_image;
 
     @SuppressLint({"WrongConstant", "NewApi", "ResourceAsColor"})
     @Override
@@ -124,7 +124,7 @@ public class DetailsActivity extends BaseActivity {
                 getSubCategory(Integer.parseInt( subCategory.getSubcategoryid() ));
                 getCart();
                 if (subCategory.getImages() != null && subCategory.getImages().size() != 0) {
-                    ProductImgSlider pagerAdapter = new ProductImgSlider( DetailsActivity.this, subCategory );
+                    ProductImgSlider pagerAdapter = new ProductImgSlider( DetailsActivity.this, subCategory.getImages() );
                     viewPager.setAdapter( pagerAdapter );
                     dots_indicator.setViewPager( viewPager );
                     /*Images*//*
@@ -247,7 +247,7 @@ public class DetailsActivity extends BaseActivity {
         dots_indicator = findViewById(R.id.dots_indicator);
         viewPager =  findViewById(R.id.view_pager);
         item_details =  findViewById(R.id.item_details);
-        selected_image = findViewById(R.id.selected_image);
+        //selected_image = findViewById(R.id.selected_image);
         weight_recycler = findViewById(R.id.weight_recycler);
         sizes_recycler = findViewById(R.id.sizes_recycler);
        // colors_recycler = findViewById(R.id.colors_recycler);

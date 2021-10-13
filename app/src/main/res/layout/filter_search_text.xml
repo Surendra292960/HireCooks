@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/sort_search_text"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_50"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textColor="@color/style_color_primary"
+            android:text="Apply"
+            android:clickable="true"
+            android:textSize="@dimen/size_16"
+            android:button="@null"
+            android:textStyle="bold"
+            android:drawablePadding="@dimen/margin_20"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"/>
+
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_btn_bg_pressed_color"/>
+
+</LinearLayout>

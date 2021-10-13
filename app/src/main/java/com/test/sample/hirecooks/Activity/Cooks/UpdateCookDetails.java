@@ -398,7 +398,7 @@ public class UpdateCookDetails extends BaseActivity {
         }
 
         @Override
-        public void onBindViewHolder(final AAH_CustomViewHolder holder, int position) {
+        public void onBindViewHolder(final AAH_CustomViewHolder holder, @SuppressLint("RecyclerView") int position) {
             //((MyViewHolder) holder).tv.setText(list.get(position).getName());
             //todo
       /*  holder.setImageUrl(list.get(position).getImage_url());

@@ -18,12 +18,10 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".Activity.ProductDatails.FullImageActivity"
+            android:name=".Activity.ProductDatails.ViewPagerActivity"
             android:exported="true" />
         <activity android:name=".Activity.Cooks.Video.PickVideoActivity" />
-
         <activity android:name=".Activity.Users.FirmUsers.FirmUserReportActivity" />
-
         <activity android:name=".Activity.Users.FirmUsers.FirmUserTracking" />
         <activity android:name=".Activity.Users.FirmUsers.FirmUserActivity" />
         <activity android:name=".Activity.Cooks.Video.FullScreenVideo" />
@@ -50,7 +48,7 @@
         <activity android:name=".Activity.Users.FirmUsers.FirmUserList" />
         <activity android:name=".Activity.Users.FirmUsers.AllFirmUsersReportActivity" />
         <activity android:name=".Activity.Users.FirmUsers.AdminChatActivity" />
-        <activity android:name=".Activity.Venders.VendersSubCategory.VendersSubCategoryActivity" />
+        <activity android:name=".Activity.Venders.VendersSubCategory.VendersSubCategoryActivity"/>
         <activity
             android:name=".Activity.Orders.PlacedOrderSuccessfully"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -97,7 +95,7 @@
             android:taskAffinity="" />
         <activity android:name=".Activity.Orders.MyOrdersActivity"/>
         <activity android:name=".Activity.Home.CalenderViewActivity" />
-        <activity android:name=".Activity.SubCategory.SubCategoryActivity" />
+        <activity android:name=".Activity.SubCategory.SubCategoryActivity"/>
         <activity android:name=".Activity.Cooks.CooksActivity" />
         <activity
             android:name=".Activity.Search.SearchResultActivity"
@@ -267,6 +265,7 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -274,7 +273,6 @@
         android:name="android.permission.REAL_GET_TASKS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
-
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
 </manifest>

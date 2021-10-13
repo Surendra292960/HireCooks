@@ -83,8 +83,8 @@
                                 android:layout_marginStart="@dimen/margin_5"
                                 android:textAllCaps="false"
                                 android:textColor="@color/dark_gray"
-                                android:textSize="14sp"
-                                android:textStyle="normal" />
+                                android:textSize="@dimen/size_14"
+                                android:textStyle="bold" />
 
                         </LinearLayout>
 
@@ -429,7 +429,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/idTopLayout">
+                android:layout_below="@+id/idTopLayout"
+                android:orientation="vertical">
 
               <!--  <TextView
                     android:id="@+id/item_description"

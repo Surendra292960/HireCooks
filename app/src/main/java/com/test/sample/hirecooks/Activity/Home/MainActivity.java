@@ -327,8 +327,8 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
                     }
                 }
                 else{
-                      ShowToast("Failed due to :"+response.body().getMessage());
-                     getToken(user.getPhone(),user.getId(),user.getFirmId());
+                    ShowToast("Failed due to :"+response.body().getMessage());
+                    getToken(user.getPhone(),user.getId(),user.getFirmId());
                 }
             }
 

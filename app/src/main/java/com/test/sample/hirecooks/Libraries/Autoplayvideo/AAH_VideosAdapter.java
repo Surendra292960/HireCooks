@@ -46,7 +46,4 @@ public class AAH_VideosAdapter extends RecyclerView.Adapter<AAH_CustomViewHolder
     public int getItemViewType(int position) {
         return 0;
     }
-
-
-
 }

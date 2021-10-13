@@ -43,7 +43,10 @@ public class VendersAdapter extends RecyclerView.Adapter<VendersAdapter.ViewHold
         if(venders!=null){
             if(!venders.getImage().isEmpty()){
                 holder.progress_dialog.setVisibility( View.GONE );
-                Glide.with(mCtx).load( APIUrl.PROFILE_URL+venders.getImage()).into( holder.venders_image );
+                if(venders.getImage().contains("https://")){
+                }else{
+                    Glide.with(mCtx).load( APIUrl.PROFILE_URL+venders.getImage()).into( holder.venders_image );
+                }
             }
            // holder.text.setText(venders.getName());
             holder.vender_layout.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +70,6 @@ public class VendersAdapter extends RecyclerView.Adapter<VendersAdapter.ViewHold
     class ViewHolder extends RecyclerView.ViewHolder {
         private CircleImageView venders_image;
         private LinearLayout vender_layout;
-        private TextView text;
         private ProgressBar progress_dialog;
 
         public ViewHolder(View itemLayoutView) {

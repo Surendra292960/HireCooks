@@ -218,20 +218,35 @@
     <string name="ad_" translatable="false">+</string>
     <string name="remove_" translatable="false">-</string>
     <string name="_1" translatable="false">1</string>
-    <string name="product_rating_reviews"><![CDATA[Product Rating & Reviews]]></string>
-    <string name="dozan">Dozan</string>
-    <string name="gm">gm</string>
-    <string name="litre">Litre</string>
-    <string name="kg">Kg</string>
-    <string name="add_only_one_size_which_you_wants_n_rest_keep_zero">add only one size which you wants ? \n rest keep zero</string>
-    <string name="add_product_weight">Add Product Weight</string>
-    <string name="pound">Pound</string>
-    <string name="enter_delivery_pincode">Enter Delivery Pincode</string>
-    <string name="check">CHECK</string>
-    <string name="estimate_delivery_date">Estimate Delivery Date</string>
-    <string name="track">Track</string>
-    <string name="enter_action_id">Enter Action ID</string>
-    <string name="retry">Retry</string>
+    <string name="product_rating_reviews"  translatable="false"><![CDATA[Product Rating & Reviews]]></string>
+    <string name="dozan" translatable="false">Dozan</string>
+    <string name="gm" translatable="false">gm</string>
+    <string name="litre" translatable="false">Litre</string>
+    <string name="kg" translatable="false">Kg</string>
+    <string name="add_only_one_size_which_you_wants_n_rest_keep_zero" translatable="false">add only one size which you wants ? \n rest keep zero</string>
+    <string name="add_product_weight" translatable="false">Add Product Weight</string>
+    <string name="pound" translatable="false">Pound</string>
+    <string name="enter_delivery_pincode" translatable="false">Enter Delivery Pincode</string>
+    <string name="check" translatable="false">CHECK</string>
+    <string name="estimate_delivery_date" translatable="false">Estimate Delivery Date</string>
+    <string name="track" translatable="false">Track</string>
+    <string name="enter_action_id" translatable="false">Enter Action ID</string>
+    <string name="retry" translatable="false">Retry</string>
+    <string name="clear"  translatable="false">Clear</string>
+
+    <string-array name="genders">
+        <item>Select</item>
+        <item>Female</item>
+        <item>Male</item>
+        <item>Boys</item>
+        <item>Girls</item>
+    </string-array>
+
+    <string-array name="prices">
+        <item>0–100</item>
+        <item>101–500</item>
+        <item>501–1000</item>
+    </string-array>
 
     <string-array name="uploadImages">
         <item>Pick from gallery</item>
@@ -243,19 +258,6 @@
         <item>gallery_image</item>
         <item>camera_image</item>
         <item>remove_image</item>
-    </string-array>
-
-    <string-array name="colorList">
-        <item>Black</item>
-        <item>White</item>
-        <item>Red</item>
-        <item>Blue</item>
-        <item>Yellow</item>
-        <item>Green</item>
-        <item>Brown</item>
-        <item>Pink</item>
-        <item>Orange</item>
-        <item>Purple</item>
     </string-array>
 
     <string-array name="order_status">
