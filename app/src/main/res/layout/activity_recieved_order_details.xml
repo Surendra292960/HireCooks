@@ -152,6 +152,16 @@
                 android:textSize="16sp"/>
 
 
+            <Button
+                android:id="@+id/navigation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:textColor="@color/style_color_primary"
+                android:textStyle="bold"
+                android:text="Check route Of the firm"
+                android:textSize="16sp"/>
+
         </LinearLayout>
 
         </androidx.cardview.widget.CardView>

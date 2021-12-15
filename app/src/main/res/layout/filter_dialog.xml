@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/boottom_navigation"
     android:layout_marginTop="@dimen/margin_5"
     app:cardCornerRadius="@dimen/margin_10"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
                 android:layout_width="356dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="Filter"
+                android:text="@string/filter"
                 android:textAllCaps="true"
                 android:textColor="@color/dark_gray"
                 android:textSize="@dimen/size_16"
@@ -46,7 +46,6 @@
             android:orientation="horizontal"
             android:layout_gravity="center_vertical">
 
-
             <TextView
                 android:layout_weight="0.7"
                 android:layout_width="match_parent"
@@ -54,8 +53,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:background="@color/colorNoInternetGradStartH"
-                android:text="Category"/>
-
+                android:text="@string/category"/>
 
             <androidx.appcompat.widget.SearchView
                 android:layout_weight="0.3"
@@ -76,10 +74,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="400dp"
             android:orientation="horizontal"
-            android:weightSum="1"
-            tools:ignore="UselessParent">
+            android:weightSum="1">
 
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/nested_scroll_view"
@@ -88,61 +85,50 @@
                 android:layout_weight="0.7"
                 android:fillViewport="true">
 
-
-                <ScrollView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/list1"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/white"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/list1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:background="@color/white"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
-                    </LinearLayout>
-
-                </ScrollView>
+                </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>
 
             <androidx.core.widget.NestedScrollView
+                android:layout_margin="@dimen/margin_10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
                 android:fillViewport="true">
 
-                <ScrollView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/list2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:background="@color/white"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/list2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/white"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
-                    </LinearLayout>
-
-                </ScrollView>
+                </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>
 
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginTop="@dimen/margin_20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -164,9 +150,13 @@
                 android:background="@color/quantum_yellow"
                 android:textColor="@color/white_alpha"
                 android:text="@string/apply"/>
+
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/margin_20"/>
+
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -18,9 +18,8 @@ public class CircularImageCategoryAdapter extends RecyclerView.Adapter<CircularI
     private Context mCtx;
     private List<Offer> offers;
 
-    public CircularImageCategoryAdapter(Context mCtx, List<Offer> offers) {
+    public CircularImageCategoryAdapter(Context mCtx) {
         this.mCtx = mCtx;
-        this.offers = offers;
     }
 
     @Override
@@ -44,6 +43,12 @@ public class CircularImageCategoryAdapter extends RecyclerView.Adapter<CircularI
     public int getItemCount() {
         return offers==null?0:offers.size();
     }
+
+    public void setCategoryOffers(List<Offer> offers) {
+        this.offers = offers;
+        notifyDataSetChanged();
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         public TextView circular_image_category_name;
         private CircleImageView circular_category_image;

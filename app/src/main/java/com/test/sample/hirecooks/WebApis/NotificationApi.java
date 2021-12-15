@@ -17,5 +17,6 @@ public interface NotificationApi {
     Call<String> chatNotification(
             @Field("device_token") String device_token,
             @Field("firm_id") String firm_id,
-            @Field("message") String message);
+            @Field("message") String message,
+            @Field("sender_name") String sender_name);
 }

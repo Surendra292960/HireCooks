@@ -1,27 +1,38 @@
 package com.test.sample.hirecooks.Activity.Orders;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.model.LatLng;
 import com.test.sample.hirecooks.Models.NewOrder.Order;
 import com.test.sample.hirecooks.Models.SubCategory.Color;
 import com.test.sample.hirecooks.Models.SubCategory.Size;
 import com.test.sample.hirecooks.Models.SubCategory.Weight;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.Utils.SharedPrefManager;
 
+import java.util.Locale;
 import java.util.Objects;
 
 public class RecievedOrderDetails extends AppCompatActivity {
     private TextView order_id, product_name, product_sellRate, product_displayRate,
             product_discount, product_quantity, product_totalAmount, firm_id, firm_address,order_color,order_weight,order_size;
     private ImageView order_image;
+    private Button navigation;
     private Order orders;
+    private User user;
+    private LatLng latLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +41,7 @@ public class RecievedOrderDetails extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("RecievedOrderDetails");
+        user = SharedPrefManager.getInstance(this).getUser();
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
             orders = (Order)bundle.getSerializable("Orders");
@@ -77,11 +89,22 @@ public class RecievedOrderDetails extends AppCompatActivity {
                    Glide.with(this).load( orders.getImages().get( 0 ).getImage() ).into( order_image );
                }
            }
+
+           navigation.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   latLng = new com.google.android.gms.maps.model.LatLng(orders.getFirmLat(), orders.getFirmLng());
+                   String uri = "http://maps.google.com/maps?f=d&hl=en&saddr="+orders.getFirmLat()+","+orders.getFirmLng()+"&daddr="+orders.getFirmLat()+","+orders.getFirmLng();
+                   Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
+                   startActivity(Intent.createChooser(intent, "Select an application"));
+               }
+           });
        }
     }
 
     private void initViews() {
         order_id = findViewById(R.id.order_id);
+        navigation = findViewById(R.id.navigation);
         product_name = findViewById(R.id.product_name);
         order_image = findViewById(R.id.order_image);
         product_sellRate = findViewById(R.id.product_sellRate);

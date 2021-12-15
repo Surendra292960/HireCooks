@@ -131,7 +131,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                         String title = Objects.requireNonNull(editTextTitle.getText()).toString().trim();
                         String message = Objects.requireNonNull(editTextMessage.getText()).toString().trim();
                         //sending the message
-                        sendMessage(user.getId(), title, message);
+                        sendMessage(user.getId(), title, message,user.getName());
                     }
                 });
 
@@ -197,12 +197,12 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                 .show();
     }
 
-    private void sendMessage(int id, final String title, final String message) {
+    private void sendMessage(int id, final String title, final String message, final String sender_name) {
         final ProgressDialog progressDialog = new ProgressDialog(mCtx);
         progressDialog.setMessage("Sending Message...");
         progressDialog.show();
         UserApi service = ApiClient.getClient().create(UserApi.class);
-        Call<MessageResponse> call = service.sendMessage(SharedPrefManager.getInstance(mCtx).getUser().getId(), id, title, message,1,0);
+        Call<MessageResponse> call = service.sendMessage(SharedPrefManager.getInstance(mCtx).getUser().getId(), id, title, message,1,0,sender_name);
         call.enqueue(new Callback<MessageResponse>() {
             @Override
             public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {

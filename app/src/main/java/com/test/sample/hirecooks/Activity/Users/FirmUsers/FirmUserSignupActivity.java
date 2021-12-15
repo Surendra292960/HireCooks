@@ -48,6 +48,7 @@ import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.Utils.TrackGPS;
 import com.test.sample.hirecooks.WebApis.UserApi;
+import com.test.sample.hirecooks.databinding.ActivitySignUpBinding;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -87,7 +88,6 @@ public class FirmUserSignupActivity extends BaseActivity {
     private List<String> user_type_list;
     private User users;
     private User signUpuser;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

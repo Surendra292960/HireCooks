@@ -1,8 +1,10 @@
 package com.test.sample.hirecooks.WebApis;
 
+import com.test.sample.hirecooks.ApiServiceCall.Retry;
 import com.test.sample.hirecooks.Models.Category.Category;
+import com.test.sample.hirecooks.Models.Category.CategoryResponse;
 import com.test.sample.hirecooks.Models.SubCategory.ColorExample;
-import com.test.sample.hirecooks.Models.SubCategory.Example;
+import com.test.sample.hirecooks.Models.SubCategory.SubcategoryResponse;
 import com.test.sample.hirecooks.Models.SubCategory.ImageExample;
 import com.test.sample.hirecooks.Models.SubCategory.SizeExample;
 import com.test.sample.hirecooks.Models.SubCategory.WeightExample;
@@ -20,29 +22,29 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface ProductApi {
-
+    @Retry
     @GET("subCategoryBy_sub/{sub_id}")
-    Call<ArrayList<Example>> getSubCategorysBySub_id(
+    Call<ArrayList<SubcategoryResponse>> getSubCategorysBySub_id(
             @Path( "sub_id" ) int subcategoryid);
-
+    @Retry
     @GET("subCategory")
-    Call<ArrayList<Example>> getSubCategorys();
+    Call<ArrayList<SubcategoryResponse>> getSubCategorys();
 
     @DELETE("subCategory/{id}")
-    Call<ArrayList<Example>> deleteSubCategory(@Path( "id" ) String product_uniquekey);
+    Call<ArrayList<SubcategoryResponse>> deleteSubCategory(@Path( "id" ) String product_uniquekey);
 
     @POST("subCategory/{serach_key}")
-    Call<ArrayList<Example>> searchAllProducts(@Path("serach_key") String search_key);
+    Call<ArrayList<SubcategoryResponse>> searchAllProducts(@Path("serach_key") String search_key);
 
     @PUT("Category/{id}")
-    Call<ArrayList<com.test.sample.hirecooks.Models.Category.Example>> updateCategory(
+    Call<ArrayList<CategoryResponse>> updateCategory(
             @Path( "id" ) int id, @Body ArrayList<Category> category);
 
     @POST("Category")
-    Call<ArrayList<com.test.sample.hirecooks.Models.Category.Example>> addCategory(@Body ArrayList<Category> category);
+    Call<ArrayList<CategoryResponse>> addCategory(@Body ArrayList<Category> category);
 
     @POST("Category")
-    Call<List<Example>> addSubCategory(@Body List<Example> subcategory);
+    Call<List<SubcategoryResponse>> addSubCategory(@Body List<SubcategoryResponse> subcategory);
 
     @PUT("colors/{id}")
     Call<List<ColorExample>> updateColor(@Path( "id" ) int id, @Body List<ColorExample> colorList);
@@ -59,30 +61,36 @@ public interface ProductApi {
     @GET("weights/{x_id}")
     Call<List<WeightExample>> getProductWeight(@Path( "x_id" ) String id);
 
+    @Retry
     @GET("colors/{x_id}")
     Call<List<ColorExample>> getProductColor(@Path( "x_id" ) String id);
 
+    @Retry
     @GET("sizes/{x_id}")
     Call<List<SizeExample>> getProductSize(@Path( "x_id" ) String id);
 
+    @Retry
     @GET("weights}")
     Call<List<WeightExample>> getSelectWeight();
 
+    @Retry
     @GET("select_color")
     Call<List<ColorExample>> getSelectColor();
 
+    @Retry
     @GET("select_sizes")
     Call<List<SizeExample>> getSelectSize();
 
     @POST("subCategory")
-    Call<ArrayList<Example>> addSubcategory(@Body List<Example> exampleList);
+    Call<ArrayList<SubcategoryResponse>> addSubcategory(@Body List<SubcategoryResponse> exampleList);
 
     @PUT("subCategory/{id}")
-    Call<ArrayList<Example>> updateSubcategory(@Path( "id" ) int id, @Body List<Example> exampleList);
+    Call<ArrayList<SubcategoryResponse>> updateSubcategory(@Path( "id" ) int id, @Body List<SubcategoryResponse> exampleList);
 
     @PATCH("subCategory/{firm_id}")
-    Call<ArrayList<Example>> accepting_Orders(@Path("firm_id")String firmId, @Body List<Example> examples);
+    Call<ArrayList<SubcategoryResponse>> accepting_Orders(@Path("firm_id")String firmId, @Body List<SubcategoryResponse> examples);
 
+    @Retry
     @GET("getSubCategorysByFirmId/{firm_id}")
-    Call<ArrayList<Example>> getSubCategorysByFirmId(@Path( "firm_id" ) String id);
+    Call<ArrayList<SubcategoryResponse>> getSubCategorysByFirmId(@Path( "firm_id" ) String id);
 }

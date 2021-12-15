@@ -36,7 +36,7 @@ import com.test.sample.hirecooks.Activity.ProductDatails.DetailsActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
-import com.test.sample.hirecooks.Models.SubCategory.Example;
+import com.test.sample.hirecooks.Models.SubCategory.SubcategoryResponse;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
@@ -64,7 +64,7 @@ public class VendersSubCategoryActivity extends BaseActivity {
     private TextView item_count,checkout_amount,checkout;
     private View bottom_anchor,appRoot;
     private Category category;
-    private List<Example> examples;
+    private List<SubcategoryResponse> examples;
     private FrameLayout no_vender_found,no_result_found;
     private List<Subcategory> filteredList;
     private User userResponse;
@@ -136,17 +136,17 @@ public class VendersSubCategoryActivity extends BaseActivity {
 
     private void getSubCategory(String firm_id) {
         ProductApi mService = ApiClient.getClient().create(ProductApi.class);
-        Call<ArrayList<Example>> call = mService.getSubCategorysByFirmId(firm_id);
-        call.enqueue(new Callback<ArrayList<Example>>() {
+        Call<ArrayList<SubcategoryResponse>> call = mService.getSubCategorysByFirmId(firm_id);
+        call.enqueue(new Callback<ArrayList<SubcategoryResponse>>() {
             @SuppressLint("WrongConstant")
             @Override
-            public void onResponse(Call<ArrayList<Example>> call, Response<ArrayList<Example>> response) {
+            public void onResponse(Call<ArrayList<SubcategoryResponse>> call, Response<ArrayList<SubcategoryResponse>> response) {
                 int statusCode = response.code();
                 if (statusCode == 200) {
                 examples = new ArrayList<>(  );
                 examples = response.body();
                 if(examples!=null&&examples.size()!=0){
-                    for(Example example:examples){
+                    for(SubcategoryResponse example:examples){
                         if(example.getError()==false){
                             if(example.getSubcategory()!=null&&example.getSubcategory().size()!=0){
                                 List<Subcategory> list = new ArrayList<>();
@@ -187,7 +187,7 @@ public class VendersSubCategoryActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Example>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<SubcategoryResponse>> call, Throwable t) {
                 System.out.println("Suree : " + t.getMessage());
             }
         });

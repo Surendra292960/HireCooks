@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
+
+import java.util.List;
+
 public class LocalStorage {
 
 
@@ -110,9 +114,9 @@ public class LocalStorage {
     }
 
 
-    public void setFavourite(String cart) {
+    public void setFavourite(String favourite) {
         Editor editor = sharedPreferences.edit();
-        editor.putString("FAVOURITE", cart);
+        editor.putString("FAVOURITE", favourite);
         editor.commit();
     }
 

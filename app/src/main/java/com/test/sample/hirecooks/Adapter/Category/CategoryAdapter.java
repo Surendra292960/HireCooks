@@ -25,12 +25,12 @@ import java.util.List;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     private Context mCtx;
     private List<Category> categories;
-    Scene aScene;
-    private ViewGroup sceneRoot;
+/*    Scene aScene;
+    private ViewGroup sceneRoot;*/
 
-    public CategoryAdapter(Context mCtx, List<Category> categories) {
+    public CategoryAdapter(Context mCtx) {
         this.mCtx = mCtx;
-        this.categories = categories;
+      //  this.categories = categories;
     }
 
     @Override
@@ -63,6 +63,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public int getItemCount() {
         return categories==null?0:categories.size();
     }
+
+    public void setCategory(List<Category> category) {
+        this.categories = category;
+        notifyDataSetChanged();
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         public TextView categoryName;
         public ImageView categoryImage;

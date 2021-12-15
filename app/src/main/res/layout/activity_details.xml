@@ -66,7 +66,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:weightSum="2">
+                            android:weightSum="2"
+                            android:baselineAligned="false">
 
                             <LinearLayout
                                 android:layout_weight="1"
@@ -296,7 +297,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="12sp"
-                                android:text="50 ratings \u0026 15 reviews"
+                                android:text="@string/ratings_and_reviews"
                                 android:textSize="12sp"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
@@ -319,8 +320,10 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
+                                android:clickable="true"
                                 android:orientation="horizontal"
-                                android:weightSum="2">
+                                android:weightSum="2"
+                                tools:ignore="UseCompoundDrawables">
                                 <ImageView android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     app:srcCompat="@drawable/ic_share"/>
@@ -345,8 +348,10 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
+                                android:clickable="true"
                                 android:orientation="horizontal"
-                                android:weightSum="2">
+                                android:weightSum="2"
+                                tools:ignore="UseCompoundDrawables">
                                 <ImageView android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     app:srcCompat="@drawable/ic_filter_none_black_24dp"/>
@@ -371,8 +376,10 @@
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center"
+                                android:clickable="true"
                                 android:orientation="horizontal"
-                                android:weightSum="2">
+                                android:weightSum="2"
+                                tools:ignore="UseCompoundDrawables">
                                 <ImageView
                                     android:id="@+id/item_favourite"
                                     android:layout_width="wrap_content"
@@ -569,13 +576,13 @@
 
                         <WebView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:id="@+id/item_details"
-                            android:layout_marginTop="@dimen/margin_5"
-                            android:layout_marginBottom="@dimen/margin_5"
+                            android:layout_margin="@dimen/margin_10"
                             android:textColor="@color/dark_gray"
                             android:textSize="@dimen/size_20"
                             android:textStyle="bold"
+                            android:background="@color/white_alpha"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                             tools:ignore="WebViewLayout" />
 
@@ -818,7 +825,7 @@
             android:id="@+id/bottom_anchor_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <include
                 android:id="@+id/footerView"

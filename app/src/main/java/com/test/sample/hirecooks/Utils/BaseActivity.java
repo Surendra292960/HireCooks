@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -51,6 +53,7 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
     public static final String TAG = "BaseActivity===>";
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 10;
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 20;
+    private static final int GPS_REQUEST_CODE = 9001;
     List<Cart> cartList = new ArrayList<Cart>();
     List<Subcategory> newCartList = new ArrayList<Subcategory>();
     List<com.test.sample.hirecooks.Models.NewOrder.Order> newOrderList = new ArrayList<com.test.sample.hirecooks.Models.NewOrder.Order>();
@@ -185,22 +188,23 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
         toast.show(); // display the custom Toast
     }
 
-    public void enableGPS() {
-        String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-
-        if (!provider.contains("gps")) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                final Intent poke = new Intent();
-                poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
-                poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
-                poke.setData(Uri.parse("3"));
-                sendBroadcast(poke);
-            } else {
-                Intent intent = new Intent("android.location.GPS_ENABLED_CHANGE");
-                intent.putExtra("enabled", true);
-                sendBroadcast(intent);
-            }
-        }
+    public boolean enableGPS() {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        boolean providerEnable = locationManager.isProviderEnabled(locationManager.GPS_PROVIDER);
+       if(providerEnable){
+           return true;
+       }else{
+            AlertDialog alertDialog = new AlertDialog.Builder(this)
+                    .setTitle("GPS Permission")
+                    .setMessage("GPS is required for this app")
+                    .setPositiveButton("Yes",((dialogInterface, i) -> {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(intent,GPS_REQUEST_CODE);
+                    }))
+                    .setCancelable(false)
+                    .show();
+       }
+        return false;
     }
 
     public Location getLocation() {
@@ -324,7 +328,7 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
             if (ContextCompat.checkSelfPermission(BaseActivity.this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(BaseActivity.this, Manifest.permission.READ_SMS)) {
                 } else {
-                     ActivityCompat.requestPermissions(BaseActivity.this, new String[]{Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS}, 101);
+                    ActivityCompat.requestPermissions(BaseActivity.this, new String[]{Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS}, 101);
                 }
             }
         }

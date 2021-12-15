@@ -117,7 +117,6 @@ public class UserSignUpActivity extends BaseActivity {
         editTextFirmId = findViewById(R.id.editTextFirmId);
        // editTextUserType = findViewById(R.id.editTextUserType);
         radioGender = findViewById(R.id.radioGender);
-        radioGender = findViewById(R.id.radioGender);
         buttonSignUp = findViewById(R.id.buttonSignUp);
         editTextPhone.setFocusableInTouchMode( true );
 

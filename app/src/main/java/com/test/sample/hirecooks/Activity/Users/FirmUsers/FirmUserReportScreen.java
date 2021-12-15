@@ -1,6 +1,7 @@
 package com.test.sample.hirecooks.Activity.Users.FirmUsers;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,12 +21,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.MenuItemCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.bumptech.glide.Glide;
+import com.test.sample.hirecooks.Activity.SubCategory.SubCategoryActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Users.Example;
 import com.test.sample.hirecooks.Models.Users.User;
@@ -35,6 +38,13 @@ import com.test.sample.hirecooks.Utils.OnButtonClickListener;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.UserApi;
+import com.test.sample.hirecooks.databinding.ActivityFirmUserReportBinding;
+import com.test.sample.hirecooks.databinding.ActivitySubCategoryBinding;
+import com.test.sample.hirecooks.databinding.ActivityUsersBinding;
+import com.test.sample.hirecooks.databinding.EditSubcategoryAlertBinding;
+import com.test.sample.hirecooks.databinding.ItemHorizontalLayoutBinding;
+import com.test.sample.hirecooks.databinding.RecyclerviewAddressBinding;
+import com.test.sample.hirecooks.databinding.RecyclerviewProfilesBinding;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -46,37 +56,32 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.paytm.pgsdk.easypay.manager.PaytmAssist.getContext;
+
 public class FirmUserReportScreen extends AppCompatActivity {
-    private RecyclerView usersRecyclerView;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private FirmUserAdapter adapter;
     private ProgressBarUtil progressBarUtil;
     private List<User> filtereduserList;
-    private View appRoot;
-    private OnButtonClickListener listener;
     private User user;
-    private FloatingActionButton add_user;
-
+    private ActivityUsersBinding usersBinding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView( R.layout.activity_users);
+        usersBinding = ActivityUsersBinding.inflate(getLayoutInflater());
+        View view = usersBinding.getRoot();
+        setContentView(view);
         Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         progressBarUtil = new ProgressBarUtil(this);
-        appRoot = findViewById(R.id.appRoot);
         user = SharedPrefManager.getInstance( this ).getUser();
-        usersRecyclerView = findViewById(R.id.users_list_recycler_view);
-        mSwipeRefreshLayout = findViewById(R.id.swipeToRefresh);
-        add_user = findViewById(R.id.add_user);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.style_color_accent);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        usersBinding.swipeToRefresh.setColorSchemeResources(R.color.style_color_accent);
+        usersBinding.swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new Handler().postDelayed( new Runnable() {
                     @Override
                     public void run() {
-                        mSwipeRefreshLayout.setRefreshing(false);
+                        usersBinding.swipeToRefresh.setRefreshing(false);
                         if(user!=null&&user.getFirmId()!=null){
                             getUsers( user.getFirmId() );
                         }
@@ -86,14 +91,14 @@ public class FirmUserReportScreen extends AppCompatActivity {
         });
 
         final LinearLayoutManager layoutParams = new LinearLayoutManager(this);
-        usersRecyclerView.setLayoutManager(layoutParams);
+        usersBinding.usersListRecyclerView.setLayoutManager(layoutParams);
         adapter = new FirmUserAdapter(this,filtereduserList);
-        usersRecyclerView.setAdapter(adapter);
-        usersRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
+        usersBinding.usersListRecyclerView.setAdapter(adapter);
+        usersBinding.usersListRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 int topRowVerticalPosition = (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
-                mSwipeRefreshLayout.setEnabled(topRowVerticalPosition >= 0);
+                usersBinding.swipeToRefresh.setEnabled(topRowVerticalPosition >= 0);
 
             }
 
@@ -103,8 +108,8 @@ public class FirmUserReportScreen extends AppCompatActivity {
             }
         });
         if(user!=null&&user.getFirmId()!=null&&user.getUserType().equalsIgnoreCase( "Admin" )||user.getUserType().equalsIgnoreCase( "Manager" )){
-            add_user.setVisibility( View.VISIBLE );
-            add_user.setOnClickListener( new View.OnClickListener() {
+            usersBinding.addUser.setVisibility( View.VISIBLE );
+            usersBinding.addUser.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startActivity( new Intent( FirmUserReportScreen.this, FirmUserSignupActivity.class )  .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -129,7 +134,7 @@ public class FirmUserReportScreen extends AppCompatActivity {
                     filtereduserList = new ArrayList<>(  );
                     List<User> usersList = new ArrayList<>(  );
                     progressBarUtil.hideProgress();
-                    mSwipeRefreshLayout.onFinishTemporaryDetach();
+                    usersBinding.swipeToRefresh.onFinishTemporaryDetach();
                     for (Example example:response.body()){
                         for(User user:example.getUsers()){
                             if(user.getUserType().equalsIgnoreCase( "Employee" )||user.getUserType().equalsIgnoreCase( "Rider" )){
@@ -140,7 +145,7 @@ public class FirmUserReportScreen extends AppCompatActivity {
                         }
                         if(filtereduserList!=null&&filtereduserList.size()!=0){
                             adapter = new FirmUserAdapter( FirmUserReportScreen.this, filtereduserList);
-                            usersRecyclerView.setAdapter(adapter);
+                            usersBinding.usersListRecyclerView.setAdapter(adapter);
                         }
                     }
                 }
@@ -193,7 +198,7 @@ public class FirmUserReportScreen extends AppCompatActivity {
             }
 
             adapter = new FirmUserAdapter ( FirmUserReportScreen.this, filteredList);
-            usersRecyclerView.setAdapter (adapter);
+            usersBinding.usersListRecyclerView.setAdapter (adapter);
             adapter.notifyDataSetChanged();
 
         }catch (Exception e){
@@ -235,41 +240,40 @@ public class FirmUserReportScreen extends AppCompatActivity {
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_profiles, parent, false);
-            return new ViewHolder(v);
+            return new FirmUserAdapter.ViewHolder(RecyclerviewProfilesBinding.inflate(LayoutInflater.from(mCtx)));
         }
 
         @SuppressLint("SetTextI18n")
         @Override
-        public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        public void onBindViewHolder(@NonNull final ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
             final User user = users.get(position);
             if(user.getId()== SharedPrefManager.getInstance( mCtx ).getUser().getId()){
-                holder.profile_layout.removeAllViews();
+                holder.binding.profileLayout.removeAllViews();
                 return;
             }
             if(user.getImage()!=null) {
                 if (user.getImage().contains("https://")) {
-                    Glide.with(mCtx).load(user.getImage()).into(holder.profile_image);
+                    Glide.with(mCtx).load(user.getImage()).into(holder.binding.profileImage);
                 } else if (user.getImage().contains(" ")) {
 
                 } else {
-                    Glide.with(mCtx).load( APIUrl.PROFILE_URL + user.getImage()).into(holder.profile_image);
+                    Glide.with(mCtx).load( APIUrl.PROFILE_URL + user.getImage()).into(holder.binding.profileImage);
                 }
             }
-            holder.textViewName.setText(user.getName());
-            holder.textViewEmail.setVisibility( View.GONE );
+            holder.binding.textViewName.setText(user.getName());
+            holder.binding.textViewEmail.setVisibility( View.GONE );
             if(user.getStatus().equalsIgnoreCase( "1" )){
-                holder.status.setVisibility( View.VISIBLE );
-                holder.status.setText( "Online" );
-                holder.status.setBackgroundColor( android.graphics.Color.parseColor("#567845"));
-                holder.status.setTextColor( android.graphics.Color.parseColor("#ffffff"));
+                holder.binding.status.setVisibility( View.VISIBLE );
+                holder.binding.status.setText( "Online" );
+                holder.binding.status.setBackgroundColor( android.graphics.Color.parseColor("#567845"));
+                holder.binding.status.setTextColor( android.graphics.Color.parseColor("#ffffff"));
             }else{
-                holder.status.setVisibility( View.VISIBLE );
-                holder.status.setText( "Offline" );
-                holder.status.setBackgroundColor( android.graphics.Color.parseColor( "#ff0000" ));
-                holder.status.setTextColor( android.graphics.Color.parseColor("#ffffff"));
+                holder.binding.status.setVisibility( View.VISIBLE );
+                holder.binding.status.setText( "Offline" );
+                holder.binding.status.setBackgroundColor( android.graphics.Color.parseColor( "#ff0000" ));
+                holder.binding.status.setTextColor( android.graphics.Color.parseColor("#ffffff"));
             }
-            holder.profile_layout.setOnClickListener(new View.OnClickListener() {
+            holder.binding.profileLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     showalertbox(users.get( position ));
@@ -279,17 +283,13 @@ public class FirmUserReportScreen extends AppCompatActivity {
 
         private void showalertbox(User userResponse) {
             final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder( FirmUserReportScreen.this);
-            LayoutInflater inflater = FirmUserReportScreen.this.getLayoutInflater();
-            View view = inflater.inflate(R.layout.edit_subcategory_alert,null);
-            TextView text = view.findViewById(R.id.text);
-            AppCompatTextView deletBtn = view.findViewById(R.id.no_btn);
-            text.setText( "User Profile !" );
-            AppCompatTextView report = view.findViewById(R.id.edit_btn);
-            report.setText( "Report Screen" );
-            dialogBuilder.setView(view);
+            EditSubcategoryAlertBinding binding = EditSubcategoryAlertBinding.inflate(LayoutInflater.from(mCtx));
+            setContentView(binding.getRoot());
+            binding.text.setText( "User Profile !" );
+            binding.editBtn.setText( "Report Screen" );
             final android.app.AlertDialog dialog = dialogBuilder.create();
             dialog.show();
-            deletBtn.setOnClickListener( v -> {
+            binding.noBtn.setOnClickListener( v -> {
                 try {
                     dialog.dismiss();
                 }
@@ -297,7 +297,7 @@ public class FirmUserReportScreen extends AppCompatActivity {
                     ex.printStackTrace();
                 }
             } );
-            report.setOnClickListener( v -> {
+            binding.editBtn.setOnClickListener( v -> {
                 try {
                     dialog.dismiss();
                     Intent intent = new Intent( mCtx,FirmUserReportActivity.class );
@@ -319,17 +319,11 @@ public class FirmUserReportScreen extends AppCompatActivity {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            private TextView textViewName,textViewEmail,status;
-            private ImageView profile_image;
-            private CardView profile_layout;
+            RecyclerviewProfilesBinding binding;
 
-            ViewHolder(View itemView) {
-                super(itemView);
-                textViewName = itemView.findViewById(R.id.textViewName);
-                textViewEmail = itemView.findViewById(R.id.textViewEmail);
-                status = itemView.findViewById(R.id.status);
-                profile_image = itemView.findViewById(R.id.profile_image);
-                profile_layout = itemView.findViewById(R.id.profile_layout);
+            ViewHolder(RecyclerviewProfilesBinding bind) {
+                super(bind.getRoot());
+                binding = bind;
             }
         }
     }

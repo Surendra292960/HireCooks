@@ -26,10 +26,9 @@ import androidx.transition.Scene;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
-import com.test.sample.hirecooks.Models.Category.Example;
+import com.test.sample.hirecooks.Models.Category.CategoryResponse;
 import com.test.sample.hirecooks.Models.Offer.Offer;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
@@ -101,14 +100,14 @@ public class EditCategoryActivity extends AppCompatActivity {
     private void getCategory(int id) {
         mCategory = new ArrayList<>(  );
         mService = ApiClient.getClient().create( UserApi.class);
-        Call<List<Example>> call = mService.getCategoryByCatId(id);
-        call.enqueue(new Callback<List<Example>>() {
+        Call<List<CategoryResponse>> call = mService.getCategoryByCatId(id);
+        call.enqueue(new Callback<List<CategoryResponse>>() {
             @SuppressLint("WrongConstant")
             @Override
-            public void onResponse(Call<List<Example>> call, Response<List<Example>> response) {
+            public void onResponse(Call<List<CategoryResponse>> call, Response<List<CategoryResponse>> response) {
                 int statusCode = response.code();
                 if(statusCode==200){
-                    for(Example example:response.body()){
+                    for(CategoryResponse example:response.body()){
                         if(example.getError()==false){
                           if(response.body().size()!=0){
                               for(Category category:example.getCategory()){
@@ -123,7 +122,7 @@ public class EditCategoryActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<com.test.sample.hirecooks.Models.Category.Example>> call, Throwable t) {
+            public void onFailure(Call<List<CategoryResponse>> call, Throwable t) {
                 Toast.makeText( EditCategoryActivity.this, t.getMessage(), Toast.LENGTH_SHORT ).show();
             }
         });

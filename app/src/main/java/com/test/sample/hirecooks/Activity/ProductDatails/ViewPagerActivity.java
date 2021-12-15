@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
+import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 import com.test.sample.hirecooks.Models.SubCategory.Image;
 import com.test.sample.hirecooks.R;
 import java.util.List;

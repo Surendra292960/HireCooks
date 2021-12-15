@@ -19,6 +19,7 @@ public class Constants {
     public static final String SKU_DELAROY_SIXMONTH = "delaroy_sixmonth";
     public static final String SKU_DELAROY_YEARLY = "delaroy_yearly";
     public static final String base64EncodedPublicKey = "";
+    public static String SEARCH_KEY = "";
     public static List<Map> NEARBY_COOKS = null;
     public static LatLng USER_CURRENT_LOCATION = null;
     public static String USER_PROFILE = null;

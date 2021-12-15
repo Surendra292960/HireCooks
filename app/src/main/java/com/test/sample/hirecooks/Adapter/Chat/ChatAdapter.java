@@ -1,113 +1,143 @@
 package com.test.sample.hirecooks.Adapter.Chat;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import androidx.recyclerview.widget.RecyclerView;
+import com.test.sample.hirecooks.Activity.Chat.DateParser;
+import com.test.sample.hirecooks.Models.Chat.ChatModelObject;
+import com.test.sample.hirecooks.Models.Chat.DateObject;
+import com.test.sample.hirecooks.Models.Chat.ListObject;
 import com.test.sample.hirecooks.Models.Chat.Message;
 import com.test.sample.hirecooks.R;
-import com.test.sample.hirecooks.Utils.SharedPrefManager;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private final List<Message> list;
-    SimpleDateFormat format = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
-    DateFormat date = new SimpleDateFormat("dd MMM yyyy");
-    DateFormat time = new SimpleDateFormat("HH:mm a");
-    private final Context context;
-    public static final int MESSAGE_TYPE_IN = 1;
-    public static final int MESSAGE_TYPE_OUT = 2;
+    private List<ListObject> listObjects;
+    private int loggedInUserId;
+    private Context context;
 
-    public ChatAdapter(Context context, List<Message> list) { // you can pass other parameters in constructor
+    public ChatAdapter(List<ListObject> listObjects, Context context) {
+        this.listObjects = listObjects;
         this.context = context;
-        this.list = list;
     }
 
-    private class MessageInViewHolder extends RecyclerView.ViewHolder {
-        TextView chat_meesage_in,chat_date_in,chat_time_in;
-        MessageInViewHolder(final View itemView) {
-            super(itemView);
-            chat_meesage_in = itemView.findViewById( R.id.chat_meesage_in);
-            chat_date_in = itemView.findViewById( R.id.chat_date_in);
-            chat_time_in = itemView.findViewById( R.id.chat_time_in);
-        }
-        void bind(int position) {
-            Message message = list.get(position);
-            chat_meesage_in.setText(message.getMessage());
-            chat_date_in.setText(date.format( getDateTime(message.getSentat())));
-            chat_time_in.setText(time.format( getDateTime(message.getSentat())));
-        }
+    public void setUser(int userId) {
+        this.loggedInUserId = userId;
     }
 
-    private class MessageOutViewHolder extends RecyclerView.ViewHolder {
-        TextView chat_meesage_out,chat_date_out,chat_time_out;
-        MessageOutViewHolder(final View itemView) {
-            super(itemView);
-            chat_meesage_out = itemView.findViewById( R.id.chat_meesage_out);
-            chat_date_out = itemView.findViewById( R.id.chat_date_out);
-            chat_time_out = itemView.findViewById( R.id.chat_time_out);
-        }
-        void bind(int position) {
-            Message message = list.get(position);
-            chat_meesage_out.setText(message.getMessage());
-            chat_date_out.setText(date.format( getDateTime(message.getSentat())));
-            chat_time_out.setText(time.format( getDateTime(message.getSentat())));
-        }
+    @SuppressLint("NotifyDataSetChanged")
+    public void setDataChange(List<ListObject> asList) {
+        this.listObjects = asList;
+        //now, tell the adapter about the update
+        notifyDataSetChanged();
     }
 
-    private Date getDateTime(String sentat) {
-        Date date= null;
-        try{
-            date = format.parse(sentat);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return date;
-    }
-
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view;
-        if (viewType == MESSAGE_TYPE_IN) {
-            view = LayoutInflater.from( parent.getContext() ).inflate( R.layout.item_text_in, parent, false );
-            return new MessageInViewHolder(view);
-        }else if(viewType == MESSAGE_TYPE_OUT){
-            view = LayoutInflater.from( parent.getContext() ).inflate( R.layout.item_text_out, parent, false );
-            return new MessageOutViewHolder(view);
-        }
-        return null;
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        switch (holder.getItemViewType()) {
-            case MESSAGE_TYPE_IN:
-                ((MessageInViewHolder) holder).bind( position );
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        RecyclerView.ViewHolder viewHolder = null;
+        //LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        switch (viewType) {
+            case ListObject.TYPE_GENERAL_RIGHT:
+                View currentUserView = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_right, parent, false);
+                viewHolder = new ChatRightViewHolder(currentUserView); // view holder for normal items
                 break;
-            case MESSAGE_TYPE_OUT:
-                ((MessageOutViewHolder) holder).bind( position );
+            case ListObject.TYPE_GENERAL_LEFT:
+                View otherUserView = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_left, parent, false);
+                viewHolder = new ChatLeftViewHolder(otherUserView); // view holder for normal items
+                break;
+            case ListObject.TYPE_DATE:
+                View v2 = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_date, parent, false);
+                viewHolder = new DateViewHolder(v2);
+                break;
+        }
+
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        switch (viewHolder.getItemViewType()) {
+            case ListObject.TYPE_GENERAL_RIGHT:
+                ChatModelObject generalItem = (ChatModelObject) listObjects.get(position);
+                ChatRightViewHolder chatViewHolder = (ChatRightViewHolder) viewHolder;
+                chatViewHolder.bind(generalItem.getChatModel());
+                break;
+            case ListObject.TYPE_GENERAL_LEFT:
+                ChatModelObject generalItemLeft = (ChatModelObject) listObjects.get(position);
+                ChatLeftViewHolder chatLeftViewHolder = (ChatLeftViewHolder) viewHolder;
+                chatLeftViewHolder.bind(generalItemLeft.getChatModel());
+                break;
+            case ListObject.TYPE_DATE:
+                DateObject dateItem = (DateObject) listObjects.get(position);
+                DateViewHolder dateViewHolder = (DateViewHolder) viewHolder;
+                dateViewHolder.bind(dateItem.getDate());
                 break;
         }
     }
 
     @Override
     public int getItemCount() {
-        return list==null?0:list.size();
+        if (listObjects != null) {
+            return listObjects.size();
+        }
+        return 0;
     }
 
     @Override
     public int getItemViewType(int position) {
-        Message message = list.get(position);
-        if (message.getFrom_users_id().equals( SharedPrefManager.getInstance( context ).getUser().getId() )) {
-            // If the current user is the sender of the message
-            return MESSAGE_TYPE_IN;
-        } else{
-            // If some other user sent the message
-            return MESSAGE_TYPE_OUT;
+        return listObjects.get(position).getType(loggedInUserId);
+    }
+
+    public ListObject getItem(int position) {
+        return listObjects.get(position);
+    }
+
+    private static class ChatRightViewHolder extends RecyclerView.ViewHolder {
+        TextView chat_meesage_in,chat_time_in;
+        public ChatRightViewHolder(View itemView) {
+            super(itemView);
+            chat_meesage_in = itemView.findViewById( R.id.chat_meesage_in);
+            chat_time_in = itemView.findViewById( R.id.chat_time_in);
+        }
+
+        public void bind(Message message) {
+            chat_meesage_in.setText(message.getMessage());
+            chat_time_in.setText(DateParser.getTime(message.getSentat()));
+        }
+    }
+
+    public static class ChatLeftViewHolder extends RecyclerView.ViewHolder {
+        TextView chat_meesage_out,chat_time_out;
+        public ChatLeftViewHolder(View itemView) {
+            super(itemView);
+            //TODO initialize your xml views
+            chat_meesage_out = itemView.findViewById( R.id.chat_meesage_out);
+            chat_time_out = itemView.findViewById( R.id.chat_time_out);
+        }
+
+        public void bind(final Message message) {
+            //TODO set data to xml view via textivew.setText();
+            chat_meesage_out.setText(message.getMessage());
+            chat_time_out.setText(DateParser.getTime(message.getSentat()));
+        }
+    }
+
+    public static class DateViewHolder extends RecyclerView.ViewHolder {
+        TextView text_date;
+        public DateViewHolder(View itemView) {
+            super(itemView);
+            //TODO initialize your xml views
+            text_date = itemView.findViewById(R.id.text_date);
+        }
+
+        public void bind(final String date) {
+            //TODO set data to xml view via textivew.setText();
+            text_date.setText(DateParser.getDate(date));
         }
     }
 }

@@ -4,8 +4,8 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.SpannableString;
 import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
@@ -18,25 +18,19 @@ import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.SearchView;
-import androidx.cardview.widget.CardView;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
 import com.bumptech.glide.Glide;
@@ -47,8 +41,7 @@ import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.Filter;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
-import com.test.sample.hirecooks.Models.Offer.Offer;
-import com.test.sample.hirecooks.Models.SubCategory.Example;
+import com.test.sample.hirecooks.Models.SubCategory.SubcategoryResponse;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
@@ -57,12 +50,10 @@ import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.Preferences;
 import com.test.sample.hirecooks.WebApis.ProductApi;
-
+import com.test.sample.hirecooks.databinding.ActivitySubCategoryBinding;
+import com.test.sample.hirecooks.databinding.ItemHorizontalLayoutBinding;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -77,54 +68,28 @@ import retrofit2.Response;
 import static android.view.View.GONE;
 
 public class SubCategoryActivity extends BaseActivity {
-    private RecyclerView subcategory_recycler;
     private List<Subcategory> cartList;
-    private RelativeLayout bottom_anchor_layout;
-    private LinearLayout header_lay,gender_layout,sort_layout,filter_layout;
-    private TextView item_count,checkout_amount,checkout;
-    private View bottom_anchor,appRoot;
     private Category category;
-    private List<Example> examples;
-    private FrameLayout no_vender_found,no_result_found;
+    private List<SubcategoryResponse> examples;
     private List<Subcategory> filteredList;
     private SubcategoryAdapter mAdapter;
     private List<String> suggestList=new ArrayList<>();
     private static User vender1 = new User();
+    private ProductApi mService;
+    private ActivitySubCategoryBinding subCategoryBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_sub_category );
+        subCategoryBinding = ActivitySubCategoryBinding.inflate(getLayoutInflater());
+        View view = subCategoryBinding.getRoot();
+        setContentView(view);
         Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         Objects.requireNonNull(getSupportActionBar()).setTitle("");
         this.getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        subcategory_recycler = findViewById( R.id.subcategory_recycler );
-        appRoot = findViewById(R.id.appRoot);
-        bottom_anchor_layout = findViewById(R.id.bottom_anchor_layout);
-        no_vender_found = findViewById(R.id.no_vender_found);
-        no_result_found = findViewById(R.id.no_result_found);
-
-        View view = findViewById(R.id.footerView);
-        item_count =  view.findViewById(R.id.item_count);
-        bottom_anchor =  view.findViewById(R.id.bottom_anchor);
-        checkout_amount = view.findViewById(R.id.checkout_amount);
-        checkout = view.findViewById(R.id.checkout);
-
-        header_lay =  findViewById(R.id.header_lay);
-        gender_layout =  findViewById(R.id.gender_layout);
-        sort_layout =  findViewById(R.id.sort_layout);
-        filter_layout =  findViewById(R.id.filter_layout);
-
-
         getCart();
-        checkout.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity( new Intent( SubCategoryActivity.this, PlaceOrderActivity.class ) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK) );
-            }
-        });
+        subCategoryBinding.footerView.checkout.setOnClickListener(v -> startActivity( new Intent( SubCategoryActivity.this, PlaceOrderActivity.class ) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK) ));
         Bundle bundle = getIntent().getExtras();
         if (bundle != null&&Constants.NEARBY_VENDERS_LOCATION !=null) {
             category = (Category) bundle.getSerializable("Video");
@@ -135,45 +100,38 @@ public class SubCategoryActivity extends BaseActivity {
             }
         }
 
-        NestedScrollView nested_content = (NestedScrollView) findViewById(R.id.nested_scroll_view);
-        nested_content.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (scrollY < oldScrollY) { // up
-                    animateBottomAnchor(false);
-                    animateHeader(false);
-                }
-                if (scrollY > oldScrollY) { // down
-                    animateBottomAnchor(true);
-                    animateHeader(true);
-                }
+        NestedScrollView nested_content = findViewById(R.id.nested_scroll_view);
+        nested_content.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if (scrollY < oldScrollY) { // up
+                animateBottomAnchor(false);
+                //animateHeader(false);
+            }
+            if (scrollY > oldScrollY) { // down
+                animateBottomAnchor(true);
+               // animateHeader(true);
             }
         });
-
-        sort_layout.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                List<String> prices = Arrays.asList(new String[]{"0-0", "0-100", "101-200", "201-1000"});
-                if (!Preferences.filters.containsKey(Filter.INDEX_PRICE)) {
-                    Preferences.filters.put(Filter.INDEX_PRICE, new Filter("Price", prices, new ArrayList()));
-                }
-
-                SortSheetDialog bottomSheet = new SortSheetDialog(SubCategoryActivity.this, Preferences.filters);
-                bottomSheet.show(getSupportFragmentManager(), "ModalBottomSheet");
+        subCategoryBinding.swipeToRefresh.setOnRefreshListener(() -> new Handler().postDelayed(() -> {
+            subCategoryBinding.swipeToRefresh.setRefreshing(false);
+            if(category!=null&&category.getId()!=0){
+                getSubCategory(category.getId());
             }
-        });  gender_layout.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GenderSheetDialog bottomSheet = new GenderSheetDialog(SubCategoryActivity.this,getList());
-                bottomSheet.show(getSupportFragmentManager(), "ModalBottomSheet");
+        }, 3000));
+        subCategoryBinding.headerView.sortLayout.setOnClickListener(v -> {
+            List<String> prices = Arrays.asList(new String[]{"0-0", "0-100", "101-200", "201-1000"});
+            if (!Preferences.filters.containsKey(Filter.INDEX_PRICE)) {
+                Preferences.filters.put(Filter.INDEX_PRICE, new Filter("Price", prices, new ArrayList()));
             }
+
+            SortSheetDialog bottomSheet = new SortSheetDialog(SubCategoryActivity.this, Preferences.filters);
+            bottomSheet.show(getSupportFragmentManager(), "ModalBottomSheet");
+        });  subCategoryBinding.headerView.genderLayout.setOnClickListener(v -> {
+            GenderSheetDialog bottomSheet = new GenderSheetDialog(SubCategoryActivity.this,getList());
+            bottomSheet.show(getSupportFragmentManager(), "ModalBottomSheet");
         });
-        filter_layout.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FilterSheetDialog bottomSheet = new FilterSheetDialog(SubCategoryActivity.this,getList());
-                bottomSheet.show(getSupportFragmentManager(), "ModalBottomSheet");
-            }
+        subCategoryBinding.headerView.filterLayout.setOnClickListener(v -> {
+            FilterSheetDialog bottomSheet = new FilterSheetDialog(SubCategoryActivity.this,getList());
+            bottomSheet.show(getSupportFragmentManager(), "ModalBottomSheet");
         });
     }
 
@@ -195,6 +153,18 @@ public class SubCategoryActivity extends BaseActivity {
         offerList.add(new User(1,"Male","https://cdn-icons-png.flaticon.com/512/4128/4128176.png"));
         offerList.add(new User(2,"Girls","https://cdn-icons-png.flaticon.com/512/163/163811.png"));
         offerList.add(new User(3,"Boys","https://cdn-icons-png.flaticon.com/512/145/145867.png"));
+        offerList.add(new User(4, "Female","https://cdn-icons-png.flaticon.com/512/417/417776.png"));
+        offerList.add(new User(5,"Male","https://cdn-icons-png.flaticon.com/512/4128/4128176.png"));
+        offerList.add(new User(6,"Girls","https://cdn-icons-png.flaticon.com/512/163/163811.png"));
+        offerList.add(new User(7,"Boys","https://cdn-icons-png.flaticon.com/512/145/145867.png"));
+        offerList.add(new User(0, "Female","https://cdn-icons-png.flaticon.com/512/417/417776.png"));
+        offerList.add(new User(1,"Male","https://cdn-icons-png.flaticon.com/512/4128/4128176.png"));
+        offerList.add(new User(2,"Girls","https://cdn-icons-png.flaticon.com/512/163/163811.png"));
+        offerList.add(new User(3,"Boys","https://cdn-icons-png.flaticon.com/512/145/145867.png"));
+        offerList.add(new User(4, "Female","https://cdn-icons-png.flaticon.com/512/417/417776.png"));
+        offerList.add(new User(5,"Male","https://cdn-icons-png.flaticon.com/512/4128/4128176.png"));
+        offerList.add(new User(6,"Girls","https://cdn-icons-png.flaticon.com/512/163/163811.png"));
+        offerList.add(new User(7,"Boys","https://cdn-icons-png.flaticon.com/512/145/145867.png"));
         return offerList;
     }
 
@@ -203,18 +173,18 @@ public class SubCategoryActivity extends BaseActivity {
     private void animateBottomAnchor(final boolean hide) {
         if (isBottomAnchorNavigationHide && hide || !isBottomAnchorNavigationHide && !hide) return;
         isBottomAnchorNavigationHide = hide;
-        int moveY = hide ? (2 * bottom_anchor.getHeight()) : 0;
-        bottom_anchor.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+        int moveY = hide ? (2 * subCategoryBinding.footerView.bottomAnchor.getHeight()) : 0;
+        subCategoryBinding.footerView.bottomAnchor.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
     }
 
-    boolean isHeaderHide = false;
+   /* boolean isHeaderHide = false;
 
     private void animateHeader(final boolean hide) {
         if (isHeaderHide && hide || !isHeaderHide && !hide) return;
         isHeaderHide = hide;
-        int moveY = hide ? -(2 * header_lay.getHeight()) : 0;
-        header_lay.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
-    }
+        int moveY = hide ? -(2 * subCategoryBinding.headerView.headerLay.getHeight()) : 0;
+        subCategoryBinding.headerView.headerLay.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+    }*/
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -255,31 +225,31 @@ public class SubCategoryActivity extends BaseActivity {
             animateBottomAnchor(false);
             for(int i=0; i<cartList.size(); i++){
                 if(cartList.get(i).getItemQuantity()<=1&&cartList.size()<=1){
-                    bottom_anchor_layout.setAnimation( AnimationUtils.loadAnimation(this,R.anim.fade_transition_animation));
+                    subCategoryBinding.bottomAnchorLayout.setAnimation( AnimationUtils.loadAnimation(this,R.anim.fade_transition_animation));
                 }
             }
-            bottom_anchor_layout.setVisibility(View.VISIBLE);
-            checkout_amount.setText("₹  " + getTotalPrice());
-            item_count.setText("" + cartCount());
+            subCategoryBinding.bottomAnchorLayout.setVisibility(View.VISIBLE);
+            subCategoryBinding.footerView.checkoutAmount.setText("₹  " + getTotalPrice());
+            subCategoryBinding.footerView.itemCount.setText("" + cartCount());
 
         } else {
-            bottom_anchor_layout.setVisibility( GONE);
+            subCategoryBinding.bottomAnchorLayout.setVisibility( GONE);
         }
     }
 
     private void getSubCategory(int id) {
-        ProductApi mService = ApiClient.getClient().create(ProductApi.class);
-        Call<ArrayList<Example>> call = mService.getSubCategorysBySub_id(id);
-        call.enqueue(new Callback<ArrayList<Example>>() {
+        mService = ApiClient.getClient().create(ProductApi.class);
+        Call<ArrayList<SubcategoryResponse>> call = mService.getSubCategorysBySub_id(id);
+        call.enqueue(new Callback<ArrayList<SubcategoryResponse>>() {
             @SuppressLint("WrongConstant")
             @Override
-            public void onResponse(Call<ArrayList<Example>> call, Response<ArrayList<Example>> response) {
+            public void onResponse(Call<ArrayList<SubcategoryResponse>> call, Response<ArrayList<SubcategoryResponse>> response) {
                 int statusCode = response.code();
                 if (statusCode == 200) {
                     examples = new ArrayList<>(  );
                     examples = response.body();
                     if(examples!=null&&examples.size()!=0){
-                        for(Example example:examples){
+                        for(SubcategoryResponse example:examples){
                             if(example.getError()==false){
                                 if(example.getSubcategory()!=null&&example.getSubcategory().size()!=0){
                                     List<Subcategory> list = new ArrayList<>();
@@ -294,23 +264,17 @@ public class SubCategoryActivity extends BaseActivity {
                                         }
                                     }
                                     if(filteredList!=null&&filteredList.size()!=0) {
-                                        Constants.SUBCATEGORYs = filteredList;
-                                        subcategory_recycler.setVisibility( GONE);
-                                        no_vender_found.setVisibility(View.GONE);
-                                        subcategory_recycler.setVisibility(View.VISIBLE);
-                                        subcategory_recycler.setHasFixedSize(true);
-                                        mAdapter = new SubcategoryAdapter( SubCategoryActivity.this, filteredList);
-                                        subcategory_recycler.setAdapter(mAdapter);
+                                        getSubCategoryData(filteredList);
                                     }else{
-                                        no_vender_found.setVisibility(View.VISIBLE);
-                                        subcategory_recycler.setVisibility( GONE);
+                                        subCategoryBinding.noResultFound.setVisibility(View.VISIBLE);
+                                        subCategoryBinding.subcategoryRecycler.setVisibility( GONE);
                                     }
                                 }else{
-                                    no_result_found.setVisibility(View.VISIBLE);
+                                    subCategoryBinding.noResultFound.setVisibility(View.VISIBLE);
                                 }
                             }else{
                                 Toast.makeText( SubCategoryActivity.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
-                                no_result_found.setVisibility(View.VISIBLE);
+                                subCategoryBinding.noResultFound.setVisibility(View.VISIBLE);
                             }
                         }
                     }
@@ -320,10 +284,18 @@ public class SubCategoryActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Example>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<SubcategoryResponse>> call, Throwable t) {
                 System.out.println("Suree : " + t.getMessage());
             }
         });
+    }
+
+    private void getSubCategoryData(List<Subcategory> filteredList) {
+        Constants.SUBCATEGORYs = filteredList;
+        subCategoryBinding.noVenderFound.setVisibility(View.GONE);
+        subCategoryBinding.subcategoryRecycler.setVisibility(View.VISIBLE);
+        mAdapter = new SubcategoryAdapter( SubCategoryActivity.this, filteredList);
+        subCategoryBinding.subcategoryRecycler.setAdapter(mAdapter);
     }
 
     private void startSearch(CharSequence text) {
@@ -343,7 +315,7 @@ public class SubCategoryActivity extends BaseActivity {
                 }
 
                 SubcategoryAdapter mAdapter = new SubcategoryAdapter( SubCategoryActivity.this, subcategory);
-                subcategory_recycler.setAdapter(mAdapter);
+                subCategoryBinding.subcategoryRecycler.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
             }
         } catch (Exception e) {
@@ -360,6 +332,9 @@ public class SubCategoryActivity extends BaseActivity {
     public class SubcategoryAdapter extends RecyclerView.Adapter<SubCategoryActivity.SubcategoryAdapter.MyViewHolder> {
         List<Subcategory> productList;
         Context context;
+        private static final int LOADING = 0;
+        private static final int ITEM = 1;
+        private boolean isLoadingAdded = false;
         String Tag;
         LocalStorage localStorage;
         Gson gson;
@@ -375,11 +350,12 @@ public class SubCategoryActivity extends BaseActivity {
         @NonNull
         @Override
         public SubCategoryActivity.SubcategoryAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-            View itemView;
-            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_horizontal_layout, parent, false);
-            return new SubCategoryActivity.SubcategoryAdapter.MyViewHolder(itemView);
+            return new SubcategoryAdapter.MyViewHolder(ItemHorizontalLayoutBinding.inflate(LayoutInflater.from(context)));
         }
 
+        public Subcategory getItem(int position) {
+            return productList.get(position);
+        }
         @Override
         public void onBindViewHolder(@NonNull final SubCategoryActivity.SubcategoryAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
             final Subcategory product = productList.get(position);
@@ -389,55 +365,54 @@ public class SubCategoryActivity extends BaseActivity {
 
             if(product!=null){
                 if(product.getAcceptingOrder()==0){
-                    holder.order_not_accepting.setVisibility( View.VISIBLE);
-                    holder.add_item_layout.setVisibility( GONE);
+                    holder.binding.orderNotAccepting.setVisibility( View.VISIBLE);
+                    holder.binding.addItemLayout.setVisibility( GONE);
 
                 }else{
-                    holder.order_not_accepting.setVisibility( GONE);
-                    holder.add_item_layout.setVisibility( GONE);
+                    holder.binding.orderNotAccepting.setVisibility( GONE);
+                    holder.binding.addItemLayout.setVisibility( GONE);
                 }
 
-                holder.name.setText(product.getName());
-                holder.item_short_desc.setText(product.getDiscription());
+                holder.binding.itemName.setText(product.getName());
+                holder.binding.itemShortDesc.setText(product.getDiscription());
                 //holder.item_short_desc.setText(product.getDetailDiscription());
-                holder.progress_dialog.setVisibility( View.GONE );
+                holder.binding.progressDialog.setVisibility( View.GONE );
                 if(product.getImages()!=null&&product.getImages().size()!=0){
-                    Glide.with(context).load(product.getImages().get( 0 ).getImage()).into( holder.imageView);
+                    Glide.with(context).load(product.getImages().get( 0 ).getImage()).into( holder.binding.itemImage);
                 }
 
                 if (product.getSellRate() != 0 && product.getDisplayRate()!= 0) {
-                    holder.sellrate.setText("\u20B9 " + product.getSellRate());
+                    holder.binding.itemSellrate.setText("\u20B9 " + product.getSellRate());
                     SpannableString spanString = new SpannableString("\u20B9 " + product.getDisplayRate());
                     spanString.setSpan(new StrikethroughSpan(), 0, spanString.length(), 0);
-                    holder.displayRate.setText(spanString);
+                    holder.binding.itemDisplayrate.setText(spanString);
                     discount = (product.getDisplayRate() - product.getSellRate());
                     displayrate = (product.getDisplayRate());
                     discountPercentage = (discount * 100 / displayrate);
-                    holder.discount.setText("Save " + discountPercentage + " %");
+                    holder.binding.itemDiscount.setText("Save " + discountPercentage + " %");
                 }
             }
 
             if (!cartList.isEmpty()) {
                 for (int i = 0; i < cartList.size(); i++) {
                     if (cartList.get(i).getId()==product.getId()&&cartList.get(i).getName().equalsIgnoreCase(product.getName())) {
-                        holder.add_.setVisibility(GONE);
-                        holder.quantity_ll.setVisibility(View.VISIBLE);
-                        holder.quantity.setText(""+cartList.get(i).getItemQuantity());
+                        holder.binding.add.setVisibility(GONE);
+                        holder.binding.quantityLl.setVisibility(View.VISIBLE);
+                        holder.binding.itemQty.setText(""+cartList.get(i).getItemQuantity());
                         Quantity = cartList.get(i).getItemQuantity();
                         sellRate = product.getSellRate();
                         SubTotal = (sellRate * Quantity);
                     }
                 }
             } else {
-
-                holder.quantity.setText("0");
+                holder.binding.itemQty.setText("0");
             }
 
-            holder.add_.setOnClickListener(new View.OnClickListener() {
+            holder.binding.add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    holder.add_.setVisibility(GONE);
-                    holder.quantity_ll.setVisibility(View.VISIBLE);
+                    holder.binding.add.setVisibility(GONE);
+                    holder.binding.quantityLl.setVisibility(View.VISIBLE);
                     sellRate = product.getSellRate();
                     displayRate = product.getDisplayRate();
                     Quantity = 1;
@@ -454,23 +429,23 @@ public class SubCategoryActivity extends BaseActivity {
                             getCart();
                         }
                     }else{
-                        holder.add_.setVisibility(View.VISIBLE);
-                        holder.quantity_ll.setVisibility(GONE);
+                        holder.binding.add.setVisibility(View.VISIBLE);
+                        holder.binding.quantityLl.setVisibility(GONE);
                         Toast.makeText(context, "This item can`t be add please remove item and try again", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
 
-            holder.add_item.setOnClickListener( v -> {
-                holder.add_.setVisibility(GONE);
-                holder.quantity_ll.setVisibility(View.VISIBLE);
+            holder.binding.addItem.setOnClickListener( v -> {
+                holder.binding.add.setVisibility(GONE);
+                holder.binding.quantityLl.setVisibility(View.VISIBLE);
                 sellRate = product.getSellRate();
                 displayRate = product.getDisplayRate();
-                String count = holder.quantity.getText().toString();
+                String count = holder.binding.itemQty.getText().toString();
                 Quantity = Integer.parseInt(count);
                 if (Quantity >= 1) {
                     Quantity++;
-                    holder.quantity.setText(""+(Quantity));
+                    holder.binding.itemQty.setText(""+(Quantity));
                     for (int i = 0; i < cartList.size(); i++) {
 
                         if (cartList.get(i).getId()==product.getId()&&cartList.get(i).getName().equalsIgnoreCase(product.getName())) {
@@ -506,21 +481,21 @@ public class SubCategoryActivity extends BaseActivity {
                             Toast.makeText(context, "Please Add Quantity", Toast.LENGTH_SHORT).show();
                         }
                     }else{
-                        holder.add_.setVisibility(View.VISIBLE);
-                        holder.quantity_ll.setVisibility(GONE);
+                        holder.binding.add.setVisibility(View.VISIBLE);
+                        holder.binding.quantityLl.setVisibility(GONE);
                         Toast.makeText(context, "This item can`t be add please remove item and try again", Toast.LENGTH_SHORT).show();
                     }
                 }
             } );
 
-            holder.remove_item.setOnClickListener( v -> {
+            holder.binding.removeItem.setOnClickListener( v -> {
                 sellRate = product.getSellRate();
                 displayRate = product.getDisplayRate();
-                String count = holder.quantity.getText().toString();
+                String count = holder.binding.itemQty.getText().toString();
                 Quantity = Integer.parseInt(count);
                 if (Quantity > 1) {
                     Quantity--;
-                    holder.quantity.setText(""+(Quantity));
+                    holder.binding.itemQty.setText(""+(Quantity));
                     for (int i = 0; i < cartList.size(); i++) {
                         if (cartList.get(i).getId()==product.getId()&&cartList.get(i).getName().equalsIgnoreCase(product.getName())) {
                             SubTotal = (sellRate * Quantity);
@@ -536,7 +511,7 @@ public class SubCategoryActivity extends BaseActivity {
             } );
 
 
-            holder.cardview.setOnClickListener( v -> {
+            holder.binding.cardView.setOnClickListener( v -> {
                 Bundle bundle = new Bundle();
                 Intent intent = new Intent(context, DetailsActivity.class);
                 bundle.putSerializable("SubCategory",productList.get(position));
@@ -557,34 +532,10 @@ public class SubCategoryActivity extends BaseActivity {
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            ImageView imageView;
-            TextView discount, name, sellrate, quantity, displayRate,item_not_in_stock,discription,item_short_desc,add_;
-            TextView add_item, remove_item;
-            LinearLayout add_item_layout,quantity_ll;
-            FrameLayout order_not_accepting;
-            private ProgressBar progress_dialog;
-            CardView cardview;
-
-            public MyViewHolder(@NonNull View itemView) {
-                super(itemView);
-                imageView = itemView.findViewById(R.id.item_image);
-                name = itemView.findViewById(R.id.item_name);
-                discount = itemView.findViewById(R.id.item_discount);
-                sellrate = itemView.findViewById(R.id.item_sellrate);
-                displayRate = itemView.findViewById(R.id.item_displayrate);
-                quantity = itemView.findViewById(R.id.item_count);
-                add_item = itemView.findViewById(R.id.add_item);
-                remove_item = itemView.findViewById(R.id.remove_item);
-                add_item_layout = itemView.findViewById(R.id.add_item_layout);
-                add_ = itemView.findViewById(R.id.add_);
-                quantity_ll = itemView.findViewById(R.id.quantity_ll);
-                // available_stock = itemView.findViewById(R.id.available_stock);
-                cardview = itemView.findViewById(R.id.card_view);
-                item_not_in_stock = itemView.findViewById(R.id.item_not_in_stock);
-                discription = itemView.findViewById(R.id.item_description);
-                item_short_desc = itemView.findViewById(R.id.item_short_desc);
-                order_not_accepting = itemView.findViewById(R.id.order_not_accepting);
-                progress_dialog = itemView.findViewById(R.id.progress_dialog);
+            ItemHorizontalLayoutBinding binding;
+            public MyViewHolder(@NonNull ItemHorizontalLayoutBinding bind) {
+                super(bind.getRoot());
+                binding = bind;
             }
         }
     }
@@ -697,11 +648,11 @@ public class SubCategoryActivity extends BaseActivity {
             Arrays.sort(itemsArr3, Subcategory.priceComparator);
             sortfilteredList = Arrays.asList(itemsArr3);
             SubcategoryAdapter subcategoryAdapter = new SubcategoryAdapter(this,sortfilteredList);
-            subcategory_recycler.setAdapter(subcategoryAdapter);
+            subCategoryBinding.subcategoryRecycler.setAdapter(subcategoryAdapter);
         }else if(!mString.equalsIgnoreCase("Price")){
             List<Subcategory> sortfilteredList = new ArrayList<>();
             if (!mString.isEmpty()) {
-              List<Subcategory> genderList = new ArrayList<>();
+                List<Subcategory> genderList = new ArrayList<>();
                 for (Subcategory item : filteredList) {
                     if (mString.equalsIgnoreCase(item.getGender())) {
                         genderList.add(item);
@@ -714,7 +665,7 @@ public class SubCategoryActivity extends BaseActivity {
             Arrays.sort(itemsArr3, Subcategory.genderComparator);
             sortfilteredList = Arrays.asList(itemsArr3);
             SubcategoryAdapter subcategoryAdapter = new SubcategoryAdapter(this,sortfilteredList);
-            subcategory_recycler.setAdapter(subcategoryAdapter);
+            subCategoryBinding.subcategoryRecycler.setAdapter(subcategoryAdapter);
         }
     }
 
@@ -750,6 +701,7 @@ public class SubCategoryActivity extends BaseActivity {
             return v;
         }
     }
+
 
     public static class FilterSheetDialog extends BottomSheetDialogFragment {
         public RecyclerView recyclerView1,recyclerView2;

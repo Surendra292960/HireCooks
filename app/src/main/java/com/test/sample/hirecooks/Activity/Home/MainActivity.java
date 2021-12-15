@@ -39,9 +39,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
@@ -70,6 +67,7 @@ import com.test.sample.hirecooks.Fragments.MessageFragment;
 import com.test.sample.hirecooks.Fragments.NotificationFragment;
 import com.test.sample.hirecooks.Fragments.ProfileFragment;
 import com.test.sample.hirecooks.Libraries.BedgeNotification.NotificationCountSetClass;
+import com.test.sample.hirecooks.Libraries.RandomString;
 import com.test.sample.hirecooks.Models.FirmUsers.Example;
 import com.test.sample.hirecooks.Models.FirmUsers.Firmuser;
 import com.test.sample.hirecooks.Models.TokenResponse.Token;
@@ -96,6 +94,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
 import retrofit2.Call;
@@ -133,7 +132,7 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
     private FusedLocationProviderClient client;
     private String created_at;
     private String status;
-    private GoogleSignInAccount account;
+    private RandomString randomString;
 
     @SuppressLint("NewApi")
     @Override
@@ -143,9 +142,9 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
         notificationCountCart = cartCount();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         user = SharedPrefManager.getInstance(this).getUser();
-
         initData();
         initViews();
+       // sendMessage();
        /* status = getFirmUserByDate(user.getId(),format2.format(new Date( )),format2.format(new Date( )));
         if(status.equalsIgnoreCase( "Present" )){
 
@@ -162,7 +161,6 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
         appUpdateManager = AppUpdateManagerFactory.create(MainActivity.this);
         getCurrentVersion();
         client = LocationServices.getFusedLocationProviderClient( MainActivity.this);
-        account = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -192,28 +190,26 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
         });
 
         mNavigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.navigation_home:
-                                toolbar.setTitle("");
-                                mViewPager.setCurrentItem(0);
-                                return true;
-                            case R.id.navigation_message:
-                                toolbar.setTitle("Message");
-                                mViewPager.setCurrentItem(1);
-                                return true;
-                            case R.id.navigation_profile:
-                                toolbar.setTitle("Profile");
-                                mViewPager.setCurrentItem(2);
-                                return true;
-                            case R.id.navigation_notification:
-                                toolbar.setTitle("Notifications");
-                                mViewPager.setCurrentItem(3);
-                                return true;
-                        }
-                        return false;
+                item -> {
+                    switch (item.getItemId()) {
+                        case R.id.navigation_home:
+                            toolbar.setTitle("");
+                            mViewPager.setCurrentItem(0);
+                            return true;
+                        case R.id.navigation_message:
+                            toolbar.setTitle("Message");
+                            mViewPager.setCurrentItem(1);
+                            return true;
+                        case R.id.navigation_profile:
+                            toolbar.setTitle("Profile");
+                            mViewPager.setCurrentItem(2);
+                            return true;
+                        case R.id.navigation_notification:
+                            toolbar.setTitle("Notifications");
+                            mViewPager.setCurrentItem(3);
+                            return true;
                     }
+                    return false;
                 });
 
         FirebaseMessaging.getInstance().getToken()
@@ -831,5 +827,12 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
             Log.e("MapLocation", "Unable connect to Geocoder", e);
             return result;
         }
+    }
+
+    public void sendMessage(){
+        String uniqueActionString = "com.androidbook.intents.testbc";
+        Intent broadcastIntent = new Intent(uniqueActionString);
+        broadcastIntent.putExtra("message","Hello world");
+        sendBroadcast(broadcastIntent);
     }
 }

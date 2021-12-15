@@ -40,34 +40,18 @@ public class ApiClient {
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS).build();
 
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-
+        Gson gson = new GsonBuilder().setLenient().create();
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .client(client)
+                    .addCallAdapterFactory(RetryCallAdapterFactory.create())
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
         }
         return retrofit;
-    }
-
-
-    public static boolean isNetworkAvailable ( Context context ) {
-        final ConnectivityManager connectivityManager = ( ( ConnectivityManager ) context.getSystemService ( Context.CONNECTIVITY_SERVICE ) );
-        return connectivityManager.getActiveNetworkInfo ( ) != null && connectivityManager.getActiveNetworkInfo ( ).isConnected ( );
-    }
-    public static void hideKeyboard ( Activity activity ) {
-        InputMethodManager imm = ( InputMethodManager ) activity.getSystemService ( Activity.INPUT_METHOD_SERVICE );
-        View view = activity.getCurrentFocus ( );
-        if ( view == null ) {
-            view = new View ( activity );
-        }
-        imm.hideSoftInputFromWindow ( view.getWindowToken ( ) , 0 );
     }
 
     public static Bitmap getResizedBitmap (Bitmap image , int maxSize ) {
@@ -115,15 +99,5 @@ public class ApiClient {
         }
 
     }
-    public static String getBase64 ( Bitmap bitmap ) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream ( );
-        bitmap.compress ( Bitmap.CompressFormat.PNG , 100 , byteArrayOutputStream );
-        byte[] byteArray = byteArrayOutputStream.toByteArray ( );
-        String encoded = Base64.encodeToString ( byteArray , Base64.DEFAULT );
-        return encoded;
-    }
-    public static Bitmap decodeBase64 ( String input ) {
-        byte[] decodedBytes = Base64.decode ( input , 0 );
-        return BitmapFactory.decodeByteArray ( decodedBytes , 0 , decodedBytes.length );
-    }
+
 }

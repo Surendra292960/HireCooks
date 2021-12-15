@@ -21,9 +21,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
@@ -50,7 +47,6 @@ public class FirmUserSignupAddressActivity extends BaseActivity {
     private TextView locationText,location_saved;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private FusedLocationProviderClient client;
-    private GoogleSignInAccount account;
     private String subAddress;
     private String pinCode;
     private LatLng latLng;
@@ -71,7 +67,6 @@ public class FirmUserSignupAddressActivity extends BaseActivity {
     private void initViews ( ) {
         user = SharedPrefManager.getInstance( this ).getUser();
         client = LocationServices.getFusedLocationProviderClient( FirmUserSignupAddressActivity.this);
-        account = GoogleSignIn.getLastSignedInAccount( FirmUserSignupAddressActivity.this);
         locationText = findViewById(R.id.location_et);
         address_lay = findViewById(R.id.address_lay);
         location_saved = findViewById(R.id.location_saved);
@@ -166,6 +161,7 @@ public class FirmUserSignupAddressActivity extends BaseActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_LOCATION:
                 // If request is cancelled, the result arrays are empty.
@@ -177,7 +173,7 @@ public class FirmUserSignupAddressActivity extends BaseActivity {
                     /*TextView locationText = findViewById(R.id.locationText);
                     locationText.setText("location: permission denied");*/
 
-                    new AlertDialog.Builder( FirmUserSignupAddressActivity.this)
+                    new AlertDialog.Builder(FirmUserSignupAddressActivity.this)
                             .setMessage("Cannot get the location!")
                             .setPositiveButton("OK", null)
                             .setNegativeButton("Cancel", null)

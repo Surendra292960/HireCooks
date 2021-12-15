@@ -139,6 +139,7 @@
     <string name="not_in_stock" translatable="false">Not in Stock</string>
     <string name="order_not_accepting" translatable="false">Order Not Accepting</string>
     <string name="_0" translatable="false">0</string>
+    <string name="rupee" translatable="false">\u20B9</string>
     <string name="no_result_found" translatable="false">No Result Found</string>
     <string name="your_cart_is_empty" translatable="false">Your Cart is Empty</string>
     <string name="items" translatable="false">Items</string>
@@ -218,7 +219,7 @@
     <string name="ad_" translatable="false">+</string>
     <string name="remove_" translatable="false">-</string>
     <string name="_1" translatable="false">1</string>
-    <string name="product_rating_reviews"  translatable="false"><![CDATA[Product Rating & Reviews]]></string>
+    <string name="product_rating_reviews" translatable="false"><![CDATA[Product Rating & Reviews]]></string>
     <string name="dozan" translatable="false">Dozan</string>
     <string name="gm" translatable="false">gm</string>
     <string name="litre" translatable="false">Litre</string>
@@ -232,7 +233,11 @@
     <string name="track" translatable="false">Track</string>
     <string name="enter_action_id" translatable="false">Enter Action ID</string>
     <string name="retry" translatable="false">Retry</string>
-    <string name="clear"  translatable="false">Clear</string>
+    <string name="clear" translatable="false">Clear</string>
+    <string name="ratings_and_reviews" translatable="false"><![CDATA[50 ratings & 15 reviews]]></string>
+    <string name="filter" translatable="false">Filter</string>
+    <string name="sort" translatable="false">Sort</string>
+    <string name="category" translatable="false">Category</string>
 
     <string-array name="genders">
         <item>Select</item>

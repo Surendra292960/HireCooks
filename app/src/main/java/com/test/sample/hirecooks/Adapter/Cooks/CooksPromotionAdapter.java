@@ -25,9 +25,8 @@ public class CooksPromotionAdapter extends RecyclerView.Adapter<CooksPromotionAd
     private Context mCtx;
     private List<CooksPromotion> cooksPromotion;
 
-    public CooksPromotionAdapter(Context mCtx, List<CooksPromotion> cooksPromotion) {
+    public CooksPromotionAdapter(Context mCtx) {
         this.mCtx = mCtx;
-        this.cooksPromotion = cooksPromotion;
     }
 
     @Override
@@ -62,6 +61,11 @@ public class CooksPromotionAdapter extends RecyclerView.Adapter<CooksPromotionAd
     @Override
     public int getItemCount() {
         return cooksPromotion==null?0:cooksPromotion.size();
+    }
+
+    public void setCategory(List<CooksPromotion> promotions) {
+        this.cooksPromotion = promotions;
+        notifyDataSetChanged();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

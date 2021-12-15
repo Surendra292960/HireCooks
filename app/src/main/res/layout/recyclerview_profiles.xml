@@ -28,7 +28,7 @@
                 android:layout_width="0dp"
                 android:layout_height="55dp"
                 android:layout_weight="1"
-                card_view:srcCompat="@drawable/ic_profile_user"
+                android:src="@drawable/ic_profile_user"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="2dp" />
 

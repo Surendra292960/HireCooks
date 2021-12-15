@@ -1,6 +1,8 @@
 package com.test.sample.hirecooks.WebApis;
 
+import com.test.sample.hirecooks.ApiServiceCall.Retry;
 import com.test.sample.hirecooks.Models.BannerResponse.Banners;
+import com.test.sample.hirecooks.Models.Category.CategoryResponse;
 import com.test.sample.hirecooks.Models.Chat.Example;
 import com.test.sample.hirecooks.Models.Chat.MessageResponse;
 import com.test.sample.hirecooks.Models.HotelImage;
@@ -15,6 +17,7 @@ import java.util.List;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
@@ -52,12 +55,15 @@ public interface UserApi {
     @POST("phone")
     Call<List<com.test.sample.hirecooks.Models.Users.Example>> checkUserPhone(@Field( "phone" ) String phone);
 
+    @Retry
     @GET("user")
     Call<List<com.test.sample.hirecooks.Models.Users.Example>> getUsers();
 
+    @Retry
     @GET("menu")
     Call<Menus> getMenu();
 
+    @Retry
     @GET("getBanner")
     Call<Banners> getBanners();
 
@@ -70,7 +76,8 @@ public interface UserApi {
             @Field("title") String title,
             @Field("message") String message,
             @Field("sent") int sent,
-            @Field("recieve") int recieve);
+            @Field("recieve") int recieve,
+            @Field("sender_name") String sender_name);
 
     //getting messages
     @GET("messages/{id}")
@@ -106,6 +113,7 @@ public interface UserApi {
     Call<TokenResult> getTokenFromServer(
             @Field("userId") int userId);
 
+    @Retry
     @GET("getTokens")
     Call<Tokens> getTokens();
 
@@ -131,12 +139,12 @@ public interface UserApi {
     @POST("getTokenByUserId")
     Call<TokenResult> getTokenByUserId(
             @Field("userId") int userId);
-
+    @Retry
     @GET("Category")
-    Call<List<com.test.sample.hirecooks.Models.Category.Example>> getCategory();
+    Call<List<CategoryResponse>> getCategory();
 
     @POST("Category/{id}")
-    Call<List<com.test.sample.hirecooks.Models.Category.Example>> getCategoryByCatId(@Path( "id" ) int id);
+    Call<List<CategoryResponse>> getCategoryByCatId(@Path( "id" ) int id);
 
     @FormUrlEncoded
     @PUT("updateSataus/{id}")
@@ -177,4 +185,5 @@ public interface UserApi {
             @Field("from_date") String from_date,
             @Field("to_date") String to_date);
 
+    void getCategory(Callback<List<CategoryResponse>> listCallback);
 }

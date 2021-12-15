@@ -5,7 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Category implements Serializable {
+import androidx.databinding.BaseObservable;
+
+public class Category extends BaseObservable implements Serializable {
 
     @SerializedName("id")
     @Expose

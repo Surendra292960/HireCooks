@@ -16,7 +16,7 @@
             layout="@layout/chat_menu_toolbar"/>
 
         <TextView
-            android:visibility="gone"
+            android:visibility="visible"
             android:id="@+id/typing_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,6 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
             android:scrollingCache="false">
 
             <LinearLayout
@@ -46,13 +48,13 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-                <LinearLayout
+                <View
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="90dp"
+                    android:layout_marginBottom="65dp"
                     android:orientation="vertical">
 
-                </LinearLayout>
+                </View>
 
             </LinearLayout>
 
@@ -61,20 +63,37 @@
 
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/layout_gchat_chatbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_5"
-        android:padding="@dimen/margin_10"
-        android:background="@drawable/rect_whiteboder"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/margin_10"
+        android:layout_marginEnd="@dimen/margin_10"
+        android:layout_marginBottom="@dimen/margin_5"
+        android:background="@drawable/edit_text_design"
+        android:padding="5dp"
+        android:elevation="@dimen/margin_5">
 
         <RelativeLayout
-            android:elevation="@dimen/margin_10"
             android:id="@+id/bottom_anchor"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/margin_10">
+
+            <EditText
+                android:id="@+id/type_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="45dp"
+                android:layout_marginEnd="45dp"
+                android:background="@null"
+                android:gravity="start"
+                android:maxHeight="200dp"
+                android:hint="@string/type_message"
+                android:textColor="@color/black" />
+
 
             <FrameLayout
                 android:id="@+id/item_counter"
@@ -93,26 +112,13 @@
 
             </FrameLayout>
 
-
-            <EditText
-                android:layout_marginStart="45dp"
-                android:layout_marginEnd="45dp"
-                android:id="@+id/type_message"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:gravity="start"
-                android:textColor="@color/black"
-                android:hint="@string/type_message"
-                android:background="@null"/>
-
             <FrameLayout
                 android:id="@+id/checkout_envelop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true">
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true">
 
                 <Button
                     android:id="@+id/send_message"
@@ -125,8 +131,8 @@
             </FrameLayout>
         </RelativeLayout>
 
+    </LinearLayout>
 
-    </RelativeLayout>
 
 
 </RelativeLayout>

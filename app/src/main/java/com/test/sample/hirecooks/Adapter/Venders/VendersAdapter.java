@@ -48,7 +48,7 @@ public class VendersAdapter extends RecyclerView.Adapter<VendersAdapter.ViewHold
                     Glide.with(mCtx).load( APIUrl.PROFILE_URL+venders.getImage()).into( holder.venders_image );
                 }
             }
-           // holder.text.setText(venders.getName());
+            // holder.text.setText(venders.getName());
             holder.vender_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -77,7 +77,7 @@ public class VendersAdapter extends RecyclerView.Adapter<VendersAdapter.ViewHold
             venders_image = itemLayoutView.findViewById(R.id.venders_image);
             vender_layout = itemLayoutView.findViewById(R.id.vender_layout);
             progress_dialog = itemLayoutView.findViewById(R.id.progress_dialog);
-          //  text = itemLayoutView.findViewById(R.id.text);
+            //  text = itemLayoutView.findViewById(R.id.text);
         }
     }
 }

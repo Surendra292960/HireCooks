@@ -24,6 +24,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -33,7 +35,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.test.sample.hirecooks.Adapter.Chat.ChatAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
+import com.test.sample.hirecooks.Models.Chat.ChatModelObject;
+import com.test.sample.hirecooks.Models.Chat.DateObject;
 import com.test.sample.hirecooks.Models.Chat.Example;
+import com.test.sample.hirecooks.Models.Chat.ListObject;
 import com.test.sample.hirecooks.Models.Chat.Message;
 import com.test.sample.hirecooks.Models.Chat.MessageResponse;
 import com.test.sample.hirecooks.Models.TokenResponse.TokenResult;
@@ -43,6 +48,8 @@ import com.test.sample.hirecooks.Utils.APIUrl;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.NotificationApi;
 import com.test.sample.hirecooks.WebApis.UserApi;
+import com.test.sample.hirecooks.databinding.ActivityChatBinding;
+import com.test.sample.hirecooks.databinding.ActivitySearchResultBinding;
 
 import org.jitsi.meet.sdk.JitsiMeetActivity;
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
@@ -50,8 +57,11 @@ import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Timer;
@@ -64,13 +74,7 @@ import retrofit2.Response;
 
 public class ChatActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private RecyclerView recyclerView;
     private ChatAdapter adapter;
-    private EditText type_message;
-    private TextView user_name,user_status,typing_status,go_back,call,video_call;
-    private CircleImageView user_profile;
-    private Button send_message;
-    private View appRoot;
     private User users;
     private User user;
     private FirebaseUser firebaseUser;
@@ -81,15 +85,19 @@ public class ChatActivity extends AppCompatActivity {
     Boolean isTyping = false;
     private Intent intent;
     private Boolean typingTracker = false;
+    private ActivityChatBinding chatBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_chat );
+        chatBinding = ActivityChatBinding.inflate(getLayoutInflater());
+        View view = chatBinding.getRoot();
+        setContentView(view);
         this.getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN );
         user = SharedPrefManager.getInstance( this ).getUser();
         mAuth = FirebaseAuth.getInstance();
-        recyclerView = findViewById( R.id.recyclerViewMessages );
+
+  /*      recyclerView = findViewById( R.id.recyclerViewMessages );
         type_message = findViewById( R.id.type_message );
         send_message = findViewById( R.id.send_message );
         user_status = findViewById( R.id.user_status );
@@ -101,7 +109,7 @@ public class ChatActivity extends AppCompatActivity {
         user_profile = toolbar_view.findViewById( R.id.user_profile );
         go_back = toolbar_view.findViewById( R.id.go_back );
         call = toolbar_view.findViewById( R.id.call );
-        video_call = toolbar_view.findViewById( R.id.video_call );
+        video_call = toolbar_view.findViewById( R.id.video_call );*/
 
         //checkFirebaseUser();
 
@@ -110,34 +118,36 @@ public class ChatActivity extends AppCompatActivity {
             users = (User) bundle.getSerializable( "User" );
             if (users != null) {
                 getMessages( users.getId() );
-                user_name.setText( users.getName() );
+                chatBinding.toolbarInterface.userName.setText( users.getName() );
                 if (users.getImage() != null) {
                     if (users.getImage().contains( "https://" )) {
-                        Glide.with(this).load( users.getImage() ).into( user_profile );
+                        Glide.with(this).load( users.getImage() ).into( chatBinding.toolbarInterface.userProfile );
                     } else if (users.getImage().contains( " " )) {
 
                     } else {
-                        Glide.with(this).load( APIUrl.PROFILE_URL + users.getImage() ).into( user_profile );
+                        Glide.with(this).load( APIUrl.PROFILE_URL + users.getImage() ).into( chatBinding.toolbarInterface.userProfile );
                     }
                 }
             }
         }
 
-        send_message.setOnClickListener( new View.OnClickListener() {
+        bindRecyclerView();
+
+        chatBinding.sendMessage.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 validate();
             }
         } );
 
-        go_back.setOnClickListener( new View.OnClickListener() {
+        chatBinding.toolbarInterface.goBack.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         } );
 
-        type_message.addTextChangedListener(new TextWatcher() {
+        chatBinding.typeMessage.addTextChangedListener(new TextWatcher() {
             boolean isTyping = false;
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -172,7 +182,7 @@ public class ChatActivity extends AppCompatActivity {
                 );
             }
         });
-        call.setOnClickListener( new View.OnClickListener() {
+        chatBinding.toolbarInterface.call.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int permissionCheck = ContextCompat.checkSelfPermission(ChatActivity.this, Manifest.permission.CALL_PHONE);
@@ -180,11 +190,10 @@ public class ChatActivity extends AppCompatActivity {
                 if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions( ChatActivity.this, new String[]{Manifest.permission.CALL_PHONE}, 123);
                 } else {
-                    startActivity(new Intent(Intent.ACTION_CALL)
-                            .setAction(Intent.ACTION_DIAL).setData( Uri.parse("tel:"+users.getPhone())));
+                    startActivity(new Intent(Intent.ACTION_CALL).setAction(Intent.ACTION_DIAL).setData( Uri.parse("tel:"+users.getPhone())));
                 }
             }
-        } );
+        });
         try {
             JitsiMeetConferenceOptions options = new JitsiMeetConferenceOptions.Builder()
                     .setServerURL(new URL("https://meet.jit.si"))
@@ -194,7 +203,7 @@ public class ChatActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        video_call.setOnClickListener(new View.OnClickListener() {
+        chatBinding.toolbarInterface.videoCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 JitsiMeetConferenceOptions options = new JitsiMeetConferenceOptions.Builder()
@@ -207,10 +216,10 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void validate() {
-        String message = type_message.getText().toString().trim();
+        String message = chatBinding.typeMessage.getText().toString().trim();
         if (!TextUtils.isEmpty( message )){
             if(users!=null){
-                sendMessage( user.getId() ,"Hello",message);
+                sendMessage( user.getId() ,"Hello",message,user.getName());
             }
         }
     }
@@ -238,10 +247,10 @@ public class ChatActivity extends AppCompatActivity {
                         if(!messages.getError()){
                             for(Message message: messages.getMessages()){
                                 if(user.getId() != message.getId()&&message.getMessage().equalsIgnoreCase( "Typing" )) {
-                                    typing_status.setVisibility( View.VISIBLE );
-                                    typing_status.setText( message.getMessage() );
+                                    chatBinding.typingStatus.setVisibility( View.VISIBLE );
+                                    chatBinding.typingStatus.setText( message.getMessage() );
                                 }else if(message.getMessage().equalsIgnoreCase( "Stop" )){
-                                    typing_status.setVisibility( View.GONE );
+                                    chatBinding.typingStatus.setVisibility( View.GONE );
                                 }
                             }
                         }
@@ -288,8 +297,7 @@ public class ChatActivity extends AppCompatActivity {
                               }
                           }
                           if(filterMessageList!=null&&filterMessageList.size()!=0){
-                              adapter = new ChatAdapter( ChatActivity.this, filterMessageList);
-                              recyclerView.setAdapter(adapter);
+                              getDate(filterMessageList);
                               //adapter.notifyDataSetChanged();
                           }
                         }
@@ -305,6 +313,63 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    private void getDate(List<Message> filterMessageList) {
+        List<Message> chatModelList = ParseData.chatParser(filterMessageList);
+        Collections.sort(chatModelList);
+        groupDataIntoHashMap(chatModelList);
+    }
+    private void bindRecyclerView() {
+        adapter = new ChatAdapter( null,ChatActivity.this);
+        chatBinding.recyclerViewMessages.setAdapter(adapter);
+        adapter.setUser(user.getId());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        chatBinding.recyclerViewMessages.setLayoutManager(mLayoutManager);
+        chatBinding.recyclerViewMessages.setAdapter(adapter);
+    }
+
+    private void groupDataIntoHashMap(List<Message> chatModelList) {
+        LinkedHashMap<String, Set<Message>> groupedHashMap = new LinkedHashMap<>();
+        Set<Message> list = null;
+        for (Message chatModel : chatModelList) {
+            //Log.d(TAG, travelActivityDTO.toString());
+            String hashMapKey = DateParser.getChatGroupDate(chatModel.getSentat());
+            //Log.d(TAG, "start date: " + DateParser.convertDateToString(travelActivityDTO.getStartDate()));
+            if (groupedHashMap.containsKey(hashMapKey)) {
+                // The key is already in the HashMap; add the pojo object
+                // against the existing key.
+                groupedHashMap.get(hashMapKey).add(chatModel);
+            } else {
+                // The key is not there in the HashMap; create a new key-value pair
+                list = new LinkedHashSet<>();
+                list.add(chatModel);
+                groupedHashMap.put(hashMapKey, list);
+            }
+        }
+        //Generate list from map
+        generateListFromMap(groupedHashMap);
+
+    }
+
+
+    private List<ListObject> generateListFromMap(LinkedHashMap<String, Set<Message>> groupedHashMap) {
+        // We linearly add every item into the consolidatedList.
+        List<ListObject> consolidatedList = new ArrayList<>();
+        for (String date : groupedHashMap.keySet()) {
+            DateObject dateItem = new DateObject();
+            dateItem.setDate(date);
+            consolidatedList.add(dateItem);
+            for (Message chatModel : groupedHashMap.get(date)) {
+                ChatModelObject generalItem = new ChatModelObject();
+                generalItem.setChatModel(chatModel);
+                consolidatedList.add(generalItem);
+            }
+        }
+
+        adapter.setDataChange(consolidatedList);
+
+        return consolidatedList;
+    }
+
 /*    private void checkFirebaseUser() {
         firebaseUser = mAuth.getCurrentUser();
         if (firebaseUser != null) {
@@ -316,17 +381,17 @@ public class ChatActivity extends AppCompatActivity {
         }
     }*/
 
-    private void sendMessage(int id, final String title, final String message) {
+    private void sendMessage(int id, final String title, final String message, final String sender_name) {
         UserApi service = ApiClient.getClient().create(UserApi.class);
-        Call<MessageResponse> call = service.sendMessage( id, users.getId(), title, message,1,0);
+        Call<MessageResponse> call = service.sendMessage( id, users.getId(), title, message,1,0,sender_name);
         call.enqueue(new Callback<MessageResponse>() {
             @Override
             public void onResponse(@NonNull Call<MessageResponse> call, @NonNull Response<MessageResponse> response) {
                 if(response.code()==200) {
                     if (response.body() != null) {
-                        type_message.setText( " " );
+                        chatBinding.typeMessage.setText( " " );
                       //  recyclerView.scrollToPosition(messagesList.size() - 1);
-                        firebaseMessageSend( id, users.getId(), title, message, 1, 0 );
+                        //firebaseMessageSend( id, users.getId(), title, message, 1, 0 );
                         Toast.makeText( ChatActivity.this, response.body().getMessage(), Toast.LENGTH_LONG ).show();
                         getMessages( users.getId() );
                         UserApi mService = ApiClient.getClient().create( UserApi.class );
@@ -338,7 +403,7 @@ public class ChatActivity extends AppCompatActivity {
                                 int statusCode = response.code();
                                 if (statusCode == 200) {
                                     NotificationApi mService = ApiClient.getClient().create( NotificationApi.class );
-                                    Call<String> calls = mService.chatNotification( response.body().getToken().getToken(), users.getFirmId(), message );
+                                    Call<String> calls = mService.chatNotification( response.body().getToken().getToken(), users.getFirmId(), message, sender_name );
                                     calls.enqueue( new Callback<String>() {
                                         @Override
                                         public void onResponse(Call<String> call, Response<String> response) {
@@ -372,7 +437,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
-
+/*
     private void firebaseMessageSend(int from_user_id, Integer to_user_id, String title, String message, int sent, int recieve) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         HashMap<String,Object> hashMap = new HashMap<>(  );
@@ -383,7 +448,7 @@ public class ChatActivity extends AppCompatActivity {
         hashMap.put( "sent",sent );
         hashMap.put( "recieve",recieve );
         reference.child( "Chat" ).push().setValue( hashMap );
-    }
+    }*/
 
     @Override
     public void onBackPressed() {

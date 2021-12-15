@@ -15,7 +15,6 @@
 
   <LinearLayout
       android:visibility="visible"
-      android:background="@color/gray_btn_bg_color"
       android:id="@+id/zoomImage_lay"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
@@ -28,7 +27,6 @@
           android:layout_height="match_parent"
           android:id="@+id/zoomImage"
           android:layout_gravity="center"
-          android:scaleType="center"
           android:contentDescription="@string/to_date" />
 
   </LinearLayout>

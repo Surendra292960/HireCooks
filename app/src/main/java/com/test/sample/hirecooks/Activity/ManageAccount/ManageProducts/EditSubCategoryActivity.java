@@ -34,10 +34,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
-import com.test.sample.hirecooks.Models.SubCategory.Example;
+import com.test.sample.hirecooks.Models.SubCategory.SubcategoryResponse;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
@@ -110,17 +109,17 @@ public class EditSubCategoryActivity extends AppCompatActivity {
 
     private void getSubCategory(int id) {
         ProductApi mService = ApiClient.getClient().create(ProductApi.class);
-        Call<ArrayList<Example>> call = mService.getSubCategorysBySub_id(id);
-        call.enqueue(new Callback<ArrayList<Example>>() {
+        Call<ArrayList<SubcategoryResponse>> call = mService.getSubCategorysBySub_id(id);
+        call.enqueue(new Callback<ArrayList<SubcategoryResponse>>() {
             @SuppressLint("WrongConstant")
             @Override
-            public void onResponse(Call<ArrayList<Example>> call, Response<ArrayList<Example>> response) {
+            public void onResponse(Call<ArrayList<SubcategoryResponse>> call, Response<ArrayList<SubcategoryResponse>> response) {
                 int statusCode = response.code();
                 if (statusCode == 200) {
                     if(response.body()!=null&&response.body().size()!=0){
                         List<Subcategory> subcategoryList = new ArrayList<>(  );
                         filteredList = new ArrayList<>(  );
-                        for(Example example:response.body()){
+                        for(SubcategoryResponse example:response.body()){
                             if(example.getError()==false){
                                 for(Subcategory subcategory:example.getSubcategory()){
                                     if(subcategory.getFirmId().equalsIgnoreCase( user.getFirmId() )){
@@ -165,7 +164,7 @@ public class EditSubCategoryActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Example>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<SubcategoryResponse>> call, Throwable t) {
                 System.out.println("Suree : " + t.getMessage());
             }
         });
@@ -320,14 +319,14 @@ public class EditSubCategoryActivity extends AppCompatActivity {
 
         private void deleteSubCategory(String product_uniquekey) {
             ProductApi mService = ApiClient.getClient().create(ProductApi.class);
-            Call<ArrayList<Example>> call = mService.deleteSubCategory(product_uniquekey);
-            call.enqueue(new Callback<ArrayList<Example>>() {
+            Call<ArrayList<SubcategoryResponse>> call = mService.deleteSubCategory(product_uniquekey);
+            call.enqueue(new Callback<ArrayList<SubcategoryResponse>>() {
                 @SuppressLint("WrongConstant")
                 @Override
-                public void onResponse(Call<ArrayList<Example>> call, Response<ArrayList<Example>> response) {
+                public void onResponse(Call<ArrayList<SubcategoryResponse>> call, Response<ArrayList<SubcategoryResponse>> response) {
                     int statusCode = response.code();
                     if (statusCode == 200) {
-                        for(Example example:response.body()){
+                        for(SubcategoryResponse example:response.body()){
                             Toast.makeText( EditSubCategoryActivity.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
                             if(!example.getError()){
                                 getSubCategory(category.getId());
@@ -340,7 +339,7 @@ public class EditSubCategoryActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<ArrayList<Example>> call, Throwable t) {
+                public void onFailure(Call<ArrayList<SubcategoryResponse>> call, Throwable t) {
                     System.out.println("Suree : " + t.getMessage());
                 }
             });

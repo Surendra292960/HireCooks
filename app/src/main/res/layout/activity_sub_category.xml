@@ -1,115 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/smoke_white"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:theme="@style/AppTheme.PopupOverlay">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/smoke_white"
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <include
+                android:id="@+id/header_view"
+                layout="@layout/view_header" />
+
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/header_lay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white_alpha"
-            android:orientation="vertical">
-
-            <View android:layout_width="match_parent"
-                android:layout_height="@dimen/view_width_small"
-                android:background="@color/grey_light"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/margin_40"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <LinearLayout android:id="@+id/sort_layout"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-                    <ImageView android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_baseline_sort_24"/>
-                    <TextView android:id="@+id/sort"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="8dp"
-                        android:text="Sort"
-                        android:textSize="@dimen/size_14"
-                        android:textColor="@color/gen_black"
-                        android:gravity="start"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
-                </LinearLayout>
-
-                <View android:layout_width="@dimen/view_width_small"
-                    android:layout_height="match_parent"
-                    android:background="@color/grey_light"/>
-
-                <LinearLayout android:id="@+id/gender_layout"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-                    <TextView android:id="@+id/gender"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="8dp"
-                        android:text="@string/gender"
-                        android:textSize="12sp"
-                        android:textColor="@color/gen_black"
-                        android:gravity="start"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
-                    <ImageView android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_keyboard_arrow_down"/>
-                </LinearLayout>
-
-                <View android:layout_width="@dimen/view_width_small"
-                    android:layout_height="match_parent"
-                    android:background="@color/grey_light"/>
-
-                <LinearLayout android:id="@+id/filter_layout"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-                    <ImageView
-                        android:id="@+id/filter_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_baseline_filter_list"/>
-                    <TextView android:id="@+id/filter"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="8dp"
-                        android:text="Filter"
-                        android:textSize="12sp"
-                        android:textColor="@color/gen_black"
-                        android:gravity="start"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <View android:layout_width="match_parent"
-                android:layout_height="@dimen/view_width_small"
-                android:background="@color/grey_light" />
-
-        </LinearLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeToRefresh"
@@ -117,50 +38,44 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical">
 
-          <androidx.core.widget.NestedScrollView
-            android:id="@+id/nested_scroll_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none"
-            android:scrollingCache="true">
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/nested_scroll_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                android:scrollingCache="true">
 
-              <LinearLayout
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:descendantFocusability="blocksDescendants"
-                  android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                  <LinearLayout
-                      android:layout_width="match_parent"
-                      android:layout_height="match_parent"
-                      android:orientation="vertical">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:visibility="visible"
+                        android:layout_marginTop="@dimen/margin_50"
+                        android:id="@+id/subcategory_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scrollbars="none"
+                        android:layoutAnimation="@anim/layout_animation_fall_down"
+                        android:scrollbarAlwaysDrawHorizontalTrack="true"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-                      <androidx.recyclerview.widget.RecyclerView
-                          android:visibility="visible"
-                          android:id="@+id/subcategory_recycler"
-                          android:layout_width="match_parent"
-                          android:layout_height="match_parent"
-                          android:scrollbars="none"
-                          android:layoutAnimation="@anim/layout_animation_fall_down"
-                          android:scrollbarAlwaysDrawHorizontalTrack="true"
-                          app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                          app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="90dp"
+                        android:orientation="vertical">
 
-                      <LinearLayout
-                          android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:layout_marginBottom="90dp"
-                          android:orientation="vertical">
+                    </LinearLayout>
 
-                      </LinearLayout>
+                </LinearLayout>
 
-                  </LinearLayout>
-
-              </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
+            </androidx.core.widget.NestedScrollView>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
     </LinearLayout>
 
     <RelativeLayout
@@ -268,4 +183,4 @@
             android:background="@drawable/no_results" />
     </FrameLayout>
 
-    </RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

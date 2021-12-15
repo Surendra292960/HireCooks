@@ -13,7 +13,6 @@
         app:mt_navIconEnabled="false"
         android:elevation="5dp"
         android:fadeScrollbars="false"
-        app:mt_speechMode="true"
         app:mt_suggestionsAnimationSpeed="@integer/icon_animation_duration"
         app:mt_placeholder="" />
 
@@ -28,6 +27,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+       <!--     <GridView
+                android:visibility="gone"
+                android:id="@+id/suggetion_grid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_60"
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:horizontalSpacing="6dp"
+                android:numColumns="4"
+                android:verticalSpacing="6dp" />-->
 
             <androidx.core.widget.NestedScrollView
                 android:id="@+id/nested_scroll_view"

@@ -36,7 +36,6 @@ import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.Chat.ChatActivity;
 import com.test.sample.hirecooks.Activity.Cooks.UpdateCookDetails;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
-import com.test.sample.hirecooks.Activity.ManageAccount.ManageProducts.EditCategoryActivity;
 import com.test.sample.hirecooks.Activity.ManageAccount.ManageProducts.ProductCategoryList;
 import com.test.sample.hirecooks.Activity.ManageAddress.SecondryAddressActivity;
 import com.test.sample.hirecooks.Activity.Users.UpdateProfile;
@@ -44,7 +43,7 @@ import com.test.sample.hirecooks.Activity.Users.UsersActivity;
 import com.test.sample.hirecooks.Adapter.Users.AdminProfileAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Offer.Offer;
-import com.test.sample.hirecooks.Models.SubCategory.Example;
+import com.test.sample.hirecooks.Models.SubCategory.SubcategoryResponse;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
@@ -62,6 +61,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MultipartBody;
@@ -171,23 +171,29 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
                     startActivity(new Intent(getActivity(), SecondryAddressActivity.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
-          if(user.getUserType().equalsIgnoreCase( "Employee" )||user.getUserType().equalsIgnoreCase( "Rider" )){
-              chat.setVisibility( View.VISIBLE );
-              chat.setOnClickListener(new View.OnClickListener() {
-                  @Override
-                  public void onClick(View v) {
-                      if(users!=null){
-                          Intent intent = new Intent( mainActivity, ChatActivity.class );
-                           Bundle bundle = new Bundle(  );
-                           bundle.putSerializable( "User",users );
-                           intent.putExtras( bundle );
-                           mainActivity.startActivity( intent );
-                      }
-                  }
-              });
-          }else{
-              chat.setVisibility( View.GONE );
-          }
+            if(user.getUserType().equalsIgnoreCase( "Employee" )||user.getUserType().equalsIgnoreCase( "Rider" )){
+                chat.setVisibility( View.VISIBLE );
+                chat.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(users!=null){
+                            Intent intent = new Intent( mainActivity, ChatActivity.class );
+                            Bundle bundle = new Bundle(  );
+                            bundle.putSerializable( "User",users );
+                            intent.putExtras( bundle );
+                            mainActivity.startActivity( intent );
+                        }else{
+                            Intent intent = new Intent( mainActivity, ChatActivity.class );
+                            Bundle bundle = new Bundle(  );
+                            bundle.putSerializable( "User",user );
+                            intent.putExtras( bundle );
+                            mainActivity.startActivity( intent );
+                        }
+                    }
+                });
+            }else{
+                chat.setVisibility( View.GONE );
+            }
             if(user.getUserType().equalsIgnoreCase( "Cook" )){
                 manage_cook.setVisibility( View.VISIBLE );
                 manage_cook.setOnClickListener( new View.OnClickListener() {
@@ -229,11 +235,11 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
             order_not_accepting.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    List<Example> examples = new ArrayList<>(  );
+                    List<SubcategoryResponse> examples = new ArrayList<>(  );
                     List<Subcategory> subcategoryList = new ArrayList<>(  );
                     Subcategory subcategory = new Subcategory();
                     subcategoryList.add( subcategory );
-                    Example example = new Example();
+                    SubcategoryResponse example = new SubcategoryResponse();
                     example.setSubcategory(  subcategoryList);
                     examples.add( example );
                     if (order_not_accepting.isChecked()) {
@@ -338,13 +344,13 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
         });
     }
 
-    private void orderNotAccepting(String firmId, List<Example> examples) {
+    private void orderNotAccepting(String firmId, List<SubcategoryResponse> examples) {
         ProductApi mService = ApiClient.getClient().create(ProductApi.class);
-        Call<ArrayList<Example>> call = mService.accepting_Orders(firmId,examples);
-        call.enqueue(new Callback<ArrayList<Example>>() {
+        Call<ArrayList<SubcategoryResponse>> call = mService.accepting_Orders(firmId,examples);
+        call.enqueue(new Callback<ArrayList<SubcategoryResponse>>() {
             @SuppressLint("WrongConstant")
             @Override
-            public void onResponse(Call<ArrayList<Example>> call, Response<ArrayList<Example>> response) {
+            public void onResponse(Call<ArrayList<SubcategoryResponse>> call, Response<ArrayList<SubcategoryResponse>> response) {
                 int statusCode = response.code();
                 if (statusCode == 200) {
 
@@ -352,7 +358,7 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Example>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<SubcategoryResponse>> call, Throwable t) {
                 System.out.println("Suree : " + t.getMessage());
             }
         });
@@ -399,11 +405,13 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
 
     private void uploadFile() {
         if(selectedFileUri!=null) {
+            Random rnd = new Random();
+            String orderNo = String.valueOf(100000000 + rnd.nextInt(900000000));
             File file=FileUtils.getFile(mainActivity,selectedFileUri);
-            String fileName= SharedPrefManager.getInstance(mainActivity).getUser().getEmail() + FileUtils.getExtension(file.toString());
+            String fileName= orderNo + FileUtils.getExtension(file.toString());
             ProgressRequestBody requestFile=new ProgressRequestBody(file, this);
             final MultipartBody.Part body=MultipartBody.Part.createFormData("uploaded_file",fileName,requestFile);
-            final MultipartBody.Part userEmail=MultipartBody.Part.createFormData("phone",SharedPrefManager.getInstance(mainActivity).getUser().getEmail());
+            final MultipartBody.Part userEmail=MultipartBody.Part.createFormData("email",SharedPrefManager.getInstance(mainActivity).getUser().getEmail());
             System.out.println("Test "+userEmail);
             new Thread(new Runnable() {
                 @Override

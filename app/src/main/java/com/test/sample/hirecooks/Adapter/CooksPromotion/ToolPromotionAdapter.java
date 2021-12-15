@@ -18,9 +18,8 @@ public class ToolPromotionAdapter extends RecyclerView.Adapter<ToolPromotionAdap
     private Context mCtx;
     private List<Offer> offers;
 
-    public ToolPromotionAdapter(Context mCtx, List<Offer> offers) {
+    public ToolPromotionAdapter(Context mCtx) {
         this.mCtx = mCtx;
-        this.offers = offers;
     }
 
     @Override
@@ -43,6 +42,12 @@ public class ToolPromotionAdapter extends RecyclerView.Adapter<ToolPromotionAdap
     public int getItemCount() {
         return offers==null?0:offers.size();
     }
+
+    public void setPromotion(List<Offer> offers) {
+        this.offers = offers;
+        notifyDataSetChanged();
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
         private ProgressBar progress_dialog;

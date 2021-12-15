@@ -14,12 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
@@ -44,7 +40,6 @@ public class SignupAddressActivity extends BaseActivity {
     private TextView locationText;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private FusedLocationProviderClient client;
-    private GoogleSignInAccount account;
     private String subAddress;
     private String pinCode;
     private LatLng latLng;
@@ -62,7 +57,6 @@ public class SignupAddressActivity extends BaseActivity {
 
     private void initViews ( ) {
         client = LocationServices.getFusedLocationProviderClient(SignupAddressActivity.this);
-        account = GoogleSignIn.getLastSignedInAccount(SignupAddressActivity.this);
         locationText = findViewById(R.id.location_et);
 
         locationText.setOnClickListener( new View.OnClickListener() {

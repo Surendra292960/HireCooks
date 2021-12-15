@@ -56,7 +56,9 @@
                        android:layout_height="wrap_content"
                        android:layout_margin="5dp"
                        android:scrollbars="none"
+                       android:orientation="horizontal"
                        android:scrollbarAlwaysDrawHorizontalTrack="true"
+                       custom:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
                    <LinearLayout
@@ -94,7 +96,10 @@
                        android:layout_width="match_parent"
                        android:layout_height="match_parent"
                        android:layout_below="@+id/slide_down"
-                       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                       android:orientation="horizontal"
+                       android:scrollbars="none"
+                       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                       app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 
                    <LinearLayout
@@ -133,6 +138,8 @@
                        android:layout_margin="5dp"
                        android:scrollbars="none"
                        android:scrollbarAlwaysDrawHorizontalTrack="true"
+                       android:orientation="horizontal"
+                       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 
@@ -172,6 +179,8 @@
                        android:scrollbars="none"
                        android:layout_margin="5dp"
                        android:scrollbarAlwaysDrawHorizontalTrack="true"
+                       android:orientation="horizontal"
+                       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
                    <LinearLayout
@@ -248,6 +257,8 @@
                        android:layout_height="wrap_content"
                        android:layout_margin="5dp"
                        android:scrollbars="none"
+                       android:orientation="horizontal"
+                       custom:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                        android:scrollbarAlwaysDrawHorizontalTrack="true"
                        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
@@ -285,6 +296,8 @@
                        android:layout_width="match_parent"
                        android:layout_height="match_parent"
                        android:layout_below="@+id/slide_down"
+                       android:orientation="horizontal"
+                       android:scrollbars="none"
                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
                    <LinearLayout

@@ -1,11 +1,14 @@
-package com.test.sample.hirecooks.Models.SubCategory;
+package com.test.sample.hirecooks.Models.Category;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class Example implements Serializable {
+import androidx.databinding.BaseObservable;
+
+public class CategoryResponse extends BaseObservable implements Serializable {
 
     @SerializedName("error")
     @Expose
@@ -13,9 +16,9 @@ public class Example implements Serializable {
     @SerializedName("message")
     @Expose
     private String message;
-    @SerializedName("subcategory")
+    @SerializedName("category")
     @Expose
-    private List<Subcategory> subcategory = null;
+    private List<Category> category = null;
 
     public Boolean getError() {
         return error;
@@ -33,12 +36,12 @@ public class Example implements Serializable {
         this.message = message;
     }
 
-    public List<Subcategory> getSubcategory() {
-        return subcategory;
+    public List<Category> getCategory() {
+        return category;
     }
 
-    public void setSubcategory(List<Subcategory> subcategory) {
-        this.subcategory = subcategory;
+    public void setCategory(List<Category> category) {
+        this.category = category;
     }
 
 }

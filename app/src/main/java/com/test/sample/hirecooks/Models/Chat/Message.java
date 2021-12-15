@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Message implements Serializable {
+public class Message implements Serializable ,Comparable<Message>{
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -30,6 +30,9 @@ public class Message implements Serializable {
     @SerializedName("recieve")
     @Expose
     private Integer recieve;
+    @SerializedName("sender_name")
+    @Expose
+    private String sender_name;
 
     public Integer getId() {
         return id;
@@ -95,8 +98,21 @@ public class Message implements Serializable {
         this.recieve = recieve;
     }
 
+    public String getSender_name() {
+        return sender_name;
+    }
+
+    public void setSender_name(String sender_name) {
+        this.sender_name = sender_name;
+    }
+
     public int compare(Message o1, Message o2) {
         return Integer.parseInt( o1.getSentat() ) < Integer.parseInt( o2.getSentat() ) ? 1 :
                 (o1.getSentat().equals( o2.getSentat() ) ? 0 : -1);
+    }
+
+    @Override
+    public int compareTo(Message message) {
+        return getSentat().compareTo(message.getSentat());
     }
 }

@@ -28,7 +28,7 @@ import com.google.firebase.storage.UploadTask;
 import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
-import com.test.sample.hirecooks.Models.Category.Example;
+import com.test.sample.hirecooks.Models.Category.CategoryResponse;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
@@ -219,13 +219,13 @@ public class StartEditCategory extends AppCompatActivity {
 
     private void updatCategory(int id, ArrayList<Category> category) {
         mService = ApiClient.getClient().create( ProductApi.class);
-        Call<ArrayList<Example>> call = mService.updateCategory(id, category);
-        call.enqueue(new Callback<ArrayList<Example>>() {
+        Call<ArrayList<CategoryResponse>> call = mService.updateCategory(id, category);
+        call.enqueue(new Callback<ArrayList<CategoryResponse>>() {
             @Override
-            public void onResponse(Call<ArrayList<Example>> call, Response<ArrayList<Example>> response) {
+            public void onResponse(Call<ArrayList<CategoryResponse>> call, Response<ArrayList<CategoryResponse>> response) {
                 int statusCode = response.code();
                 if(statusCode==200){
-                    for(Example example:response.body()){
+                    for(CategoryResponse example:response.body()){
                         if(example.getError()==false) {
                             Toast.makeText( StartEditCategory.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
                             StartEditCategory.this.finish();
@@ -237,7 +237,7 @@ public class StartEditCategory extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Example>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<CategoryResponse>> call, Throwable t) {
                 Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
@@ -245,13 +245,13 @@ public class StartEditCategory extends AppCompatActivity {
 
     private void addCategory( ArrayList<Category> category) {
         mService = ApiClient.getClient().create( ProductApi.class);
-        Call<ArrayList<Example>> call = mService.addCategory(category);
-        call.enqueue(new Callback<ArrayList<Example>>() {
+        Call<ArrayList<CategoryResponse>> call = mService.addCategory(category);
+        call.enqueue(new Callback<ArrayList<CategoryResponse>>() {
             @Override
-            public void onResponse(Call<ArrayList<Example>> call, Response<ArrayList<Example>> response) {
+            public void onResponse(Call<ArrayList<CategoryResponse>> call, Response<ArrayList<CategoryResponse>> response) {
                 int statusCode = response.code();
                 if(statusCode==200){
-                    for(Example example:response.body()){
+                    for(CategoryResponse example:response.body()){
                         if(example.getError()==false) {
                             Toast.makeText( StartEditCategory.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
                             StartEditCategory.this.finish();
@@ -263,7 +263,7 @@ public class StartEditCategory extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Example>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<CategoryResponse>> call, Throwable t) {
                 Toast.makeText(getApplicationContext(),t.getMessage(),Toast.LENGTH_LONG).show();
             }
         });

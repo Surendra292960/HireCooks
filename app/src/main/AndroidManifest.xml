@@ -202,13 +202,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider> <!-- AlarmService -->
-        <receiver android:name=".Services.AlarmSoundService.GPSReciever">
+        <receiver android:name=".Services.GPSReciever.GPSReciever">
             <intent-filter>
                 <action android:name="android.location.PROVIDERS_CHANGED" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.net.conn.CONNECTIVITY_CAHNEG" />
                 <action android:name="android.location.GPS_ENABLED_CHANGE" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
@@ -218,6 +216,22 @@
             android:permission="com.google.android.gms.auth.api.phone.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".Services.NotificationReciever.NotificationReciever" />
+
+        <receiver android:name = ".Services.GPSReciever.MyReceiver">
+            <intent-filter>
+                <action android:name = "android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
+                <action android:name = "android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".Notifications.NotificationReciever">
+            <intent-filter>
+                <action android:name="com.androidbook.intents.testbc"></action>
             </intent-filter>
         </receiver>
 
@@ -266,6 +280,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />

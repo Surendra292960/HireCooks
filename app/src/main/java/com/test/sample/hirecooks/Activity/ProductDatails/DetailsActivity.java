@@ -11,13 +11,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.text.SpannableString;
 import android.text.style.StrikethroughSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,18 +34,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 import com.test.sample.hirecooks.Activity.AddorRemoveCallbacks;
 import com.test.sample.hirecooks.Activity.Orders.PlaceOrderActivity;
 import com.test.sample.hirecooks.Activity.SubCategory.SubCategoryActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Libraries.Slider.ProductImgSlider;
-import com.test.sample.hirecooks.Models.Images.Images;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.SubCategory.Color;
-import com.test.sample.hirecooks.Models.SubCategory.Example;
+import com.test.sample.hirecooks.Models.SubCategory.SubcategoryResponse;
 import com.test.sample.hirecooks.Models.SubCategory.Image;
 import com.test.sample.hirecooks.Models.SubCategory.Size;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
@@ -54,6 +53,7 @@ import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
 import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Constants;
+import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.WebApis.ProductApi;
 
 import java.io.File;
@@ -67,9 +67,6 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.stream.Collectors;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -80,6 +77,7 @@ import static android.view.View.VISIBLE;
 public class DetailsActivity extends BaseActivity {
     private RelativeLayout bottom_anchor_layout;
     private WebView item_details;
+    private ProgressBarUtil progressBarUtil;
     private TextView check, similar_product,item_not_in_stock, product_discount,itemAdd, itemRemove,item_count,checkout_amount,checkout,product_displayRate,item_sellrate,item_name,addToCart,quantity;
     private List<Subcategory> cartList;
     private List<Subcategory> FavouriteList;
@@ -220,9 +218,10 @@ public class DetailsActivity extends BaseActivity {
                             detailList.add( "<li>"+res[i]+"."+"</li>");
                         }
                     }
+                    //String listString = detailList.asList();
                     String listString = "<ul type='&#x25cf;'>"+detailList.stream().map(Object::toString).collect( Collectors.joining(" "))+"</ul>";
                     item_details.getSettings().setJavaScriptEnabled(true);
-                    item_details.loadData(listString, "text/html; charset=utf-8", "UTF-8");
+                    item_details.loadData(subCategory.getDetailDiscription(), "text/html; charset=utf-8", "UTF-8");
                     item_name.setText( subCategory.getName() );
                 }
 
@@ -243,6 +242,7 @@ public class DetailsActivity extends BaseActivity {
 
     private void initViews() {
         localStorage = new LocalStorage( this );
+        progressBarUtil = new ProgressBarUtil( this );
         gson = new Gson();
         dots_indicator = findViewById(R.id.dots_indicator);
         viewPager =  findViewById(R.id.view_pager);
@@ -250,7 +250,7 @@ public class DetailsActivity extends BaseActivity {
         //selected_image = findViewById(R.id.selected_image);
         weight_recycler = findViewById(R.id.weight_recycler);
         sizes_recycler = findViewById(R.id.sizes_recycler);
-       // colors_recycler = findViewById(R.id.colors_recycler);
+        // colors_recycler = findViewById(R.id.colors_recycler);
         weight_lay= findViewById(R.id.weight_lay);
         size_lay= findViewById(R.id.size_lay);
         check= findViewById(R.id.check);
@@ -315,26 +315,25 @@ public class DetailsActivity extends BaseActivity {
                         Toast.makeText( DetailsActivity.this, "This item can`t be add please remove item and try again", Toast.LENGTH_SHORT ).show();
                     }
                 }else{
-                    if(subCategory!=null&&FavouriteList.size()!=0&&FavQuantity>0){
-                        FavQuantity = 0;
-                        sellRate = subCategory.getSellRate();
-                        displayRate = subCategory.getDisplayRate();;
-                        for (int i = 0; i < FavouriteList.size(); i++) {
-                            if (FavouriteList.get(i).getId()==subCategory.getId()&&FavouriteList.get(i).getName().equalsIgnoreCase(subCategory.getName())&&FavouriteList.get(i).getSellRate()==subCategory.getSellRate()) {
-                                SubTotal = (sellRate * FavQuantity);
-                                FavouriteList.get(i).setItemQuantity(FavQuantity);
-                                FavouriteList.get(i).setTotalAmount(SubTotal);
-                                String cartStr = gson.toJson(FavouriteList);
-                                localStorage.setFavourite(cartStr);
-                                item_favourite.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
-                                getFavourites();
-                            }
+                    View currentFocus = (DetailsActivity.this).getCurrentFocus();
+                    if (currentFocus != null) {
+                        currentFocus.clearFocus();
+                    }
+                    for (int i = 0; i < FavouriteList.size(); i++) {
+                        if (FavouriteList.get(i).getId()==subCategory.getId()&&FavouriteList.get(i).getName().equalsIgnoreCase(subCategory.getName())&&FavouriteList.get(i).getSellRate()==subCategory.getSellRate()) {
+                            FavouriteList.remove(FavouriteList.get(i));
+                            Gson gson = new Gson();
+                            String favourite = gson.toJson(FavouriteList);
+                            Log.d("FAVOURITE", favourite);
+                            localStorage.setFavourite(favourite);
+                            getFavourites();
+                            Toast.makeText( DetailsActivity.this, "Removed from Wishlist", Toast.LENGTH_SHORT ).show();
                         }
                     }
                 }
             }
         });
-        
+
         addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -387,18 +386,18 @@ public class DetailsActivity extends BaseActivity {
                             String cartStr = gson.toJson(cartList);
                             localStorage.setCart(cartStr);
                             ((AddorRemoveCallbacks) DetailsActivity.this).onAddProduct();
-                           // color=null;
+                            // color=null;
                             weight=null;
                             size=null;
                           /* getProductColor( subCategory.getProductUniquekey() );
                             getProductSize( subCategory.getProductUniquekey() );
                             getProductWeight( subCategory.getProductUniquekey() );*/
                             getCart();
-                    }else{
-                        addToCart.setVisibility(View.VISIBLE);
-                        add_quantity_layout.setVisibility(GONE);
-                        Toast.makeText(DetailsActivity.this, "This item can`t be add please remove item and try again", Toast.LENGTH_SHORT).show();
-                    }
+                        }else{
+                            addToCart.setVisibility(View.VISIBLE);
+                            add_quantity_layout.setVisibility(GONE);
+                            Toast.makeText(DetailsActivity.this, "This item can`t be add please remove item and try again", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }
@@ -422,7 +421,7 @@ public class DetailsActivity extends BaseActivity {
                                 cartList.get(i).setTotalAmount(SubTotal);
                                 String cartStr = gson.toJson(cartList);
                                 localStorage.setCart(cartStr);
-                             //   subcategoryAdapter.notifyDataSetChanged();
+                                //   subcategoryAdapter.notifyDataSetChanged();
                                 getCart();
                             }
                         }
@@ -469,17 +468,17 @@ public class DetailsActivity extends BaseActivity {
 
     private void getSubCategory(int subcategoryid) {
         ProductApi mService = ApiClient.getClient().create(ProductApi.class);
-        Call<ArrayList<Example>> call = mService.getSubCategorysBySub_id(subcategoryid);
-        call.enqueue(new Callback<ArrayList<Example>>() {
+        Call<ArrayList<SubcategoryResponse>> call = mService.getSubCategorysBySub_id(subcategoryid);
+        call.enqueue(new Callback<ArrayList<SubcategoryResponse>>() {
             @SuppressLint("WrongConstant")
             @Override
-            public void onResponse(Call<ArrayList<Example>> call, Response<ArrayList<Example>> response) {
+            public void onResponse(Call<ArrayList<SubcategoryResponse>> call, Response<ArrayList<SubcategoryResponse>> response) {
                 int statusCode = response.code();
                 if (statusCode == 200) {
                     if(response.body()!=null&&response.body().size()!=0){
                         List<Subcategory> list = new ArrayList<>();
                         List<Subcategory> filteredList = new ArrayList<>();
-                        for (Example example : response.body()) {
+                        for (SubcategoryResponse example : response.body()) {
                             for (Subcategory subcategory : example.getSubcategory()) {
                                 for (Map map : Constants.NEARBY_VENDERS_LOCATION) {
                                     if (map.getFirm_id().equalsIgnoreCase(subcategory.getFirmId())) {
@@ -512,15 +511,17 @@ public class DetailsActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Example>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<SubcategoryResponse>> call, Throwable t) {
                 System.out.println("Suree : " + t.getMessage());
             }
         });
     }
 
     public void shareItem(String url) {
-      /*  Picasso.with(this).load(url).into(new Target() {
-            @Override public void onBitmapLoaded(Bitmap bitmap, Glide.LoadedFrom from) {
+        Picasso.with(DetailsActivity.this).load(url).into(new com.squareup.picasso.Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                progressBarUtil.hideProgress();
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("image/*");
                 i.putExtra(Intent.EXTRA_STREAM, getLocalBitmapUri(bitmap));
@@ -528,9 +529,16 @@ public class DetailsActivity extends BaseActivity {
             }
 
             @Override
-            public void onBitmapFailed(Exception e, Drawable errorDrawable) { }
-            @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
-        });*/
+            public void onBitmapFailed(Drawable errorDrawable) {
+                progressBarUtil.hideProgress();
+                Toast.makeText(DetailsActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                progressBarUtil.showProgress();
+            }
+        });
     }
 
     public Uri getLocalBitmapUri(Bitmap bmp) {
@@ -598,10 +606,14 @@ public class DetailsActivity extends BaseActivity {
                         item_favourite.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_black_24dp));
                         FavQuantity = FavouriteList.get(i).getItemQuantity();
                     }else{
+                        item_favourite.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
                         FavQuantity = 0;
                     }
                 }
             }
+        }else {
+            item_favourite.setImageDrawable(getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+            FavQuantity = 0;
         }
     }
 
@@ -926,13 +938,17 @@ public class DetailsActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(@NonNull final DetailsActivity.SubcategoryAdapter.MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-
             final Subcategory product = productList.get(position);
             localStorage = new LocalStorage(context);
             gson = new Gson();
             cartList = ((BaseActivity) context).getnewCartList();
 
             if(product!=null){
+                if(product.getId()== subCategory.getId()){
+                    holder.products_layout.removeAllViews();
+                    return;
+                }
+
                 if(product.getAcceptingOrder()==0){
                     holder.order_not_accepting.setVisibility( View.VISIBLE);
                     holder.add_item_layout.setVisibility( GONE);
@@ -1105,7 +1121,7 @@ public class DetailsActivity extends BaseActivity {
             ImageView imageView;
             TextView discount, name, sellrate, quantity, displayRate,item_not_in_stock,discription,item_short_desc,add_;
             TextView add_item, remove_item;
-            LinearLayout add_item_layout,quantity_ll;
+            LinearLayout add_item_layout,quantity_ll,products_layout;
             CardView cardview;
             FrameLayout order_not_accepting;
             private ProgressBar progress_dialog;
@@ -1130,6 +1146,7 @@ public class DetailsActivity extends BaseActivity {
                 item_short_desc = itemView.findViewById(R.id.item_short_desc);
                 order_not_accepting = itemView.findViewById(R.id.order_not_accepting);
                 progress_dialog = itemView.findViewById(R.id.progress_dialog);
+                products_layout = itemView.findViewById(R.id.products_layout);
             }
         }
     }

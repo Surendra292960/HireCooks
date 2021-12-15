@@ -22,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,7 +52,7 @@ import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Result;
 import com.test.sample.hirecooks.Models.SubCategory.Color;
 import com.test.sample.hirecooks.Models.SubCategory.ColorExample;
-import com.test.sample.hirecooks.Models.SubCategory.Example;
+import com.test.sample.hirecooks.Models.SubCategory.SubcategoryResponse;
 import com.test.sample.hirecooks.Models.SubCategory.Image;
 import com.test.sample.hirecooks.Models.SubCategory.Size;
 import com.test.sample.hirecooks.Models.SubCategory.SizeExample;
@@ -520,10 +519,10 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                     1,
                     brand_,gender_,
                     Integer.parseInt( age_ ));
-            List<Example> exampleList = new ArrayList<>(  );
+            List<SubcategoryResponse> exampleList = new ArrayList<>(  );
             List<Subcategory> subcategoryList = new ArrayList<>(  );
             subcategoryList.add( subcategory );
-            Example example = new Example();
+            SubcategoryResponse example = new SubcategoryResponse();
             example.setSubcategory( subcategoryList );
             exampleList.add( example);
             Gson gson = new Gson();
@@ -537,10 +536,10 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                     "", discription, detail_discription, Integer.parseInt( sellRate ), Integer.parseInt( displayRate ),firmId, Double.parseDouble( lat_ ) ,
                     Double.parseDouble( lang_ ) ,address,pincode,colorList,imageList,sizeList,weightList, 0.0,available_stock_, 1,brand_,gender_,
                     Integer.parseInt( age_ ));
-            List<Example> exampleList = new ArrayList<>(  );
+            List<SubcategoryResponse> exampleList = new ArrayList<>(  );
             List<Subcategory> subcategoryList = new ArrayList<>(  );
             subcategoryList.add( subcategory );
-            Example example = new Example();
+            SubcategoryResponse example = new SubcategoryResponse();
             example.setSubcategory( subcategoryList );
             exampleList.add( example );
             Gson gson = new Gson();
@@ -640,16 +639,16 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         } );
     }
 
-    private void addSubcategory(List<Example> exampleList) {
+    private void addSubcategory(List<SubcategoryResponse> exampleList) {
         ProductApi mService = ApiClient.getClient().create(ProductApi.class);
-        Call<ArrayList<Example>> call = mService.addSubcategory(exampleList);
-        call.enqueue(new Callback<ArrayList<Example>>() {
+        Call<ArrayList<SubcategoryResponse>> call = mService.addSubcategory(exampleList);
+        call.enqueue(new Callback<ArrayList<SubcategoryResponse>>() {
             @SuppressLint("WrongConstant")
             @Override
-            public void onResponse(Call<ArrayList<Example>> call, Response<ArrayList<Example>> response) {
+            public void onResponse(Call<ArrayList<SubcategoryResponse>> call, Response<ArrayList<SubcategoryResponse>> response) {
                 int statusCode = response.code();
                 if (statusCode == 200) {
-                    for(Example example:response.body()){
+                    for(SubcategoryResponse example:response.body()){
                         if(example.getError()==false){
                              Toast.makeText( StartEditSubCategoryActivity.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
                              finish();
@@ -663,22 +662,22 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Example>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<SubcategoryResponse>> call, Throwable t) {
                 System.out.println("Suree : " + t.getMessage());
             }
         });
     }
 
-    private void updateSubcategory(int id, List<Example> exampleList) {
+    private void updateSubcategory(int id, List<SubcategoryResponse> exampleList) {
         ProductApi mService = ApiClient.getClient().create(ProductApi.class);
-        Call<ArrayList<Example>> call = mService.updateSubcategory(id,exampleList);
-        call.enqueue(new Callback<ArrayList<Example>>() {
+        Call<ArrayList<SubcategoryResponse>> call = mService.updateSubcategory(id,exampleList);
+        call.enqueue(new Callback<ArrayList<SubcategoryResponse>>() {
             @SuppressLint("WrongConstant")
             @Override
-            public void onResponse(Call<ArrayList<Example>> call, Response<ArrayList<Example>> response) {
+            public void onResponse(Call<ArrayList<SubcategoryResponse>> call, Response<ArrayList<SubcategoryResponse>> response) {
                 int statusCode = response.code();
                 if (statusCode == 200) {
-                    for(Example example:response.body()){
+                    for(SubcategoryResponse example:response.body()){
                         if(example.getError()==false){
                              Toast.makeText( StartEditSubCategoryActivity.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
                              finish();
@@ -693,7 +692,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Example>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<SubcategoryResponse>> call, Throwable t) {
                 System.out.println("Suree : " + t.getMessage());
             }
         });

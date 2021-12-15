@@ -59,7 +59,6 @@ public class FirmUserActivity extends AppCompatActivity {
     private OnButtonClickListener listener;
     private User user;
     private FloatingActionButton add_user;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

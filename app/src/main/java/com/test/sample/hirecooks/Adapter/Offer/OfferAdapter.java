@@ -26,9 +26,8 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     private Context mCtx;
     private List<Category> offers;
 
-    public OfferAdapter(Context mCtx, List<Category> offers) {
+    public OfferAdapter(Context mCtx) {
         this.mCtx = mCtx;
-        this.offers = offers;
     }
 
     @Override
@@ -66,6 +65,12 @@ public class OfferAdapter extends RecyclerView.Adapter<OfferAdapter.ViewHolder> 
     public int getItemCount() {
         return offers==null?0:offers.size();
     }
+
+    public void setCategory(List<Category> offer) {
+        this.offers = offer;
+        notifyDataSetChanged();
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         public TextView circular_image_name;
         private CircleImageView circular_image;

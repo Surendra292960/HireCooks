@@ -25,9 +25,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
@@ -35,7 +32,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
-import com.mxn.soul.flowingdrawer_core.BuildConfig;
 import com.test.sample.hirecooks.Activity.Cooks.CooksActivity;
 import com.test.sample.hirecooks.Activity.Favourite.FavouriteActivity;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
@@ -77,7 +73,6 @@ public class MenuListFragment extends Fragment implements UploadCallBack {
     private SwitchCompat drawer_switch;
     MainActivity mainActivity;
     private FusedLocationProviderClient client;
-    private GoogleSignInAccount account;
     private String subAddress;
     private String pinCode;
     private LatLng latLng;
@@ -114,7 +109,6 @@ public class MenuListFragment extends Fragment implements UploadCallBack {
         userPhone.setText("Ph:  "+user.getPhone());
         getFirmUserByDate(user.getId(),format2.format(new Date( )),format2.format(new Date( )));
         client = LocationServices.getFusedLocationProviderClient( mainActivity);
-        account = GoogleSignIn.getLastSignedInAccount(mainActivity);
         if(user.getUserType().equalsIgnoreCase( "Rider" )||user.getUserType().equalsIgnoreCase( "Employee" )){
             switch_lay.setVisibility( View.VISIBLE );
 
@@ -210,7 +204,6 @@ public class MenuListFragment extends Fragment implements UploadCallBack {
        // mAuth.signOut();
         SharedPrefManager.getInstance(getActivity()).logout();
         startActivity(new Intent(getActivity(), UserSignInActivity.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
-        Objects.requireNonNull(getActivity()).finish();
     }
 
     public void updateUserStatus(Integer id, Integer status, String email) {
