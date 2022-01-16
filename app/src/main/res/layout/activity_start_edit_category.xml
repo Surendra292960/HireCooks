@@ -1,136 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/activity_item_details"
+<androidx.coordinatorlayout.widget.CoordinatorLayout android:id="@+id/activity_item_details"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="10"
-    tools:ignore="NamespaceTypo">
-
-    <ScrollView android:id="@+id/scrollbar"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="9.5"
-        android:scrollbars="none"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        tools:ignore="MissingConstraints">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:orientation="vertical">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:focusable="false"
-                style="@style/AppTheme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Category Id">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:visibility="gone"
-                    android:inputType="number"
-                    android:id="@+id/editTextCategoryId"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:focusable="false"
-                android:padding="@dimen/margin_10"
-                android:background="@drawable/rect_whiteboder"
-                android:visibility="visible"
-                android:hint="Category Name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:inputType="text"
-                    android:id="@+id/editTextCategoryName"
-                    android:maxLines="1"
-                    android:background="@null"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:focusable="false"
-                style="@style/AppTheme"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Category Image">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:inputType="text"
-                    android:maxLines="4"
-                    android:id="@+id/editTextCategoryImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <LinearLayout
-                android:layout_marginTop="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <Button
-                    android:layout_weight="1"
-                    android:id="@+id/btnChoose"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="choose Image"/>
-
-                <Button
-                    android:layout_weight="1"
-                    android:id="@+id/btnUpload"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="upload Image"/>
-
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/editTextUploadCategoryImage"
-                android:layout_width="match_parent"
-                android:scaleType="fitXY"
-                android:layout_height="180dp"
-                tools:ignore="ContentDescription" />
-
-        </LinearLayout>
-
-    </ScrollView>
+    tools:ignore="NamespaceTypo"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        android:elevation="30dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/submit"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/style_color_primary"
-            android:text="Submit"
-            android:textAllCaps="true"
-            android:textSize="14dp"
-            android:textColor="#fff"
-            android:textStyle="bold"
-            android:gravity="center"/>
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:theme="@style/AppTheme.PopupOverlay">
+
+            <include
+                android:id="@+id/toolbar_interface"
+                layout="@layout/custome_toobar_layout" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView android:id="@+id/scrollbar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="9.5"
+            android:scrollbars="none"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            tools:ignore="MissingConstraints">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:focusable="false"
+                    style="@style/AppTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Category Id">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:visibility="gone"
+                        android:inputType="number"
+                        android:id="@+id/editTextCategoryId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:focusable="false"
+                    android:padding="@dimen/margin_10"
+                    android:background="@drawable/rect_whiteboder"
+                    android:visibility="visible"
+                    android:hint="Category Name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:inputType="text"
+                        android:id="@+id/editTextCategoryName"
+                        android:maxLines="1"
+                        android:background="@null"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:focusable="false"
+                    style="@style/AppTheme"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Category Image">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:inputType="text"
+                        android:maxLines="4"
+                        android:id="@+id/editTextCategoryImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <Button
+                        android:layout_weight="1"
+                        android:id="@+id/btnChoose"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="choose Image"/>
+
+                    <Button
+                        android:layout_weight="1"
+                        android:id="@+id/btnUpload"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="upload Image"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/editTextUploadCategoryImage"
+                    android:layout_width="match_parent"
+                    android:scaleType="fitXY"
+                    android:layout_height="180dp"
+                    tools:ignore="ContentDescription" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
-</LinearLayout>
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/style_color_primary"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+        app:hideOnScroll="true"
+        android:text="@string/submit"
+        android:textColor="@color/white_alpha"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:layout_margin="@dimen/margin_5"
+        android:elevation="10dp"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -16,7 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Models.Users.Example;
+import com.test.sample.hirecooks.Models.Users.UserResponse;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
@@ -100,13 +100,13 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
     private void forgotPassword(String email, String password) {
         progressBarUtil.showProgress();
         mService = ApiClient.getClient().create(UserApi.class);
-        Call<List<Example>> call = mService.forgotPassword(email, password);
-        call.enqueue(new Callback<List<Example>>() {
+        Call<List<UserResponse>> call = mService.forgotPassword(email, password);
+        call.enqueue(new Callback<List<UserResponse>>() {
             @Override
-            public void onResponse(Call<List<Example>> call, Response<List<Example>> response) {
+            public void onResponse(Call<List<UserResponse>> call, Response<List<UserResponse>> response) {
                 if(response.code()==200) {
                     progressBarUtil.hideProgress();
-                    for(Example example:response.body()){
+                    for(UserResponse example:response.body()){
                         if(!example.getError()){
                             //updateFirebasePassword( password );
                             ShowToast( example.getMessage());
@@ -120,7 +120,7 @@ public class ForgotPasswordActivity extends BaseActivity implements View.OnClick
             }
 
             @Override
-            public void onFailure(Call<List<Example>> call, Throwable t) {
+            public void onFailure(Call<List<UserResponse>> call, Throwable t) {
                 progressBarUtil.hideProgress();
                 System.out.println("Suree :"+ t.getMessage());
                 ShowToast("Please Check Intenet Connection");

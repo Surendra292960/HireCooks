@@ -27,7 +27,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -35,6 +34,8 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -56,8 +57,6 @@ import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
-import com.test.sample.flowingdrawer_core.ElasticDrawer;
-import com.test.sample.flowingdrawer_core.FlowingDrawer;
 import com.test.sample.hirecooks.Activity.Orders.PlaceOrderActivity;
 import com.test.sample.hirecooks.Activity.Search.SearchResultActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
@@ -67,7 +66,6 @@ import com.test.sample.hirecooks.Fragments.MessageFragment;
 import com.test.sample.hirecooks.Fragments.NotificationFragment;
 import com.test.sample.hirecooks.Fragments.ProfileFragment;
 import com.test.sample.hirecooks.Libraries.BedgeNotification.NotificationCountSetClass;
-import com.test.sample.hirecooks.Libraries.RandomString;
 import com.test.sample.hirecooks.Models.FirmUsers.Example;
 import com.test.sample.hirecooks.Models.FirmUsers.Firmuser;
 import com.test.sample.hirecooks.Models.TokenResponse.Token;
@@ -111,12 +109,12 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private List<Example> exampleArrayList;
     private List<Firmuser> firmuserArrayList;
-    private FlowingDrawer mDrawer;
+    private DrawerLayout mDrawer;
     public View appRoot, toolbar_layout;
     public Toolbar toolbar;
     private ViewPager mViewPager;
     private List<Fragment> fragmentList;
-    public BottomNavigationView mNavigationView;
+    public BottomNavigationView bottomNavigationView;
     public static int notificationCountCart = 0;
     private User user;
     private UserApi mService;
@@ -132,7 +130,6 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
     private FusedLocationProviderClient client;
     private String created_at;
     private String status;
-    private RandomString randomString;
 
     @SuppressLint("NewApi")
     @Override
@@ -144,16 +141,6 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
         user = SharedPrefManager.getInstance(this).getUser();
         initData();
         initViews();
-       // sendMessage();
-       /* status = getFirmUserByDate(user.getId(),format2.format(new Date( )),format2.format(new Date( )));
-        if(status.equalsIgnoreCase( "Present" )){
-
-        }else if(status.equalsIgnoreCase( "Absent" )){
-            if(user.getUserType().equalsIgnoreCase( "Rider" )){
-                signInAlert();
-            }
-        }*/
-
         setupToolbar();
         setupMenu();
         getTokenFromServer(user.getId());
@@ -168,9 +155,8 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
     private void initViews() {
         // Fresco.initialize(this);
         mDrawer = findViewById(R.id.drawerlayout);
-        mDrawer.setTouchMode(ElasticDrawer.TOUCH_MODE_BEZEL);
         appRoot = findViewById(R.id.appRoot);
-        mNavigationView = findViewById(R.id.bye_burger);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
         mViewPager = findViewById(R.id.viewpager);
 
         View toolbar_view = findViewById(R.id.toolbar_interface);
@@ -189,22 +175,22 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
             }
         });
 
-        mNavigationView.setOnNavigationItemSelectedListener(
+        bottomNavigationView.setOnNavigationItemSelectedListener(
                 item -> {
                     switch (item.getItemId()) {
-                        case R.id.navigation_home:
+                        case R.id.home_destination:
                             toolbar.setTitle("");
                             mViewPager.setCurrentItem(0);
                             return true;
-                        case R.id.navigation_message:
+                        case R.id.message_destination:
                             toolbar.setTitle("Message");
                             mViewPager.setCurrentItem(1);
                             return true;
-                        case R.id.navigation_profile:
+                        case R.id.profile_destination:
                             toolbar.setTitle("Profile");
                             mViewPager.setCurrentItem(2);
                             return true;
-                        case R.id.navigation_notification:
+                        case R.id.notification_destination:
                             toolbar.setTitle("Notifications");
                             mViewPager.setCurrentItem(3);
                             return true;
@@ -365,7 +351,7 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDrawer.toggleMenu();
+                mDrawer.openDrawer(GravityCompat.START);
             }
         });
     }
@@ -455,7 +441,7 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.action_cart);
+        MenuItem item = menu.findItem(R.id.cart_destination);
         NotificationCountSetClass.setAddToCart(MainActivity.this, item,notificationCountCart);
         invalidateOptionsMenu();
         return super.onPrepareOptionsMenu(menu);
@@ -466,10 +452,10 @@ public class MainActivity extends BaseActivity implements OnSuccessListener<AppU
         int id = item.getItemId();
         if(id==android.R.id.home){
             this.finish();
-        }else if ( id == R.id.action_cart ) {
+        }else if ( id == R.id.cart_destination ) {
             startActivity(new Intent(MainActivity.this, PlaceOrderActivity.class));
             return true;
-        }else if ( id == R.id.action_searchresult ) {
+        }else if ( id == R.id.search_destination ) {
             startActivity(new Intent(MainActivity.this, SearchResultActivity.class));
             return true;
         }

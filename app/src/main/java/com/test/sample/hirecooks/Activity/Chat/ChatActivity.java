@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -319,12 +320,18 @@ public class ChatActivity extends AppCompatActivity {
         groupDataIntoHashMap(chatModelList);
     }
     private void bindRecyclerView() {
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        chatBinding.recyclerViewMessages.setLayoutManager(mLayoutManager);
         adapter = new ChatAdapter( null,ChatActivity.this);
         chatBinding.recyclerViewMessages.setAdapter(adapter);
         adapter.setUser(user.getId());
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        chatBinding.recyclerViewMessages.setLayoutManager(mLayoutManager);
         chatBinding.recyclerViewMessages.setAdapter(adapter);
+        chatBinding.recyclerViewMessages.post(new Runnable() {
+            @Override
+            public void run() {
+                chatBinding.recyclerViewMessages.smoothScrollToPosition(ScrollView.FOCUS_DOWN);
+            }
+        });
     }
 
     private void groupDataIntoHashMap(List<Message> chatModelList) {
@@ -347,7 +354,6 @@ public class ChatActivity extends AppCompatActivity {
         }
         //Generate list from map
         generateListFromMap(groupedHashMap);
-
     }
 
 
@@ -366,6 +372,7 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         adapter.setDataChange(consolidatedList);
+        chatBinding.recyclerViewMessages.smoothScrollToPosition(consolidatedList.size()-1);
 
         return consolidatedList;
     }

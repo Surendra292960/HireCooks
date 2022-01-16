@@ -26,7 +26,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.hbb20.CountryCodePicker;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Libraries.PinView.PinView;
-import com.test.sample.hirecooks.Models.Users.Example;
+import com.test.sample.hirecooks.Models.Users.UserResponse;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
@@ -220,13 +220,13 @@ public class PhoneVerification extends AppCompatActivity {
         System.out.println( "Suree : "+phone );
         progressBarUtil.showProgress();
         UserApi service = ApiClient.getClient().create(UserApi.class);
-        Call<List<Example>> call = service.checkUserPhone(phone);
-        call.enqueue(new Callback<List<Example>>() {
+        Call<List<UserResponse>> call = service.checkUserPhone(phone);
+        call.enqueue(new Callback<List<UserResponse>>() {
             @Override
-            public void onResponse(@NonNull Call<List<Example>> call, @NonNull Response<List<Example>> response) {
+            public void onResponse(@NonNull Call<List<UserResponse>> call, @NonNull Response<List<UserResponse>> response) {
                 if(response.code()==200) {
                     progressBarUtil.hideProgress();
-                   for(Example example:response.body()){
+                   for(UserResponse example:response.body()){
                        if(!example.getError()){
                            sendVerificationCode(phone);
                        }else{
@@ -237,7 +237,7 @@ public class PhoneVerification extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<Example>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<UserResponse>> call, @NonNull Throwable t) {
                 progressBarUtil.hideProgress();
                 Toast.makeText(getApplicationContext(), R.string.error+t.getMessage(), Toast.LENGTH_LONG).show();
             }

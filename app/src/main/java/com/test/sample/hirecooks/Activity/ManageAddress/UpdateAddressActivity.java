@@ -34,9 +34,6 @@ public class UpdateAddressActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Update Address");
         setContentView(R.layout.activity_update_secondry_address);
         initViews();
         Bundle bundle = getIntent().getExtras();

@@ -32,7 +32,7 @@ import com.test.sample.hirecooks.Libraries.Autoplayvideo.AAH_CustomViewHolder;
 import com.test.sample.hirecooks.Libraries.Autoplayvideo.AAH_VideosAdapter;
 import com.test.sample.hirecooks.MapLocation;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
-import com.test.sample.hirecooks.Models.MapLocationResponse.Result;
+import com.test.sample.hirecooks.Models.MapLocationResponse.MapResponse;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.Models.Video.Example;
 import com.test.sample.hirecooks.Models.Video.Video;
@@ -80,9 +80,6 @@ public class UpdateCookDetails extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cooks_details);
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Cooks Details");
         initViews();
 
         getLocation(user);
@@ -237,11 +234,11 @@ public class UpdateCookDetails extends BaseActivity {
 
     private void getLocation(User userResponse) {
         MapApi service = ApiClient.getClient().create(MapApi.class);
-        Call<Result> call = service.getMapDetails(userResponse.getId());
-        call.enqueue(new Callback<Result>() {
+        Call<MapResponse> call = service.getMapDetails(userResponse.getId());
+        call.enqueue(new Callback<MapResponse>() {
             @SuppressLint("ShowToast")
             @Override
-            public void onResponse(@NonNull Call<Result> call, @NonNull Response<Result> response) {
+            public void onResponse(@NonNull Call<MapResponse> call, @NonNull Response<MapResponse> response) {
                 int statusCode = response.code();
                 if (statusCode == 200) {
                     if(response.body().getMaps()!=null){
@@ -254,7 +251,7 @@ public class UpdateCookDetails extends BaseActivity {
 
             @SuppressLint("ShowToast")
             @Override
-            public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<MapResponse> call, @NonNull Throwable t) {
                 Toast.makeText(getApplicationContext(), R.string.error + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

@@ -27,7 +27,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,37 +42,29 @@ import com.squareup.picasso.Picasso;
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator;
 import com.test.sample.hirecooks.Activity.AddorRemoveCallbacks;
 import com.test.sample.hirecooks.Activity.Orders.PlaceOrderActivity;
+import com.test.sample.hirecooks.Activity.Search.SearchResultActivity;
 import com.test.sample.hirecooks.Activity.SubCategory.SubCategoryActivity;
-import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Libraries.Slider.ProductImgSlider;
-import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
 import com.test.sample.hirecooks.Models.SubCategory.Color;
-import com.test.sample.hirecooks.Models.SubCategory.SubcategoryResponse;
 import com.test.sample.hirecooks.Models.SubCategory.Image;
 import com.test.sample.hirecooks.Models.SubCategory.Size;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.Models.SubCategory.Weight;
+import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
 import com.test.sample.hirecooks.Utils.BaseActivity;
-import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
-import com.test.sample.hirecooks.WebApis.ProductApi;
+import com.test.sample.hirecooks.Utils.SharedPrefManager;
+import com.test.sample.hirecooks.ViewModel.ViewModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 import java.util.Timer;
 import java.util.stream.Collectors;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -103,6 +98,10 @@ public class DetailsActivity extends BaseActivity {
     private List<Weight> weightList = new ArrayList<>(  );
     private List<Image> imageList = new ArrayList<>(  );
     List<String> detailList;
+    private ViewModel viewModel;
+    private User user;
+    private Toolbar mToolbar;
+    private TextView backButton, search;
     //private ImageView selected_image;
 
     @SuppressLint({"WrongConstant", "NewApi", "ResourceAsColor"})
@@ -110,16 +109,20 @@ public class DetailsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("");
+        viewModel=new ViewModelProvider(DetailsActivity.this).get(ViewModel.class);
+        user = SharedPrefManager.getInstance(this).getUser();
         initViews();
 
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null) {
             subCategory = (Subcategory) bundle.getSerializable( "SubCategory" );
             if (subCategory != null) {
-                getSubCategory(Integer.parseInt( subCategory.getSubcategoryid() ));
+                viewModel.getNearBySubCategoryBySubId(user.getId(), Integer.valueOf(subCategory.getSubcategoryid())).observe(this, subcategoryResponses -> subcategoryResponses.forEach(subcategory ->{
+                    if(subcategory.getSubcategory()!=null&&subcategory.getSubcategory().size()!=0){
+                        SubcategoryAdapter mAdapter = new SubcategoryAdapter( this, subcategory.getSubcategory());
+                        subcategory_recycler.setAdapter(mAdapter);
+                    }
+                }));
                 getCart();
                 if (subCategory.getImages() != null && subCategory.getImages().size() != 0) {
                     ProductImgSlider pagerAdapter = new ProductImgSlider( DetailsActivity.this, subCategory.getImages() );
@@ -279,56 +282,52 @@ public class DetailsActivity extends BaseActivity {
         checkout = view.findViewById( R.id.checkout );
         bottom_anchor_layout = findViewById(R.id.bottom_anchor_layout);
 
-        check.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BottomSheetDialog bottomSheet = new BottomSheetDialog();
-                bottomSheet.show(getSupportFragmentManager(), "ModalBottomSheet");
-            }
-        }); checkout.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity( new Intent( DetailsActivity.this, PlaceOrderActivity.class ) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK) );
-            }
-        });
+        View view1= findViewById(R.id.m_toolbar_interface);
+        backButton = view1.findViewById(R.id.go_back);
+        search = view1.findViewById(R.id.search);
+        mToolbar = view1.findViewById(R.id.m_toolbar);
+        mToolbar.setVisibility(VISIBLE);
+        backButton.setOnClickListener(view2 -> finish());
+        search.setOnClickListener(v -> startActivity( new Intent( DetailsActivity.this, SearchResultActivity.class )));
+        check.setOnClickListener(v -> {
+            BottomSheetDialog bottomSheet = new BottomSheetDialog();
+            bottomSheet.show(getSupportFragmentManager(), "ModalBottomSheet");
+        }); checkout.setOnClickListener(v -> startActivity( new Intent( DetailsActivity.this, PlaceOrderActivity.class )));
 
-        layout_action_favourite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (subCategory != null && FavQuantity == 0) {
-                    sellRate = subCategory.getSellRate();
-                    displayRate = subCategory.getDisplayRate();
-                    FavQuantity = 1;
-                    if (subCategory.getId() != 0 && subCategory.getName() != null && subCategory.getLink2() != null && subCategory.getDiscription() != null && sellRate != 0 && subCategory.getDisplayRate() != 0 && subCategory.getFirmId() != null) {
-                        SubTotal = (sellRate * FavQuantity);
-                        if (DetailsActivity.this instanceof DetailsActivity) {
-                            Subcategory cart = new Subcategory(subCategory.getId(),subCategory.getSubcategoryid(),subCategory.getLastUpdate(),subCategory.getSearchKey(), subCategory.getName(), subCategory.getProductUniquekey(), subCategory.getLink2(),  subCategory.getLink3(),  subCategory.getLink4(),subCategory.getShieldLink(), subCategory.getDiscription(), subCategory.getDetailDiscription(), sellRate, displayRate,subCategory.getFirmId(),subCategory.getFirmLat(),subCategory.getFirmLng(),subCategory.getFirmAddress(),subCategory.getFrimPincode(),subCategory.getColors(),subCategory.getImages(),subCategory.getSizes(),subCategory.getWeights(), SubTotal, 1,subCategory.getBrand(),subCategory.getGender(),subCategory.getAge(),subCategory.getAcceptingOrder());
-                            FavouriteList = getFavourite();
-                            FavouriteList.add( cart );
-                            String favourite = gson.toJson( FavouriteList );
-                            localStorage.setFavourite( favourite );
-                            ((AddorRemoveCallbacks) DetailsActivity.this).onAddProduct();
-                            getFavourites();
-                            Toast.makeText( DetailsActivity.this, "Added to Wishlist", Toast.LENGTH_SHORT ).show();
-                        }
-                    } else {
-                        Toast.makeText( DetailsActivity.this, "This item can`t be add please remove item and try again", Toast.LENGTH_SHORT ).show();
+        layout_action_favourite.setOnClickListener(v -> {
+            if (subCategory != null && FavQuantity == 0) {
+                sellRate = subCategory.getSellRate();
+                displayRate = subCategory.getDisplayRate();
+                FavQuantity = 1;
+                if (subCategory.getId() != 0 && subCategory.getName() != null && subCategory.getLink2() != null && subCategory.getDiscription() != null && sellRate != 0 && subCategory.getDisplayRate() != 0 && subCategory.getFirmId() != null) {
+                    SubTotal = (sellRate * FavQuantity);
+                    if (DetailsActivity.this instanceof DetailsActivity) {
+                        Subcategory cart = new Subcategory(subCategory.getId(),subCategory.getSubcategoryid(),subCategory.getLastUpdate(),subCategory.getSearchKey(), subCategory.getName(), subCategory.getProductUniquekey(), subCategory.getLink2(),  subCategory.getLink3(),  subCategory.getLink4(),subCategory.getShieldLink(), subCategory.getDiscription(), subCategory.getDetailDiscription(), sellRate, displayRate,subCategory.getFirmId(),subCategory.getFirmLat(),subCategory.getFirmLng(),subCategory.getFirmAddress(),subCategory.getFrimPincode(),subCategory.getColors(),subCategory.getImages(),subCategory.getSizes(),subCategory.getWeights(), SubTotal, 1,subCategory.getBrand(),subCategory.getGender(),subCategory.getAge(),subCategory.getAcceptingOrder());
+                        FavouriteList = getFavourite();
+                        FavouriteList.add( cart );
+                        String favourite = gson.toJson( FavouriteList );
+                        localStorage.setFavourite( favourite );
+                        ((AddorRemoveCallbacks) DetailsActivity.this).onAddProduct();
+                        getFavourites();
+                        Toast.makeText( DetailsActivity.this, "Added to Wishlist", Toast.LENGTH_SHORT ).show();
                     }
-                }else{
-                    View currentFocus = (DetailsActivity.this).getCurrentFocus();
-                    if (currentFocus != null) {
-                        currentFocus.clearFocus();
-                    }
-                    for (int i = 0; i < FavouriteList.size(); i++) {
-                        if (FavouriteList.get(i).getId()==subCategory.getId()&&FavouriteList.get(i).getName().equalsIgnoreCase(subCategory.getName())&&FavouriteList.get(i).getSellRate()==subCategory.getSellRate()) {
-                            FavouriteList.remove(FavouriteList.get(i));
-                            Gson gson = new Gson();
-                            String favourite = gson.toJson(FavouriteList);
-                            Log.d("FAVOURITE", favourite);
-                            localStorage.setFavourite(favourite);
-                            getFavourites();
-                            Toast.makeText( DetailsActivity.this, "Removed from Wishlist", Toast.LENGTH_SHORT ).show();
-                        }
+                } else {
+                    Toast.makeText( DetailsActivity.this, "This item can`t be add please remove item and try again", Toast.LENGTH_SHORT ).show();
+                }
+            }else{
+                View currentFocus = (DetailsActivity.this).getCurrentFocus();
+                if (currentFocus != null) {
+                    currentFocus.clearFocus();
+                }
+                for (int i = 0; i < FavouriteList.size(); i++) {
+                    if (FavouriteList.get(i).getId()==subCategory.getId()&&FavouriteList.get(i).getName().equalsIgnoreCase(subCategory.getName())&&FavouriteList.get(i).getSellRate()==subCategory.getSellRate()) {
+                        FavouriteList.remove(FavouriteList.get(i));
+                        Gson gson = new Gson();
+                        String favourite = gson.toJson(FavouriteList);
+                        Log.d("FAVOURITE", favourite);
+                        localStorage.setFavourite(favourite);
+                        getFavourites();
+                        Toast.makeText( DetailsActivity.this, "Removed from Wishlist", Toast.LENGTH_SHORT ).show();
                     }
                 }
             }
@@ -464,55 +463,16 @@ public class DetailsActivity extends BaseActivity {
                 }
             }
         });
-    }
 
-    private void getSubCategory(int subcategoryid) {
-        ProductApi mService = ApiClient.getClient().create(ProductApi.class);
-        Call<ArrayList<SubcategoryResponse>> call = mService.getSubCategorysBySub_id(subcategoryid);
-        call.enqueue(new Callback<ArrayList<SubcategoryResponse>>() {
-            @SuppressLint("WrongConstant")
-            @Override
-            public void onResponse(Call<ArrayList<SubcategoryResponse>> call, Response<ArrayList<SubcategoryResponse>> response) {
-                int statusCode = response.code();
-                if (statusCode == 200) {
-                    if(response.body()!=null&&response.body().size()!=0){
-                        List<Subcategory> list = new ArrayList<>();
-                        List<Subcategory> filteredList = new ArrayList<>();
-                        for (SubcategoryResponse example : response.body()) {
-                            for (Subcategory subcategory : example.getSubcategory()) {
-                                for (Map map : Constants.NEARBY_VENDERS_LOCATION) {
-                                    if (map.getFirm_id().equalsIgnoreCase(subcategory.getFirmId())) {
-                                        list.add(subcategory);
-                                        Set<Subcategory> newList = new LinkedHashSet<>(list);
-                                        filteredList = new ArrayList<>(newList);
-                                    }
-                                }
-                            }
-                        }
-                        if(filteredList!=null&&filteredList.size()!=0) {
-                            Constants.SUBCATEGORYs = filteredList;
-                            subcategory_recycler.setVisibility( GONE);
-                            //   no_vender_found.setVisibility(View.GONE);
-                            subcategory_recycler.setVisibility(View.VISIBLE);
-                            subcategory_recycler.setHasFixedSize(true);
-                            // subcategory_recycler.setLayoutManager(new GridLayoutManager( VendersSubCategoryActivity.this,2));
-                            SubcategoryAdapter mAdapter = new SubcategoryAdapter(DetailsActivity.this, filteredList);
-                            subcategory_recycler.setAdapter(mAdapter);
-                        }else{
-                            //no_vender_found.setVisibility(View.VISIBLE);
-                            subcategory_recycler.setVisibility( GONE);
-                        }
-                    }else{
-                        // no_result_found.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    Toast.makeText( DetailsActivity.this, R.string.failed_due_to + statusCode, Toast.LENGTH_LONG).show();
-                }
+        NestedScrollView nested_content = findViewById(R.id.nested_scroll_view);
+        nested_content.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if (scrollY < oldScrollY) { // up
+                animateBottomAnchor(false);
+                //animateHeader(false);
             }
-
-            @Override
-            public void onFailure(Call<ArrayList<SubcategoryResponse>> call, Throwable t) {
-                System.out.println("Suree : " + t.getMessage());
+            if (scrollY > oldScrollY) { // down
+                animateBottomAnchor(true);
+                // animateHeader(true);
             }
         });
     }
@@ -563,8 +523,6 @@ public class DetailsActivity extends BaseActivity {
         int moveY = hide ? (2 * bottom_anchor.getHeight()) : 0;
         bottom_anchor.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
     }
-
-    boolean isSearchBarHide = false;
 
     private void getCart() {
         cartList = new ArrayList<>();
@@ -960,7 +918,7 @@ public class DetailsActivity extends BaseActivity {
 
                 holder.name.setText(product.getName());
                 holder.item_short_desc.setText(product.getDiscription());
-                holder.discription.setText(product.getDetailDiscription());
+                //holder.discription.setText(product.getDetailDiscription());
                 if(product.getImages()!=null&&product.getImages().size()!=0){
                     holder.progress_dialog.setVisibility( GONE );
                     Glide.with(context).load(product.getImages().get( 0 ).getImage()).into(holder.imageView);
@@ -974,7 +932,9 @@ public class DetailsActivity extends BaseActivity {
                     discount = (product.getDisplayRate() - product.getSellRate());
                     displayrate = (product.getDisplayRate());
                     discountPercentage = (discount * 100 / displayrate);
-                    holder.discount.setText("Save " + discountPercentage + " %");
+                    if(discountPercentage!=0&&discountPercentage>0){
+                        holder.discount.setText(discountPercentage + " %"+" Off " );
+                    }
                 }
             }
 
@@ -1102,7 +1062,6 @@ public class DetailsActivity extends BaseActivity {
                 Intent intent = new Intent(context, DetailsActivity.class);
                 bundle.putSerializable("SubCategory",productList.get(position));
                 intent.putExtras(bundle);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             } );
         }
@@ -1168,9 +1127,8 @@ public class DetailsActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id==android.R.id.home){
-            this.finish();
+           finish();
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

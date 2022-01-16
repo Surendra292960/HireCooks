@@ -17,7 +17,6 @@ import com.test.sample.hirecooks.Activity.Users.UserSignInActivity;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.BaseActivity;
-import com.test.sample.hirecooks.Utils.EncryptPassword;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 
@@ -28,7 +27,6 @@ public class LandingScreen extends BaseActivity {
     private User user;
     private ProgressBarUtil progressBarUtil;
     private static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
-    private EncryptPassword encryptPassword;
 
     @SuppressLint("NewApi")
     @Override
@@ -37,7 +35,6 @@ public class LandingScreen extends BaseActivity {
         setContentView(R.layout.activity_landing_screen);
         user = SharedPrefManager.getInstance(this).getUser();
         try {
-            encryptPassword = new EncryptPassword();
         } catch (Exception e) {
             e.printStackTrace();
         }

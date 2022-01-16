@@ -21,9 +21,6 @@ public class FullScreenVideo extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_full_screen_video );
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("");
         initViews();
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){

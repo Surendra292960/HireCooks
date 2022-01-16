@@ -1,7 +1,6 @@
 package com.test.sample.hirecooks.Activity.Users.FirmUsers;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,38 +11,26 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.SearchView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.cardview.widget.CardView;
 import androidx.core.view.MenuItemCompat;
-import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.bumptech.glide.Glide;
-import com.test.sample.hirecooks.Activity.SubCategory.SubCategoryActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Models.Users.Example;
+import com.test.sample.hirecooks.Models.Users.UserResponse;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.APIUrl;
-import com.test.sample.hirecooks.Utils.OnButtonClickListener;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.UserApi;
-import com.test.sample.hirecooks.databinding.ActivityFirmUserReportBinding;
-import com.test.sample.hirecooks.databinding.ActivitySubCategoryBinding;
 import com.test.sample.hirecooks.databinding.ActivityUsersBinding;
 import com.test.sample.hirecooks.databinding.EditSubcategoryAlertBinding;
-import com.test.sample.hirecooks.databinding.ItemHorizontalLayoutBinding;
-import com.test.sample.hirecooks.databinding.RecyclerviewAddressBinding;
 import com.test.sample.hirecooks.databinding.RecyclerviewProfilesBinding;
 
 import java.util.ArrayList;
@@ -56,10 +43,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.paytm.pgsdk.easypay.manager.PaytmAssist.getContext;
-
 public class FirmUserReportScreen extends AppCompatActivity {
-    private FirmUserAdapter adapter;
+    //private FirmUserAdapter adapter;
     private ProgressBarUtil progressBarUtil;
     private List<User> filtereduserList;
     private User user;
@@ -92,8 +77,8 @@ public class FirmUserReportScreen extends AppCompatActivity {
 
         final LinearLayoutManager layoutParams = new LinearLayoutManager(this);
         usersBinding.usersListRecyclerView.setLayoutManager(layoutParams);
-        adapter = new FirmUserAdapter(this,filtereduserList);
-        usersBinding.usersListRecyclerView.setAdapter(adapter);
+       /* adapter = new FirmUserAdapter(this,filtereduserList);
+        usersBinding.usersListRecyclerView.setAdapter(adapter);*/
         usersBinding.usersListRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -125,17 +110,17 @@ public class FirmUserReportScreen extends AppCompatActivity {
     private void getUsers(String firmId) {
         progressBarUtil.showProgress();
         UserApi service = ApiClient.getClient().create(UserApi.class);
-        Call<List<Example>> call = service.getUserByFirmId(firmId);
-        call.enqueue(new Callback<List<Example>>() {
+        Call<List<UserResponse>> call = service.getUserByFirmId(firmId);
+        call.enqueue(new Callback<List<UserResponse>>() {
             @SuppressLint("ShowToast")
             @Override
-            public void onResponse(@NonNull Call<List<Example>> call, @NonNull Response<List<Example>> response) {
+            public void onResponse(@NonNull Call<List<UserResponse>> call, @NonNull Response<List<UserResponse>> response) {
                 if (response.code() == 200) {
                     filtereduserList = new ArrayList<>(  );
                     List<User> usersList = new ArrayList<>(  );
                     progressBarUtil.hideProgress();
                     usersBinding.swipeToRefresh.onFinishTemporaryDetach();
-                    for (Example example:response.body()){
+                    for (UserResponse example:response.body()){
                         for(User user:example.getUsers()){
                             if(user.getUserType().equalsIgnoreCase( "Employee" )||user.getUserType().equalsIgnoreCase( "Rider" )){
                                 usersList.add( user );
@@ -144,8 +129,8 @@ public class FirmUserReportScreen extends AppCompatActivity {
                             }
                         }
                         if(filtereduserList!=null&&filtereduserList.size()!=0){
-                            adapter = new FirmUserAdapter( FirmUserReportScreen.this, filtereduserList);
-                            usersBinding.usersListRecyclerView.setAdapter(adapter);
+                           /* adapter = new FirmUserAdapter( FirmUserReportScreen.this, filtereduserList);
+                            usersBinding.usersListRecyclerView.setAdapter(adapter);*/
                         }
                     }
                 }
@@ -153,7 +138,7 @@ public class FirmUserReportScreen extends AppCompatActivity {
 
             @SuppressLint("ShowToast")
             @Override
-            public void onFailure(@NonNull Call<List<Example>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<UserResponse>> call, @NonNull Throwable t) {
                 progressBarUtil.hideProgress();
             }
         });
@@ -197,9 +182,9 @@ public class FirmUserReportScreen extends AppCompatActivity {
                 }
             }
 
-            adapter = new FirmUserAdapter ( FirmUserReportScreen.this, filteredList);
+            /*adapter = new FirmUserAdapter ( FirmUserReportScreen.this, filteredList);
             usersBinding.usersListRecyclerView.setAdapter (adapter);
-            adapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();*/
 
         }catch (Exception e){
             e.printStackTrace();
@@ -228,7 +213,7 @@ public class FirmUserReportScreen extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class FirmUserAdapter extends RecyclerView.Adapter<FirmUserAdapter.ViewHolder> {
+   /* public class FirmUserAdapter extends RecyclerView.Adapter<FirmUserAdapter.ViewHolder> {
         private List<User> users;
         private Context mCtx;
 
@@ -304,7 +289,6 @@ public class FirmUserReportScreen extends AppCompatActivity {
                     Bundle bundle = new Bundle(  );
                     bundle.putSerializable( "FirmUser",userResponse );
                     intent.putExtras( bundle );
-                    intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity( intent);
                 }
                 catch (Exception ex) {
@@ -326,5 +310,5 @@ public class FirmUserReportScreen extends AppCompatActivity {
                 binding = bind;
             }
         }
-    }
+    }*/
 }

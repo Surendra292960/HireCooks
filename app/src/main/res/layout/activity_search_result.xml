@@ -6,15 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.mancj.materialsearchbar.MaterialSearchBar
-        android:id="@+id/searchBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:mt_navIconEnabled="false"
-        android:elevation="5dp"
-        android:fadeScrollbars="false"
-        app:mt_suggestionsAnimationSpeed="@integer/icon_animation_duration"
-        app:mt_placeholder="" />
+
 
     <FrameLayout
         android:layout_width="match_parent"

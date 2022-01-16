@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.SpannableString;
-import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,77 +25,80 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.widget.NestedScrollView;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.gson.Gson;
 import com.bumptech.glide.Glide;
-import com.test.sample.hirecooks.Activity.AddorRemoveCallbacks;
 import com.test.sample.hirecooks.Activity.Orders.PlaceOrderActivity;
-import com.test.sample.hirecooks.Activity.ProductDatails.DetailsActivity;
-import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
+import com.test.sample.hirecooks.Activity.Search.SearchResultActivity;
+import com.test.sample.hirecooks.Adapter.SubCategory.SubcategoryAdapter;
 import com.test.sample.hirecooks.Models.Category.Category;
+import com.test.sample.hirecooks.Models.Chat.ListObject;
 import com.test.sample.hirecooks.Models.Filter;
-import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
-import com.test.sample.hirecooks.Models.SubCategory.SubcategoryResponse;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
-import com.test.sample.hirecooks.RoomDatabase.LocalStorage.LocalStorage;
 import com.test.sample.hirecooks.Utils.BaseActivity;
-import com.test.sample.hirecooks.Utils.Constants;
+import com.test.sample.hirecooks.Utils.NetworkUtil;
 import com.test.sample.hirecooks.Utils.Preferences;
-import com.test.sample.hirecooks.WebApis.ProductApi;
+import com.test.sample.hirecooks.Utils.SharedPrefManager;
+import com.test.sample.hirecooks.ViewModel.ViewModel;
 import com.test.sample.hirecooks.databinding.ActivitySubCategoryBinding;
-import com.test.sample.hirecooks.databinding.ItemHorizontalLayoutBinding;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
 import de.hdodenhof.circleimageview.CircleImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import static android.view.View.GONE;
 
 public class SubCategoryActivity extends BaseActivity {
     private List<Subcategory> cartList;
     private Category category;
-    private List<SubcategoryResponse> examples;
     private List<Subcategory> filteredList;
-    private SubcategoryAdapter mAdapter;
-    private List<String> suggestList=new ArrayList<>();
     private static User vender1 = new User();
-    private ProductApi mService;
-    private ActivitySubCategoryBinding subCategoryBinding;
+    private ActivitySubCategoryBinding binding;
+    private ViewModel viewModel;
+    private User user;
 
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        subCategoryBinding = ActivitySubCategoryBinding.inflate(getLayoutInflater());
-        View view = subCategoryBinding.getRoot();
+        binding = ActivitySubCategoryBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
         setContentView(view);
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("");
+        viewModel=new ViewModelProvider(SubCategoryActivity.this).get(ViewModel.class);
+        user = SharedPrefManager.getInstance(this).getUser();
         this.getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        getSubCategoryViews();
+    }
+
+    public void getSubCategoryViews() {
         getCart();
-        subCategoryBinding.footerView.checkout.setOnClickListener(v -> startActivity( new Intent( SubCategoryActivity.this, PlaceOrderActivity.class ) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK) ));
+        binding.mToolbarInterface.mToolbar.setVisibility(View.VISIBLE);
+        binding.mToolbarInterface.headerLay.setVisibility(View.VISIBLE);
+        binding.footerView.checkout.setOnClickListener(v -> startActivity( new Intent( SubCategoryActivity.this, PlaceOrderActivity.class )));// .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK) ));
+        binding.mToolbarInterface.search.setOnClickListener(v -> startActivity( new Intent( SubCategoryActivity.this, SearchResultActivity.class )));// .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK) ));
+        binding.mToolbarInterface.goBack.setOnClickListener(view1 -> finish());
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null&&Constants.NEARBY_VENDERS_LOCATION !=null) {
-            category = (Category) bundle.getSerializable("Video");
-            if(category!=null){
+        if (bundle != null) {
+            category = (Category) bundle.getSerializable("Category");
+        }
+        if(NetworkUtil.checkInternetConnection(this)) {
+            binding.subcategoryLayout.setVisibility( View.VISIBLE );
+            binding.noInternetConnectionLayout.setVisibility(View.GONE );
+            if(category!=null) {
                 getSubCategory(category.getId());
             }else {
                 Toast.makeText( this, "Comming soon", Toast.LENGTH_SHORT ).show();
             }
+        }
+        else {
+            binding.subcategoryLayout.setVisibility( View.GONE );
+            binding.noInternetConnectionLayout.setVisibility( View.VISIBLE );
         }
 
         NestedScrollView nested_content = findViewById(R.id.nested_scroll_view);
@@ -108,31 +109,47 @@ public class SubCategoryActivity extends BaseActivity {
             }
             if (scrollY > oldScrollY) { // down
                 animateBottomAnchor(true);
-               // animateHeader(true);
+                // animateHeader(true);
             }
         });
-        subCategoryBinding.swipeToRefresh.setOnRefreshListener(() -> new Handler().postDelayed(() -> {
-            subCategoryBinding.swipeToRefresh.setRefreshing(false);
+        binding.swipeToRefresh.setOnRefreshListener(() -> new Handler().postDelayed(() -> {
+            binding.swipeToRefresh.setRefreshing(false);
             if(category!=null&&category.getId()!=0){
                 getSubCategory(category.getId());
             }
         }, 3000));
-        subCategoryBinding.headerView.sortLayout.setOnClickListener(v -> {
+
+        binding.mToolbarInterface.sortLayout.setOnClickListener(v -> {
             List<String> prices = Arrays.asList(new String[]{"0-0", "0-100", "101-200", "201-1000"});
             if (!Preferences.filters.containsKey(Filter.INDEX_PRICE)) {
                 Preferences.filters.put(Filter.INDEX_PRICE, new Filter("Price", prices, new ArrayList()));
             }
-
             SortSheetDialog bottomSheet = new SortSheetDialog(SubCategoryActivity.this, Preferences.filters);
             bottomSheet.show(getSupportFragmentManager(), "ModalBottomSheet");
-        });  subCategoryBinding.headerView.genderLayout.setOnClickListener(v -> {
+        }); binding.mToolbarInterface.genderLayout.setOnClickListener(v -> {
             GenderSheetDialog bottomSheet = new GenderSheetDialog(SubCategoryActivity.this,getList());
             bottomSheet.show(getSupportFragmentManager(), "ModalBottomSheet");
-        });
-        subCategoryBinding.headerView.filterLayout.setOnClickListener(v -> {
+        }); binding.mToolbarInterface.filterLayout.setOnClickListener(v -> {
             FilterSheetDialog bottomSheet = new FilterSheetDialog(SubCategoryActivity.this,getList());
             bottomSheet.show(getSupportFragmentManager(), "ModalBottomSheet");
         });
+    }
+
+    @SuppressLint("NewApi")
+    private void getSubCategory(int id) {
+        viewModel.getNearBySubCategoryBySubId(user.getId(), id).observe(this, subcategoryResponses -> subcategoryResponses.forEach(subcategory ->{
+            if(subcategory.getSubcategory()!=null&&subcategory.getSubcategory().size()!=0){
+                filteredList = subcategory.getSubcategory();
+                binding.recyclerview.setVisibility(View.VISIBLE);
+                binding.noResultFound.setVisibility(GONE);
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
+                SubcategoryAdapter mAdapter = new SubcategoryAdapter( this, subcategory.getSubcategory(), ListObject.TYPE_CARDVIEW_GRID);
+                binding.recyclerview.setLayoutManager(gridLayoutManager);
+                binding.recyclerview.setAdapter(mAdapter);
+            }else {
+                binding.noResultFound.setVisibility(View.VISIBLE);
+            }
+        }));
     }
 
     private boolean priceContains(List<String> prices, Double price) {
@@ -173,8 +190,8 @@ public class SubCategoryActivity extends BaseActivity {
     private void animateBottomAnchor(final boolean hide) {
         if (isBottomAnchorNavigationHide && hide || !isBottomAnchorNavigationHide && !hide) return;
         isBottomAnchorNavigationHide = hide;
-        int moveY = hide ? (2 * subCategoryBinding.footerView.bottomAnchor.getHeight()) : 0;
-        subCategoryBinding.footerView.bottomAnchor.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+        int moveY = hide ? (2 * binding.footerView.bottomAnchor.getHeight()) : 0;
+        binding.footerView.bottomAnchor.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
     }
 
    /* boolean isHeaderHide = false;
@@ -182,8 +199,8 @@ public class SubCategoryActivity extends BaseActivity {
     private void animateHeader(final boolean hide) {
         if (isHeaderHide && hide || !isHeaderHide && !hide) return;
         isHeaderHide = hide;
-        int moveY = hide ? -(2 * subCategoryBinding.headerView.headerLay.getHeight()) : 0;
-        subCategoryBinding.headerView.headerLay.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+        int moveY = hide ? -(2 * binding.headerView.headerLay.getHeight()) : 0;
+        binding.headerView.headerLay.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
     }*/
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -225,77 +242,16 @@ public class SubCategoryActivity extends BaseActivity {
             animateBottomAnchor(false);
             for(int i=0; i<cartList.size(); i++){
                 if(cartList.get(i).getItemQuantity()<=1&&cartList.size()<=1){
-                    subCategoryBinding.bottomAnchorLayout.setAnimation( AnimationUtils.loadAnimation(this,R.anim.fade_transition_animation));
+                    binding.bottomAnchorLayout.setAnimation( AnimationUtils.loadAnimation(this,R.anim.fade_transition_animation));
                 }
             }
-            subCategoryBinding.bottomAnchorLayout.setVisibility(View.VISIBLE);
-            subCategoryBinding.footerView.checkoutAmount.setText("₹  " + getTotalPrice());
-            subCategoryBinding.footerView.itemCount.setText("" + cartCount());
+            binding.bottomAnchorLayout.setVisibility(View.VISIBLE);
+            binding.footerView.checkoutAmount.setText("₹  " + getTotalPrice());
+            binding.footerView.itemCount.setText("" + cartCount());
 
         } else {
-            subCategoryBinding.bottomAnchorLayout.setVisibility( GONE);
+            binding.bottomAnchorLayout.setVisibility( GONE);
         }
-    }
-
-    private void getSubCategory(int id) {
-        mService = ApiClient.getClient().create(ProductApi.class);
-        Call<ArrayList<SubcategoryResponse>> call = mService.getSubCategorysBySub_id(id);
-        call.enqueue(new Callback<ArrayList<SubcategoryResponse>>() {
-            @SuppressLint("WrongConstant")
-            @Override
-            public void onResponse(Call<ArrayList<SubcategoryResponse>> call, Response<ArrayList<SubcategoryResponse>> response) {
-                int statusCode = response.code();
-                if (statusCode == 200) {
-                    examples = new ArrayList<>(  );
-                    examples = response.body();
-                    if(examples!=null&&examples.size()!=0){
-                        for(SubcategoryResponse example:examples){
-                            if(example.getError()==false){
-                                if(example.getSubcategory()!=null&&example.getSubcategory().size()!=0){
-                                    List<Subcategory> list = new ArrayList<>();
-                                    filteredList = new ArrayList<>();
-                                    for (Subcategory subcategory : example.getSubcategory()) {
-                                        for (Map map : Constants.NEARBY_VENDERS_LOCATION) {
-                                            if (map.getFirm_id().equalsIgnoreCase(subcategory.getFirmId())) {
-                                                list.add(subcategory);
-                                                Set<Subcategory> newList = new LinkedHashSet<>(list);
-                                                filteredList = new ArrayList<>(newList);
-                                            }
-                                        }
-                                    }
-                                    if(filteredList!=null&&filteredList.size()!=0) {
-                                        getSubCategoryData(filteredList);
-                                    }else{
-                                        subCategoryBinding.noResultFound.setVisibility(View.VISIBLE);
-                                        subCategoryBinding.subcategoryRecycler.setVisibility( GONE);
-                                    }
-                                }else{
-                                    subCategoryBinding.noResultFound.setVisibility(View.VISIBLE);
-                                }
-                            }else{
-                                Toast.makeText( SubCategoryActivity.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
-                                subCategoryBinding.noResultFound.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    }
-                } else {
-                    Toast.makeText( SubCategoryActivity.this, R.string.failed_due_to + statusCode, Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<SubcategoryResponse>> call, Throwable t) {
-                System.out.println("Suree : " + t.getMessage());
-            }
-        });
-    }
-
-    private void getSubCategoryData(List<Subcategory> filteredList) {
-        Constants.SUBCATEGORYs = filteredList;
-        subCategoryBinding.noVenderFound.setVisibility(View.GONE);
-        subCategoryBinding.subcategoryRecycler.setVisibility(View.VISIBLE);
-        mAdapter = new SubcategoryAdapter( SubCategoryActivity.this, filteredList);
-        subCategoryBinding.subcategoryRecycler.setAdapter(mAdapter);
     }
 
     private void startSearch(CharSequence text) {
@@ -314,8 +270,8 @@ public class SubCategoryActivity extends BaseActivity {
                     }
                 }
 
-                SubcategoryAdapter mAdapter = new SubcategoryAdapter( SubCategoryActivity.this, subcategory);
-                subCategoryBinding.subcategoryRecycler.setAdapter(mAdapter);
+                SubcategoryAdapter mAdapter = new SubcategoryAdapter( SubCategoryActivity.this, subcategory, ListObject.TYPE_CARDVIEW_GRID);
+                binding.recyclerview.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
             }
         } catch (Exception e) {
@@ -329,7 +285,7 @@ public class SubCategoryActivity extends BaseActivity {
         getCart();
     }
 
-    public class SubcategoryAdapter extends RecyclerView.Adapter<SubCategoryActivity.SubcategoryAdapter.MyViewHolder> {
+    /*public class SubcategoryAdapter extends RecyclerView.Adapter<SubCategoryActivity.SubcategoryAdapter.MyViewHolder> {
         List<Subcategory> productList;
         Context context;
         private static final int LOADING = 0;
@@ -538,7 +494,7 @@ public class SubCategoryActivity extends BaseActivity {
                 binding = bind;
             }
         }
-    }
+    }*/
 
     public static class SortSheetDialog extends BottomSheetDialogFragment {
         private Context mCtx;
@@ -647,8 +603,8 @@ public class SubCategoryActivity extends BaseActivity {
             itemsArr3 = sortfilteredList.toArray(itemsArr3);
             Arrays.sort(itemsArr3, Subcategory.priceComparator);
             sortfilteredList = Arrays.asList(itemsArr3);
-            SubcategoryAdapter subcategoryAdapter = new SubcategoryAdapter(this,sortfilteredList);
-            subCategoryBinding.subcategoryRecycler.setAdapter(subcategoryAdapter);
+            SubcategoryAdapter subcategoryAdapter = new SubcategoryAdapter(this,sortfilteredList, ListObject.TYPE_CARDVIEW_GRID);
+            binding.recyclerview.setAdapter(subcategoryAdapter);
         }else if(!mString.equalsIgnoreCase("Price")){
             List<Subcategory> sortfilteredList = new ArrayList<>();
             if (!mString.isEmpty()) {
@@ -664,8 +620,8 @@ public class SubCategoryActivity extends BaseActivity {
             itemsArr3 = sortfilteredList.toArray(itemsArr3);
             Arrays.sort(itemsArr3, Subcategory.genderComparator);
             sortfilteredList = Arrays.asList(itemsArr3);
-            SubcategoryAdapter subcategoryAdapter = new SubcategoryAdapter(this,sortfilteredList);
-            subCategoryBinding.subcategoryRecycler.setAdapter(subcategoryAdapter);
+            SubcategoryAdapter subcategoryAdapter = new SubcategoryAdapter(this,sortfilteredList, ListObject.TYPE_CARDVIEW_GRID);
+            binding.recyclerview.setAdapter(subcategoryAdapter);
         }
     }
 
@@ -794,7 +750,7 @@ public class SubCategoryActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id==android.R.id.home){
-            this.finish();
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

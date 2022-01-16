@@ -22,7 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
-import com.test.sample.hirecooks.Models.MapLocationResponse.Result;
+import com.test.sample.hirecooks.Models.MapLocationResponse.MapResponse;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.Constants;
@@ -192,11 +192,11 @@ public class SignupAddressActivity extends BaseActivity {
 
     public void postMapDetails(final Map postMaps) {
         MapApi mapApi = ApiClient.getClient().create(MapApi.class);
-        Call<Result> postMapDetailsResponse = mapApi.addMapDetails(postMaps.getLatitude(),postMaps.getLongitude(),postMaps.getAddress(),postMaps.getSubAddress(),
+        Call<MapResponse> postMapDetailsResponse = mapApi.addMapDetails(postMaps.getLatitude(),postMaps.getLongitude(),postMaps.getAddress(),postMaps.getSubAddress(),
                 String.valueOf(postMaps.getPincode()),postMaps.getPlaceId(),postMaps.getUserId(),postMaps.getFirm_id());
-        postMapDetailsResponse.enqueue(new Callback<Result>() {
+        postMapDetailsResponse.enqueue(new Callback<MapResponse>() {
             @Override
-            public void onResponse(@NonNull Call<Result> call, @NonNull Response<Result> response) {
+            public void onResponse(@NonNull Call<MapResponse> call, @NonNull Response<MapResponse> response) {
                 int statusCode = response.code();
                 if(statusCode == 200) {
                     try{
@@ -213,7 +213,7 @@ public class SignupAddressActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<MapResponse> call, @NonNull Throwable t) {
                 ShowToast("Please Check Internet Connection");
             }
         });

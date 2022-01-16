@@ -65,10 +65,6 @@ public class AddCookImages extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_add_cook_images );
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Add Cooks Images");
-
         iniViews();
 
         Bundle bundle = getIntent().getExtras();

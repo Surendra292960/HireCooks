@@ -10,23 +10,30 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 public class Image implements Serializable {
-
+    @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
     @Expose
     private int id;
     @SerializedName("subcategory_id")
     @Expose
+    @ColumnInfo(name = "subcategory_id")
     private int subcategoryId;
     @SerializedName("image")
     @Expose
+    @ColumnInfo(name = "image")
     private String image;
     @SerializedName("x_id")
     @Expose
+    @ColumnInfo(name = "x_id")
     private String xId;
     @SerializedName("colorName")
     @Expose
+    @ColumnInfo(name = "colorName")
     private String colorName;
 
     private boolean isSelected = false;

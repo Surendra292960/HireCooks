@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-public class SubcategoryResponse implements Serializable {
+public class SubcategoryResponse extends Subcategory implements Serializable {
 
     @SerializedName("error")
     @Expose
@@ -16,6 +16,9 @@ public class SubcategoryResponse implements Serializable {
     @SerializedName("subcategory")
     @Expose
     private List<Subcategory> subcategory = null;
+    @SerializedName("has_more")
+    @Expose
+    public Boolean has_more;
 
     public Boolean getError() {
         return error;

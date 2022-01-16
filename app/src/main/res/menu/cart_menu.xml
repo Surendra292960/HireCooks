@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/action_cart"
+    <item android:id="@+id/cart_destination"
         android:title="@string/cart"
         android:icon="@drawable/ic_menu_notifications"
         app:showAsAction="collapseActionView|ifRoom" />
 
-    <item android:id="@+id/action_searchresult"
+    <item android:id="@+id/search_destination"
         android:title="@string/search_products"
         android:icon="@drawable/ic_search"
         app:showAsAction="collapseActionView|ifRoom"/>

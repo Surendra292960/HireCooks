@@ -3,6 +3,7 @@ package com.test.sample.hirecooks.Activity.Cooks;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -15,13 +16,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.test.sample.hirecooks.Activity.Orders.PlaceOrderActivity;
+import com.test.sample.hirecooks.Activity.Search.SearchResultActivity;
+import com.test.sample.hirecooks.Activity.Users.FirmUsers.FirmUserSignupActivity;
 import com.test.sample.hirecooks.Adapter.Cooks.CooksAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
-import com.test.sample.hirecooks.Models.Users.Example;
+import com.test.sample.hirecooks.Models.Users.UserResponse;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.Models.cooks.Cooks;
 import com.test.sample.hirecooks.R;
@@ -30,7 +35,9 @@ import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.NetworkUtil;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
+import com.test.sample.hirecooks.ViewModel.ViewModel;
 import com.test.sample.hirecooks.WebApis.UserApi;
+import com.test.sample.hirecooks.databinding.ActivitySubCategoryBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,79 +49,69 @@ import retrofit2.Response;
 
 public class CooksActivity extends BaseActivity {
     private ProgressBarUtil progressBarUtil;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView profile_list_recycler_view;
     private Cooks cooks;
     private String type;
     private User user;
-    private LinearLayout cook_profile_layout,no_internet_connection_layout;
+    private ViewModel viewModel;
+    private ActivitySubCategoryBinding binding;
     private List<User> allCook,filterCook,searchList,cook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-        this.getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Nearby Cooks");
-        initViews( );
-        if(NetworkUtil.checkInternetConnection(CooksActivity.this)) {
-            cook_profile_layout.setVisibility( View.VISIBLE );
-            no_internet_connection_layout.setVisibility( View.GONE );
-            Bundle bundle = getIntent().getExtras();
-            if (bundle != null) {
-                cooks = (Cooks) bundle.getSerializable("Cooks");
-                type= bundle.getString("type");
-                if (cooks != null) {
-                }
-                if(type!=null){
-                    Objects.requireNonNull(getSupportActionBar()).setTitle(type);
-                }
+        binding = ActivitySubCategoryBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+        progressBarUtil = new ProgressBarUtil(this);
+        user = SharedPrefManager.getInstance(this).getUser();
+        viewModel = new ViewModelProvider(this).get(ViewModel.class);
+        binding.mToolbarInterface.mToolbar.setVisibility(View.VISIBLE);
+        binding.mToolbarInterface.search.setOnClickListener(v -> startActivity( new Intent( this, SearchResultActivity.class )));
+        binding.add.setOnClickListener(v -> startActivity( new Intent( this, FirmUserSignupActivity.class )));
+        binding.mToolbarInterface.goBack.setOnClickListener(view1 -> finish());
+        checkInternet();
+        Bundle bundle = getIntent().getExtras();
+        if(bundle!=null){
+            cooks = (Cooks) bundle.getSerializable("Cooks");
+            type= bundle.getString("type");
+            if (cooks != null) {
             }
-
-            getUsers();
+            if(type!=null){
+                // Objects.requireNonNull(getSupportActionBar()).setTitle(type);
+            }
         }
-        else {
-            cook_profile_layout.setVisibility( View.GONE );
-            no_internet_connection_layout.setVisibility( View.VISIBLE );
-        }
+        binding.swipeToRefresh.setOnRefreshListener(() -> new Handler().postDelayed(() -> {
+            binding.swipeToRefresh.setRefreshing(false);
+            checkInternet();
+        }, 3000));
     }
 
-    private void initViews() {
-            user = SharedPrefManager.getInstance( CooksActivity.this ).getUser();
-            progressBarUtil = new ProgressBarUtil(this);
-        cook_profile_layout = findViewById(R.id.cook_profile_layout);
-        no_internet_connection_layout = findViewById(R.id.no_internet_connection_layout);
-            mSwipeRefreshLayout = findViewById(R.id.swipeToRefresh);
-            profile_list_recycler_view = findViewById(R.id.profile_list_recycler_view);
-            mSwipeRefreshLayout.setColorScheme(R.color.green_light, R.color.red, R.color.style_color_primary);
-            mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mSwipeRefreshLayout.setRefreshing(false);
-                            getUsers();
-                        }
-                    }, 3000);
-                }
-            });
-
+    private void checkInternet(){
+        if(NetworkUtil.checkInternetConnection(this)) {
+            binding.subcategoryLayout.setVisibility( View.VISIBLE );
+            binding.noInternetConnectionLayout.setVisibility(View.GONE );
+            if(user!=null&&user.getFirmId()!=null){
+                getUsers();
+            }
+        }
+        else {
+            binding.subcategoryLayout.setVisibility( View.GONE );
+            binding.noInternetConnectionLayout.setVisibility( View.VISIBLE );
+        }
     }
 
     private void getUsers() {
         progressBarUtil.showProgress();
         UserApi service = ApiClient.getClient().create(UserApi.class);
-        Call<List<Example>> call = service.getUsers();
-        call.enqueue(new Callback<List<Example>>() {
+        Call<List<UserResponse>> call = service.getUsers();
+        call.enqueue(new Callback<List<UserResponse>>() {
             @SuppressLint("ShowToast")
             @Override
-            public void onResponse(@NonNull Call<List<Example>> call, @NonNull Response<List<Example>> response) {
+            public void onResponse(@NonNull Call<List<UserResponse>> call, @NonNull Response<List<UserResponse>> response) {
                 if(response.code()==200){
                     progressBarUtil.hideProgress();
-                    for(Example example:response.body()){
+                    binding.recyclerview.setVisibility(View.VISIBLE);
+                    for(UserResponse example:response.body()){
                         if(!example.getError()){
                             setCookData( example.getUsers());
                         }
@@ -124,7 +121,7 @@ public class CooksActivity extends BaseActivity {
 
             @SuppressLint("ShowToast")
             @Override
-            public void onFailure(@NonNull Call<List<Example>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<UserResponse>> call, @NonNull Throwable t) {
                 progressBarUtil.hideProgress();
                 Toast.makeText(getApplicationContext(), R.string.error + t.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -136,7 +133,7 @@ public class CooksActivity extends BaseActivity {
         filterCook = new ArrayList<>();
         allCook = new ArrayList<>();
         searchList = new ArrayList<>();
-        mSwipeRefreshLayout.onFinishTemporaryDetach();
+        binding.swipeToRefresh.onFinishTemporaryDetach();
         if (userList!= null) {
             for (User userResponse : userList) {
                 if (userResponse.getUserType().equalsIgnoreCase("Cook")) {
@@ -160,13 +157,13 @@ public class CooksActivity extends BaseActivity {
     private void setAdapter(String type, List<User> allCook, List<User> filterCook, List<User> cook) {
         if(type!=null&&allCook!=null&&allCook.size()!=0){
             CooksAdapter adapter = new CooksAdapter(CooksActivity.this, allCook);
-            profile_list_recycler_view.setAdapter(adapter);
+            binding.recyclerview.setAdapter(adapter);
         }else if(type==null&&filterCook!=null&&filterCook.size()!=0){
             CooksAdapter adapter = new CooksAdapter(CooksActivity.this, filterCook);
-            profile_list_recycler_view.setAdapter(adapter);
+            binding.recyclerview.setAdapter(adapter);
         }else if(type==null&&cook!=null&&cook.size()!=0){
             CooksAdapter adapter = new CooksAdapter(CooksActivity.this, filterCook);
-            profile_list_recycler_view.setAdapter(adapter);
+            binding.recyclerview.setAdapter(adapter);
         }
     }
 
@@ -214,7 +211,7 @@ public class CooksActivity extends BaseActivity {
                 }
 
                 CooksAdapter adapter = new CooksAdapter(CooksActivity.this, filterList);
-                profile_list_recycler_view.setAdapter(adapter);
+                binding.recyclerview.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
         } catch (Exception e) {

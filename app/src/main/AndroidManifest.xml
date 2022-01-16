@@ -2,11 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.test.sample.hirecooks">
-    <!--
-         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-         Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the 'MyLocation' functionality.
-    -->
+
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
@@ -17,50 +13,52 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity
-            android:name=".Activity.ProductDatails.ViewPagerActivity"
-            android:exported="true" />
-        <activity android:name=".Activity.Cooks.Video.PickVideoActivity" />
-        <activity android:name=".Activity.Users.FirmUsers.FirmUserReportActivity" />
-        <activity android:name=".Activity.Users.FirmUsers.FirmUserTracking" />
-        <activity android:name=".Activity.Users.FirmUsers.FirmUserActivity" />
-        <activity android:name=".Activity.Cooks.Video.FullScreenVideo" />
-        <activity android:name=".Activity.Cooks.Video.VideoPlayer" />
-        <activity android:name=".Activity.TrackUser.RiderMapLocation" />
-        <activity android:name=".Activity.subscription.SubscriptionActivity" />
-        <activity android:name=".Activity.subscription.DashboardActivity" />
-        <activity android:name=".Activity.ManageAccount.ManageProducts.AddActivity" />
-        <activity android:name=".Activity.ManageAccount.ManageProducts.StartEditSubCategoryActivity" />
-        <activity android:name=".Activity.ManageAccount.ManageProducts.StartEditCategory" />
-        <activity android:name=".Activity.ManageAccount.ManageProducts.EditSubCategoryActivity" />
-        <activity android:name=".Activity.ManageAccount.ManageProducts.EditCategoryActivity" />
-        <activity android:name=".Activity.ManageAccount.ManageProducts.ProductCategoryList" />
-        <activity android:name=".EmailVerification" />
-        <activity android:name=".Activity.Cooks.UpdateCookImage" />
-        <activity android:name=".Activity.Cooks.AddCookImages" />
-        <activity android:name=".Activity.Cooks.CookImagesList" />
-        <activity android:name=".Activity.Cooks.UpdateCookDetails" />
-        <activity android:name=".Activity.Cooks.CooksDetailsActivity" />
-        <activity android:name=".Activity.Users.FirmUsers.FirmUserSignupActivity" />
-        <activity android:name=".Activity.Users.FirmUsers.FirmUserSignupAddressActivity" />
-        <activity android:name=".Activity.Users.FirmUsers.UpdateFirmUser" />
-        <activity android:name=".Activity.Users.FirmUsers.FirmUserReportScreen" />
-        <activity android:name=".Activity.Users.FirmUsers.FirmUserList" />
-        <activity android:name=".Activity.Users.FirmUsers.AllFirmUsersReportActivity" />
-        <activity android:name=".Activity.Users.FirmUsers.AdminChatActivity" />
-        <activity android:name=".Activity.Venders.VendersSubCategory.VendersSubCategoryActivity"/>
+        <activity android:name=".Activity.Category.CategoryActivity" android:exported="true" />
+        <activity android:name=".Activity.ProductDatails.ViewPagerActivity"  android:exported="true" />
+        <activity android:name=".Activity.Cooks.Video.PickVideoActivity"  android:exported="true" />
+        <activity android:name=".Activity.Users.FirmUsers.FirmUserReportActivity"  android:exported="true" />
+        <activity android:name=".Activity.Users.FirmUsers.FirmUserTracking"  android:exported="true" />
+        <activity android:name=".Activity.Cooks.Video.FullScreenVideo"  android:exported="true" />
+        <activity android:name=".Activity.Cooks.Video.VideoPlayer"  android:exported="true" />
+        <activity android:name=".Activity.TrackRider.RiderMapLocation"  android:exported="true" />
+        <activity android:name=".Activity.subscription.SubscriptionActivity"  android:exported="true" />
+        <activity android:name=".Activity.subscription.DashboardActivity"  android:exported="true" />
+        <activity android:name=".Activity.ManageAccount.ManageProducts.AddActivity"  android:exported="true" />
+        <activity android:name=".Activity.ManageAccount.ManageProducts.StartEditSubCategoryActivity"  android:exported="true" />
+        <activity android:name=".Activity.ManageAccount.ManageProducts.StartEditCategory"  android:exported="true" />
+        <activity android:name=".Activity.ManageAccount.ManageProducts.EditSubCategoryActivity"  android:exported="true" />
+        <activity android:name=".Activity.ManageAccount.ManageProducts.EditCategoryActivity"  android:exported="true" />
+        <activity android:name=".Activity.ManageAccount.ManageProducts.EditMenuActivity"  android:exported="true" />
+        <activity android:name=".EmailVerification"  android:exported="true" />
+        <activity android:name=".Activity.Cooks.UpdateCookImage"  android:exported="true" />
+        <activity android:name=".Activity.Cooks.AddCookImages"  android:exported="true" />
+        <activity android:name=".Activity.Cooks.CookImagesList"  android:exported="true" />
+        <activity android:name=".Activity.Cooks.UpdateCookDetails"  android:exported="true" />
+        <activity android:name=".Activity.Cooks.CooksDetailsActivity"  android:exported="true" />
+        <activity android:name=".Activity.Users.FirmUsers.FirmUserSignupActivity"  android:exported="true" />
+        <activity android:name=".Activity.Users.FirmUsers.FirmUserSignupAddressActivity"  android:exported="true" />
+        <activity android:name=".Activity.Users.FirmUsers.UpdateFirmUser"  android:exported="true" />
+        <activity android:name=".Activity.Users.FirmUsers.FirmUserReportScreen"  android:exported="true" />
+        <activity android:name=".Activity.Users.FirmUsers.FirmUserList"  android:exported="true" />
+        <activity android:name=".Activity.Users.FirmUsers.AllFirmUsersReportActivity"  android:exported="true" />
+        <activity android:name=".Activity.Users.FirmUsers.UserActivity"  android:exported="true" />
+        <activity android:name=".Activity.Venders.VendersSubCategory.VendersSubCategoryActivity"  android:exported="true" />
         <activity
             android:name=".Activity.Orders.PlacedOrderSuccessfully"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activity.Orders.PlaceOrderActivity" />
-        <activity android:name=".Activity.Users.UpdateProfile" />
-        <activity android:name=".Activity.ManageAddress.UpdateAddressActivity" />
-        <activity android:name=".Activity.ManageAddress.SecondryAddressActivity" />
-        <activity android:name=".Activity.Favourite.FavouriteActivity" />
+            android:theme="@style/AppTheme.NoActionBar"  android:exported="true" />
+        <activity
+            android:name=".Activity.Orders.PlaceOrderActivity"
+            android:theme="@style/AppTheme"  android:exported="true" />
+        <activity android:name=".Activity.Users.UpdateProfile"  android:exported="true" />
+        <activity android:name=".Activity.ManageAddress.UpdateAddressActivity"  android:exported="true" />
+        <activity android:name=".Activity.ManageAddress.SecondryAddressActivity"  android:exported="true" />
+        <activity android:name=".Activity.Favourite.FavouriteActivity"  android:exported="true" />
         <activity
             android:name=".Activity.Users.ForgotPasswordActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activity.ProductDatails.DetailsActivity">
+            android:theme="@style/AppTheme.NoActionBar"  android:exported="true" />
+        <activity
+            android:name=".Activity.ProductDatails.DetailsActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -85,28 +83,27 @@
         </activity>
         <activity
             android:name=".Activity.Users.SignupAddressActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activity.ManageAddress.SearchAddress" />
-        <activity android:name=".Activity.Orders.RecievedOrderDetails" />
+            android:theme="@style/AppTheme.NoActionBar"  android:exported="true" />
+        <activity android:name=".Activity.ManageAddress.SearchAddress" android:theme="@style/AppTheme.NoActionBar" android:exported="true" />
+        <activity android:name=".Activity.Orders.RecievedOrderDetails"  android:exported="true" />
         <activity
             android:name=".Activity.Orders.RecievedOrderActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
-            android:taskAffinity="" />
-        <activity android:name=".Activity.Orders.MyOrdersActivity"/>
-        <activity android:name=".Activity.Home.CalenderViewActivity" />
-        <activity android:name=".Activity.SubCategory.SubCategoryActivity"/>
-        <activity android:name=".Activity.Cooks.CooksActivity" />
+            android:taskAffinity=""  android:exported="true" />
+        <activity android:name=".Activity.Orders.MyOrdersActivity"  android:exported="true" />
+        <activity android:name=".Activity.Home.CalenderViewActivity"  android:exported="true" />
+        <activity android:name=".Activity.SubCategory.SubCategoryActivity" android:theme="@style/AppTheme.NoActionBar"  android:exported="true" />
+        <activity android:name=".Activity.Cooks.CooksActivity"  android:exported="true" />
         <activity
             android:name=".Activity.Search.SearchResultActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".TestActivity" />
-        <activity android:name=".Activity.Users.UploadImagesActivity" />
-        <activity android:name=".Activity.Menus.MenuActivity" />
-        <activity android:name=".Utils.BaseActivity" />
+            android:theme="@style/AppTheme.NoActionBar"  android:exported="true" />
+        <activity android:name=".TestActivity"  android:exported="true" />
+        <activity android:name=".Activity.Users.UploadImagesActivity"  android:exported="true" />
+        <activity android:name=".Utils.BaseActivity"  android:exported="true" />
         <activity
             android:name=".MapLocation"
-            android:label="@string/title_activity_map_location" />
+            android:label="@string/title_activity_map_location"  android:exported="true" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -118,34 +115,34 @@
         <!--
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_maps_key"  android:exported="true" />
         -->
         <activity
             android:name=".Activity.Chat.ChatActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity android:name=".Activity.Users.UserDetailsActivity" />
-
+            android:theme="@style/AppTheme.NoActionBar"  android:exported="true" />
+        <activity android:name=".Activity.Users.CookDetailsActivity"  android:exported="true" />
         <activity
             android:name=".Activity.IntroSlider.IntroSlider"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"  android:exported="true" />
         <activity
             android:name=".Activity.Users.PhoneVerification"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activity.Users.UsersActivity" />
+            android:theme="@style/AppTheme.NoActionBar"  android:exported="true" />
+        <activity android:name=".Activity.Users.UsersActivity"  android:exported="true" />
         <activity
             android:name=".Activity.Users.UserSignUpActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"  android:exported="true" />
         <activity
             android:name=".Activity.Users.UserSignInActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"  android:exported="true" />
         <activity
             android:name=".Activity.Home.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme"  android:exported="true" />
         <activity
             android:name=".Activity.Home.LandingScreen"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activity.Home.SplashActivity">
+            android:theme="@style/AppTheme.NoActionBar"  android:exported="true" />
+        <activity
+            android:name=".Activity.Home.SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -153,13 +150,13 @@
             </intent-filter>
         </activity>
         <activity android:name="com.facebook.accountkit.ui.AccountKitActivity" />
+
         <meta-data
             android:name="com.facebook.accountkit.ApplicationName"
             android:value="@string/app_name" /> <!-- Facebook -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/FACEBOOK_APP_ID" />
-
         <meta-data
             android:name="com.facebook.accountkit.ClientToken"
             android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
@@ -189,24 +186,26 @@
         <meta-data
             android:name="com.google.android.gms.ads.AD_MANAGER_APP"
             android:value="true" />
-
         <meta-data
             android:name="com.razorpay.ApiKey"
             android:value="rzp_live_KZF11BKNnNOOcy" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.hirecook.fileprovider"
-            android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider> <!-- AlarmService -->
-        <receiver android:name=".Services.GPSReciever.GPSReciever">
+        <receiver
+            android:name=".Services.GPSReciever.GPSReciever"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.location.PROVIDERS_CHANGED" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.location.GPS_ENABLED_CHANGE" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
@@ -218,42 +217,47 @@
                 <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".Services.NotificationReciever.NotificationReciever" />
         <receiver
-            android:name=".Services.NotificationReciever.NotificationReciever" />
-
-        <receiver android:name = ".Services.GPSReciever.MyReceiver">
+            android:name=".Services.GPSReciever.MyReceiver"
+            android:exported="true">
             <intent-filter>
-                <action android:name = "android.net.conn.CONNECTIVITY_CHANGE"
+                <action
+                    android:name="android.net.conn.CONNECTIVITY_CHANGE"
                     tools:ignore="BatteryLife" />
-                <action android:name = "android.net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name=".Notifications.NotificationReciever">
+        <receiver
+            android:name=".Notifications.NotificationReciever"
+            android:exported="true">
             <intent-filter>
-                <action android:name="com.androidbook.intents.testbc"></action>
+                <action android:name="com.androidbook.intents.testbc" />
             </intent-filter>
         </receiver>
 
         <service
             android:name=".Notifications.MyFirebaseMessagingService"
             android:enabled="true"
-            android:exported="false"
+            android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND"
-            android:stopWithTask="false">
+            android:stopWithTask="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
                 <action android:name="com.google.android.c2dm.permission.RECEIVE" />
             </intent-filter>
         </service> <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
-        <service
+        <!--
+  <service
             android:name=".Services.ForegroundService"
             android:enabled="true"
             android:exported="true" />
+        -->
         <service
             android:name=".Services.TrackerService"
             android:enabled="true"
             android:exported="true" />
+
         <uses-library android:name="com.google.android.maps" />
     </application>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -279,8 +283,8 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.SEND_SMS"/>
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -288,6 +292,7 @@
         android:name="android.permission.REAL_GET_TASKS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
 </manifest>

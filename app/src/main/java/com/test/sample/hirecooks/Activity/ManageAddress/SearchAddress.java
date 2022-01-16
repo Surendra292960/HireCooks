@@ -121,9 +121,6 @@ public class SearchAddress extends BaseActivity implements PlacesAutoCompleteAda
         try {
             setContentView(R.layout.activity_search_address);
             this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-            Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-            Objects.requireNonNull(getSupportActionBar()).setTitle("Your Location");
             Bundle bundle = getIntent().getExtras();
             if(bundle!=null){
                 map = (Map) bundle.getSerializable("address_book");

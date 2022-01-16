@@ -29,11 +29,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.Users.FirmUsers.FirmUserSignupActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Models.Users.Example;
+import com.test.sample.hirecooks.Models.Users.UserResponse;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.APIUrl;
-import com.test.sample.hirecooks.Utils.OnButtonClickListener;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.UserApi;
@@ -58,7 +57,6 @@ public class UsersActivity extends AppCompatActivity {
     private List<User> usersList;
     private View appRoot;
     private FloatingActionButton add_user;
-    private OnButtonClickListener listener;
     private User user;
     private ArrayList<User> filterusersList;
 
@@ -126,17 +124,17 @@ public class UsersActivity extends AppCompatActivity {
     private void getUsers() {
         progressBarUtil.showProgress();
         UserApi service = ApiClient.getClient().create(UserApi.class);
-        Call<List<Example>> call = service.getUsers();
-        call.enqueue(new Callback<List<Example>>() {
+        Call<List<UserResponse>> call = service.getUsers();
+        call.enqueue(new Callback<List<UserResponse>>() {
             @SuppressLint("ShowToast")
             @Override
-            public void onResponse(@NonNull Call<List<Example>> call, @NonNull Response<List<Example>> response) {
+            public void onResponse(@NonNull Call<List<UserResponse>> call, @NonNull Response<List<UserResponse>> response) {
                 if (response.code() == 200) {
                     progressBarUtil.hideProgress();
                     mSwipeRefreshLayout.onFinishTemporaryDetach();
                     usersList = new ArrayList<>(  );
                    filterusersList = new ArrayList<>(  );
-                  for(Example example:response.body()){
+                  for(UserResponse example:response.body()){
                    if(!example.getError()){
                       for(User users:example.getUsers()){
                           if(users.getUserType().equalsIgnoreCase( "Admin" )||users.getUserType().equalsIgnoreCase( "Manager" )){
@@ -156,7 +154,7 @@ public class UsersActivity extends AppCompatActivity {
 
             @SuppressLint("ShowToast")
             @Override
-            public void onFailure(@NonNull Call<List<Example>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<UserResponse>> call, @NonNull Throwable t) {
                 progressBarUtil.hideProgress();
                 Toast.makeText(getApplicationContext(), R.string.error + t.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -325,12 +323,12 @@ public class UsersActivity extends AppCompatActivity {
 
     private void deleteUser(User user) {
         UserApi mService = ApiClient.getClient().create( UserApi.class );
-        Call<List<Example>> call = mService.deleteUser( user.getId() );
-        call.enqueue( new Callback<List<Example>>() {
+        Call<List<UserResponse>> call = mService.deleteUser( user.getId() );
+        call.enqueue( new Callback<List<UserResponse>>() {
             @Override
-            public void onResponse(Call<List<Example>> call, Response<List<Example>> response) {
+            public void onResponse(Call<List<UserResponse>> call, Response<List<UserResponse>> response) {
                 if(response.code()==200){
-                    for(Example example:response.body()){
+                    for(UserResponse example:response.body()){
                         Toast.makeText( UsersActivity.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
                         if(!example.getError()){
                            getUsers();
@@ -340,7 +338,7 @@ public class UsersActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Example>> call, Throwable t) {
+            public void onFailure(Call<List<UserResponse>> call, Throwable t) {
             System.out.println( "Suree : "+t.getMessage() );
             }
         } );

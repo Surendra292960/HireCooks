@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,13 +7,24 @@
     android:id="@+id/appRoot"
     tools:context=".Activity.Orders.RecievedOrderActivity">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:theme="@style/AppTheme.PopupOverlay">
+
+            <include
+                android:id="@+id/toolbar_interface"
+                layout="@layout/custome_toobar_layout" />
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeToRefresh"
@@ -38,7 +49,7 @@
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:visibility="visible"
-                            android:id="@+id/edit_category_recycler"
+                            android:id="@+id/edit_menue_recycler"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scrollbars="none"
@@ -75,6 +86,6 @@
             app:backgroundTint="@color/style_color_primary"
             tools:ignore="VectorDrawableCompat" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

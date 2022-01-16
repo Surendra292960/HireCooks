@@ -12,6 +12,7 @@
     <string name="sign_up" translatable="false">Sign Up</string>
     <string name="sign_in" translatable="false">Sign In</string>
     <string name="please_wait" translatable="false">Please wait . . . </string>
+    <string name="crash_toast_text" translatable="false">Oops Crashe Occurred</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
@@ -238,13 +239,20 @@
     <string name="filter" translatable="false">Filter</string>
     <string name="sort" translatable="false">Sort</string>
     <string name="category" translatable="false">Category</string>
+    <string name="_4_3" translatable="false">4.3 *</string>
+    <string name="_50_ratings_u0026_15_reviews" translatable="false"><![CDATA[50 ratings & 15 reviews]]></string>
+    <string name="your_location" translatable="false">Your Location</string>
+    <string name="select_delivery_location" translatable="false">Select delivery location</string>
+    <string name="current_location" translatable="false">Current location</string>
 
     <string-array name="genders">
-        <item>Select</item>
+        <item>Select Gender</item>
+        <item>Not_Available</item>
         <item>Female</item>
         <item>Male</item>
         <item>Boys</item>
         <item>Girls</item>
+
     </string-array>
 
     <string-array name="prices">

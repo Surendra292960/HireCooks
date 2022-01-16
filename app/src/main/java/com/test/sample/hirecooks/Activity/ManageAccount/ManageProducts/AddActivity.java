@@ -8,10 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,12 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.SubCategory.Color;
 import com.test.sample.hirecooks.Models.SubCategory.ColorExample;
@@ -36,24 +30,23 @@ import com.test.sample.hirecooks.Models.SubCategory.SizeExample;
 import com.test.sample.hirecooks.Models.SubCategory.Weight;
 import com.test.sample.hirecooks.Models.SubCategory.WeightExample;
 import com.test.sample.hirecooks.Models.Users.User;
-import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
+import com.test.sample.hirecooks.ViewModel.ViewModel;
 import com.test.sample.hirecooks.WebApis.ProductApi;
+import com.test.sample.hirecooks.databinding.ActivityAddBinding;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
+import androidx.lifecycle.ViewModelProvider;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AddActivity extends AppCompatActivity {
-    private TextInputEditText colorName, color,weight_kg,dozon,pond,size_number,size_text;
-    private TextView submit;
     private Color mColor;
     private List<ColorExample> colorExampleList;
     private List<Color> colorList;
@@ -64,7 +57,6 @@ public class AddActivity extends AppCompatActivity {
     private List<WeightExample> weightExampleList;
     private List<Weight> weightList;
     private ProgressBarUtil progressBarUtil;
-    private ImageView imageView;
     private Size mSize;
     private Weight mWeight;
     private Image mImage;
@@ -72,36 +64,24 @@ public class AddActivity extends AppCompatActivity {
     private final int PICK_IMAGE_REQUEST = 71;
     private String sUrl;
     private User user;
-    private LinearLayout image_lay;
     //Firebase
     private FirebaseStorage storage;
     private StorageReference storageReference;
-    private Button btnUpload,btnChoose;
+    private ActivityAddBinding binding;
+    private ViewModel viewModel;
    // private Video mCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_add );
-        Objects.requireNonNull( getSupportActionBar() ).setHomeButtonEnabled( true );
-        Objects.requireNonNull( getSupportActionBar() ).setDisplayHomeAsUpEnabled( true );
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Add");
+        binding = ActivityAddBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+        viewModel = new ViewModelProvider(this).get(ViewModel.class);
+        user = SharedPrefManager.getInstance( this ).getUser();
         progressBarUtil = new ProgressBarUtil( this );
-        user = SharedPrefManager.getInstance(AddActivity.this).getUser();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-        btnChoose = findViewById(R.id.btnChoose);
-        btnUpload = findViewById(R.id.btnUpload);
-        colorName = findViewById( R.id.color_name );
-        color = findViewById( R.id.color );
-        weight_kg = findViewById( R.id.weight_kg );
-        dozon = findViewById( R.id.dozon );
-        pond = findViewById( R.id.pond );
-        imageView = findViewById( R.id.imageView );
-        size_number = findViewById( R.id.size_number );
-        size_text = findViewById( R.id.size_text );
-        image_lay = findViewById( R.id.image_lay );
-        submit = findViewById( R.id.submit );
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -112,42 +92,42 @@ public class AddActivity extends AppCompatActivity {
            // mCategory = (Video) bundle.getSerializable( "Video" );
         }
         if (mColor != null) {
-            colorName.setVisibility( View.VISIBLE );
-            color.setVisibility( View.VISIBLE );
-            colorName.setText( mColor.getColorName() );
-            color.setText( mColor.getColor() );
+            binding.colorName.setVisibility( View.VISIBLE );
+            binding.color.setVisibility( View.VISIBLE );
+            binding.colorName.setText( mColor.getColorName() );
+            binding.color.setText( mColor.getColor() );
         } else if (mSize != null) {
-            size_number.setVisibility( View.VISIBLE );
-            size_text.setVisibility( View.VISIBLE );
-            size_number.setText(""+ mSize.getSizeNumber() );
-            size_text.setText( mSize.getSizeText() );
+            binding.sizeNumber.setVisibility( View.VISIBLE );
+            binding.sizeText.setVisibility( View.VISIBLE );
+            binding.sizeNumber.setText(""+ mSize.getSizeNumber() );
+            binding.sizeText.setText( mSize.getSizeText() );
         } else if (mWeight != null) {
-            pond.setVisibility( View.VISIBLE );
-            weight_kg.setVisibility( View.VISIBLE );
-            dozon.setVisibility( View.VISIBLE );
-            weight_kg.setText(""+mWeight.getKg() );
-            dozon.setText(""+ mWeight.getDozan() );
-            pond.setText(""+ mWeight.getPond() );
+            binding.pond.setVisibility( View.VISIBLE );
+            binding.weightKg.setVisibility( View.VISIBLE );
+            binding.dozon.setVisibility( View.VISIBLE );
+            binding.weightKg.setText(""+mWeight.getKg() );
+            binding.dozon.setText(""+ mWeight.getDozan() );
+            binding.pond.setText(""+ mWeight.getPond() );
         }else if (mImage != null) {
-            image_lay.setVisibility( View.VISIBLE );
-            Glide.with(this).load( mImage.getImage() ).into( imageView );
+            binding.imageLay.setVisibility( View.VISIBLE );
+            Glide.with(this).load( mImage.getImage() ).into( binding.imageView );
         }
 
-        btnChoose.setOnClickListener(new View.OnClickListener() {
+        binding.btnChoose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 chooseImage();
             }
         });
 
-        btnUpload.setOnClickListener(new View.OnClickListener() {
+        binding.btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 uploadImage();
             }
         });
 
-        submit.setOnClickListener( new View.OnClickListener() {
+        binding.submit.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mColor!=null){
@@ -188,7 +168,7 @@ public class AddActivity extends AppCompatActivity {
                             Toast.makeText(AddActivity.this, "Uploaded successfully", Toast.LENGTH_SHORT).show();
                             final Uri downloadUrl = uri;
                             sUrl = downloadUrl.toString();
-                            Glide.with(AddActivity.this).load( sUrl ).into( imageView );
+                            Glide.with(AddActivity.this).load( sUrl ).into( binding.imageView );
                            // image_Link = sUrl;
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -216,7 +196,7 @@ public class AddActivity extends AppCompatActivity {
             filePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                imageView.setImageBitmap(bitmap);
+                binding.imageView.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -243,8 +223,8 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void colorValidation() {
-        final String color_name = colorName.getText().toString().trim();
-        String color_code = color.getText().toString().trim();
+        final String color_name = binding.colorName.getText().toString().trim();
+        String color_code = binding.color.getText().toString().trim();
         int subcategory_id = mColor.getSubcategoryId();
         String x_id = mColor.getxId();
         if (mColor != null) {
@@ -260,8 +240,8 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void sizeValidation() {
-        final String size_numbers = size_number.getText().toString().trim();
-        String size_texts = size_text.getText().toString().trim();
+        final String size_numbers = binding.sizeNumber.getText().toString().trim();
+        String size_texts = binding.sizeText.getText().toString().trim();
         int subcategory_id = mSize.getSubcategoryId();
         String x_id = mSize.getxId();
         if (mSize != null) {
@@ -276,9 +256,9 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void weightValidation() {
-        final String weight_kgs = weight_kg.getText().toString().trim();
-        String dozons = dozon.getText().toString().trim();
-        String ponds = pond.getText().toString().trim();
+        final String weight_kgs = binding.weightKg.getText().toString().trim();
+        String dozons = binding.dozon.getText().toString().trim();
+        String ponds = binding.pond.getText().toString().trim();
         int subcategory_id = mWeight.getSubcategoryId();
         String x_id = mWeight.getxId();
         if (mWeight != null) {

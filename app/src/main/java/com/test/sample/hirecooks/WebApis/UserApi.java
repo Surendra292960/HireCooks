@@ -7,13 +7,12 @@ import com.test.sample.hirecooks.Models.Chat.Example;
 import com.test.sample.hirecooks.Models.Chat.MessageResponse;
 import com.test.sample.hirecooks.Models.HotelImage;
 import com.test.sample.hirecooks.Models.ImagesResponse.Images;
-import com.test.sample.hirecooks.Models.MenuResponse.Menus;
+import com.test.sample.hirecooks.Models.Menue.MenueResponse;
 import com.test.sample.hirecooks.Models.TokenResponse.TokenResult;
 import com.test.sample.hirecooks.Models.TokenResponse.Tokens;
-
+import com.test.sample.hirecooks.Models.Users.UserResponse;
 import java.util.ArrayList;
 import java.util.List;
-
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -31,37 +30,45 @@ import retrofit2.http.Path;
 
 public interface UserApi {
     @POST("user")
-    Call<List<com.test.sample.hirecooks.Models.Users.Example>> createUser(
-            @Body List<com.test.sample.hirecooks.Models.Users.Example> examples);
+    Call<List<UserResponse>> createUser(
+            @Body List<UserResponse> examples);
 
     @POST("loginProfile")
-    Call<List<com.test.sample.hirecooks.Models.Users.Example>> userLogin(@Body List<com.test.sample.hirecooks.Models.Users.Example> exampleList);
+    Call<List<UserResponse>> userLogin(@Body List<UserResponse> exampleList);
 
     @PUT("user/{id}")
-    Call<List<com.test.sample.hirecooks.Models.Users.Example>> updateUser(
+    Call<List<UserResponse>> updateUser(
             @Path( "id" ) int id,
-            @Body List<com.test.sample.hirecooks.Models.Users.Example> examples);
+            @Body List<UserResponse> examples);
 
     @DELETE("user/{id}")
-    Call<List<com.test.sample.hirecooks.Models.Users.Example>> deleteUser(@Path( "id" ) int id);
+    Call<List<UserResponse>> deleteUser(@Path( "id" ) int id);
 
     @FormUrlEncoded
     @PUT("forgotPassword")
-    Call<List<com.test.sample.hirecooks.Models.Users.Example>> forgotPassword(
+    Call<List<UserResponse>> forgotPassword(
             @Field("email") String email,
             @Field("password") String password);
 
     @FormUrlEncoded
     @POST("phone")
-    Call<List<com.test.sample.hirecooks.Models.Users.Example>> checkUserPhone(@Field( "phone" ) String phone);
+    Call<List<UserResponse>> checkUserPhone(@Field( "phone" ) String phone);
 
     @Retry
     @GET("user")
-    Call<List<com.test.sample.hirecooks.Models.Users.Example>> getUsers();
+    Call<List<UserResponse>> getUsers();
 
     @Retry
-    @GET("menu")
-    Call<Menus> getMenu();
+    @GET("Menue")
+    Call<List<MenueResponse>> getMenue();
+
+    @Retry
+    @GET("Menue")
+    Call<List<MenueResponse>> addMenue();
+
+    @Retry
+    @GET("Menue/{id}")
+    Call<List<MenueResponse>> updateMenus();
 
     @Retry
     @GET("getBanner")
@@ -157,10 +164,10 @@ public interface UserApi {
     Call<List<Example>> startTypingMessage(@Path("id") Integer id, @Body ArrayList<Example> exampleArrayList);
 
     @POST("user/{firm_id}")
-    Call<List<com.test.sample.hirecooks.Models.Users.Example>> getUserByFirmId(@Path( "firm_id" ) String firmId);
+    Call<List<UserResponse>> getUserByFirmId(@Path( "firm_id" ) String firmId);
 
     @DELETE("user/{id}")
-    Call<List<String>> deleteProfile(@Path( "id" ) int id);
+    Call<List<UserResponse>> deleteProfile(@Path( "id" ) int id);
 
     @POST("firmusers")
     Call<List<com.test.sample.hirecooks.Models.FirmUsers.Example>> firmUserSignIn(
@@ -186,4 +193,5 @@ public interface UserApi {
             @Field("to_date") String to_date);
 
     void getCategory(Callback<List<CategoryResponse>> listCallback);
+
 }

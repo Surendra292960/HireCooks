@@ -77,15 +77,13 @@ public class FirmUserTracking extends AppCompatActivity implements OnMapReadyCal
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_firm_user_tracking );
-        Objects.requireNonNull( getSupportActionBar() ).setHomeButtonEnabled( true );
-        Objects.requireNonNull( getSupportActionBar() ).setDisplayHomeAsUpEnabled( true );
         initViews();
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             user = (User) bundle.getSerializable( "FirmUser" );
             if (user != null) {
                 getFirmUserByDate( user.getId(), format2.format( new Date() ), format2.format( new Date() ) );
-                Objects.requireNonNull( getSupportActionBar() ).setTitle( user.getName() );
+                //Objects.requireNonNull( getSupportActionBar() ).setTitle( user.getName() );
                 user_name.setText( user.getName() );
                 if (user.getImage() != null) {
                     if (user.getImage().contains( "https://" )) {

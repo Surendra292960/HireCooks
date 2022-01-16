@@ -1,0 +1,1 @@
+adb shell am instrument -w-e class full.path.and.TestClassName\ 

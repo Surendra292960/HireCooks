@@ -124,7 +124,6 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
         return newCartList;
     }
 
-
     public List<Subcategory> getFavourite() {
         if (localStorage.getFavourite() != null) {
             String jsonFavourite = localStorage.getFavourite();
@@ -191,9 +190,9 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
     public boolean enableGPS() {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         boolean providerEnable = locationManager.isProviderEnabled(locationManager.GPS_PROVIDER);
-       if(providerEnable){
-           return true;
-       }else{
+        if(providerEnable){
+            return true;
+        }else{
             AlertDialog alertDialog = new AlertDialog.Builder(this)
                     .setTitle("GPS Permission")
                     .setMessage("GPS is required for this app")
@@ -203,7 +202,7 @@ public class BaseActivity extends AppCompatActivity implements AddorRemoveCallba
                     }))
                     .setCancelable(false)
                     .show();
-       }
+        }
         return false;
     }
 

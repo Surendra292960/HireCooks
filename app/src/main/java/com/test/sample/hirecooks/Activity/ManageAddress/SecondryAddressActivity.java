@@ -1,54 +1,39 @@
 package com.test.sample.hirecooks.Activity.ManageAddress;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.test.sample.hirecooks.Adapter.Users.AddressAdapter;
-import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
-import com.test.sample.hirecooks.Models.MapLocationResponse.Maps;
+import com.test.sample.hirecooks.Adapter.Users.UserAddressAdapter;
 import com.test.sample.hirecooks.Models.NewOrder.OrdersTable;
 import com.test.sample.hirecooks.Models.Users.User;
-import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.BaseActivity;
-import com.test.sample.hirecooks.Utils.Common;
-import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
-import com.test.sample.hirecooks.WebApis.MapApi;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import com.test.sample.hirecooks.ViewModel.ViewModel;
+import com.test.sample.hirecooks.databinding.ActivitySecondryAddressBinding;
 
 public class SecondryAddressActivity extends BaseActivity {
-    private Button buttonAddAddress;
-    private RecyclerView recyclerView;
     private User userResponse;
-    private ProgressBarUtil progressBarUtil;
-    private MapApi mService = Common.getAPI();;
     private User user;
     private OrdersTable ordersTable;
+    private ActivitySecondryAddressBinding binding;
+    private ViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_secondry_address);
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("My Address");
+        binding = ActivitySecondryAddressBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+        viewModel = new ViewModelProvider(this).get(ViewModel.class);
+        binding.mToolbarInterface.mToolbar.setVisibility(View.VISIBLE);
+        binding.mToolbarInterface.goBack.setOnClickListener(view1 -> finish());
+        user = SharedPrefManager.getInstance(this).getUser();
         initViews();
-        ApiServiceCall();
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
             userResponse = (User)bundle.getSerializable("User");
@@ -56,69 +41,28 @@ public class SecondryAddressActivity extends BaseActivity {
         }
     }
 
+    @SuppressLint("NewApi")
     private void initViews() {
-        progressBarUtil = new ProgressBarUtil( this );
-        user = SharedPrefManager.getInstance( this ).getUser();
-        recyclerView = findViewById(R.id.recyclerview_tasks);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        buttonAddAddress = findViewById(R.id.floating_button_add);
-        buttonAddAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                    Intent intent = new Intent(SecondryAddressActivity.this, SearchAddress.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("User", userResponse);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-            }
+        binding.floatingButtonAdd.setOnClickListener(v->{
+            Intent intent = new Intent(SecondryAddressActivity.this, SearchAddress.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("User", userResponse);
+            intent.putExtras(bundle);
+            startActivity(intent);
         });
-    }
 
-    private void ApiServiceCall() {
-        progressBarUtil.showProgress();
-        mService.getAddressByUserId(user.getId())
-                .subscribeOn( Schedulers.io())
-                .observeOn( AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Maps>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(@NonNull List<Maps> result) {
-                        for(Maps maps:result){
-                            ShowToast( maps.getMessage() );
-                            if(!maps.getError()){
-                                callAdapter(maps.getMaps());
-                            }else{
-                                callAdapter(maps.getMaps());
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        ShowToast(e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        progressBarUtil.hideProgress();
-                    }
-                });
-
-    }
-
-    private void callAdapter(List<Map> result) {
-        AddressAdapter adapter = new AddressAdapter(SecondryAddressActivity.this, result,ordersTable);
-        recyclerView.setAdapter(adapter);
+        viewModel.getAddressByUserId(user.getId()).observe(this, maps -> maps.forEach(map->{
+            if(!map.getError()&&map.getMaps()!=null&&map.getMaps().size()!=0){
+                binding.recyclerview.setVisibility(View.VISIBLE);
+                UserAddressAdapter adapter = new UserAddressAdapter(SecondryAddressActivity.this, map.getMaps(),ordersTable);
+                binding.recyclerview.setAdapter(adapter);
+            }
+        }));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        ApiServiceCall();
     }
 
     @Override

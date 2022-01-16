@@ -5,8 +5,11 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Color implements Serializable {
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+public class Color implements Serializable {
     @SerializedName("id")
     @Expose
     private int id;

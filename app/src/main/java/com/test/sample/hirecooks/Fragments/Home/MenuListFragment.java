@@ -55,7 +55,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -141,7 +140,7 @@ public class MenuListFragment extends Fragment implements UploadCallBack {
                 }else{
                     showalertbox("Logout Firm User First");
                 }
-            } else if (id == R.id.menu_favourite) {
+            } else if (id == R.id.menuelist_destination) {
                 startActivity( new Intent(getActivity(), FavouriteActivity.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
             } else if (id == R.id.menu_terms_and_condition) {
                 startActivity( new Intent(getActivity(), SubscriptionActivity.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -151,7 +150,7 @@ public class MenuListFragment extends Fragment implements UploadCallBack {
                 intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity( intent );
             } else if (id == R.id.menu_myorders) {
-                startActivity(new Intent(getActivity(), MyOrdersActivity.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+                startActivity( new Intent(getActivity(), MyOrdersActivity.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
             } else if (id == R.id.menu_share) {
              /*   Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);

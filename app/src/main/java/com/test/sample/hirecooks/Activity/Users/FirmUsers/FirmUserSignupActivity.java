@@ -18,13 +18,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -38,7 +36,7 @@ import com.hbb20.CountryCodePicker;
 import com.test.sample.hirecooks.Adapter.SpinnerAdapter.UserTypeAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.TokenResponse.TokenResult;
-import com.test.sample.hirecooks.Models.Users.Example;
+import com.test.sample.hirecooks.Models.Users.UserResponse;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.BaseActivity;
@@ -48,7 +46,6 @@ import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.Utils.TrackGPS;
 import com.test.sample.hirecooks.WebApis.UserApi;
-import com.test.sample.hirecooks.databinding.ActivitySignUpBinding;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -92,9 +89,6 @@ public class FirmUserSignupActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView( R.layout.activity_sign_up);
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle( "" );
         this.getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         initializeViews();
 
@@ -279,9 +273,9 @@ public class FirmUserSignupActivity extends BaseActivity {
         phone = ccp.getFullNumberWithPlus();
         phone = phone.replace(" " , "");
 
-        List<Example> exampleList = new ArrayList<>(  );
+        List<UserResponse> exampleList = new ArrayList<>(  );
         List<User> userList = new ArrayList<>(  );
-        Example example = new Example();
+        UserResponse example = new UserResponse();
         User user = new User(  );
         user.setName( name );
         user.setEmail( email );
@@ -298,16 +292,16 @@ public class FirmUserSignupActivity extends BaseActivity {
         FirmUserSignUp(exampleList);
     }
 
-    private void FirmUserSignUp( List<Example> exampleList) {
+    private void FirmUserSignUp( List<UserResponse> exampleList) {
         progressBarUtil.showProgress();
         mService = ApiClient.getClient().create(UserApi.class);
-        Call<List<Example>> call = mService.createUser(exampleList);
-        call.enqueue(new Callback<List<Example>>() {
+        Call<List<UserResponse>> call = mService.createUser(exampleList);
+        call.enqueue(new Callback<List<UserResponse>>() {
             @Override
-            public void onResponse(Call<List<Example>> call, Response<List<Example>> response){
+            public void onResponse(Call<List<UserResponse>> call, Response<List<UserResponse>> response){
                 if(response.code()==200){
                     progressBarUtil.hideProgress();
-                    for(Example example:response.body()){
+                    for(UserResponse example:response.body()){
                         ShowToast(example.getMessage());
                         if(!example.getError()){
                             for(User user: example.getUsers()){
@@ -325,7 +319,7 @@ public class FirmUserSignupActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Example>> call, Throwable t) {
+            public void onFailure(Call<List<UserResponse>> call, Throwable t) {
                 progressBarUtil.hideProgress();
                 System.out.println("Suree: "+t.getMessage());
                 ShowToast("Please Check Intenet Connection");

@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Models.Users.Example;
+import com.test.sample.hirecooks.Models.Users.UserResponse;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
@@ -38,9 +38,6 @@ public class UpdateProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_profile);
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Update Profile");
         initViews();
     }
 
@@ -116,9 +113,9 @@ public class UpdateProfile extends AppCompatActivity {
             bikeNumber = "Not_Available";
         }
 
-        List<Example> exampleList = new ArrayList<>(  );
+        List<UserResponse> exampleList = new ArrayList<>(  );
         List<User> userList = new ArrayList<>(  );
-        Example example = new Example();
+        UserResponse example = new UserResponse();
         User users = new User(  );
         users.setName( name );
         users.setEmail( email );
@@ -136,16 +133,16 @@ public class UpdateProfile extends AppCompatActivity {
         System.out.println( "Suree : "+json );
     }
 
-    private void updateUser(List<Example> exampleList) {
+    private void updateUser(List<UserResponse> exampleList) {
         progressBarUtil.showProgress();
         mService = ApiClient.getClient().create(UserApi.class);
-        Call<List<Example>> call = mService.updateUser(user.getId(),exampleList);
-        call.enqueue(new Callback<List<Example>>() {
+        Call<List<UserResponse>> call = mService.updateUser(user.getId(),exampleList);
+        call.enqueue(new Callback<List<UserResponse>>() {
             @Override
-            public void onResponse(Call<List<Example>> call, Response<List<Example>> response) {
+            public void onResponse(Call<List<UserResponse>> call, Response<List<UserResponse>> response) {
                 if(response.code()==200) {
                     progressBarUtil.hideProgress();
-                    for(Example example:response.body()){
+                    for(UserResponse example:response.body()){
                         Toast.makeText( UpdateProfile.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
                         if(!example.getError()) {
                             for(User user1:example.getUsers()){
@@ -159,7 +156,7 @@ public class UpdateProfile extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Example>> call, Throwable t) {
+            public void onFailure(Call<List<UserResponse>> call, Throwable t) {
                 progressBarUtil.hideProgress();
                 Toast.makeText(UpdateProfile.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }

@@ -3,6 +3,7 @@ package com.test.sample.hirecooks.WebApis;
 import com.test.sample.hirecooks.ApiServiceCall.Retry;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.Category.CategoryResponse;
+import com.test.sample.hirecooks.Models.MapLocationResponse.Example;
 import com.test.sample.hirecooks.Models.SubCategory.ColorExample;
 import com.test.sample.hirecooks.Models.SubCategory.SubcategoryResponse;
 import com.test.sample.hirecooks.Models.SubCategory.ImageExample;
@@ -15,6 +16,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -29,6 +32,27 @@ public interface ProductApi {
     @Retry
     @GET("subCategory")
     Call<ArrayList<SubcategoryResponse>> getSubCategorys();
+
+    @FormUrlEncoded
+    @POST("getNearBySubCategory")
+    Call<List<SubcategoryResponse>> getNearBySubCategory(
+            @Field("latitude") String latitude,
+            @Field("longitude") String longitude);
+
+    @FormUrlEncoded
+    @POST("getNearBySubCategoryBySub_id")
+    Call<List<SubcategoryResponse>> getNearBySubCategoryBySub_id(
+            @Field("latitude") String latitude,
+            @Field("longitude") String longitude,
+            @Field("sub_id") int id);
+
+
+    @FormUrlEncoded
+    @POST("searchNearBySubCategory")
+    Call<List<SubcategoryResponse>> searchNearBySubCategory(
+            @Field("latitude") String latitude,
+            @Field("longitude") String longitude,
+            @Field("search_key") String search_key);
 
     @DELETE("subCategory/{id}")
     Call<ArrayList<SubcategoryResponse>> deleteSubCategory(@Path( "id" ) String product_uniquekey);
@@ -93,4 +117,6 @@ public interface ProductApi {
     @Retry
     @GET("getSubCategorysByFirmId/{firm_id}")
     Call<ArrayList<SubcategoryResponse>> getSubCategorysByFirmId(@Path( "firm_id" ) String id);
+
+    Call<List<SubcategoryResponse>> getNearBySubCategoryByPaging(int i, int firstPage, int pageSize);
 }

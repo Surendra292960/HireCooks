@@ -1,6 +1,6 @@
 package com.test.sample.hirecooks.Services;
-
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -13,6 +13,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -27,15 +28,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
+import com.test.sample.hirecooks.Models.Chat.Example;
+import com.test.sample.hirecooks.Models.Chat.Message;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
-import com.test.sample.hirecooks.Models.MapLocationResponse.Result;
+import com.test.sample.hirecooks.Models.MapLocationResponse.MapResponse;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
 import com.test.sample.hirecooks.WebApis.MapApi;
+import com.test.sample.hirecooks.WebApis.UserApi;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -108,6 +113,7 @@ public class TrackerService extends Service {
                         try{
                             if(user!=null){
                                 setMapDetails(latLng);
+                                getMessages(user.getId());
                             }
                         }catch (Exception e){
                             e.printStackTrace();
@@ -165,14 +171,13 @@ public class TrackerService extends Service {
 
     private void updateMapDetails(final Map updateMaps) {
         MapApi mapApi = ApiClient.getClient().create(MapApi.class);
-        Call<Result> postMapDetailsResponse = mapApi.TrackUser(updateMaps.getUserId(),updateMaps.getLatitude(),updateMaps.getLongitude(),updateMaps.getAddress(),updateMaps.getSubAddress(),String.valueOf(updateMaps.getPincode()),updateMaps.getFirm_id());
-        postMapDetailsResponse.enqueue(new Callback<Result>() {
+        Call<MapResponse> postMapDetailsResponse = mapApi.TrackUser(updateMaps.getUserId(),updateMaps.getLatitude(),updateMaps.getLongitude(),updateMaps.getAddress(),updateMaps.getSubAddress(),String.valueOf(updateMaps.getPincode()),updateMaps.getFirm_id());
+        postMapDetailsResponse.enqueue(new Callback<MapResponse>() {
             @Override
-            public void onResponse(@NonNull Call<Result> call, @NonNull Response<Result> response) {
+            public void onResponse(@NonNull Call<MapResponse> call, @NonNull Response<MapResponse> response) {
                 if(response.code() == 200 && response.body() != null) {
                     try{
-                       System.out.println("Suree : update location ");
-
+                        System.out.println("Suree : update location ");
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -183,8 +188,34 @@ public class TrackerService extends Service {
             }
 
             @Override
-            public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<MapResponse> call, @NonNull Throwable t) {
                 System.out.println("suree: "+t.getMessage());
+            }
+        });
+    }
+
+    private void getMessages(Integer id) {
+        UserApi service = ApiClient.getClient().create(UserApi.class);
+        Call<List<Example>> call = service.getMessages(id);
+        call.enqueue(new Callback<List<Example>>() {
+            @SuppressLint("ShowToast")
+            @Override
+            public void onResponse(@NonNull Call<List<Example>> call, @NonNull Response<List<Example>> response) {
+                int statusCode = response.code();
+                if (statusCode == 200) {
+                    Log.d(TAG,"getMessages");
+                    List<Message> messageList = new ArrayList<>(  );
+                    List<Message> filterMessageList = new ArrayList<>(  );
+                    for (Example messages:response.body()) {
+
+                    }
+                }
+            }
+
+            @SuppressLint("ShowToast")
+            @Override
+            public void onFailure(@NonNull Call<List<Example>> call, @NonNull Throwable t) {
+                Toast.makeText(getApplicationContext(), R.string.error + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -24,7 +23,6 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -39,7 +37,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.hbb20.CountryCodePicker;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.TokenResponse.TokenResult;
-import com.test.sample.hirecooks.Models.Users.Example;
+import com.test.sample.hirecooks.Models.Users.UserResponse;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.BaseActivity;
@@ -235,9 +233,9 @@ public class UserSignUpActivity extends BaseActivity {
         phone = ccp.getFullNumberWithPlus();
         phone = phone.replace(" " , "");
 
-        List<Example> exampleList = new ArrayList<>(  );
+        List<UserResponse> exampleList = new ArrayList<>(  );
         List<User> userList = new ArrayList<>(  );
-        Example example = new Example();
+        UserResponse example = new UserResponse();
         User user = new User(  );
         user.setName( name );
         user.setEmail( email );
@@ -254,16 +252,16 @@ public class UserSignUpActivity extends BaseActivity {
         userSignUp(exampleList);
     }
 
-    private void userSignUp( List<Example> exampleList) {
+    private void userSignUp( List<UserResponse> exampleList) {
        progressBarUtil.showProgress();
         mService = ApiClient.getClient().create(UserApi.class);
-        Call<List<Example>> call = mService.createUser(exampleList);
-        call.enqueue(new Callback<List<Example>>() {
+        Call<List<UserResponse>> call = mService.createUser(exampleList);
+        call.enqueue(new Callback<List<UserResponse>>() {
             @Override
-            public void onResponse(Call<List<Example>> call, Response<List<Example>> response){
+            public void onResponse(Call<List<UserResponse>> call, Response<List<UserResponse>> response){
                 if(response.code()==200){
                     progressBarUtil.hideProgress();
-                    for(Example example:response.body()){
+                    for(UserResponse example:response.body()){
                         ShowToast(example.getMessage());
                         if(!example.getError()){
                           for(User user: example.getUsers()){
@@ -282,7 +280,7 @@ public class UserSignUpActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Example>> call, Throwable t) {
+            public void onFailure(Call<List<UserResponse>> call, Throwable t) {
                 progressBarUtil.hideProgress();
                 System.out.println("Suree: "+t.getMessage());
                 ShowToast("Please Check Intenet Connection");

@@ -33,7 +33,7 @@ import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
-import com.test.sample.hirecooks.Models.MapLocationResponse.Result;
+import com.test.sample.hirecooks.Models.MapLocationResponse.MapResponse;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.Utils.Constants;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
@@ -273,10 +273,10 @@ public class MapLocation extends AppCompatActivity {
     private void updateMapDetails(final Map updateMaps) {
         progressBarUtil.showProgress();
         MapApi mapApi = ApiClient.getClient().create(MapApi.class);
-        Call<Result> postMapDetailsResponse = mapApi.updateMapDetails(updateMaps.getUserId(),updateMaps.getLatitude(),updateMaps.getLongitude(),updateMaps.getAddress(),updateMaps.getSubAddress(),String.valueOf(updateMaps.getPincode()),updateMaps.getPlaceId(),updateMaps.getFirm_id());
-        postMapDetailsResponse.enqueue(new Callback<Result>() {
+        Call<MapResponse> postMapDetailsResponse = mapApi.updateMapDetails(updateMaps.getUserId(),updateMaps.getLatitude(),updateMaps.getLongitude(),updateMaps.getAddress(),updateMaps.getSubAddress(),String.valueOf(updateMaps.getPincode()),updateMaps.getPlaceId(),updateMaps.getFirm_id());
+        postMapDetailsResponse.enqueue(new Callback<MapResponse>() {
             @Override
-            public void onResponse(@NonNull Call<Result> call, @NonNull Response<Result> response) {
+            public void onResponse(@NonNull Call<MapResponse> call, @NonNull Response<MapResponse> response) {
                 progressBarUtil.hideProgress();
                 if(response.code() == 200 && response.body() != null) {
                     try{
@@ -293,7 +293,7 @@ public class MapLocation extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<MapResponse> call, @NonNull Throwable t) {
                 progressBarUtil.hideProgress();
                 Toast.makeText(MapLocation.this,R.string.error+t.getMessage(), Toast.LENGTH_SHORT).show();
                 System.out.println("suree: "+t.getMessage());
@@ -304,10 +304,10 @@ public class MapLocation extends AppCompatActivity {
     private void getMapDetails() {
         progressBarUtil.showProgress();
         MapApi mService = ApiClient.getClient().create(MapApi.class);
-        Call<Result> call = mService.getMapDetails(user.getId());
-        call.enqueue(new Callback<Result>() {
+        Call<MapResponse> call = mService.getMapDetails(user.getId());
+        call.enqueue(new Callback<MapResponse>() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
+            public void onResponse(Call<MapResponse> call, Response<MapResponse> response) {
                 if (response.code() == 200 && response.body() != null && response.body().getMaps() != null) {
                     progressBarUtil.hideProgress();
                     try{
@@ -338,7 +338,7 @@ public class MapLocation extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<MapResponse> call, Throwable t) {
                 progressBarUtil.hideProgress();
                 Toast.makeText(MapLocation.this,R.string.error+t.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -348,10 +348,10 @@ public class MapLocation extends AppCompatActivity {
     public void postMapDetails(final Map postMaps) {
         progressBarUtil.showProgress();
         MapApi mapApi = ApiClient.getClient().create(MapApi.class);
-        Call<Result> postMapDetailsResponse = mapApi.addMapDetails(postMaps.getLatitude(),postMaps.getLongitude(),postMaps.getAddress(),postMaps.getSubAddress(),String.valueOf(postMaps.getPincode()),postMaps.getPlaceId(),postMaps.getUserId(),postMaps.getFirm_id());
-        postMapDetailsResponse.enqueue(new Callback<Result>() {
+        Call<MapResponse> postMapDetailsResponse = mapApi.addMapDetails(postMaps.getLatitude(),postMaps.getLongitude(),postMaps.getAddress(),postMaps.getSubAddress(),String.valueOf(postMaps.getPincode()),postMaps.getPlaceId(),postMaps.getUserId(),postMaps.getFirm_id());
+        postMapDetailsResponse.enqueue(new Callback<MapResponse>() {
             @Override
-            public void onResponse(@NonNull Call<Result> call, @NonNull Response<Result> response) {
+            public void onResponse(@NonNull Call<MapResponse> call, @NonNull Response<MapResponse> response) {
                 progressBarUtil.hideProgress();
                 if(response.code() == 200 && response.body() != null) {
                     try{
@@ -367,7 +367,7 @@ public class MapLocation extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<MapResponse> call, @NonNull Throwable t) {
                 progressBarUtil.hideProgress();
                 Toast.makeText(MapLocation.this,R.string.error+t.getMessage(), Toast.LENGTH_SHORT).show();
             }

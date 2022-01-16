@@ -30,8 +30,10 @@ import com.test.sample.hirecooks.Models.FirmUsers.Example;
 import com.test.sample.hirecooks.Models.FirmUsers.Firmuser;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.Utils.NetworkUtil;
 import com.test.sample.hirecooks.Utils.ProgressBarUtil;
 import com.test.sample.hirecooks.WebApis.UserApi;
+import com.test.sample.hirecooks.databinding.TableLayoutBinding;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -61,22 +63,24 @@ public class FirmUserReportActivity extends AppCompatActivity {
     private UserApi mService;
     private Example exampleList;
     private int mYear, mMonth, mDay, mHour, mMinute;
+    private View mToolabr ,goBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_firm_user_report );
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle( "");
-        initViews();
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
             user = (User) bundle.getSerializable( "FirmUser" );
             if(user!=null){
-                Objects.requireNonNull(getSupportActionBar()).setTitle( user.getName() );
-                //getFirmUserByDate( user.getId(), format2.format( new Date() ), format2.format( new Date() ) );
+
             }
+        }
+        if(NetworkUtil.checkInternetConnection(this)) {
+            initViews();
+        }
+        else {
+            Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -85,22 +89,24 @@ public class FirmUserReportActivity extends AppCompatActivity {
         generate_report = findViewById( R.id.generate_report );
         progress_btn = findViewById( R.id.progress_btn );
         report_list_recycler_view = findViewById( R.id.report_list_recycler_view );
-        generate_report.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(generate_report.getText().toString().equalsIgnoreCase( "Select Date" )){
-                    selectDate( "Report" );
-                }else if(generate_report.getText().toString().equalsIgnoreCase( "Generate Report" )){
-                    progressBarUtil.showProgress();
-                    if(generateFirmUserReport(exampleList.getFirmusers())){
-                        sendEmailattache();
-                    }else{
-                        progressBarUtil.hideProgress();
-                        Toast.makeText( FirmUserReportActivity.this, "Failed to load File", Toast.LENGTH_SHORT ).show();
-                    }
+        View view = findViewById(R.id.m_toolbar_interface);
+        mToolabr = view.findViewById(R.id.m_toolbar);
+        mToolabr.setVisibility(View.VISIBLE);
+        goBack = view.findViewById(R.id.go_back);
+        goBack.setOnClickListener(v->finish());
+        generate_report.setOnClickListener(v -> {
+            if(generate_report.getText().toString().equalsIgnoreCase( "Select Date" )){
+                selectDate( "Report" );
+            }else if(generate_report.getText().toString().equalsIgnoreCase( "Generate Report" )){
+                progressBarUtil.showProgress();
+                if(generateFirmUserReport(exampleList.getFirmusers())){
+                    sendEmailattache();
+                }else{
+                    progressBarUtil.hideProgress();
+                    Toast.makeText( FirmUserReportActivity.this, "Failed to load File", Toast.LENGTH_SHORT ).show();
                 }
             }
-        } );
+        });
     }
 
     private void sendEmailattache() {
@@ -274,8 +280,7 @@ public class FirmUserReportActivity extends AppCompatActivity {
         @NonNull
         @Override
         public FirmUserReportActivity.FirmUserReportAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.table_layout, parent, false);
-            return new FirmUserReportActivity.FirmUserReportAdapter.ViewHolder(v);
+            return new FirmUserReportActivity.FirmUserReportAdapter.ViewHolder(TableLayoutBinding.inflate(getLayoutInflater()));
         }
 
         @SuppressLint("SetTextI18n")
@@ -283,17 +288,17 @@ public class FirmUserReportActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull final FirmUserReportActivity.FirmUserReportAdapter.ViewHolder holder, final int position) {
             final Firmuser firmuser = firmuserList.get(position);
            if(firmuser!=null){
-               holder.id.setText(""+firmuser.getId());
-               holder.name.setText(firmuser.getName());
-               holder.user_type.setText(firmuser.getUserType());
-               holder.login_date.setText(firmuser.getSigninDate());
-               holder.logout_date.setText(firmuser.getSignoutDate() );
-               holder.login_address.setText(firmuser.getSigninAddress());
-               holder.logout_address.setText(firmuser.getSignoutAddress());
-               holder.firm_id.setText(firmuser.getFirmId());
-               holder.status.setText(firmuser.getStatus());
-               holder.user_id.setText(firmuser.getUserId());
-               holder.created_at.setText(firmuser.getCreatedAt());
+               holder.binding.id.setText(""+firmuser.getId());
+               holder.binding.name.setText(firmuser.getName());
+               holder.binding.userType.setText(firmuser.getUserType());
+               holder.binding.loginDate.setText(firmuser.getSigninDate());
+               holder.binding.logoutDate.setText(firmuser.getSignoutDate() );
+               holder.binding.loginAddress.setText(firmuser.getSigninAddress());
+               holder.binding.logoutAddress.setText(firmuser.getSignoutAddress());
+               holder.binding.firmId.setText(firmuser.getFirmId());
+               holder.binding.status.setText(firmuser.getStatus());
+               holder.binding.userId.setText(firmuser.getUserId());
+               holder.binding.createdAt.setText(firmuser.getCreatedAt());
            }
         }
         @Override
@@ -302,21 +307,11 @@ public class FirmUserReportActivity extends AppCompatActivity {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            private TextView id,name,user_type,login_date,logout_date,login_address,logout_address,firm_id,status,user_id,created_at;
+            TableLayoutBinding binding;
 
-            ViewHolder(View itemView) {
-                super(itemView);
-                name = itemView.findViewById(R.id.name);
-                id = itemView.findViewById(R.id.id);
-                user_type = itemView.findViewById(R.id.user_type);
-                login_address = itemView.findViewById(R.id.login_address);
-                logout_address = itemView.findViewById(R.id.logout_address);
-                login_date = itemView.findViewById(R.id.login_date);
-                logout_date = itemView.findViewById(R.id.logout_date);
-                firm_id = itemView.findViewById(R.id.firm_id);
-                status = itemView.findViewById(R.id.status);
-                user_id = itemView.findViewById(R.id.user_id);
-                created_at = itemView.findViewById(R.id.created_at);
+            ViewHolder(@NonNull TableLayoutBinding itemView) {
+                super(itemView.getRoot());
+                binding = itemView;
             }
         }
     }

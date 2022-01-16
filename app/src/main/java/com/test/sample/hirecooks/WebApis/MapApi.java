@@ -1,11 +1,10 @@
 package com.test.sample.hirecooks.WebApis;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Example;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Maps;
-import com.test.sample.hirecooks.Models.MapLocationResponse.Result;
+import com.test.sample.hirecooks.Models.MapLocationResponse.MapResponse;
 
 import java.util.List;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -37,7 +36,7 @@ public interface MapApi {
 
     @FormUrlEncoded
     @POST("createMap")
-    Call<Result> addMapDetails(
+    Call<MapResponse> addMapDetails(
             @Field("latitude") String latitude,
             @Field("longitude") String longitude,
             @Field("address") String address,
@@ -52,7 +51,7 @@ public interface MapApi {
 
     @FormUrlEncoded
     @PUT("updateMap/{userId}")
-    Call<Result> updateMapDetails(
+    Call<MapResponse> updateMapDetails(
             @Path("userId") int userId,
             @Field("latitude") String latitude,
             @Field("longitude") String longitude,
@@ -64,7 +63,7 @@ public interface MapApi {
 
     @FormUrlEncoded
     @PUT("updateUserMap/{userId}")
-    Call<Result> TrackUser(
+    Call<MapResponse> TrackUser(
             @Path("userId") int userId,
             @Field("latitude") String latitude,
             @Field("longitude") String longitude,
@@ -75,7 +74,7 @@ public interface MapApi {
 
     @FormUrlEncoded
     @POST("getMapByuserId")
-    Call<Result> getMapDetails(@Field("userId") int userId);
+    Call<MapResponse> getMapDetails(@Field("userId") int userId);
 
     @FormUrlEncoded
     @POST("getNearByUsers")

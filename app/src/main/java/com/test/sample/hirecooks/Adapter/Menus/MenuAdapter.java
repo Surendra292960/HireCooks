@@ -1,45 +1,50 @@
 package com.test.sample.hirecooks.Adapter.Menus;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
-import com.test.sample.hirecooks.Models.MenuResponse.Menu;
-import com.test.sample.hirecooks.Models.cooks.Cook;
+import com.test.sample.hirecooks.Activity.Category.CategoryActivity;
+import com.test.sample.hirecooks.Activity.SubCategory.SubCategoryActivity;
+import com.test.sample.hirecooks.Models.Menue.Menue;
 import com.test.sample.hirecooks.R;
-
-import org.w3c.dom.Text;
+import com.test.sample.hirecooks.databinding.VendersRecyclerviewBinding;
 
 import java.util.List;
 
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder>  {
     private Context mCtx;
-    private List<Menu> menus;
+    private List<Menue> menus;
 
-    public MenuAdapter(Context mCtx, List<Menu> menus) {
+    public MenuAdapter(Context mCtx) {
         this.mCtx = mCtx;
-        this.menus = menus;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_feed, parent, false);
-        return new MenuAdapter.ViewHolder(v);
+        return new MenuAdapter.ViewHolder(VendersRecyclerviewBinding.inflate(LayoutInflater.from(mCtx)));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final Menu menu = menus.get(position);
-        holder.menu_name.setText(menu.getName());
-        holder.menu_descount.setText(menu.getDiscount());
-        Glide.with(mCtx).load(menu.getLink()).into(holder.ivFeedCenter);
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        final Menue menu = menus.get(position);
+        holder.binding.menueName.setVisibility(View.VISIBLE);
+        holder.binding.menueName.setText(menu.getName());
+        Glide.with(mCtx).load(menu.getLink()).into(holder.binding.vendersImage);
+        holder.binding.venderLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(mCtx, CategoryActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Menue",menus.get(position));
+            intent.putExtras(bundle);
+            mCtx.startActivity(intent);
+        });
     }
 
     @Override
@@ -47,19 +52,17 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder>  {
         return menus==null ? 0 : menus.size();
     }
 
+    public void setMenue(List<Menue> menus) {
+        this.menus = menus;
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivFeedCenter;
-        ImageView ivUserProfile;
-        TextView menu_name,menu_descount,menu_price;
+        VendersRecyclerviewBinding binding;
 
-        public ViewHolder(@NonNull View view) {
-            super(view);
-
-            ivFeedCenter = view.findViewById(R.id.ivFeedCenter);
-            ivUserProfile = view.findViewById(R.id.ivUserProfile);
-            menu_name = view.findViewById(R.id.menu_name);
-            menu_descount = view.findViewById(R.id.menu_descount);
-            menu_price = view.findViewById(R.id.menu_price);
+        public ViewHolder(@NonNull VendersRecyclerviewBinding recyclerviewBinding) {
+            super(recyclerviewBinding.getRoot());
+            binding = recyclerviewBinding;
         }
     }
 }

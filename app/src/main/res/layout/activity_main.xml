@@ -1,27 +1,18 @@
-<com.test.sample.flowingdrawer_core.FlowingDrawer
+<androidx.drawerlayout.widget.DrawerLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawerlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false"
-    android:clipToPadding="false"
-    app:edPosition="1"
-    app:edMenuSize="260dp">
+    android:clipToPadding="false">
 
     <!--content-->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <FrameLayout
-            android:id="@+id/frame_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
 
         <com.test.sample.hirecooks.Activity.Home.NoScrollViewPager
             android:id="@+id/viewpager"
@@ -29,20 +20,20 @@
             android:layout_height="match_parent"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bye_burger"
+            android:id="@+id/bottomNavigationView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:backgroundTint="@color/white"
-            android:background="@drawable/boottom_navigation"
+            android:background="@drawable/edit_text_design"
             app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
             app:hideOnScroll="true"
             app:itemIconTint="@drawable/tab_color"
             app:itemTextColor="@drawable/tab_color"
             app:layout_scrollFlags="scroll|enterAlways"
             app:menu="@menu/bottom_nav_menu"
+            android:layout_margin="@dimen/margin_5"
             android:elevation="10dp"/>
-
 
         <include
             android:id="@+id/toolbar_interface"
@@ -50,11 +41,13 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+
     <!--menu-->
-    <com.test.sample.flowingdrawer_core.FlowingMenuLayout
+    <com.google.android.material.navigation.NavigationView
         android:id="@+id/menulayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="start"
         android:background="@color/white">
 
         <FrameLayout
@@ -63,6 +56,6 @@
             android:layout_height="match_parent"
             android:background="@color/white"/>
 
-    </com.test.sample.flowingdrawer_core.FlowingMenuLayout>
+    </com.google.android.material.navigation.NavigationView>
 
-</com.test.sample.flowingdrawer_core.FlowingDrawer>
+</androidx.drawerlayout.widget.DrawerLayout>

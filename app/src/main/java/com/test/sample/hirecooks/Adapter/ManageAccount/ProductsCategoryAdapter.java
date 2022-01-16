@@ -1,74 +1,70 @@
 package com.test.sample.hirecooks.Adapter.ManageAccount;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
+import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.Scene;
-
+import com.bumptech.glide.Glide;
+import com.test.sample.hirecooks.Activity.Category.CategoryActivity;
 import com.test.sample.hirecooks.Activity.ManageAccount.ManageProducts.EditCategoryActivity;
-import com.test.sample.hirecooks.Models.Offer.Offer;
+import com.test.sample.hirecooks.Activity.SubCategory.SubCategoryActivity;
+import com.test.sample.hirecooks.Models.Menue.Menue;
 import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.databinding.VendersRecyclerviewBinding;
 
 import java.util.List;
 
-public class ProductsCategoryAdapter extends RecyclerView.Adapter<ProductsCategoryAdapter.ViewHolder> {
+public class ProductsCategoryAdapter extends RecyclerView.Adapter<ProductsCategoryAdapter.ViewHolder>  {
     private Context mCtx;
-    private List<Offer> categories;
-    Scene aScene;
-    private ViewGroup sceneRoot;
+    private List<Menue> menus;
 
-
-    public ProductsCategoryAdapter(Context mCtx, List<Offer> categories) {
+    public ProductsCategoryAdapter(Context mCtx) {
         this.mCtx = mCtx;
-        this.categories = categories;
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ProductsCategoryAdapter.ViewHolder(VendersRecyclerviewBinding.inflate(LayoutInflater.from(mCtx)));
     }
 
     @Override
-    public ProductsCategoryAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View itemLayoutView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.category_text, null);
-        ViewHolder viewHolder = new ViewHolder(itemLayoutView);
-        return viewHolder;
-    }
-
-    @Override
-    public void onBindViewHolder(ProductsCategoryAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        Offer category = categories.get(position);
-        holder.categoryName.setText(category.getName());
-        holder.categoryName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    Intent intent = new Intent(mCtx, EditCategoryActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("ProductCategory", categories.get(position));
-                    intent.putExtras(bundle);
-                    intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mCtx.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) mCtx).toBundle());
-                }
-            }
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        final Menue menu = menus.get(position);
+        holder.binding.menueName.setVisibility(View.VISIBLE);
+        holder.binding.menueName.setText(menu.getName());
+        Glide.with(mCtx).load(menu.getLink()).into(holder.binding.vendersImage);
+        holder.binding.venderLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(mCtx, EditCategoryActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("ProductCategory",menus.get(position));
+            intent.putExtras(bundle);
+            mCtx.startActivity(intent);
         });
     }
 
     @Override
     public int getItemCount() {
-        return categories==null?0:categories.size();
+        return menus==null ? 0 : menus.size();
     }
-    class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView categoryName;
 
-        public ViewHolder(View itemLayoutView) {
-            super(itemLayoutView);
-            categoryName = itemLayoutView.findViewById(R.id.category_text);
+    public void setMenue(List<Menue> menus) {
+        this.menus = menus;
+        notifyDataSetChanged();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        VendersRecyclerviewBinding binding;
+
+        public ViewHolder(@NonNull VendersRecyclerviewBinding recyclerviewBinding) {
+            super(recyclerviewBinding.getRoot());
+            binding = recyclerviewBinding;
         }
     }
 }

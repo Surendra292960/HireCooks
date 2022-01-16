@@ -2,8 +2,10 @@ package com.test.sample.hirecooks.Models.SubCategory;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.test.sample.hirecooks.RoomDatabase.LocalStorage.Dao.Converters;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
@@ -12,95 +14,134 @@ import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
+@Entity(tableName = "subcategory", indices = @Index(value = {"id"},unique = true))
 public class Subcategory implements Serializable {
-
+    @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
     @Expose
-    private int id;
+    public Integer id;
     @SerializedName("subcategoryid")
     @Expose
+    @ColumnInfo(name = "subcategoryid")
     private String subcategoryid;
     @SerializedName("last_update")
     @Expose
+    @ColumnInfo(name = "last_update")
     private String lastUpdate;
     @SerializedName("search_key")
     @Expose
+    @ColumnInfo(name = "search_key")
     private String searchKey;
     @SerializedName("name")
     @Expose
+    @ColumnInfo(name = "name")
     private String name;
     @SerializedName("product_uniquekey")
     @Expose
+    @ColumnInfo(name = "product_uniquekey")
     private String productUniquekey;
     @SerializedName("link2")
     @Expose
+    @ColumnInfo(name = "link2")
     private String link2;
     @SerializedName("link3")
     @Expose
+    @ColumnInfo(name = "link3")
     private String link3;
     @SerializedName("link4")
     @Expose
+    @ColumnInfo(name = "link4")
     private String link4;
     @SerializedName("shield_link")
     @Expose
+    @ColumnInfo(name = "shield_link")
     private String shieldLink;
     @SerializedName("discription")
     @Expose
+    @ColumnInfo(name = "discription")
     private String discription;
     @SerializedName("detail_discription")
     @Expose
+    @ColumnInfo(name = "detail_discription")
     private String detailDiscription;
     @SerializedName("sellRate")
     @Expose
+    @ColumnInfo(name = "sellRate")
     private int sellRate;
     @SerializedName("displayRate")
     @Expose
+    @ColumnInfo(name = "displayRate")
     private int displayRate;
     @SerializedName("firm_id")
     @Expose
+    @ColumnInfo(name = "firm_id")
     private String firmId;
     @SerializedName("firm_lat")
     @Expose
+    @ColumnInfo(name = "firm_lat")
     private double firmLat;
     @SerializedName("firm_lng")
     @Expose
+    @ColumnInfo(name = "firm_lng")
     private double firmLng;
     @SerializedName("firm_address")
     @Expose
+    @ColumnInfo(name = "firm_address")
     private String firmAddress;
     @SerializedName("firm_pincode")
     @Expose
+    @ColumnInfo(name = "firm_pincode")
     private int frimPincode;
     @SerializedName("stock")
     @Expose
+    @ColumnInfo(name = "stock")
     private int stock;
     @SerializedName("accepting_order")
     @Expose
+    @ColumnInfo(name = "accepting_order")
     private int acceptingOrder;
     @SerializedName("available_stock")
     @Expose
+    @ColumnInfo(name = "available_stock")
     private String availableStock;
     @SerializedName("brand")
     @Expose
+    @ColumnInfo(name = "brand")
     private String brand;
     @SerializedName("gender")
     @Expose
+    @ColumnInfo(name = "gender")
     private String gender;
     @SerializedName("age")
     @Expose
+    @ColumnInfo(name = "age")
     private Integer age;
     @SerializedName("colors")
     @Expose
+    @ColumnInfo(name = "colors")
+    @TypeConverters(Converters.class)
     private List<Color> colors = null;
     @SerializedName("images")
     @Expose
+    @ColumnInfo(name = "images")
+    @TypeConverters(Converters.class)
     private List<Image> images = null;
     @SerializedName("sizes")
     @Expose
+    @ColumnInfo(name = "sizes")
+    @TypeConverters(Converters.class)
     private List<Size> sizes = null;
     @SerializedName("weights")
     @Expose
+    @ColumnInfo(name = "weights")
+    @TypeConverters(Converters.class)
     private List<Weight> weights = null;
 
     double totalAmount;
@@ -110,7 +151,7 @@ public class Subcategory implements Serializable {
     public Subcategory() {
 
     }
-
+    @Ignore
     public Subcategory(int id, String subcategoryid, String lastUpdate, String searchKey, String name, String productUniquekey, String link2, String link3,
                        String link4, String shieldLink, String discription, String detailDiscription, int sellRate, int displayRate, String firmId,
                        double firmLat, double firmLng, String firmAddress, int frimPincode, List<Color> colors, List<Image> images, List<Size> sizes,

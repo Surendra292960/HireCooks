@@ -38,9 +38,6 @@ public class RecievedOrderDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recieved_order_details);
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("RecievedOrderDetails");
         user = SharedPrefManager.getInstance(this).getUser();
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){

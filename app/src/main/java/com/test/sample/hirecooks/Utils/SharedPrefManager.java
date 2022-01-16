@@ -2,6 +2,7 @@ package com.test.sample.hirecooks.Utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.test.sample.hirecooks.Models.TokenResponse.Token;
 import com.test.sample.hirecooks.Models.Users.User;
@@ -14,6 +15,7 @@ public class SharedPrefManager {
     private static int PRIVATE_MODE = 0;
     private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
     private static final String SHARED_PREF_NAME = "simplifiedcodingsharedprefretrofit";
+    public final static String SUBMIT_LOGS = "CrashLogs";
     //Users
     private static final String KEY_USER_ID = "keyuserid";
     private static final String KEY_USER_NAME = "keyusername";
@@ -44,6 +46,11 @@ public class SharedPrefManager {
             mInstance = new SharedPrefManager(context);
         }
         return mInstance;
+    }
+
+    public boolean getBoolean(Context appContext, String key, Boolean defaultValue) {
+        return PreferenceManager.getDefaultSharedPreferences(appContext)
+                .getBoolean(key, defaultValue);
     }
 
     public void setFirstTimeLaunch(boolean isFirstTime) {

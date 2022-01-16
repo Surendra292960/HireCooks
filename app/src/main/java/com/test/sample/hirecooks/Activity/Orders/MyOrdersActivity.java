@@ -1,122 +1,76 @@
 package com.test.sample.hirecooks.Activity.Orders;
-
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
-
-import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import com.google.android.material.appbar.MaterialToolbar;
-import com.test.sample.hirecooks.Adapter.Orders.MyOrdersAdapter;
-import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Models.NewOrder.Root;
+import android.view.WindowManager;
+import androidx.lifecycle.ViewModelProvider;
+import com.test.sample.hirecooks.Activity.Search.SearchResultActivity;
+import com.test.sample.hirecooks.Adapter.Orders.OrdersAdapter;
 import com.test.sample.hirecooks.Models.Users.User;
-import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.BaseActivity;
 import com.test.sample.hirecooks.Utils.NetworkUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
-import com.test.sample.hirecooks.WebApis.OrderApi;
-
+import com.test.sample.hirecooks.ViewModel.ViewModel;
+import com.test.sample.hirecooks.databinding.ActivitySubCategoryBinding;
 import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MyOrdersActivity extends BaseActivity {
-    private RecyclerView recyclerView;
-    private OrderApi mService;
     private User user;
-    private MyOrdersAdapter ordersAdapter;
-    private View appRoot;
-    private TextView order_status_text;
-    private LinearLayout no_orders,orders_layout,no_internet_connection_layout;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private List<Root> newOrder;
-    private boolean checkNet = false;
+    private OrdersAdapter ordersAdapter;
+    private ActivitySubCategoryBinding binding;
+    private ViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_myorders_layout);
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("My Orders");
-        initViews();
+        binding = ActivitySubCategoryBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+        viewModel=new ViewModelProvider(this).get(ViewModel.class);
+        user = SharedPrefManager.getInstance(this).getUser();
+        this.getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        binding.mToolbarInterface.mToolbar.setVisibility(View.VISIBLE);
+        binding.footerView.checkout.setOnClickListener(v -> startActivity( new Intent( this, PlaceOrderActivity.class )));
+        binding.mToolbarInterface.search.setOnClickListener(v -> startActivity( new Intent( this, SearchResultActivity.class )));
+        binding.mToolbarInterface.goBack.setOnClickListener(view1 -> finish());
         if(NetworkUtil.checkInternetConnection(this)) {
+            binding.subcategoryLayout.setVisibility( View.VISIBLE );
+            binding.noInternetConnectionLayout.setVisibility(View.GONE );
             getMyOrders(user.getId());
-            orders_layout.setVisibility( View.VISIBLE );
-            no_internet_connection_layout.setVisibility(View.GONE );
         }
         else {
-            orders_layout.setVisibility( View.GONE );
-            no_internet_connection_layout.setVisibility( View.VISIBLE );
+            binding.subcategoryLayout.setVisibility( View.GONE );
+            binding.noInternetConnectionLayout.setVisibility( View.VISIBLE );
         }
     }
 
-    private void initViews() {
-        user = SharedPrefManager.getInstance(this).getUser();
-        appRoot = findViewById(R.id.appRoot);
-        orders_layout = findViewById(R.id.orders_layout);
-        no_internet_connection_layout = findViewById(R.id.no_internet_connection_layout);
-        recyclerView = findViewById(R.id.recieved_orders_recycler);
-        no_orders = findViewById(R.id.no_orders);
-        order_status_text = findViewById(R.id.order_status_text);
-        mSwipeRefreshLayout = findViewById(R.id.swipeToRefresh);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        getMyOrders(user.getId());
-                    }
-                }, 3000);
-            }
-        });
-    }
-
+    @SuppressLint("NewApi")
     private void getMyOrders(int id) {
-        mService = ApiClient.getClient().create(OrderApi.class);
-        Call<List<Root>> call = mService.getOrdersByUserId(id);
-        call.enqueue(new Callback<List<Root>>() {
-            @Override
-            public void onResponse(Call<List<Root>> call, Response<List<Root>> response) {
-                if (response.code() == 200 ) {
-                    for(Root root:response.body()){
-                        if(!root.getError()){
-                            if(root.getOrders_table()!=null&&root.getOrders_table().size()!=0){
-                                recyclerView.setVisibility(View.VISIBLE);
-                                no_orders.setVisibility(View.GONE);
-                                Collections.reverse(root.getOrders_table());
-                                ordersAdapter = new MyOrdersAdapter(MyOrdersActivity.this,root.getOrders_table());
-                                recyclerView.setAdapter(ordersAdapter);
-                                ordersAdapter.notifyDataSetChanged();
-                            }else{
-                                recyclerView.setVisibility(View.GONE);
-                                no_orders.setVisibility(View.VISIBLE);
-                                order_status_text.setText("No Orders Available");
-                            }
-                        }
-                    }
+        viewModel.getOrdersByUserId(id).observe(this,ordersResponses ->ordersResponses.forEach(ordersResponse -> {
+            if(!ordersResponse.getError()){
+                if(ordersResponse.getOrders_table().size() != 0){
+                    Collections.reverse(ordersResponse.getOrders_table());
+                    binding.noResultFound.setVisibility(View.GONE);
+                    binding.recyclerview.setVisibility(View.VISIBLE);
+                    ordersAdapter = new OrdersAdapter(this,ordersResponse.getOrders_table(),"MyOrders");
+                    binding.recyclerview.setAdapter(ordersAdapter);
                 }
+            }else{
+                binding.recyclerview.setVisibility(View.GONE);
+                binding.noResultFound.setVisibility(View.VISIBLE);
             }
+        }));
 
+        binding.swipeToRefresh.setOnRefreshListener(() -> new Handler().postDelayed(new Runnable() {
             @Override
-            public void onFailure(Call<List<Root>> call, Throwable t) {
-                Toast.makeText(MyOrdersActivity.this,R.string.error, Toast.LENGTH_SHORT).show();
+            public void run() {
+                binding.swipeToRefresh.setRefreshing(false);
+                getMyOrders(user.getId());
             }
-        });
+        }, 3000));
     }
 
     @Override

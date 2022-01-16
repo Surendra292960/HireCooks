@@ -1,158 +1,102 @@
 package com.test.sample.hirecooks.Activity.ManageAccount.ManageProducts;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.Scene;
-
 import com.bumptech.glide.Glide;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
-import com.test.sample.hirecooks.Models.Category.CategoryResponse;
-import com.test.sample.hirecooks.Models.Offer.Offer;
+import com.test.sample.hirecooks.Models.Menue.Menue;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
-import com.test.sample.hirecooks.Utils.Constants;
+import com.test.sample.hirecooks.Utils.NetworkUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
-import com.test.sample.hirecooks.WebApis.UserApi;
-
-import java.util.ArrayList;
+import com.test.sample.hirecooks.ViewModel.ViewModel;
+import com.test.sample.hirecooks.databinding.ActivitySubCategoryBinding;
+import com.test.sample.hirecooks.databinding.CategoryCardviewBinding;
 import java.util.List;
-import java.util.Objects;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class EditCategoryActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
     private String categoryName;
-    private Offer category;
-    private UserApi mService;
-    private EditCategoryAdapter mAdapter;
-    private List<Category> mCategory;
-    private FloatingActionButton add_category;
+    private Menue menue;
     private User user;
+    private ViewModel viewModel;
+    private ActivitySubCategoryBinding binding;
 
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_edit_category );
-        recyclerView = findViewById( R.id.edit_category_recycler );
-        add_category = findViewById( R.id.add_category );
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Products");
+        binding = ActivitySubCategoryBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+        viewModel = new ViewModelProvider(this).get(ViewModel.class);
         user = SharedPrefManager.getInstance( this ).getUser();
+        binding.mToolbarInterface.mToolbar.setVisibility(View.VISIBLE);
+        binding.mToolbarInterface.goBack.setOnClickListener(v->finish());
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null&& Constants.NEARBY_VENDERS_LOCATION !=null) {
+        if (bundle != null) {
             categoryName= bundle.getString("CategoryName");
-            category = (Offer) bundle.getSerializable("ProductCategory");
-            if(category.getId()!=0){
-                getCategory(category.getId());
-            }else {
-                Toast.makeText( this, "Comming soon", Toast.LENGTH_SHORT ).show();
+            menue = (Menue) bundle.getSerializable("ProductCategory");
+            if(NetworkUtil.checkInternetConnection(this)) {
+                binding.subcategoryLayout.setVisibility( View.VISIBLE );
+                binding.noInternetConnectionLayout.setVisibility(View.GONE );
+                if(menue.getId()!=0){
+                    getCategory(menue.getId());
+                }else {
+                    Toast.makeText( this, "Comming soon", Toast.LENGTH_SHORT ).show();
+                }
             }
-            if(mCategory!=null){
-                getSupportActionBar().setTitle(category.getName());
+            else {
+                binding.subcategoryLayout.setVisibility( View.GONE );
+                binding.noResultFound.setVisibility( View.GONE );
+                binding.noInternetConnectionLayout.setVisibility( View.VISIBLE );
             }
         }
 
         if(/*user.getUserType().equalsIgnoreCase( "Admin" )||*/user.getUserType().equalsIgnoreCase( "SuperAdmin" )){
-            add_category.setVisibility( View.VISIBLE );
-            add_category.setOnClickListener( new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(category.getId()!=0&&category!=null){
-                        Intent intent = new Intent(EditCategoryActivity.this, StartEditCategory.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("CreateCategory", category.getId());
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-
-                    }
+            binding.add.setVisibility( View.VISIBLE );
+            binding.add.setOnClickListener(v -> {
+                if(menue.getId()!=0&&menue!=null){
+                    Intent intent = new Intent(EditCategoryActivity.this, StartEditCategory.class);
+                    Bundle bundle1 = new Bundle();
+                    bundle1.putSerializable("CreateCategory", menue.getId());
+                    intent.putExtras(bundle1);
+                    startActivity(intent);
                 }
-            } );
+            });
         }
     }
 
-    private void getCategory(int id) {
-        mCategory = new ArrayList<>(  );
-        mService = ApiClient.getClient().create( UserApi.class);
-        Call<List<CategoryResponse>> call = mService.getCategoryByCatId(id);
-        call.enqueue(new Callback<List<CategoryResponse>>() {
-            @SuppressLint("WrongConstant")
-            @Override
-            public void onResponse(Call<List<CategoryResponse>> call, Response<List<CategoryResponse>> response) {
-                int statusCode = response.code();
-                if(statusCode==200){
-                    for(CategoryResponse example:response.body()){
-                        if(example.getError()==false){
-                          if(response.body().size()!=0){
-                              for(Category category:example.getCategory()){
-                                  if(category!=null){
-                                      setCategoryData(category);
-                                  }
-                              }
-                          }
-                        }
-                    }
-                }
+    @SuppressLint("NewApi")
+    private void getCategory(Integer id) {
+        viewModel.getCategory(id).observe(this, categoryResponses -> categoryResponses.forEach(category -> {
+            if (category.getCategory() != null && category.getCategory().size() != 0) {
+                binding.recyclerview.setVisibility(View.VISIBLE);
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+                EditCategoryAdapter mAdapter = new EditCategoryAdapter(this,category.getCategory());
+                binding.recyclerview.setLayoutManager(gridLayoutManager);
+                binding.recyclerview.setAdapter(mAdapter);
+                //mAdapter.setCategory(category.getCategory());
             }
-
-            @Override
-            public void onFailure(Call<List<CategoryResponse>> call, Throwable t) {
-                Toast.makeText( EditCategoryActivity.this, t.getMessage(), Toast.LENGTH_SHORT ).show();
-            }
-        });
+        }));
     }
-
-    @SuppressLint("WrongConstant")
-    private void setCategoryData(Category category) {
-        mCategory.add( category );
-        mAdapter = new EditCategoryAdapter( EditCategoryActivity.this,mCategory);
-        recyclerView.setAdapter(mAdapter);
-        GridLayoutManager linearLayoutManager = new GridLayoutManager(EditCategoryActivity.this,2);
-        if (EditCategoryActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            linearLayoutManager.setOrientation(LinearLayout.VERTICAL);
-        }else{
-            linearLayoutManager.setOrientation(LinearLayout.HORIZONTAL);
-        }
-        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
-        params.setMargins(20, 20, 20, 20);
-        linearLayoutManager.canScrollHorizontally();
-
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-    }
-
 
     public class EditCategoryAdapter extends RecyclerView.Adapter<EditCategoryAdapter.ViewHolder> {
         private Context mCtx;
         private List<Category> categories;
-        Scene aScene;
-        private ViewGroup sceneRoot;
 
         public EditCategoryAdapter(Context mCtx, List<Category> categories) {
             this.mCtx = mCtx;
@@ -160,23 +104,16 @@ public class EditCategoryActivity extends AppCompatActivity {
         }
 
         @Override
-        public EditCategoryAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View itemLayoutView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.category_cardview, null);
-            ViewHolder viewHolder = new ViewHolder(itemLayoutView);
-            return viewHolder;
+        public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            return new ViewHolder(CategoryCardviewBinding.inflate(LayoutInflater.from(mCtx)));
         }
 
         @Override
         public void onBindViewHolder(EditCategoryAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
             Category category = categories.get(position);
-            holder.categoryName.setText(category.getName());
-            Glide.with(mCtx).load(category.getLink()).into(holder.categoryImage);
-            holder.categoryLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showalertbox(categories.get( position ));
-                }
-            });
+            holder.binding.categoryName.setText(category.getName());
+            Glide.with(mCtx).load(category.getLink()).into(holder.binding.categoryImage);
+            holder.binding.category.setOnClickListener(v -> showalertbox(categories.get( position )));
         }
 
         private void showalertbox(Category category) {
@@ -192,21 +129,11 @@ public class EditCategoryActivity extends AppCompatActivity {
             productsBtn.setOnClickListener( v -> {
                 try {
                     dialog.dismiss();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        Intent intent = new Intent(mCtx, EditSubCategoryActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("Category", category);
-                        intent.putExtras(bundle);
-                        // Check if we're running on Android 5.0 or higher
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            mCtx.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) mCtx).toBundle());
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        } else {
-                            // Swap without transition
-                            mCtx.startActivity(intent);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        }
-                    }
+                    Intent intent = new Intent(mCtx, EditSubCategoryActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Category", category);
+                    intent.putExtras(bundle);
+                    mCtx.startActivity(intent);
                 }
                 catch (Exception ex) {
                     ex.printStackTrace();
@@ -216,21 +143,11 @@ public class EditCategoryActivity extends AppCompatActivity {
                 try {
                     dialog.dismiss();
                     if(user.getUserType().equalsIgnoreCase("SuperAdmin")){
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            Intent intent = new Intent(mCtx, StartEditCategory.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("Category", category);
-                            intent.putExtras(bundle);
-                            // Check if we're running on Android 5.0 or higher
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                mCtx.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) mCtx).toBundle());
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            } else {
-                                // Swap without transition
-                                mCtx.startActivity(intent);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            }
-                        }
+                        Intent intent = new Intent(mCtx, StartEditCategory.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("Category", category);
+                        intent.putExtras(bundle);
+                        mCtx.startActivity(intent);
                     }else {
                         Toast.makeText(EditCategoryActivity.this, "Can't Edit", Toast.LENGTH_SHORT).show();
                     }
@@ -245,15 +162,11 @@ public class EditCategoryActivity extends AppCompatActivity {
             return categories==null?0:categories.size();
         }
         class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView categoryName;
-            public ImageView categoryImage;
-            public LinearLayout categoryLayout;
+            CategoryCardviewBinding binding;
 
-            public ViewHolder(View itemLayoutView) {
-                super(itemLayoutView);
-                categoryLayout = itemLayoutView.findViewById(R.id.category);
-                categoryName = itemLayoutView.findViewById(R.id.category_name);
-                categoryImage = itemLayoutView.findViewById(R.id.category_image);
+            public ViewHolder(@NonNull CategoryCardviewBinding itemLayoutBinding) {
+                super(itemLayoutBinding.getRoot());
+                binding = itemLayoutBinding;
 
             }
         }

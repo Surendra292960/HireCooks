@@ -1,61 +1,46 @@
 package com.test.sample.hirecooks.Adapter.Category;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.Scene;
-
 import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.SubCategory.SubCategoryActivity;
 import com.test.sample.hirecooks.Models.Category.Category;
-import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.Models.Users.User;
+import com.test.sample.hirecooks.Utils.SharedPrefManager;
+import com.test.sample.hirecooks.databinding.CategoryCardviewBinding;
 
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     private Context mCtx;
     private List<Category> categories;
-/*    Scene aScene;
-    private ViewGroup sceneRoot;*/
-
+    private User user;
     public CategoryAdapter(Context mCtx) {
         this.mCtx = mCtx;
-      //  this.categories = categories;
     }
 
     @Override
     public CategoryAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View itemLayoutView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.category_cardview, null);
-        ViewHolder viewHolder = new ViewHolder(itemLayoutView);
-        return viewHolder;
+        return new CategoryAdapter.ViewHolder(CategoryCardviewBinding.inflate(LayoutInflater.from(mCtx)));
     }
 
     @Override
     public void onBindViewHolder(CategoryAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        user = SharedPrefManager.getInstance(mCtx).getUser();
         Category category = categories.get(position);
-        holder.categoryName.setText(category.getName());
-        holder.progress_dialog.setVisibility( View.GONE );
-        Glide.with(mCtx).load(category.getLink()).into( holder.categoryImage);
-        holder.categoryLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mCtx, SubCategoryActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Video", categories.get(position));
-                intent.putExtras(bundle);
-                intent .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                mCtx.startActivity(intent);
-            }
+        holder.binding.categoryName.setText(category.getName());
+        Glide.with(mCtx).load(category.getLink()).into( holder.binding.categoryImage);
+        holder.binding.category.setOnClickListener(v -> {
+            Intent intent = new Intent(mCtx, SubCategoryActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("Category", categories.get(position));
+            intent.putExtras(bundle);
+            mCtx.startActivity(intent);
         });
     }
 
@@ -70,23 +55,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView categoryName;
-        public ImageView categoryImage;
-        private ProgressBar progress_dialog;
-        public LinearLayout categoryLayout;
+        CategoryCardviewBinding binding;
 
-        public ViewHolder(View itemLayoutView) {
-            super(itemLayoutView);
-            categoryLayout = itemLayoutView.findViewById(R.id.category);
-            categoryName = itemLayoutView.findViewById(R.id.category_name);
-            categoryImage = itemLayoutView.findViewById(R.id.category_image);
-            progress_dialog = itemLayoutView.findViewById(R.id.progress_dialog);
-
-       /*     itemLayoutView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                }
-            });*/
+        public ViewHolder(@NonNull CategoryCardviewBinding itemLayoutViewBinding) {
+            super(itemLayoutViewBinding.getRoot());
+            binding =itemLayoutViewBinding;
         }
     }
 }

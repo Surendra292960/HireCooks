@@ -7,7 +7,7 @@
 
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_5"
         android:layout_marginBottom="@dimen/margin_5"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -21,8 +21,13 @@
                 android:layout_height="@dimen/margin_30"
                 android:gravity="center"
                 android:textSize="@dimen/size_12"
-                android:textColor="@color/white_alpha"
+                android:textColor="@color/dark_gray"
                 android:text="@string/id"/>
+
+            <View
+                android:layout_width="1sp"
+                android:layout_height="match_parent"
+                android:background="@color/grey_light"/>
 
             <TextView
                 style="@style/table_header"
@@ -30,8 +35,13 @@
                 android:layout_height="@dimen/margin_30"
                 android:gravity="center"
                 android:textSize="@dimen/size_12"
-                android:textColor="@color/white_alpha"
+                android:textColor="@color/dark_gray"
                 android:text="@string/name"/>
+
+            <View
+                android:layout_width="1sp"
+                android:layout_height="match_parent"
+                android:background="@color/grey_light"/>
 
             <TextView
                 android:layout_height="@dimen/margin_30"
@@ -40,8 +50,13 @@
                 android:gravity="center"
                 android:textSize="@dimen/size_12"
                 android:id="@+id/user_type"
-                android:textColor="@color/white_alpha"
+                android:textColor="@color/dark_gray"
                 android:text="@string/user_type"/>
+
+            <View
+                android:layout_width="1sp"
+                android:layout_height="match_parent"
+                android:background="@color/grey_light"/>
 
             <TextView
                 android:layout_height="@dimen/margin_30"
@@ -50,8 +65,12 @@
                 style="@style/table_header"
                 android:textSize="@dimen/size_12"
                 android:gravity="center"
-                android:textColor="@color/white_alpha" />
+                android:textColor="@color/dark_gray" />
 
+            <View
+                android:layout_width="1sp"
+                android:layout_height="match_parent"
+                android:background="@color/grey_light"/>
 
             <TextView
                 android:layout_height="@dimen/margin_30"
@@ -60,7 +79,12 @@
                 style="@style/table_header"
                 android:gravity="center"
                 android:textSize="@dimen/size_12"
-                android:textColor="@color/white_alpha" />
+                android:textColor="@color/dark_gray" />
+
+            <View
+                android:layout_width="1sp"
+                android:layout_height="match_parent"
+                android:background="@color/grey_light"/>
 
             <TextView
                 android:layout_height="@dimen/margin_30"
@@ -69,7 +93,12 @@
                 style="@style/table_header"
                 android:gravity="center"
                 android:textSize="@dimen/size_12"
-                android:textColor="@color/white_alpha" />
+                android:textColor="@color/dark_gray" />
+
+            <View
+                android:layout_width="1sp"
+                android:layout_height="match_parent"
+                android:background="@color/grey_light"/>
 
             <TextView
                 android:layout_height="@dimen/margin_30"
@@ -77,7 +106,13 @@
                 android:text="@string/logout_address"
                 style="@style/table_header"
                 android:gravity="center"
-                android:textSize="@dimen/size_12" />
+                android:textSize="@dimen/size_12"
+                android:textColor="@color/dark_gray"/>
+
+            <View
+                android:layout_width="1sp"
+                android:layout_height="match_parent"
+                android:background="@color/grey_light"/>
 
             <TextView
                 android:layout_height="@dimen/margin_30"
@@ -86,8 +121,12 @@
                 style="@style/table_header"
                 android:gravity="center"
                 android:textSize="@dimen/size_12"
-                android:textColor="@color/white_alpha" />
+                android:textColor="@color/dark_gray" />
 
+            <View
+                android:layout_width="1sp"
+                android:layout_height="match_parent"
+                android:background="@color/grey_light"/>
 
             <TextView
                 android:layout_height="@dimen/margin_30"
@@ -96,7 +135,12 @@
                 style="@style/table_header"
                 android:gravity="center"
                 android:textSize="@dimen/size_12"
-                android:textColor="@color/white_alpha" />
+                android:textColor="@color/dark_gray" />
+
+            <View
+                android:layout_width="1sp"
+                android:layout_height="match_parent"
+                android:background="@color/grey_light"/>
 
             <TextView
                 android:layout_height="@dimen/margin_30"
@@ -105,7 +149,12 @@
                 style="@style/table_header"
                 android:gravity="center"
                 android:textSize="@dimen/size_12"
-                android:textColor="@color/white_alpha" />
+                android:textColor="@color/dark_gray" />
+
+            <View
+                android:layout_width="1sp"
+                android:layout_height="match_parent"
+                android:background="@color/grey_light"/>
 
             <TextView
                 android:layout_height="@dimen/margin_30"
@@ -114,9 +163,13 @@
                 style="@style/table_header"
                 android:gravity="center"
                 android:textSize="@dimen/size_12"
-                android:textColor="@color/white_alpha" />
+                android:textColor="@color/dark_gray" />
 
         </TableRow>
 
     </TableLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_light"/>
 </LinearLayout>

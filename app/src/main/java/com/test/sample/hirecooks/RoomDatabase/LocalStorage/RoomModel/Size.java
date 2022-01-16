@@ -1,0 +1,87 @@
+/*
+package com.test.sample.hirecooks.RoomDatabase.LocalStorage.RoomModel;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
+public class Size implements Serializable {
+    @PrimaryKey(autoGenerate = true)
+    @SerializedName("id")
+    @Expose
+    private int id;
+    @SerializedName("subcategory_id")
+    @Expose
+    @ColumnInfo(name = "subcategory_id")
+    private int subcategoryId;
+    @SerializedName("size_number")
+    @Expose
+    @ColumnInfo(name = "size_number")
+    private int sizeNumber;
+    @SerializedName("size_text")
+    @Expose
+    @ColumnInfo(name = "size_text")
+    private String sizeText;
+    @SerializedName("x_id")
+    @Expose
+    @ColumnInfo(name = "x_id")
+    private String xId;
+
+    private boolean isSelected = false;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getSubcategoryId() {
+        return subcategoryId;
+    }
+
+    public void setSubcategoryId(int subcategoryId) {
+        this.subcategoryId = subcategoryId;
+    }
+
+    public int getSizeNumber() {
+        return sizeNumber;
+    }
+
+    public void setSizeNumber(int sizeNumber) {
+        this.sizeNumber = sizeNumber;
+    }
+
+    public String getSizeText() {
+        return sizeText;
+    }
+
+    public void setSizeText(String sizeText) {
+        this.sizeText = sizeText;
+    }
+
+    public String getxId() {
+        return xId;
+    }
+
+    public void setxId(String xId) {
+        this.xId = xId;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+}*/

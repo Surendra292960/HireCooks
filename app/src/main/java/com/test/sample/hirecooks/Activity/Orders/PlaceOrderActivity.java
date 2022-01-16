@@ -1,17 +1,14 @@
 package com.test.sample.hirecooks.Activity.Orders;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -26,11 +23,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -41,10 +36,10 @@ import com.test.sample.hirecooks.Activity.Home.MainActivity;
 import com.test.sample.hirecooks.Activity.ManageAddress.SecondryAddressActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
-import com.test.sample.hirecooks.Models.MapLocationResponse.Result;
+import com.test.sample.hirecooks.Models.MapLocationResponse.MapResponse;
 import com.test.sample.hirecooks.Models.NewOrder.Order;
 import com.test.sample.hirecooks.Models.NewOrder.OrdersTable;
-import com.test.sample.hirecooks.Models.NewOrder.Root;
+import com.test.sample.hirecooks.Models.NewOrder.OrdersResponse;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.Models.TokenResponse.Token;
 import com.test.sample.hirecooks.Models.TokenResponse.TokenResult;
@@ -66,7 +61,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -102,27 +96,25 @@ public class PlaceOrderActivity extends BaseActivity {
     private Map address;
     private RazorpayPayment razorpayPayment;
     private OrdersTable orderTable;
-    private Root root;
+    private OrdersResponse root;
     private List<Subcategory> cartList = new ArrayList<>();
     private com.test.sample.hirecooks.Models.NewOrder.Order order;
     private List<com.test.sample.hirecooks.Models.NewOrder.Order> orderList;
     private List<com.test.sample.hirecooks.Models.NewOrder.Order> filteredList = new ArrayList<>(  );
     private List<OrdersTable> orderTableList = new ArrayList<>(  );
-    private List<Root> rootList = new ArrayList<>(  );
+    private List<OrdersResponse> rootList = new ArrayList<>(  );
     private LinearLayout all_order_place_layout;
     private Date location;
     ArrayList<Order> mOrdersTable = new ArrayList<>(  );
     ArrayList<Token> mTokenList = new ArrayList<>(  );
     private boolean checkNet;
     private int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_order);
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Place Order");
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
             address = (Map) bundle.getSerializable("address_book");
@@ -208,6 +200,8 @@ public class PlaceOrderActivity extends BaseActivity {
         localStorage = new LocalStorage(this);
         gson = new Gson();
 
+        backBtn();
+
         editAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -274,7 +268,7 @@ public class PlaceOrderActivity extends BaseActivity {
                             }
                             orderTable.setOrders( filteredList );
                             orderTableList.add( orderTable );
-                            root = new Root();
+                            root = new OrdersResponse();
                             root.setOrders_table( orderTableList );
                             rootList = new ArrayList<>();
                             rootList.add(root);
@@ -352,7 +346,7 @@ public class PlaceOrderActivity extends BaseActivity {
                             }
                             orderTable.setOrders( filteredList );
                             orderTableList.add( orderTable );
-                            root = new Root();
+                            root = new OrdersResponse();
                             root.setOrders_table( orderTableList );
                             rootList = new ArrayList<>();
                             rootList.add(root);
@@ -380,17 +374,17 @@ public class PlaceOrderActivity extends BaseActivity {
         getMapDetails();
     }
 
-    private void placeOrder(final List<Root> roots){
+    private void placeOrder(final List<OrdersResponse> roots){
         Gson gson = new Gson();
         String json = gson.toJson(roots);
         System.out.println("Suree Orders : "+json);
         mService  = ApiClient.getClient().create(OrderApi.class);
-        Call<List<Root>> call = mService.addOrder(roots);
-        call.enqueue( new Callback<List<Root>>() {
+        Call<List<OrdersResponse>> call = mService.addOrder(roots);
+        call.enqueue( new Callback<List<OrdersResponse>>() {
             @Override
-            public void onResponse(Call<List<Root>> call, Response<List<Root>> response) {
+            public void onResponse(Call<List<OrdersResponse>> call, Response<List<OrdersResponse>> response) {
                 if (response.code() == 200 ) {
-                    for(Root root1:response.body()){
+                    for(OrdersResponse root1:response.body()){
                         if(root1.getError()==false){
                             Toast.makeText(PlaceOrderActivity.this,root1.getMessage(), Toast.LENGTH_SHORT).show();
                             localStorage.deleteCart();
@@ -417,7 +411,7 @@ public class PlaceOrderActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Root>> call, Throwable t) {
+            public void onFailure(Call<List<OrdersResponse>> call, Throwable t) {
                 Toast.makeText(PlaceOrderActivity.this,R.string.error, Toast.LENGTH_SHORT).show();
             }
         } );
@@ -477,10 +471,10 @@ public class PlaceOrderActivity extends BaseActivity {
 
     public void getMapDetails() {
         MapApi mService = ApiClient.getClient().create(MapApi.class);
-        Call<Result> call = mService.getMapDetails(user.getId());
-        call.enqueue(new Callback<Result>() {
+        Call<MapResponse> call = mService.getMapDetails(user.getId());
+        call.enqueue(new Callback<MapResponse>() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
+            public void onResponse(Call<MapResponse> call, Response<MapResponse> response) {
                 if (response.code() == 200 && response.body() != null && response.body().getMaps() != null) {
                     try{
                         if(address!=null){
@@ -511,7 +505,7 @@ public class PlaceOrderActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<MapResponse> call, Throwable t) {
                 Toast.makeText(PlaceOrderActivity.this,R.string.error+t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -814,10 +808,16 @@ public class PlaceOrderActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id==android.R.id.home){
-            startActivity( new Intent( PlaceOrderActivity.this,MainActivity.class )
-                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
-            finish();
+            //finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void backBtn() {
+        toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Check Out");
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        toolbar.setNavigationOnClickListener(v -> startActivity( new Intent( PlaceOrderActivity.this,MainActivity.class ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK)));
     }
 }

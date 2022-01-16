@@ -17,12 +17,7 @@ public class CheckConnection extends AppCompatActivity {
                         .setMessage(message)
                         .setCancelable(true)
                         .setPositiveButton(getResources().getString(R.string.ok), null)
-                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                                dialog.dismiss();
-                            }
-                        })
+                        .setOnDismissListener(dialog -> dialog.dismiss())
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             }

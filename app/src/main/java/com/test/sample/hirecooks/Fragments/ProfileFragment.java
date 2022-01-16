@@ -36,16 +36,17 @@ import com.bumptech.glide.Glide;
 import com.test.sample.hirecooks.Activity.Chat.ChatActivity;
 import com.test.sample.hirecooks.Activity.Cooks.UpdateCookDetails;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
-import com.test.sample.hirecooks.Activity.ManageAccount.ManageProducts.ProductCategoryList;
+import com.test.sample.hirecooks.Activity.ManageAccount.ManageProducts.EditMenuActivity;
 import com.test.sample.hirecooks.Activity.ManageAddress.SecondryAddressActivity;
 import com.test.sample.hirecooks.Activity.Users.UpdateProfile;
 import com.test.sample.hirecooks.Activity.Users.UsersActivity;
-import com.test.sample.hirecooks.Adapter.Users.AdminProfileAdapter;
+import com.test.sample.hirecooks.Adapter.Users.ProfileAdminDashAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Offer.Offer;
 import com.test.sample.hirecooks.Models.SubCategory.SubcategoryResponse;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.Models.Users.User;
+import com.test.sample.hirecooks.Models.Users.UserResponse;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.APIUrl;
 import com.test.sample.hirecooks.Utils.BaseActivity;
@@ -210,7 +211,7 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
             admin_dash_lay.setVisibility( View.VISIBLE );
             List<Offer> offerList = new ArrayList<>();
             offerList.add( new Offer( 0, "Account", "Manage Your Account", "https://i.ibb.co/S5tq9C9/management-1.png", "RED" ) );
-            offerList.add( new Offer( 1, "Employee", "Manage Your Employee", "https://i.ibb.co/tBLnHGq/employee.png", "RED" ) );
+            offerList.add( new Offer( 1, "Manage Employee", "Manage Your Employee", "https://i.ibb.co/tBLnHGq/employee.png", "RED" ) );
             offerList.add( new Offer( 2, "Report", "Generate Your Employes Report", "https://i.ibb.co/vmqVpSR/report-1.png", "RED" ) );
             offerList.add( new Offer( 3, "All Employees", "Generate Your All Employes Report", "https://i.ibb.co/vmqVpSR/report-1.png", "RED" ) );
             offerList.add( new Offer( 4, "Recieved Order", "Manage Your Recieved Orders", "https://i.ibb.co/vXT6qG0/courier.png", "RED" ) );
@@ -218,7 +219,7 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
             offerList.add( new Offer( 6, "Collaboration", "Collaborate with your Employee", "https://i.ibb.co/8732tsP/deal.png", "RED" ) );
             offerList.add( new Offer( 7, "Ad", "Manage Your Add", "https://www.linkpicture.com/q/button_5.png", "RED" ) );
 
-            AdminProfileAdapter adapter = new AdminProfileAdapter( mainActivity, offerList );
+            ProfileAdminDashAdapter adapter = new ProfileAdminDashAdapter( mainActivity, offerList );
             admin_dash_recycler.setAdapter( adapter );
             GridLayoutManager linearLayoutManager = new GridLayoutManager( mainActivity, 2 );
             if (mainActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -262,13 +263,13 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
             start.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity( new Intent( mainActivity, UsersActivity.class ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK) );
+                    startActivity( new Intent( mainActivity, UsersActivity.class ));
                 }
             });
             manage_category.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity( new Intent( mainActivity, ProductCategoryList.class ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK) );
+                    startActivity( new Intent( mainActivity, EditMenuActivity.class ));
                 }
             });
         }
@@ -283,7 +284,7 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
         edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), UpdateProfile.class) .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+                startActivity(new Intent(getActivity(), UpdateProfile.class) );
             }
         });
 
@@ -318,13 +319,13 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
 
     private void getUserByFirmId(String firmId) {
         UserApi service = ApiClient.getClient().create(UserApi.class);
-        Call<List<com.test.sample.hirecooks.Models.Users.Example>> call = service.getUserByFirmId(firmId);
-        call.enqueue(new Callback<List<com.test.sample.hirecooks.Models.Users.Example>>() {
+        Call<List<UserResponse>> call = service.getUserByFirmId(firmId);
+        call.enqueue(new Callback<List<UserResponse>>() {
             @SuppressLint("ShowToast")
             @Override
-            public void onResponse(@NonNull Call<List<com.test.sample.hirecooks.Models.Users.Example>> call, @NonNull Response<List<com.test.sample.hirecooks.Models.Users.Example>> response) {
+            public void onResponse(@NonNull Call<List<UserResponse>> call, @NonNull Response<List<UserResponse>> response) {
                 if (response.code() == 200) {
-                    for(com.test.sample.hirecooks.Models.Users.Example example:response.body()){
+                    for(UserResponse example:response.body()){
                         if (!example.getError()){
                             for(User user:example.getUsers()){
                                 if(user.getUserType().equalsIgnoreCase( "Admin" )){
@@ -338,7 +339,7 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
 
             @SuppressLint("ShowToast")
             @Override
-            public void onFailure(@NonNull Call<List<com.test.sample.hirecooks.Models.Users.Example>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<UserResponse>> call, @NonNull Throwable t) {
                 System.out.println( "Suree : "+t.getMessage() );
             }
         });
@@ -369,8 +370,8 @@ public class ProfileFragment extends Fragment implements NavigationView.OnNaviga
     private void animateNavigation(final boolean hide) {
         if (isNavigationHide && hide || !isNavigationHide && !hide) return;
         isNavigationHide = hide;
-        int moveY = hide ? (2 * mainActivity.mNavigationView.getHeight()) : 0;
-        mainActivity.mNavigationView.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
+        int moveY = hide ? (2 * mainActivity.bottomNavigationView.getHeight()) : 0;
+        mainActivity.bottomNavigationView.animate().translationY(moveY).setStartDelay(100).setDuration(300).start();
     }
 
     boolean isToolBarHide = false;

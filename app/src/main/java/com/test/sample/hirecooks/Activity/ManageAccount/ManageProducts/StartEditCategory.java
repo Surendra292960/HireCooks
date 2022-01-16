@@ -45,7 +45,7 @@ import retrofit2.Response;
 
 public class StartEditCategory extends AppCompatActivity {
     private TextInputEditText editTextCategoryName,editTextCategoryId,editTextCategoryImageUrl;
-    private TextView Submit;
+    private Button Submit;
     private ProductApi mService;
     private String categoryName;
     private Button btnChoose,btnUpload;
@@ -66,8 +66,6 @@ public class StartEditCategory extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView( R.layout.activity_start_edit_category);
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
             categoryName= bundle.getString("CategoryName");
@@ -75,9 +73,9 @@ public class StartEditCategory extends AppCompatActivity {
             subcategoryId = bundle.getInt( "CreateCategory" );
         }
         if(mCategory!=null){
-            getSupportActionBar().setTitle("Update "+mCategory.getName());
+            //getSupportActionBar().setTitle("Update "+mCategory.getName());
         }else{
-            getSupportActionBar().setTitle("Create Video");
+            //getSupportActionBar().setTitle("Create Video");
         }
         initViews();
     }

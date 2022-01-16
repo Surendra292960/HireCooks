@@ -23,7 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.test.sample.hirecooks.Activity.Home.MainActivity;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
-import com.test.sample.hirecooks.Models.Users.Example;
+import com.test.sample.hirecooks.Models.Users.UserResponse;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
 import com.test.sample.hirecooks.Utils.BaseActivity;
@@ -105,8 +105,8 @@ public class UserSignInActivity extends BaseActivity implements View.OnClickList
             editTextEmail.requestFocus();
             return;
         }
-        List<Example> exampleList = new ArrayList<>();
-        Example exampls = new Example();
+        List<UserResponse> exampleList = new ArrayList<>();
+        UserResponse exampls = new UserResponse();
         List<User> userList = new ArrayList<>();
         User user = new User();
         user.setEmail( editTextEmail.getText().toString() );
@@ -117,17 +117,17 @@ public class UserSignInActivity extends BaseActivity implements View.OnClickList
         signIn(exampleList);
     }
 
-    private void signIn(List<Example> exampleList) {
+    private void signIn(List<UserResponse> exampleList) {
         progressBarUtil.showProgress();
         mService = ApiClient.getClient().create(UserApi.class);
-        Call<List<Example>> call = mService.userLogin(exampleList);
-        call.enqueue(new Callback<List<Example>>() {
+        Call<List<UserResponse>> call = mService.userLogin(exampleList);
+        call.enqueue(new Callback<List<UserResponse>>() {
             @Override
-            public void onResponse(Call<List<Example>> call, Response<List<Example>> response) {
+            public void onResponse(Call<List<UserResponse>> call, Response<List<UserResponse>> response) {
                 int statusCode = response.code();
                 if(statusCode==200){
                     progressBarUtil.hideProgress();
-                    for(Example example:response.body()){
+                    for(UserResponse example:response.body()){
                         ShowToast( example.getMessage() );
                         if(!example.getError()) {
                            for(User user:example.getUsers()){
@@ -142,7 +142,7 @@ public class UserSignInActivity extends BaseActivity implements View.OnClickList
             }
 
             @Override
-            public void onFailure(Call<List<Example>> call, Throwable t) {
+            public void onFailure(Call<List<UserResponse>> call, Throwable t) {
                 progressBarUtil.hideProgress();
                 System.out.println("Suree :"+ t.getMessage());
                 ShowToast("Please Check Intenet Connection");

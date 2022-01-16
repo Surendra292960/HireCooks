@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,11 +7,15 @@
     android:id="@+id/appRoot"
     tools:context=".Activity.Orders.RecievedOrderActivity">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <LinearLayout
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <include
+            android:id="@+id/m_toolbar_interface"
+            layout="@layout/custome_toobar_layout" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeToRefresh"
@@ -41,7 +45,7 @@
 
                     <include
                         android:id="@+id/firmuser_header"
-                        layout="@layout/firmuser_report_header"/>
+                        layout="@layout/firmuser_report_header" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:visibility="visible"
@@ -69,52 +73,53 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <LinearLayout
-            android:layout_gravity="bottom|end"
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_gravity="bottom|end"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:background="@color/smoke_white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <FrameLayout
-                android:background="@color/smoke_white"
+            tools:ignore="UselessParent">
+            <LinearLayout
+                android:id="@+id/linearLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:ignore="UselessParent">
-                <LinearLayout
-                    android:id="@+id/linearLayout2"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/generate_report"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="@dimen/margin_50"
+                    android:text="@string/select_date"
+                    android:background="@color/style_color_primary"
+                    android:textColor="@color/white_alpha"/>
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/generate_report"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/margin_50"
-                        android:text="@string/select_date"
-                        android:background="@color/style_color_primary"
-                        android:textColor="@color/white_alpha"/>
+            </LinearLayout>
 
-                </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_50"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_50"
-                    android:layout_gravity="center_vertical"
-                    android:orientation="horizontal">
+                <ProgressBar
+                    android:id="@+id/progress_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom|end"
+                    android:visibility="gone" />
 
-                    <ProgressBar
-                        android:id="@+id/progress_btn"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="bottom|end"
-                        android:visibility="gone" />
+            </LinearLayout>
 
-                </LinearLayout>
+        </FrameLayout>
 
-            </FrameLayout>
+    </LinearLayout>
 
-        </LinearLayout>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

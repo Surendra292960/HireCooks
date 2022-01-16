@@ -11,7 +11,7 @@
             android:title="@string/cook" />
 
         <item
-            android:id="@+id/menu_favourite"
+            android:id="@+id/menuelist_destination"
             android:icon="@drawable/ic_wishlist_icon"
             android:title="@string/my_wishlist"/>
 

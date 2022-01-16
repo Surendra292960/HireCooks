@@ -2,6 +2,7 @@ package com.test.sample.hirecooks.Models.Chat;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.test.sample.hirecooks.Models.Users.User;
 
 import java.io.Serializable;
 

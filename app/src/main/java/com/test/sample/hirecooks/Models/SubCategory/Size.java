@@ -5,8 +5,12 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Size implements Serializable {
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+public class Size implements Serializable {
+    @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
     @Expose
     private int id;

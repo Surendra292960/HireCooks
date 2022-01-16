@@ -49,7 +49,7 @@ import com.test.sample.hirecooks.Adapter.SpinnerAdapter.UserTypeAdapter;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.MapLocationResponse.Map;
-import com.test.sample.hirecooks.Models.MapLocationResponse.Result;
+import com.test.sample.hirecooks.Models.MapLocationResponse.MapResponse;
 import com.test.sample.hirecooks.Models.SubCategory.Color;
 import com.test.sample.hirecooks.Models.SubCategory.ColorExample;
 import com.test.sample.hirecooks.Models.SubCategory.SubcategoryResponse;
@@ -67,8 +67,10 @@ import com.test.sample.hirecooks.WebApis.MapApi;
 import com.test.sample.hirecooks.WebApis.ProductApi;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 import retrofit2.Call;
@@ -111,9 +113,9 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
     private Map maps;
     private List<Size> mSizeNumberList = new ArrayList<>(  );
     private List<Size> mSizesTextList = new ArrayList<>(  );
-    private ArrayList<Image> mImagesList= new ArrayList<>(  );
+    private List<Image> mImagesList= new ArrayList<>(  );
     private List<Color> mColoList= new ArrayList<>(  );
-    private ArrayList<Weight> mWeightList= new ArrayList<>(  );
+    private List<Weight> mWeightList= new ArrayList<>(  );
     /**/
     private List<Size> sizeList = new ArrayList<>(  );
     private List<Image> imageList = new ArrayList<>(  );
@@ -123,7 +125,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
     private Size sizeText;
     private Size sizeNumber;
     private LinearLayout image_upload_btn;
-    private ArrayList<String> genders_list;
+    private List<String> genders_list;
     private Spinner genderSpinner;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -131,9 +133,6 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_start_edit_sub_category );
-        Objects.requireNonNull( getSupportActionBar() ).setHomeButtonEnabled( true );
-        Objects.requireNonNull( getSupportActionBar() ).setDisplayHomeAsUpEnabled( true );
-        Objects.requireNonNull(getSupportActionBar()).setTitle("");
         this.getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -143,9 +142,8 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         }
 
         if (mSubCategory != null) {
-            getSupportActionBar().setTitle( mSubCategory.getName() );
+//            getSupportActionBar().setTitle( mSubCategory.getName() );
         }
-
         initViews();
     }
 
@@ -498,7 +496,8 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
            // return;
         }
         if(mImagesList!=null&&mImagesList.size()!=0){
-            imageList = (ArrayList<Image>)((ArrayList<Image>)mImagesList).clone();
+            imageList = new ArrayList<>();
+            imageList = mImagesList;
         }else {
             showalertbox("Please Add Images");
             return;
@@ -536,8 +535,8 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                     "", discription, detail_discription, Integer.parseInt( sellRate ), Integer.parseInt( displayRate ),firmId, Double.parseDouble( lat_ ) ,
                     Double.parseDouble( lang_ ) ,address,pincode,colorList,imageList,sizeList,weightList, 0.0,available_stock_, 1,brand_,gender_,
                     Integer.parseInt( age_ ));
-            List<SubcategoryResponse> exampleList = new ArrayList<>(  );
-            List<Subcategory> subcategoryList = new ArrayList<>(  );
+            List<SubcategoryResponse> exampleList = new ArrayList<>( );
+            List<Subcategory> subcategoryList = new ArrayList<>( );
             subcategoryList.add( subcategory );
             SubcategoryResponse example = new SubcategoryResponse();
             example.setSubcategory( subcategoryList );
@@ -700,10 +699,10 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
 
     public void getMapDetails() {
         MapApi mService = ApiClient.getClient().create(MapApi.class);
-        Call<Result> call = mService.getMapDetails(user.getId());
-        call.enqueue(new Callback<Result>() {
+        Call<MapResponse> call = mService.getMapDetails(user.getId());
+        call.enqueue(new Callback<MapResponse>() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
+            public void onResponse(Call<MapResponse> call, Response<MapResponse> response) {
                 if (response.code() == 200 && response.body() != null && response.body().getMaps() != null) {
                     try {
                         maps = response.body().getMaps();
@@ -716,7 +715,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<MapResponse> call, Throwable t) {
                 progressBarUtil.hideProgress();
             }
         });
@@ -938,18 +937,55 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
     }
 
     private void chooseImage() {
+        final android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder( StartEditSubCategoryActivity.this);
+        LayoutInflater inflater = StartEditSubCategoryActivity.this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.edit_subcategory_alert,null);
+        AppCompatTextView single = view.findViewById(R.id.no_btn);
+        single.setText( "Choose Single" );
+        AppCompatTextView multiple = view.findViewById(R.id.edit_btn);
+        multiple.setText( "Choose Multiple" );
+        dialogBuilder.setView(view);
+        final android.app.AlertDialog dialog = dialogBuilder.create();
+        dialog.show();
+        single.setOnClickListener( v -> {
+            try {
+                dialog.dismiss();
+                chooseSingleImage();
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } );
+        multiple.setOnClickListener( v -> {
+            try {
+                dialog.dismiss();
+                chooseMultipleImage();
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } );
+    }
+
+    private void chooseMultipleImage() {
         Intent intent = new Intent();
         intent.setType( "image/*" );
         intent.putExtra( Intent.EXTRA_ALLOW_MULTIPLE, true );
         intent.setAction( Intent.ACTION_GET_CONTENT );
         startActivityForResult( Intent.createChooser( intent, "Select Picture" ), PICK_IMAGE_REQUEST );
     }
+    private void chooseSingleImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent.createChooser(intent,"Select Picture"),PICK_IMAGE_REQUEST);
+    }
 
     private void uploadImage() {
         if (ImageList != null && ImageList.size() != 0) {
             final ProgressDialog progress = new ProgressDialog( this );
             progress.setTitle( "Uploading...." );
-            progress.setCancelable( false );
+            progress.setCancelable( true );
             progress.show();
 
             Uri[] uri = new Uri[ImageList.size()];
@@ -963,10 +999,12 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Uri uri) {
                                 progress.dismiss();
+                                newImageList = new ArrayList<>();
                                 newImageList.add( uri );
-                                if (newImageList.size() >= 4) {
+                                setImages( newImageList );
+                               /* if (newImageList.size() >= 4) {
                                     setImages( newImageList );
-                                }
+                                }*/
                                 Toast.makeText( StartEditSubCategoryActivity.this, "Uploaded successfully", Toast.LENGTH_SHORT ).show();
                             }
                         } ).addOnFailureListener( new OnFailureListener() {
@@ -990,14 +1028,18 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
     }
 
     @SuppressLint("WrongConstant")
-    private void setImages(List<Uri> newImageList) {
-
+    private void setImages(List<Uri> ImageList) {
+        mImagesList = new ArrayList<>();
+        Set<Uri> set =new LinkedHashSet<>(ImageList);
+        List<Uri> newImageList = new ArrayList<>(set);
+        Image image;
         if (newImageList != null && newImageList.size() != 0) {
-/*            for(int i=0; i<newImageList.size(); i++ ){
-                Image image = new Image();
+            for(int i=0; i<newImageList.size(); i++ ){
+                image = new Image();
                 image.setImage( newImageList.get( i ).toString() );
+                image.setColorName( "Green");
                 mImagesList.add(image);
-            }*/
+            }
             images_recycler.setHasFixedSize( true );
             AddImagesAdapter adapter = new AddImagesAdapter( StartEditSubCategoryActivity.this, newImageList );
             images_recycler.setAdapter( adapter );
@@ -1020,7 +1062,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult( requestCode, resultCode, data );
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK || data!=null && data.getData()!=null) {
             if (data.getClipData() != null) {
                 int countClipData = data.getClipData().getItemCount();
                 int currentImageSlect = 0;
@@ -1030,9 +1072,13 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
                     ImageList.add( ImageUri );
                     currentImageSlect = currentImageSlect + 1;
                 }
+                /*if(currentImageSlect>4){
+                    showalertbox("Do not select more than 4 images");
+                }*/
 
             } else {
-                showalertbox("Please Select 4 Images");
+                ImageList = new ArrayList<>();
+                ImageList.add( data.getData());
             }
         }
     }
@@ -1099,11 +1145,7 @@ public class StartEditSubCategoryActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(AddImagesAdapter.ViewHolder holder, int position) {
             Uri image1 = images.get( position );
-            Image image  = new Image();
             if (image1.getPath() != null) {
-                image.setImage( image1.toString() );
-                image.setColorName( "Green");
-                mImagesList.add( image );
                 Glide.with(mCtx).load( image1.toString() ).into( holder.imageView );
             }
         }

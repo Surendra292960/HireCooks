@@ -1,10 +1,8 @@
 package com.test.sample.hirecooks.Activity.ManageAccount.ManageProducts;
-
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -19,7 +17,6 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,26 +25,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.SearchView;
 import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.test.sample.hirecooks.ApiServiceCall.ApiClient;
 import com.test.sample.hirecooks.Models.Category.Category;
 import com.test.sample.hirecooks.Models.SubCategory.SubcategoryResponse;
 import com.test.sample.hirecooks.Models.SubCategory.Subcategory;
 import com.test.sample.hirecooks.Models.Users.User;
 import com.test.sample.hirecooks.R;
+import com.test.sample.hirecooks.Utils.NetworkUtil;
 import com.test.sample.hirecooks.Utils.SharedPrefManager;
+import com.test.sample.hirecooks.ViewModel.ViewModel;
 import com.test.sample.hirecooks.WebApis.ProductApi;
+import com.test.sample.hirecooks.databinding.ActivitySubCategoryBinding;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,42 +52,45 @@ import retrofit2.Response;
 import static android.view.View.GONE;
 
 public class EditSubCategoryActivity extends AppCompatActivity {
-    private RecyclerView subcategory_recycler;
-    private RelativeLayout bottom_anchor_layout;
-    private TextView item_count,checkout_amount,checkout;
-    private View searchbar_interface_layout,bottom_anchor,appRoot;
     private String categoryName;
     private Category category;
-    private FloatingActionButton add_subcategory;
-    private LinearLayout no_result_found;
     private User user;
     private List<Subcategory> filteredList;
+    private ActivitySubCategoryBinding binding;
+    private ViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_edit_sub_category );
-        Objects.requireNonNull(getSupportActionBar()).setHomeButtonEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Subcategory");
-        this.getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        binding = ActivitySubCategoryBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+        viewModel = new ViewModelProvider(this).get(ViewModel.class);
         user = SharedPrefManager.getInstance( this ).getUser();
-        subcategory_recycler = findViewById( R.id.edit_subcategory_recycler );
-        add_subcategory = findViewById( R.id.add_subcategory );
-        appRoot = findViewById(R.id.appRoot);
-        no_result_found = findViewById(R.id.no_result_found);
-
+        this.getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        binding.mToolbarInterface.mToolbar.setVisibility(View.VISIBLE);
+        binding.add.setVisibility(View.VISIBLE);
+        binding.mToolbarInterface.goBack.setOnClickListener(v->finish());
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             categoryName= bundle.getString("CategoryName");
             category = (Category) bundle.getSerializable("Category");
-            if(category.getCategoryid()!=0){
-                getSubCategory(category.getId());
-            }else {
-                Toast.makeText( this, "Comming soon", Toast.LENGTH_SHORT ).show();
+            if(NetworkUtil.checkInternetConnection(this)) {
+                binding.subcategoryLayout.setVisibility( View.VISIBLE );
+                binding.noInternetConnectionLayout.setVisibility(View.GONE );
+                if(category.getCategoryid()!=0){
+                    getSubCategory(category.getId());
+                }else {
+                    Toast.makeText( this, "Comming soon", Toast.LENGTH_SHORT ).show();
+                }
+            }
+            else {
+                binding.subcategoryLayout.setVisibility( View.GONE );
+                binding.noResultFound.setVisibility( View.GONE );
+                binding.noInternetConnectionLayout.setVisibility( View.VISIBLE );
             }
         }
-        add_subcategory.setOnClickListener( new View.OnClickListener() {
+        binding.add.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent( EditSubCategoryActivity.this, StartEditSubCategoryActivity.class );
@@ -107,67 +106,19 @@ public class EditSubCategoryActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("NewApi")
     private void getSubCategory(int id) {
-        ProductApi mService = ApiClient.getClient().create(ProductApi.class);
-        Call<ArrayList<SubcategoryResponse>> call = mService.getSubCategorysBySub_id(id);
-        call.enqueue(new Callback<ArrayList<SubcategoryResponse>>() {
-            @SuppressLint("WrongConstant")
-            @Override
-            public void onResponse(Call<ArrayList<SubcategoryResponse>> call, Response<ArrayList<SubcategoryResponse>> response) {
-                int statusCode = response.code();
-                if (statusCode == 200) {
-                    if(response.body()!=null&&response.body().size()!=0){
-                        List<Subcategory> subcategoryList = new ArrayList<>(  );
-                        filteredList = new ArrayList<>(  );
-                        for(SubcategoryResponse example:response.body()){
-                            if(example.getError()==false){
-                                for(Subcategory subcategory:example.getSubcategory()){
-                                    if(subcategory.getFirmId().equalsIgnoreCase( user.getFirmId() )){
-                                        subcategoryList.add( subcategory );
-                                        Set<Subcategory> newList = new LinkedHashSet<>(subcategoryList);
-                                        filteredList = new ArrayList<>(newList);
-                                    }
-                                }
-                                if(filteredList.size()!=0&&filteredList!=null) {
-                                    subcategory_recycler.setHasFixedSize( true );
-                                    SubcategoryAdapter mAdapter = new SubcategoryAdapter( EditSubCategoryActivity.this, filteredList );
-                                    subcategory_recycler.setAdapter( mAdapter );
-                                }else {
-                                    no_result_found.setVisibility(View.VISIBLE);
-                                }
-                                if(user.getUserType().equalsIgnoreCase( "SuperAdmin" )) {
-                                    subcategory_recycler.setHasFixedSize( true );
-                                    SubcategoryAdapter mAdapter = new SubcategoryAdapter( EditSubCategoryActivity.this, example.getSubcategory() );
-                                    subcategory_recycler.setAdapter( mAdapter );
-                                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(EditSubCategoryActivity.this);
-                                    if (EditSubCategoryActivity.this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                                        linearLayoutManager.setOrientation(LinearLayout.VERTICAL);
-                                    }else{
-                                        linearLayoutManager.setOrientation(LinearLayout.VERTICAL);
-                                    }
-                                    RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT);
-                                    params.setMargins(20, 20, 20, 20);
-                                    linearLayoutManager.canScrollHorizontally();
-
-                                    subcategory_recycler.setLayoutManager(linearLayoutManager);
-                                    subcategory_recycler.setItemAnimator(new DefaultItemAnimator());
-                                }
-                            }else{
-                                Toast.makeText( EditSubCategoryActivity.this, example.getMessage(), Toast.LENGTH_SHORT ).show();
-                                no_result_found.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    }
-                } else {
-                    Toast.makeText( EditSubCategoryActivity.this, R.string.failed_due_to + statusCode, Toast.LENGTH_LONG).show();
-                }
+        viewModel.getSubCategoryBySub_id(id).observe(this, subcategoryResponses -> subcategoryResponses.forEach(subcategory->{
+            if(!subcategory.getError()&&subcategory!=null&&subcategory.getSubcategory().size()!=0){
+                filteredList  = new ArrayList<>();
+                filteredList.add(subcategory);
+                binding.recyclerview.setVisibility(View.VISIBLE);
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
+                SubcategoryAdapter mAdapter = new SubcategoryAdapter(this, subcategory.getSubcategory());
+                binding.recyclerview.setLayoutManager(gridLayoutManager);
+                binding.recyclerview.setAdapter(mAdapter);
             }
-
-            @Override
-            public void onFailure(Call<ArrayList<SubcategoryResponse>> call, Throwable t) {
-                System.out.println("Suree : " + t.getMessage());
-            }
-        });
+        }));
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -217,7 +168,7 @@ public class EditSubCategoryActivity extends AppCompatActivity {
                 }
 
                 SubcategoryAdapter mAdapter = new SubcategoryAdapter( EditSubCategoryActivity.this, subcategory);
-                subcategory_recycler.setAdapter(mAdapter);
+                binding.recyclerview.setAdapter(mAdapter);
                 mAdapter.notifyDataSetChanged();
             }
         } catch (Exception e) {
@@ -240,7 +191,7 @@ public class EditSubCategoryActivity extends AppCompatActivity {
         @Override
         public EditSubCategoryActivity.SubcategoryAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
             View itemView;
-            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_horizontal_layout, parent, false);
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.subcategory_layout, parent, false);
             return new EditSubCategoryActivity.SubcategoryAdapter.MyViewHolder(itemView);
         }
 
@@ -250,15 +201,15 @@ public class EditSubCategoryActivity extends AppCompatActivity {
             if(product!=null){
                 if(product.getAcceptingOrder()==0){
                     holder.order_not_accepting.setVisibility(View.VISIBLE);
-                    holder.add_item_layout.setVisibility( GONE );
+  //                  holder.add_item_layout.setVisibility( GONE );
                 }else{
                     holder.order_not_accepting.setVisibility( GONE);
-                    holder.add_item_layout.setVisibility( GONE );
+//                    holder.add_item_layout.setVisibility( GONE );
                 }
 
                 holder.name.setText(product.getName());
                 holder.item_short_desc.setText(product.getDiscription());
-                holder.discription.setText(product.getDetailDiscription());
+//                holder.discription.setText(product.getDetailDiscription());
                 if(product.getImages()!=null&&product.getImages().size()!=0){
                     Glide.with(EditSubCategoryActivity.this).load(product.getImages().get( 0 ).getImage()).into(holder.imageView);
                 }
@@ -384,9 +335,9 @@ public class EditSubCategoryActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-       if(category.getId()!=0){
-           getSubCategory(category.getId());
-       }
+        if(category.getId()!=0){
+            getSubCategory(category.getId());
+        }
     }
 
     @Override
